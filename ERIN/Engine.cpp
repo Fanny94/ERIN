@@ -87,9 +87,8 @@ void Engine::SetViewport()
 
 void Engine::Render()
 {
-	float clearColor[] = { 0, 0, 1, 1 };
+	float clearColor[] = { 1, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
-
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->HSSetShader(nullptr, nullptr, 0);
@@ -236,14 +235,20 @@ void Engine::CreateShaders()
 		nullptr			// pointer for Error Blob messages.			
 		);
 
-
 	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
 	pPS->Release();
-
 }
 
 void Engine::CreateTriangle()
 {
+<<<<<<< HEAD
+=======
+	struct TriangleVertex
+	{
+		float x, y, z;
+		float r, g, b;
+	};
+>>>>>>> refs/remotes/origin/master
 
 	TriangleVertex triangleVertices[3] =
 	{
@@ -266,6 +271,7 @@ void Engine::CreateTriangle()
 	D3D11_SUBRESOURCE_DATA data;
 	data.pSysMem = triangleVertices;
 	gDevice->CreateBuffer(&bufferDesc, &data, &gVertexBuffer);
+<<<<<<< HEAD
 
 }
 
@@ -326,3 +332,6 @@ void Engine::UpdateConstantBuffer()
 }
 
 
+=======
+}
+>>>>>>> refs/remotes/origin/master

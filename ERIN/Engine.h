@@ -1,7 +1,10 @@
-#pragma once
-#include "Linker.h"
+#ifndef ENGINE_H
+#define ENGINE_H
 
-class Engine
+#include "Linker.h"
+#include "Graphics.h"
+
+class Engine: public Graphics
 {
 public:
 	Engine();
@@ -46,6 +49,12 @@ public:
 
 	void CreateShaders();
 	void CreateTriangle();
+<<<<<<< HEAD
 	void CreateConstantBuffer();
 	void UpdateConstantBuffer();
 };
+=======
+};
+
+#endif // !ENGINE_H
+>>>>>>> refs/remotes/origin/master

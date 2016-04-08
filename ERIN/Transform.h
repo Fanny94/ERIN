@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
+
 class Transform
 {
 public:
@@ -6,3 +8,4 @@ public:
 	~Transform();
 };
 
+#endif // !TRANSFORM_H

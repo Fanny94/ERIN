@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
+
 class Graphics
 {
 public:
@@ -6,3 +8,4 @@ public:
 	~Graphics();
 };
 
+#endif // !GRAPHICS_H
