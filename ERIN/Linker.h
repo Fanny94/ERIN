@@ -7,10 +7,14 @@
 #include <math.h>
 #include <vector>
 #include <DirectXMath.h>
+#include "SimpleMath.h"
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dcompiler.lib")
 #pragma comment (lib, "dinput8.lib")
 #pragma comment (lib, "dxguid.lib")
+
+using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 #endif

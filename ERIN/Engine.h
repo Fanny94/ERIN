@@ -10,6 +10,24 @@ public:
 	Engine();
 	~Engine();
 
+	struct TriangleVertex
+	{
+		float x, y, z;
+		float r, g, b;
+	};
+
+	struct MATRICES
+	{
+		Matrix worldViewProj;
+		Matrix world;
+		Matrix view;
+		Matrix projection;
+	};
+
+	TriangleVertex* triangleVertices;
+	const float WIDTH = 640;
+	const float HEIGHT = 480;
+
 	void Render();
 	void SetViewport();
 	int Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow);
@@ -27,8 +45,12 @@ public:
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
 
+	ID3D11Buffer* gConstantBuffer = nullptr;
+
 	void CreateShaders();
 	void CreateTriangle();
+	void CreateConstantBuffer();
+	void UpdateConstantBuffer();
 };
 
 #endif // !ENGINE_H

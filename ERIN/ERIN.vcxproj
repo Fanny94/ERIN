@@ -122,6 +122,7 @@
     <ClInclude Include="Linker.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Physics.h" />
+    <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
