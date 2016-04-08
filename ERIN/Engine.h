@@ -1,7 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
+
 #include "Linker.h"
-#include "GameLogic.h"
 
 class Engine
 {
