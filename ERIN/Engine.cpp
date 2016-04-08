@@ -17,6 +17,8 @@ Engine::~Engine()
 	gVertexShader->Release();
 	gVertexBuffer->Release();
 	gPixelShader->Release();
+
+	gConstantBuffer->Release();
 }
 
 int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
@@ -38,6 +40,8 @@ int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLi
 
 		CreateTriangle();
 
+		CreateConstantBuffer();
+
 		ShowWindow(wndHandle, nCommandShow);
 
 		while (WM_QUIT != msg.message)
@@ -52,6 +56,9 @@ int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLi
 			else
 			{
 				//update/render
+
+				UpdateConstantBuffer();
+
 				Render();
 
 				//switch front- and back-buffer
@@ -68,8 +75,8 @@ int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLi
 void Engine::SetViewport()
 {
 	D3D11_VIEWPORT vp;
-	vp.Width = 640;
-	vp.Height = 480;
+	vp.Width = WIDTH;
+	vp.Height = HEIGHT;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
@@ -115,7 +122,7 @@ HWND Engine::InitWindow(HINSTANCE hInstance)
 		return false;
 
 	//the window size
-	RECT rc = { 0, 0, 640, 480 };
+	RECT rc = { 0, 0, WIDTH, HEIGHT };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND handle = CreateWindow(
@@ -238,12 +245,6 @@ void Engine::CreateShaders()
 void Engine::CreateTriangle()
 {
 
-	struct TriangleVertex
-	{
-		float x, y, z;
-		float r, g, b;
-	};
-
 	TriangleVertex triangleVertices[3] =
 	{
 		0.0f, 0.5f, 0.0f,	//v0 pos
@@ -267,3 +268,61 @@ void Engine::CreateTriangle()
 	gDevice->CreateBuffer(&bufferDesc, &data, &gVertexBuffer);
 
 }
+
+void Engine::CreateConstantBuffer()
+{
+	D3D11_BUFFER_DESC cBufferDesc;
+	memset(&cBufferDesc, 0, sizeof(cBufferDesc));
+	cBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	cBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	cBufferDesc.ByteWidth = sizeof(MATRICES);
+
+	gDevice->CreateBuffer(&cBufferDesc, NULL, &gConstantBuffer);
+}
+
+void Engine::UpdateConstantBuffer()
+{
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+	MATRICES* MatrixPtr;
+
+	static float rotationCount;
+	rotationCount += 0.01;
+
+	Matrix world;
+	Matrix view;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	Vector3 camPos = Vector3(0, 0, -2);
+	Vector3 focusPos = Vector3(0, 0, 0);
+	Vector3 UpDir = Vector3(0, 1, 0);
+
+	world = XMMatrixRotationZ(XMConvertToRadians(rotationCount));
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+	view = XMMatrixLookAtLH(camPos, focusPos, UpDir);
+
+	worldViewProj = world * view * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	world = world.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr = (MATRICES*)mapped.pData;
+	MatrixPtr->worldViewProj = worldViewProj;
+	MatrixPtr->world = world;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+}
+
+
