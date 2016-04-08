@@ -183,7 +183,7 @@ void Graphics::UpdateConstantBuffer()
 	MATRICES* MatrixPtr;
 
 	static float rotationCount;
-	rotationCount += 0.01;
+	rotationCount += 0.01f;
 
 	Matrix world;
 	Matrix view;

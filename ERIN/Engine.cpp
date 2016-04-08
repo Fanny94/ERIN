@@ -77,7 +77,7 @@ HWND Engine::InitWindow(HINSTANCE hInstance)
 		return false;
 
 	//the window size
-	RECT rc = { 0, 0, WIDTH, HEIGHT };
+	RECT rc = { 0, 0, (LONG)WIDTH, (LONG)HEIGHT };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND handle = CreateWindow(
