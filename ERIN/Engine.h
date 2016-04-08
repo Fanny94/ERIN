@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ENGINE_H
+#define ENGINE_H
+
 #include "Linker.h"
 
 class Engine
@@ -27,3 +29,5 @@ public:
 	void CreateShaders();
 	void CreateTriangle();
 };
+
+#endif // !ENGINE_H
