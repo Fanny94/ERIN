@@ -49,12 +49,8 @@ public:
 
 	void CreateShaders();
 	void CreateTriangle();
-<<<<<<< HEAD
 	void CreateConstantBuffer();
 	void UpdateConstantBuffer();
 };
-=======
-};
 
 #endif // !ENGINE_H
->>>>>>> refs/remotes/origin/master

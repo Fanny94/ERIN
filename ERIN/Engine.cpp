@@ -241,15 +241,6 @@ void Engine::CreateShaders()
 
 void Engine::CreateTriangle()
 {
-<<<<<<< HEAD
-=======
-	struct TriangleVertex
-	{
-		float x, y, z;
-		float r, g, b;
-	};
->>>>>>> refs/remotes/origin/master
-
 	TriangleVertex triangleVertices[3] =
 	{
 		0.0f, 0.5f, 0.0f,	//v0 pos
@@ -271,8 +262,6 @@ void Engine::CreateTriangle()
 	D3D11_SUBRESOURCE_DATA data;
 	data.pSysMem = triangleVertices;
 	gDevice->CreateBuffer(&bufferDesc, &data, &gVertexBuffer);
-<<<<<<< HEAD
-
 }
 
 void Engine::CreateConstantBuffer()
@@ -330,8 +319,3 @@ void Engine::UpdateConstantBuffer()
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 }
-
-
-=======
-}
->>>>>>> refs/remotes/origin/master
