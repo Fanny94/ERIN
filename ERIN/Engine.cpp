@@ -300,7 +300,7 @@ void Engine::UpdateConstantBuffer()
 	Vector3 focusPos = Vector3(0, 0, 0);
 	Vector3 UpDir = Vector3(0, 1, 0);
 
-	world = XMMatrixRotationZ(XMConvertToRadians(rotationCount));
+	world = XMMatrixRotationZ(XMConvertToRadians(rotationCount)) * XMMatrixTranslation(0, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
 	view = XMMatrixLookAtLH(camPos, focusPos, UpDir);
 
