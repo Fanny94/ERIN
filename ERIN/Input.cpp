@@ -9,6 +9,7 @@ Input::Input()
 
 Input::~Input()
 {
+	//delete pad;
 }
 
 bool Input::IsXBOXControlConnected()
