@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <Windows.h>
 
 #include <d3d11.h>
@@ -23,10 +24,15 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 HRESULT CreateDirect3DContext(HWND wndHandle);
 void CreateShaders();
 void CreateTriangle();
+=======
+#include "Linker.h"
+#include "Engine.h"
+>>>>>>> refs/remotes/origin/master
 
 //link for details about the windows datatypes
 //https://msdn.microsoft.com/en-us/library/windows/desktop/aa383751(v=vs.85).aspx
 
+<<<<<<< HEAD
 void CreateShaders()
 {
 	ID3DBlob* pVS = nullptr;
@@ -141,10 +147,13 @@ void Render()
 
 }
 
+=======
+>>>>>>> refs/remotes/origin/master
 //Entry point for te program
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPWSTR lpCommandLine, int nCommandShow)
 {
+<<<<<<< HEAD
 	MSG msg = { 0 };
 
 	//create window
@@ -282,12 +291,13 @@ HRESULT CreateDirect3DContext(HWND wndHandle)
 	{
 		ID3D11Texture2D* pBackBuffer = nullptr;
 		gSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+=======
+	Engine* enginePtr = new Engine;
+>>>>>>> refs/remotes/origin/master
 
-		gDevice->CreateRenderTargetView(pBackBuffer, NULL, &gBackbufferRTV);
-		pBackBuffer->Release();
+	enginePtr->Run(hInstance, hPrevInstance, lpCommandLine, nCommandShow);
 
-		gDeviceContext->OMSetRenderTargets(1, &gBackbufferRTV, NULL);
+	delete enginePtr;
 
-	}
-	return hr;
+	return 0;
 }
