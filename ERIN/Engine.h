@@ -18,4 +18,12 @@ public:
 
 	HWND InitWindow(HINSTANCE hInstance);
 	HRESULT CreateDirect3DContext(HWND wndHandle);
+
+	ID3D11InputLayout* gVertexLayout = nullptr;
+	ID3D11VertexShader* gVertexShader = nullptr;
+	ID3D11Buffer* gVertexBuffer = nullptr;
+	ID3D11PixelShader* gPixelShader = nullptr;
+
+	void CreateShaders();
+	void CreateTriangle();
 };
