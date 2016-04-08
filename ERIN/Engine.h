@@ -2,8 +2,9 @@
 #define ENGINE_H
 
 #include "Linker.h"
+#include "Graphics.h"
 
-class Engine
+class Engine: public Graphics
 {
 public:
 	Engine();
