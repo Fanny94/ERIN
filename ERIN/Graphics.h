@@ -16,8 +16,8 @@ public:
 	void CreateConstantBuffer();
 	void UpdateConstantBuffer();
 
-	const float WIDTH = 640;
-	const float HEIGHT = 480;
+	const float WIDTH = 1080;
+	const float HEIGHT = 720;
 
 	HRESULT CreateDirect3DContext(HWND wndHandle);
 
