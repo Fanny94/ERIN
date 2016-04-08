@@ -110,8 +110,7 @@ HWND Engine::InitWindow(HINSTANCE hInstance)
 	return handle;
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam,
-	LPARAM lParam)
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
