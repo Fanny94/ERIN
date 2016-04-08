@@ -12,6 +12,11 @@ Engine::~Engine()
 	gSwapChain->Release();
 	gDevice->Release();
 	gDeviceContext->Release();
+
+	gVertexLayout->Release();
+	gVertexShader->Release();
+	gVertexBuffer->Release();
+	gPixelShader->Release();
 }
 
 int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
@@ -28,6 +33,10 @@ int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLi
 		CreateDirect3DContext(wndHandle);
 
 		SetViewport(); //Set Viewport
+
+		CreateShaders();
+
+		CreateTriangle();
 
 		ShowWindow(wndHandle, nCommandShow);
 
@@ -71,8 +80,23 @@ void Engine::SetViewport()
 
 void Engine::Render()
 {
-	float clearColor[] = { 1, 1, 0, 1 };
+	float clearColor[] = { 0, 0, 1, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+
+
+	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
+	gDeviceContext->HSSetShader(nullptr, nullptr, 0);
+	gDeviceContext->DSSetShader(nullptr, nullptr, 0);
+	gDeviceContext->GSSetShader(nullptr, nullptr, 0);
+	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+
+	UINT32 vertexSize = sizeof(float) * 6;
+	UINT32 offset = 0;
+	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gDeviceContext->IASetInputLayout(gVertexLayout);
+
+	gDeviceContext->Draw(3, 0);
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)
@@ -163,4 +187,83 @@ HRESULT Engine::CreateDirect3DContext(HWND wndHandle)
 
 	}
 	return hr;
+}
+
+void Engine::CreateShaders()
+{
+	ID3DBlob* pVS = nullptr;
+	D3DCompileFromFile(
+		L"VertexShader.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"VS_main",		// entry point
+		"vs_4_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pVS,			// double pointer to ID3DBlob
+		nullptr			// pointer for Error Blob messages.			
+		);
+
+	D3D11_INPUT_ELEMENT_DESC inputDesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	gDevice->CreateInputLayout(inputDesc,
+		ARRAYSIZE(inputDesc), pVS->GetBufferPointer(), pVS->GetBufferSize(), &gVertexLayout);
+
+	gDevice->CreateVertexShader(pVS->GetBufferPointer(), pVS->GetBufferSize(), nullptr, &gVertexShader);
+	pVS->Release();
+
+	ID3DBlob* pPS = nullptr;
+	D3DCompileFromFile(
+		L"PixelShader.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"PS_main",		// entry point
+		"ps_4_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pPS,			// double pointer to ID3DBlob
+		nullptr			// pointer for Error Blob messages.			
+		);
+
+
+	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
+	pPS->Release();
+
+}
+
+void Engine::CreateTriangle()
+{
+
+	struct TriangleVertex
+	{
+		float x, y, z;
+		float r, g, b;
+	};
+
+	TriangleVertex triangleVertices[3] =
+	{
+		0.0f, 0.5f, 0.0f,	//v0 pos
+		1.0f, 0.0f, 0.0f,	//v0 color
+
+		0.5f, -0.5f, 0.0f,	//v1
+		0.0f, 1.0f, 0.0f,	//v1 color
+
+		-0.5f, -0.5f, 0.0f, //v2
+		0.0f, 0.0f, 1.0f	//v2 color
+	};
+
+	D3D11_BUFFER_DESC bufferDesc;
+	memset(&bufferDesc, 0, sizeof(bufferDesc));
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.ByteWidth = sizeof(triangleVertices);
+
+	D3D11_SUBRESOURCE_DATA data;
+	data.pSysMem = triangleVertices;
+	gDevice->CreateBuffer(&bufferDesc, &data, &gVertexBuffer);
+
 }
