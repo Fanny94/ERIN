@@ -4,10 +4,12 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 Engine::Engine()
 {
+	 this->graphics = new Graphics();
 }
 
 Engine::~Engine()
 {
+	delete this->graphics;
 }
 
 int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
@@ -21,15 +23,15 @@ int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLi
 	if (wndHandle)
 	{
 		//Create SwapChain, Device and Device Context 
-		CreateDirect3DContext(wndHandle);
+		graphics->CreateDirect3DContext(wndHandle);
 
-		SetViewport(); //Set Viewport
+		graphics->SetViewport(); //Set Viewport
 
-		CreateShaders();
+		graphics->CreateShaders();
 
-		CreateTriangle();
+		graphics->CreateTriangle();
 
-		CreateConstantBuffer();
+		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
 
@@ -46,12 +48,12 @@ int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLi
 			{
 				//update/render
 
-				UpdateConstantBuffer();
+				graphics->UpdateConstantBuffer();
 
-				Render();
+				graphics->Render();
 
 				//switch front- and back-buffer
-				gSwapChain->Present(0, 0);
+				graphics->get_gSwapChain()->Present(0, 0);
 			}
 		}
 		//finish program
@@ -77,7 +79,7 @@ HWND Engine::InitWindow(HINSTANCE hInstance)
 		return false;
 
 	//the window size
-	RECT rc = { 0, 0, (LONG)WIDTH, (LONG)HEIGHT };
+	RECT rc = { 0, 0, (LONG) graphics->get_gWidth() , (LONG) graphics->get_gHeight() };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND handle = CreateWindow(

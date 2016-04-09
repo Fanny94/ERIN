@@ -17,6 +17,18 @@ Graphics::~Graphics()
 	gPixelShader->Release();
 
 	gConstantBuffer->Release();
+
+	this->gDevice = nullptr;
+	this->gDeviceContext = nullptr;
+	this->gSwapChain = nullptr;
+	this->gBackbufferRTV = nullptr;
+
+	this->gVertexLayout = nullptr;
+	this->gVertexShader = nullptr;
+	this->gVertexBuffer = nullptr;
+	this->gPixelShader = nullptr;
+
+	this->gConstantBuffer = nullptr;
 }
 
 void Graphics::SetViewport()

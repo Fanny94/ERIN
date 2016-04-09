@@ -4,7 +4,7 @@
 #include "Linker.h"
 #include "Graphics.h"
 
-class Engine: public Graphics
+class Engine
 {
 public:
 	Engine();
@@ -13,6 +13,9 @@ public:
 	int Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow);
 
 	HWND InitWindow(HINSTANCE hInstance);
+
+private:
+	Graphics *graphics;
 };
 
 #endif // !ENGINE_H
