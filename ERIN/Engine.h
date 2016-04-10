@@ -19,6 +19,7 @@ public:
 	HWND InitWindow(HINSTANCE hInstance);
 
 private:
+	bool running;
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	AssetManager* assetManager;
