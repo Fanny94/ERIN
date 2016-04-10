@@ -12,7 +12,21 @@ Engine::~Engine()
 	delete this->graphics;
 }
 
-int Engine::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
+void Engine::processInput()
+{
+}
+
+void Engine::update(int deltaTimeMs)
+{
+	float deltaTimeS;
+	deltaTimeS = (float)(deltaTimeMs) / 1000;
+	//update code
+	//example physics calculation using delta time:
+	//object.x = object.x + (object.speed * deltaTimeS);
+	printf("Elapsed time: %fS.\n", deltaTimeS);
+}
+
+int Engine::render(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
 	MSG msg = { 0 };
 

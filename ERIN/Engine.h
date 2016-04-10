@@ -3,6 +3,8 @@
 
 #include "Linker.h"
 #include "Graphics.h"
+#include "GameLogic.h"
+#include "AssetManager.h"
 
 class Engine
 {
@@ -10,12 +12,16 @@ public:
 	Engine();
 	~Engine();
 
-	int Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow);
+	void processInput();
+	void update(int deltaTimeMs);
+	int render(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow);
 
 	HWND InitWindow(HINSTANCE hInstance);
 
 private:
-	Graphics *graphics;
+	Graphics* graphics;
+	GameLogic* gameLogic;
+	AssetManager* assetManager;
 };
 
 #endif // !ENGINE_H

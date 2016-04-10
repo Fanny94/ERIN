@@ -5,14 +5,13 @@
 //https://msdn.microsoft.com/en-us/library/windows/desktop/aa383751(v=vs.85).aspx
 
 //Entry point for te program
-int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-	LPWSTR lpCommandLine, int nCommandShow)
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
-	Engine* enginePtr = new Engine;
+	Engine* engine = new Engine;
 
-	enginePtr->Run(hInstance, hPrevInstance, lpCommandLine, nCommandShow);
+	engine->render(hInstance, hPrevInstance, lpCommandLine, nCommandShow);
 
-	delete enginePtr;
+	delete engine;
 
 	return 0;
 }
