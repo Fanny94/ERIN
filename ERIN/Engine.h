@@ -18,6 +18,7 @@ public:
 
 	HWND InitWindow(HINSTANCE hInstance);
 
+	bool getRunning() { return running; };
 private:
 	bool running;
 	Graphics* graphics;

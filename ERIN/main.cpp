@@ -9,13 +9,6 @@ void onQuit();
 // link for details about the windows datatypes
 // https://msdn.microsoft.com/en-us/library/windows/desktop/aa383751(v=vs.85).aspx
 
-bool running = true;
-
-void onQuit()
-{
-	running = false;
-}
-
 // Entry point for te program
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
@@ -25,7 +18,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 	double previous = clock();
 	double lag = 0.0;
 
-	while (running)
+	while (engine->getRunning()) // get engine state, e.g running / shutting down
 	{
 		double current = clock();
 		double elapsed = current - previous;
