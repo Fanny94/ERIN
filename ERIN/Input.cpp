@@ -91,15 +91,15 @@ void Input::update()
 
 	// Check right thumbStick
 
-	float leftThumbY = controllerState.Gamepad.sThumbLY;
-	if (leftThumbY)
+	float rightThumbY = controllerState.Gamepad.sThumbLY;
+	if (rightThumbY)
 	{
-		State._left_thumbstick.y = leftThumbY;
+		State._right_thumbstick.y = rightThumbY;
 	}
-	float leftThumbX = controllerState.Gamepad.sThumbLX;
-	if (leftThumbX)
+	float rightThumbX = controllerState.Gamepad.sThumbLX;
+	if (rightThumbX)
 	{
-		State._left_thumbstick.x = leftThumbX;
+		State._right_thumbstick.x = rightThumbX;
 	}
 }
 
