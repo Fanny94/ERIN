@@ -1,5 +1,3 @@
-void onQuit();
-
 #include "Linker.h"
 #include "Engine.h"
 
