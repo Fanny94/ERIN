@@ -7,7 +7,7 @@ enum ControlsType
 	Con_Input,
 	Con_Behavior,
 };
-class Controls : public Component
+class Controls
 {
 public:
 	Controls();

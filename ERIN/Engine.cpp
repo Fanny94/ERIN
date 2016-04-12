@@ -6,15 +6,28 @@ Engine::Engine()
 {
 	this->running = true;
 	this->graphics = new Graphics();
+
+	// test input
+	this->gameObject = new GameObject("player", 0.0f, 0.0f, 0.0f);
 }
 
 Engine::~Engine()
 {
 	delete this->graphics;
+	delete this->gameObject;
 }
 
 void Engine::processInput()
 {
+	gameObject->input->update(); // test object, should be done for all objects
+
+	if (gameObject->input->isConnected())
+	{
+		if (this->gameObject->input->State._buttons[GamePad_Button_Y] == true)
+		{
+			this->running = false;
+		}
+	}
 }
 
 void Engine::update(int deltaTimeMs)
@@ -24,7 +37,10 @@ void Engine::update(int deltaTimeMs)
 	// update code
 	// example physics calculation using delta time:
 	// object.x = object.x + (object.speed * deltaTimeS);
-	printf("Elapsed time: %fS.\n", deltaTimeS);
+
+	//printf("Elapsed time: %fS.\n", deltaTimeS);
+
+	//gameObject->input->isConnected();
 }
 
 int Engine::render(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
@@ -62,6 +78,8 @@ int Engine::render(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComman
 			else
 			{
 				// update/render
+
+				processInput();
 
 				graphics->UpdateConstantBuffer();
 

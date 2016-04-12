@@ -1,6 +1,5 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
-#include "GameObject.h"
 
 enum ComponentType
 {
@@ -9,13 +8,15 @@ enum ComponentType
 	Comp_Transform,
 };
 
-class Component : public GameObject
+class Component
 {
 public:
 	Component();
-	virtual ~Component();
+	~Component();
+
 private:
 	ComponentType componentType;
+	Component* component;
 };
 
 #endif // !COMPONENT_H
