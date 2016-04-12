@@ -62,10 +62,10 @@ void Input::update()
 
 	
 	// Get the Buttons
-	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_A) State._buttons[GamePad_Button_A] = true;
-	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_B) State._buttons[GamePad_Button_B] = true;
-	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_X) State._buttons[GamePad_Button_X] = true;
-	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_Y) State._buttons[GamePad_Button_Y] = true;
+	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_A) State._buttons[GamePad_Button_A] = true;
+	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_B) State._buttons[GamePad_Button_B] = true;
+	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_X) State._buttons[GamePad_Button_X] = true;
+	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_Y) State._buttons[GamePad_Button_Y] = true;
 
 	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) State._buttons[GamePad_Button_DPAD_DOWN] = true;
 	

@@ -69,7 +69,19 @@ void Engine::processInput()
 
 	if (gameObject->input->isConnected())
 	{
+		if (this->gameObject->input->State._buttons[GamePad_Button_Y] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_X] == true)
+		{
+			this->running = false;
+		}
 		if (this->gameObject->input->State._buttons[GamePad_Button_B] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_A] == true)
 		{
 			this->running = false;
 		}
