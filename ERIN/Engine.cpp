@@ -2,49 +2,14 @@
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-Engine::Engine()
+Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
 	this->running = true;
 	this->graphics = new Graphics();
 
 	// test input
 	this->gameObject = new GameObject("player", 0.0f, 0.0f, 0.0f);
-}
 
-Engine::~Engine()
-{
-	delete this->graphics;
-	delete this->gameObject;
-}
-
-void Engine::processInput()
-{
-	gameObject->input->update(); // test object, should be done for all objects
-
-	if (gameObject->input->isConnected())
-	{
-		if (this->gameObject->input->State._buttons[GamePad_Button_Y] == true)
-		{
-			this->running = false;
-		}
-	}
-}
-
-void Engine::update(int deltaTimeMs)
-{
-	float deltaTimeS;
-	deltaTimeS = (float)(deltaTimeMs) / 1000;
-	// update code
-	// example physics calculation using delta time:
-	// object.x = object.x + (object.speed * deltaTimeS);
-
-	//printf("Elapsed time: %fS.\n", deltaTimeS);
-
-	//gameObject->input->isConnected();
-}
-
-int Engine::render(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
-{
 	MSG msg = { 0 };
 
 	// create window
@@ -66,34 +31,73 @@ int Engine::render(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComman
 
 		ShowWindow(wndHandle, nCommandShow);
 
-		while (WM_QUIT != msg.message)
+
+		// read messages
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
-			// read messages
-			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&msg);
+			TranslateMessage(&msg);
 
-				DispatchMessage(&msg);
-			}
-			else
-			{
-				// update/render
-
-				processInput();
-
-				graphics->UpdateConstantBuffer();
-
-				graphics->Render();
-
-				// switch front- and back-buffer
-				graphics->get_gSwapChain()->Present(0, 0);
-			}
+			DispatchMessage(&msg);
 		}
-		// finish program
-		DestroyWindow(wndHandle);
+		else
+		{
+			// update/render
+
+			//processInput();
+
+			
+
+		}
 	}
+}
+
+Engine::~Engine()
+{
+	delete this->graphics;
+	delete this->gameObject;
+
+	// finish program
+	//DestroyWindow(wndHandle);
+	
 	// return how the program finished
-	return (int)msg.wParam;
+	//return (int)msg.wParam;
+}
+
+void Engine::processInput()
+{
+	gameObject->input->update(); // test object, should be done for all objects
+
+	if (gameObject->input->isConnected())
+	{
+		if (this->gameObject->input->State._buttons[GamePad_Button_B] == true)
+		{
+			this->running = false;
+		}
+	}
+}
+
+void Engine::update(int deltaTimeMs)
+{
+	float deltaTimeS;
+	deltaTimeS = (float)(deltaTimeMs) / 1000;
+	// update code
+	// example physics calculation using delta time:
+	// object.x = object.x + (object.speed * deltaTimeS);
+
+	//printf("Elapsed time: %fS.\n", deltaTimeS);
+
+	//gameObject->input->isConnected();
+}
+
+void Engine::render()
+{
+
+	graphics->UpdateConstantBuffer();
+
+	graphics->Render();
+
+	// switch front- and back-buffer
+	graphics->get_gSwapChain()->Present(0, 0);
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)

@@ -10,7 +10,7 @@
 // Entry point for te program
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
-	Engine* engine = new Engine;
+	Engine* engine = new Engine(hInstance, hPrevInstance, lpCommandLine, nCommandShow);
 
 	const double MS_PER_UPDATE = 8;
 	double previous = clock();
@@ -32,7 +32,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 			lag -= MS_PER_UPDATE;
 		}
 
-		engine->render(hInstance, hPrevInstance, lpCommandLine, nCommandShow);
+		engine->render();
 	}
 
 	delete engine;
