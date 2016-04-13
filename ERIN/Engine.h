@@ -6,23 +6,31 @@
 #include "GameLogic.h"
 #include "AssetManager.h"
 
+// test input
+#include "GameObject.h"
+
 class Engine
 {
 public:
-	Engine();
+	Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow);
 	~Engine();
 
 	void processInput();
 	void update(int deltaTimeMs);
-	int render(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow);
+	void render();
 
 	HWND InitWindow(HINSTANCE hInstance);
 
+	bool getRunning() { return running; };
 private:
 	bool running;
+
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	AssetManager* assetManager;
+
+	// test input
+	GameObject* gameObject;
 };
 
 #endif // !ENGINE_H

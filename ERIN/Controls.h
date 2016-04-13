@@ -2,11 +2,18 @@
 #define CONTROLS_H
 #include "Component.h"
 
-class Controls : public Component
+enum ControlsType
+{
+	Con_Input,
+	Con_Behavior,
+};
+class Controls
 {
 public:
 	Controls();
 	virtual ~Controls();
+
+	virtual void update();
 };
 
 #endif // !CONTROLS_H
