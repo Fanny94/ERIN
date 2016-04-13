@@ -6,8 +6,13 @@
 #include <d3dcompiler.h>
 #include <math.h>
 #include <vector>
+#include <fstream>
+#include <istream>
+#include <sstream>
+#include <string>
 #include <DirectXMath.h>
 #include "SimpleMath.h"
+#include <tchar.h>
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dcompiler.lib")
@@ -16,5 +21,6 @@
 
 using namespace DirectX::SimpleMath;
 using namespace DirectX;
+using namespace std;
 
 #endif
