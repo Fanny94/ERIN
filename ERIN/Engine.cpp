@@ -1,15 +1,24 @@
 #include "Engine.h"
+#include "Camera.h"
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 Engine::Engine()
 {
 	 this->graphics = new Graphics();
+	 this->camera = new Camera();
 }
 
 Engine::~Engine()
 {
-	delete this->graphics;
+	if (!graphics)
+	{
+		delete this->graphics;
+	}
+	if (!camera)
+	{
+		delete this->camera;
+	}
 }
 
 void Engine::processInput()
@@ -31,8 +40,18 @@ int Engine::render(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComman
 	MSG msg = { 0 };
 
 	//create window
-	HWND wndHandle = InitWindow(hInstance); //Create Window
+	wndHandle = InitWindow(hInstance); //Create Window
 
+	if (!camera->InitDirectInput(hInstance))
+	{
+		MessageBox(0, "Direct Input Initialization - Failed", "Error", MB_OK);
+
+		return 0;
+	}
+
+	camera->wndH = wndHandle;
+
+	graphics->camera = camera;
 											//window is valid
 	if (wndHandle)
 	{
@@ -65,6 +84,8 @@ int Engine::render(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComman
 				graphics->UpdateConstantBuffer();
 
 				graphics->Render();
+
+				camera->InitCamera();
 
 				//switch front- and back-buffer
 				graphics->get_gSwapChain()->Present(0, 0);
