@@ -5,6 +5,7 @@
 #include "Graphics.h"
 #include "GameLogic.h"
 #include "AssetManager.h"
+#include "Mesh.h"
 
 // test input
 #include "GameObject.h"
@@ -28,6 +29,7 @@ private:
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	AssetManager* assetManager;
+	Mesh* mesh;
 
 	// test input
 	GameObject* gameObject;

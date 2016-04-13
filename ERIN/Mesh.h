@@ -39,8 +39,7 @@ public:
 		int& subsetCount,					//Number of subsets in mesh
 		bool isRHCoordSys,					//true if model was created in right hand coord system
 		bool computeNormals);				//true to compute the normals, false to use the files normals
-private:
-	Graphics* graphics;
+
 	ID3D11BlendState* Transparency;
 	ID3D11Buffer* meshVertBuff;
 	ID3D11Buffer* meshIndexBuff;
@@ -50,5 +49,9 @@ private:
 	vector<int> meshSubsetTexture;
 	vector<ID3D11ShaderResourceView*>* meshSRV;
 	vector<wstring> textureNameArray;
+	vector<SurfaceMaterial> material;
+
+private:
+	Graphics* graphics;
 };
 #endif // !MESH_H

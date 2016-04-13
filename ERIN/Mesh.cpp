@@ -19,6 +19,14 @@ bool Mesh::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buffer*
 
 	wifstream fileIn(filename.c_str());		//Open file
 	wstring meshMatLib;						//String to hold our obj material library filename
+	wstring filePath;
+	filePath = filename.c_str();
+	filePath.pop_back();
+	filePath.pop_back();
+	filePath.pop_back();
+	filePath.push_back('m');
+	filePath.push_back('t');
+	filePath.push_back('l');
 
 	//Arrays to store our model's information
 	vector<DWORD> indices;
@@ -366,6 +374,7 @@ bool Mesh::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buffer*
 									{
 										//Store the material libraries filename
 										fileIn >> meshMatLib;
+										meshMatLib = filePath;
 									}
 								}
 							}
@@ -413,7 +422,7 @@ bool Mesh::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buffer*
 	}
 	else			//If we could not open the file
 	{
-		graphics->get_gSwapChain()->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
+		//graphics->get_gSwapChain()->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
 
 		//create message
 		LPCSTR message = "Could not open OBJ file ";
@@ -638,7 +647,7 @@ bool Mesh::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buffer*
 	}
 	else
 	{
-		graphics->get_gSwapChain()->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
+		//graphics->get_gSwapChain()->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
 
 		LPCSTR message = "Could not open MTL file ";
 
@@ -761,7 +770,7 @@ bool Mesh::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buffer*
 	D3D11_SUBRESOURCE_DATA iinitData;
 
 	iinitData.pSysMem = &indices[0];
-	graphics->get_gDevice()->CreateBuffer(&indexBufferDesc, &iinitData, indexBuff);
+	//hr = graphics->get_gDevice()->CreateBuffer(&indexBufferDesc, &iinitData, indexBuff);
 
 	//Create Vertex Buffer
 	D3D11_BUFFER_DESC vertexBufferDesc;
@@ -777,7 +786,7 @@ bool Mesh::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buffer*
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
 
 	vertexBufferData.pSysMem = &vertices[0];
-	hr = graphics->get_gDevice()->CreateBuffer(&vertexBufferDesc, &vertexBufferData, vertBuff);
+	//hr = graphics->get_gDevice()->CreateBuffer(&vertexBufferDesc, &vertexBufferData, vertBuff);
 
 	return true;
 }
