@@ -85,6 +85,7 @@ void Engine::processInput()
 		{
 			this->running = false;
 		}
+
 	}
 }
 

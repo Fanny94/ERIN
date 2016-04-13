@@ -2,6 +2,7 @@
 #define INPUT_H
 #include "Linker.h"
 
+
 typedef enum
 {
 	GamePadIndex_One = 0,
@@ -10,6 +11,7 @@ typedef enum
 	GamePadIndex_Four = 3,
 }GamePadIndex;
 
+//definition of buttons
 typedef enum
 {
 	GamePad_Button_DPAD_UP = 0,

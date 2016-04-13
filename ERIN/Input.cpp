@@ -60,7 +60,6 @@ void Input::update()
 		State._left_trigger = _controllerState.Gamepad.bLeftTrigger / 255.0f;
 	}
 
-	
 	// Get the Buttons
 	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_A) State._buttons[GamePad_Button_A] = true;
 	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_B) State._buttons[GamePad_Button_B] = true;
@@ -81,13 +80,13 @@ void Input::update()
 	}
 
 	// Check left thumbStick
+	float leftThumbY = fmaxf(-1, (float)_controllerState.Gamepad.sThumbLY / 32767);
 
-	float leftThumbY = _controllerState.Gamepad.sThumbLY;
 	if (leftThumbY)
 	{
 		State._left_thumbstick.y = leftThumbY;
 	}
-	float leftThumbX = _controllerState.Gamepad.sThumbLX;
+	float leftThumbX = fmaxf(-1, (float)_controllerState.Gamepad.sThumbLX);
 	if (leftThumbX)
 	{
 		State._left_thumbstick.x = leftThumbX;
@@ -104,12 +103,12 @@ void Input::update()
 	}
 	// Check right thumbStick
 
-	float rightThumbY = _controllerState.Gamepad.sThumbRY;
+	float rightThumbY = fmaxf(-1, (float)_controllerState.Gamepad.sThumbRY);
 	if (rightThumbY)
 	{
 		State._right_thumbstick.y = rightThumbY;
 	}
-	float rightThumbX = _controllerState.Gamepad.sThumbRX;
+	float rightThumbX = fmaxf(-1, (float)_controllerState.Gamepad.sThumbRX);
 	if (rightThumbX)
 	{
 		State._right_thumbstick.x = rightThumbX;

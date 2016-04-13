@@ -25,6 +25,7 @@ public:
 	Input* input;
 
 private:
+
 	string name;
 	float x, y, z;
 	float velocity;
