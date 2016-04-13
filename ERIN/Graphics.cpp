@@ -9,6 +9,7 @@ Graphics::Graphics()
 
 Graphics::~Graphics()
 {
+
 	gBackbufferRTV->Release();
 	gSwapChain->Release();
 	gDevice->Release();

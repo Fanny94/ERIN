@@ -1,7 +1,8 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
+#include "Component.h"
 
-class Physics
+class Physics : public Component
 {
 public:
 	Physics();

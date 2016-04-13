@@ -1,5 +1,6 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
+#include "Input.h"
 
 #include <string>
 
@@ -10,7 +11,7 @@ class GameObject
 public:
 	GameObject();
 	GameObject(string name, float x, float y, float z);
-	virtual ~GameObject();
+	~GameObject();
 
 	void SetX() { float x; this->x = x; };
 	void SetY() { float y; this->y = y; };
@@ -21,10 +22,12 @@ public:
 	float GetY() { return this->y; };
 	float GetZ() { return this->z; };
 
-private:
+	Input* input;
 
+private:
 	string name;
 	float x, y, z;
+	float velocity;
 };
 
 #endif // !GAMEOBJECT_H
