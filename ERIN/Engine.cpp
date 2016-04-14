@@ -74,6 +74,7 @@ Engine::~Engine()
 	
 	// return how the program finished
 	//return (int)msg.wParam;
+
 	if (!graphics)
 	{
 		delete this->graphics;
