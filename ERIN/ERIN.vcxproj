@@ -112,6 +112,7 @@
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Behavior.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Controls.h" />
     <ClInclude Include="DirectXHelpers.h" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Behavior.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="Engine.cpp" />

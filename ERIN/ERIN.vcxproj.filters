@@ -60,6 +60,7 @@
     <ClInclude Include="SimpleMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="WICTextureLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,6 +71,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlatformHelpers.h">
+=======
+    <ClInclude Include="Camera.h">
+>>>>>>> refs/remotes/origin/master
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -113,7 +117,11 @@
     <ClCompile Include="Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="WICTextureLoader.cpp">
+=======
+    <ClCompile Include="Camera.cpp">
+>>>>>>> refs/remotes/origin/master
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

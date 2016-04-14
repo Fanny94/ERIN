@@ -1,9 +1,11 @@
 #include "Engine.h"
+#include "Camera.h"
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
+	this->camera = new Camera();
 	this->running = true;
 	this->graphics = new Graphics();
 
@@ -12,8 +14,19 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 	MSG msg = { 0 };
 
-	// create window
-	HWND wndHandle = InitWindow(hInstance);
+	//create window
+	wndHandle = InitWindow(hInstance); //Create Window
+
+	if (!camera->InitDirectInput(hInstance))
+	{
+		MessageBox(0, "Direct Input Initialization - Failed", "Error", MB_OK);
+
+		return;
+	}
+
+	camera->wndH = wndHandle;
+
+	graphics->camera = camera;
 
 	// window is valid
 	if (wndHandle)
@@ -50,8 +63,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 			//processInput();
 
-			
-
+			//switch front- and back-buffer
+		
 		}
 	}
 }
@@ -66,6 +79,14 @@ Engine::~Engine()
 	
 	// return how the program finished
 	//return (int)msg.wParam;
+	if (!graphics)
+	{
+		delete this->graphics;
+	}
+	if (!camera)
+	{
+		delete this->camera;
+	}
 }
 
 void Engine::processInput()
@@ -87,6 +108,33 @@ void Engine::processInput()
 			this->running = false;
 		}
 		if (this->gameObject->input->State._buttons[GamePad_Button_A] == true)
+		{
+			this->running = false;
+		}
+
+		if (this->gameObject->input->State._buttons[GamePad_Button_START] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_BACK] == true)
+		{
+			this->running = false;
+		}
+
+		if (this->gameObject->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
+		{
+			this->running = false;
+		}
+
+		if (this->gameObject->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
 		{
 			this->running = false;
 		}
@@ -112,6 +160,8 @@ void Engine::render()
 	graphics->UpdateConstantBuffer();
 
 	graphics->Render();
+
+	camera->InitCamera();
 
 	// switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(0, 0);

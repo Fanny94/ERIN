@@ -3,6 +3,7 @@
 
 #include "Linker.h"
 #include "WICTextureLoader.h"
+class Camera;
 
 class Graphics
 {
@@ -16,7 +17,7 @@ public:
 	void CreateTriangle();
 	void CreateConstantBuffer();
 	void UpdateConstantBuffer();
-
+	
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
 
@@ -49,6 +50,7 @@ public:
 	};
 
 	TriangleVertex* triangleVertices;
+	Camera* camera;
 
 	struct Vertex
 	{
@@ -94,6 +96,9 @@ public:
 private:
 	float WIDTH = 1080;
 	float HEIGHT = 720;
+
+	float camPosX;
+	float camPosY;
 
 	ID3D11Device* gDevice = nullptr;
 	ID3D11DeviceContext* gDeviceContext = nullptr;

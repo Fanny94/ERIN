@@ -13,6 +13,7 @@
 #include <DirectXMath.h>
 #include "SimpleMath.h"
 #include <tchar.h>
+#include <dinput.h>
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dcompiler.lib")

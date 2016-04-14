@@ -6,6 +6,7 @@
 #include "GameLogic.h"
 #include "AssetManager.h"
 #include "Mesh.h"
+#include "Camera.h"
 
 // test input
 #include "GameObject.h"
@@ -21,6 +22,7 @@ public:
 	void render();
 
 	HWND InitWindow(HINSTANCE hInstance);
+	HWND wndHandle;
 
 	bool getRunning() { return running; };
 private:
@@ -30,6 +32,7 @@ private:
 	GameLogic* gameLogic;
 	AssetManager* assetManager;
 	Mesh* mesh;
+	Camera* camera;
 
 	// test input
 	GameObject* gameObject;
