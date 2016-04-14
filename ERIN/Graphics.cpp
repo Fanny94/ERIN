@@ -981,7 +981,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 		//Compute vertex normals
 		XMVECTOR normalSum = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-		int facesUsing = 0;
+		float facesUsing = 0;
 		float tX;
 		float tY;
 		float tZ;
