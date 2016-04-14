@@ -97,14 +97,13 @@ void Camera::InitCamera()
 
 }
 
-
 void Camera::UpdateCamera()
 {
 	camRotationMatrix = XMMatrixRotationRollPitchYaw(camPitch, camYaw, 0);
 	camTarget = XMVector3TransformCoord(worldForward, camRotationMatrix);
 	camTarget = XMVector3Normalize(camTarget);
 
-	Matrix RotateYTempMatrix;
+	Matrix RotateYTempMatrix;                  
 	RotateYTempMatrix = XMMatrixRotationY(camYaw);
 
 	camRight = XMVector3TransformCoord(worldRight, RotateYTempMatrix);
