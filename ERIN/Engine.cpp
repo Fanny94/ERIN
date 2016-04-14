@@ -108,6 +108,33 @@ void Engine::processInput()
 		{
 			this->running = false;
 		}
+
+		if (this->gameObject->input->State._buttons[GamePad_Button_START] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_BACK] == true)
+		{
+			this->running = false;
+		}
+
+		if (this->gameObject->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
+		{
+			this->running = false;
+		}
+
+		if (this->gameObject->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
+		{
+			this->running = false;
+		}
 	}
 }
 
