@@ -6,7 +6,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 {
 	this->running = true;
 	this->graphics = new Graphics();
-	this->mesh = new Mesh();
 
 	// test input
 	this->gameObject = new GameObject("player", 0.0f, 0.0f, 0.0f);
@@ -28,7 +27,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		//graphics->CreateTriangle();
 
-		mesh->LoadObjModel(L"C:/Users/Taccoa/Documents/Cube.obj", &mesh->meshVertBuff, &mesh->meshIndexBuff, mesh->meshSubsetIndexStart, mesh->meshSubsetTexture, mesh->material, mesh->meshSubsets, true, false);
+		if (!graphics->LoadObjModel(L"C:/Users/Taccoa/Documents/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		{
+			return;
+		}
 
 		graphics->CreateConstantBuffer();
 
@@ -58,7 +60,6 @@ Engine::~Engine()
 {
 	delete this->graphics;
 	delete this->gameObject;
-	delete this->mesh;
 
 	// finish program
 	//DestroyWindow(wndHandle);
