@@ -7,12 +7,12 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-    /*DIKeyboard->Unacquire();
+    DIKeyboard->Unacquire();
     DIMouse->Unacquire();
-	DirectInput->Release();*/
+	DirectInput->Release();
 }
 
-/*bool Camera::InitDirectInput(HINSTANCE hInstance)
+bool Camera::InitDirectInput(HINSTANCE hInstance)
 {
 
 	hr = DirectInput8Create(hInstance,
@@ -35,13 +35,13 @@ Camera::~Camera()
 	hr = DIMouse->SetCooperativeLevel(wndH, DISCL_EXCLUSIVE | DISCL_NOWINKEY | DISCL_FOREGROUND);
 
 	return true;
-}*/
+}
 
 void Camera::DetectInput(double time)
 {
 	speed = 5.0f * time;
 	
-	/*DIMOUSESTATE mouseCurrState;
+	DIMOUSESTATE mouseCurrState;
 
 	BYTE keyboardState[256];
 
@@ -51,22 +51,21 @@ void Camera::DetectInput(double time)
 	DIMouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseCurrState);
 	DIKeyboard->GetDeviceState(sizeof(keyboardState), (LPVOID)&keyboardState);
 
-	if (keyboardState[DIK_ESCAPE] & 0x80)
-		PostMessage(wndH, WM_DESTROY, 0, 0);*/
+	if (keyboardState[DIK_A] & 0x80)
+		moveLeftRight -= speed;
 
-
-	/*if (keyboardState[DIK_A] & 0x80)
-		moveLeftRight -= speed;*//*
 	if (keyboardState[DIK_D] & 0x80)
 		moveLeftRight += speed;
 
 	if (keyboardState[DIK_W] & 0x80)
 		moveBackForward += speed;
+
 	if (keyboardState[DIK_S] & 0x80)
 		moveBackForward -= speed;
 
 	if (keyboardState[DIK_SPACE] & 0x80)
 		moveUpDown += speed;
+
 	if (keyboardState[DIK_LCONTROL] & 0x80)
 		moveUpDown -= speed;
 
@@ -75,7 +74,7 @@ void Camera::DetectInput(double time)
 		camYaw += mouseLastState.lX * 0.001f;
 		camPitch += mouseCurrState.lY * 0.001f;
 		mouseLastState = mouseCurrState;
-	}*/
+	}
 
 	UpdateCamera();
 

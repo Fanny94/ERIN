@@ -5,8 +5,8 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
-	this->camera = new Camera();
 	this->running = true;
+	this->camera = new Camera();
 	this->graphics = new Graphics();
 
 	// test input
@@ -17,14 +17,14 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	//create window
 	wndHandle = InitWindow(hInstance); //Create Window
 
-	/*if (!camera->InitDirectInput(hInstance))
+	if (!camera->InitDirectInput(hInstance))
 	{
 		MessageBox(0, "Direct Input Initialization - Failed", "Error", MB_OK);
 
 		return;
-	}*/
+	}
 
-	camera->wndH = wndHandle;
+	// camera->wndH = wndHandle; Behövs denna raden?? / Marc
 
 	graphics->camera = camera;
 
@@ -68,21 +68,13 @@ Engine::~Engine()
 {
 	delete this->graphics;
 	delete this->gameObject;
+	delete this->camera;
 
 	// finish program
 	//DestroyWindow(wndHandle);
 	
 	// return how the program finished
 	//return (int)msg.wParam;
-
-	if (!graphics)
-	{
-		delete this->graphics;
-	}
-	if (!camera)
-	{
-		delete this->camera;
-	}
 }
 
 void Engine::processInput()
@@ -154,6 +146,8 @@ void Engine::processInput()
 			this->camera->cameraMoveDown();
 		}
 	}
+
+	//graphics->MatrixPtr->view = camera->camView;
 }
 
 void Engine::update(int deltaTimeMs)

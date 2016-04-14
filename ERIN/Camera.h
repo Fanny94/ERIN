@@ -53,15 +53,15 @@ public:
 	void cameraMoveRight();
 	void cameraMoveUp();
 	void cameraMoveDown();
-	//bool getInput() { return cameraInput; };
-	//bool InitDirectInput(HINSTANCE hInstance);
+	bool getInput() { return cameraInput; };
+	bool InitDirectInput(HINSTANCE hInstance);
 
 	IDirectInputDevice8* DIKeyboard;
 	IDirectInputDevice8* DIMouse;
 
 	DIMOUSESTATE mouseLastState;
 	LPDIRECTINPUT8 DirectInput;
-//	bool cameraInput;
+	bool cameraInput;
 
 private:
 

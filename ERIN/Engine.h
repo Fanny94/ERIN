@@ -24,6 +24,7 @@ public:
 	HWND wndHandle;
 
 	bool getRunning() { return running; };
+
 private:
 	bool running;
 	
