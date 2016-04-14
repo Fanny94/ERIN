@@ -1,5 +1,6 @@
 #include "Linker.h"
 #include "Engine.h"
+#include "Camera.h"
 
 #include <ctime>
 #include <time.h>

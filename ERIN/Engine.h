@@ -26,7 +26,7 @@ public:
 	bool getRunning() { return running; };
 private:
 	bool running;
-
+	
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	AssetManager* assetManager;
