@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Input.h"
 
 Camera::Camera()
 {
@@ -52,7 +53,7 @@ void Camera::DetectInput(double time)
 	if (keyboardState[DIK_ESCAPE] & 0x80)
 		PostMessage(wndH, WM_DESTROY, 0, 0);
 
-	float speed = 15.0f * time;
+	float speed = 5.0f * time;
 
 	if (keyboardState[DIK_A] & 0x80)
 		moveLeftRight -= speed;
@@ -62,6 +63,10 @@ void Camera::DetectInput(double time)
 		moveBackForward += speed;
 	if (keyboardState[DIK_S] & 0x80)
 		moveBackForward -= speed;
+	if (keyboardState[DIK_SPACE] & 0x80)
+		moveUpDown += speed;
+	if (keyboardState[DIK_LCONTROL] & 0x80)
+		moveUpDown -= speed;
 	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
 	{
 		camYaw += mouseLastState.lX * 0.001f;
@@ -106,9 +111,11 @@ void Camera::UpdateCamera()
 
 	camPosition += moveLeftRight*camRight;
 	camPosition += moveBackForward*camForward;
+	camPosition += moveUpDown*camUp;
 
 	moveLeftRight = 0.0f;
 	moveBackForward = 0.0f;
+	moveUpDown = 0.0f;
 
 	camTarget = camPosition + camTarget;
 

@@ -58,10 +58,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 			//processInput();
 
-			camera->InitCamera();
-
 			//switch front- and back-buffer
-			graphics->get_gSwapChain()->Present(0, 0);
+		
 		}
 	}
 }
@@ -157,6 +155,8 @@ void Engine::render()
 	graphics->UpdateConstantBuffer();
 
 	graphics->Render();
+
+	camera->InitCamera();
 
 	// switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(0, 0);
