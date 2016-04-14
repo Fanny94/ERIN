@@ -1,5 +1,6 @@
 #include "Linker.h"
 #include "Engine.h"
+#include "Camera.h"
 
 // memory leaks
 #define CRTDBG_MAP_ALLOC
