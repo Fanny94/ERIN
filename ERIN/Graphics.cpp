@@ -33,6 +33,7 @@ Graphics::~Graphics()
 	this->gPixelShader = nullptr;
 
 	this->gConstantBuffer = nullptr;
+
 	if (!camera)
 	{
 		delete this->camera;
