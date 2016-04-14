@@ -281,12 +281,8 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 	wstring meshMatLib;						//String to hold our obj material library filename
 	wstring filePath;
 	filePath = filename.c_str();
-	filePath.pop_back();
-	filePath.pop_back();
-	filePath.pop_back();
-	filePath.push_back('m');
-	filePath.push_back('t');
-	filePath.push_back('l');
+	filePath.pop_back(); filePath.pop_back(); filePath.pop_back();
+	filePath.push_back('m'); filePath.push_back('t'); filePath.push_back('l');
 
 	//Arrays to store our model's information
 	vector<DWORD> indices;
@@ -323,7 +319,6 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 		while (fileIn)
 		{
 			checkChar = fileIn.get();	//Get next char
-
 			switch (checkChar)
 			{
 			case '#':
@@ -395,7 +390,6 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 						if (checkChar == ' ')		//If its a space
 							triangleCount++;		//Increase our triangle count
 					}
-
 					//Check for space at the end of our face string
 					if (face[face.length() - 1] == ' ')
 						triangleCount--;		//Each space adds to our triangle count
@@ -416,7 +410,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 							wstring vertPart;
 							int whichPart = 0;	//(vPos/vTexCoord/vNorm)
 
-												//Parse this string
+							//Parse this string
 							for (int j = 0; j < VertDef.length(); j++)
 							{
 								if (VertDef[j] != '/')		//If there is no divider "/", add a char to our vertPart
@@ -432,7 +426,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										wstringToInt >> vertPosIndexTemp;
 										vertPosIndexTemp -= 1;			//subtract one since c++ arrays start with 0, and obj start with 1
 
-																		//Check to see if the vert pos was the only thing specified
+										//Check to see if the vert pos was the only thing specified
 										if (j == VertDef.length() - 1)
 										{
 											vertNormIndexTemp = 0;
@@ -488,11 +482,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										{
 											indices.push_back(iCheck);			//Set index for this vertex
 											vertAlreadyExists = true;			//If we've made it here, the vertex already exists
-										}
-									}
-								}
-							}
-
+										}}}}
 							//If this vertex is not already in our vertex arrays, put it there
 							if (!vertAlreadyExists)
 							{
@@ -589,11 +579,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										{
 											indices.push_back(iCheck);			//Set index for this vertex
 											vertAlreadyExists = true;			//If we've made it here, the vertex already exists
-										}
-									}
-								}
-							}
-
+										}}}}
 							if (!vertAlreadyExists)
 							{
 								vertPosIndex.push_back(vertPosIndexTemp);
@@ -608,9 +594,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 							meshTriangles++;					//New triangle defined
 							vIndex++;
-						}
-					}
-				}
+						}}}
 				break;
 
 			case 'm':		//mtllib - material library filename
@@ -635,12 +619,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										//Store the material libraries filename
 										fileIn >> meshMatLib;
 										meshMatLib = filePath;
-									}
-								}
-							}
-						}
-					}
-				}
+									}}}}}}
 				break;
 
 			case 'u':		//usemtl - which material to use
@@ -667,24 +646,17 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										fileIn >> meshMaterialsTemp;	//Get next type
 
 										meshMaterials.push_back(meshMaterialsTemp);
-									}
-								}
-							}
-						}
-					}
-				}
+									}}}}}}
 				break;
 
 			default:
 				break;
-			}
-		}
-	}
+			}}}
 	else			//If we could not open the file
 	{
 		gSwapChain->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
 
-																			//create message
+		//create message
 		LPCSTR message = "Could not open OBJ file ";
 
 		MessageBox(0, message, "Error", MB_OK);
@@ -694,7 +666,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 	subsetIndexStart.push_back(vIndex); //There won't be another index start after our last subset, so set it here
 
-										//This makes sure the first subset does not contain '0' indices
+	//This makes sure the first subset does not contain '0' indices
 	if (subsetIndexStart[1] == 0)
 	{
 		subsetIndexStart.erase(subsetIndexStart.begin() + 1);
@@ -827,7 +799,6 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 											texFilePathEnd = true;
 										}
 									}
-
 									//Has texture already been loaded
 									bool alreadyLoaded = false;
 									for (int i = 0; i < textureNameArray.size(); i++)
@@ -850,18 +821,12 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 											material[matCount - 1].texArrayIndex = meshSRV.size();
 											meshSRV.push_back(tempMeshSRV);
 											material[matCount - 1].hasTexture = true;
-										}
-									}
-								}
-							}
+										}}}}
 							//map_d - alpha map
 							else if (checkChar == 'd')
 							{
 								material[matCount - 1].transparent = true;
-							}
-						}
-					}
-				}
+							}}}}
 				break;
 
 			case 'n':		//newmtl - declare new material
@@ -892,19 +857,12 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										material[matCount].texArrayIndex = 0;
 										matCount++;
 										kdset = false;
-									}
-								}
-							}
-						}
-					}
-				}
+									}}}}}}
 				break;
 
 			default:
 				break;
-			}
-		}
-	}
+			}}}
 	else
 	{
 		gSwapChain->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
@@ -999,8 +957,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 					normalSum = XMVectorSet(tX, tY, tZ, 0.0f);
 					facesUsing++;
-				}
-			}
+				}}
 			//Get the actual normal by dividing the normalSum by the number of faces sharing the vertex
 			normalSum = normalSum / facesUsing;
 
@@ -1015,8 +972,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 			//Clear normalSum and facesUsing for next vertex
 			normalSum = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 			facesUsing = 0;
-		}
-	}
+		}}
 
 	//Create index buffer
 	D3D11_BUFFER_DESC indexBufferDesc;
