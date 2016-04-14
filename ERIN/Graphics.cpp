@@ -21,6 +21,7 @@ Graphics::~Graphics()
 	gPixelShader->Release();
 
 	gConstantBuffer->Release();
+	objBuffer->Release();
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -73,10 +74,21 @@ void Graphics::Render()
 
 	UINT32 vertexMS = sizeof(Vertex);
 
+	D3D11_MAPPED_SUBRESOURCE mappedOBJ;
+	HRESULT hr = gDeviceContext->Map(objBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedOBJ);
+	OBJ* OBJPtr;
+	OBJPtr = (OBJ*)mappedOBJ.pData;
+
 	for (int i = 0; i < meshSubsets; ++i)
 	{
 		gDeviceContext->IASetIndexBuffer(meshIndexBuff, DXGI_FORMAT_R32_UINT, 0);
 		gDeviceContext->IASetVertexBuffers(0, 1, &meshVertBuff, &vertexMS, &offset);
+
+		OBJPtr->difColor = material[meshSubsetTexture[i]].difColor;
+		OBJPtr->hasTexture = material[meshSubsetTexture[i]].hasTexture;
+
+		gDeviceContext->UpdateSubresource(objBuffer, 0, NULL, &OBJPtr, 0, 0);
+		gDeviceContext->PSSetConstantBuffers(0, 1, &objBuffer);
 
 		if (material[meshSubsetTexture[i]].hasTexture)
 			gDeviceContext->PSSetShaderResources(0, 1, &meshSRV[material[meshSubsetTexture[i]].texArrayIndex]);
@@ -106,7 +118,7 @@ HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		D3D11_CREATE_DEVICE_DEBUG,
+		NULL, //D3D11_CREATE_DEVICE_DEBUG,
 		NULL,
 		NULL,
 		D3D11_SDK_VERSION,
@@ -211,6 +223,16 @@ void Graphics::CreateConstantBuffer()
 	cBufferDesc.ByteWidth = sizeof(MATRICES);
 
 	gDevice->CreateBuffer(&cBufferDesc, NULL, &gConstantBuffer);
+
+	D3D11_BUFFER_DESC cOBJBufferDesc;
+	ZeroMemory(&cOBJBufferDesc, sizeof(D3D11_BUFFER_DESC));
+	cOBJBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	cOBJBufferDesc.ByteWidth = sizeof(OBJ);
+	cOBJBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cOBJBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cOBJBufferDesc.MiscFlags = 0;
+
+	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
 }
 
 void Graphics::UpdateConstantBuffer()
@@ -224,17 +246,11 @@ void Graphics::UpdateConstantBuffer()
 	rotationCount += 0.01f;
 
 	Matrix world;
-	//Matrix view;
 	Matrix projection;
 	Matrix worldViewProj;
 
-	/*Vector3 camPos = Vector3(0, 0, -2);
-	Vector3 focusPos = Vector3(0, 0, 0);
-	Vector3 UpDir = Vector3(0, 1, 0);*/
-
 	world = XMMatrixRotationZ(XMConvertToRadians(rotationCount)) * XMMatrixTranslation(0, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
-	//camera->camView = XMMatrixLookAtLH(camPos, focusPos, UpDir);
 
 	worldViewProj = world * camera->camView * projection;
 

@@ -3,7 +3,6 @@ struct VS_IN
 	float3 Pos : POSITION;
 	float3 Nor: NORMAL;
 	float2 uv : UV;
-
 };
 
 struct VS_OUT

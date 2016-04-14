@@ -1,3 +1,13 @@
+SamplerState ObjSamplerState;
+Texture2D ObjTexture;
+
+cbuffer OBJ
+{
+	float4 difColor;
+	int hasTexture;
+	float3 padding;
+};
+
 struct VS_OUT
 {
 	float4 Pos : SV_POSITION;
@@ -10,7 +20,10 @@ float4 PS_main(VS_OUT input) : SV_Target
 {
 	input.Nor = normalize(input.Nor);
 	
-	float4 color = (0.0f, 0.0f, 1.0f, 0.0f);
+	float4 color = difColor;
+
+	if (hasTexture == true)
+		color = ObjTexture.Sample(ObjSamplerState, input.uv);
 
 	return color;
 };

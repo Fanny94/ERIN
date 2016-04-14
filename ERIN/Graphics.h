@@ -49,6 +49,15 @@ public:
 		Matrix projection;
 	};
 
+	ID3D11Buffer* objBuffer = nullptr;
+
+	struct OBJ
+	{
+		XMFLOAT4 difColor;
+		int hasTexture;
+		float padding[3];
+	};
+
 	TriangleVertex* triangleVertices;
 	Camera* camera;
 
