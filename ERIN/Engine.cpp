@@ -38,7 +38,12 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		graphics->CreateTriangle();
+		//graphics->CreateTriangle();
+
+		if (!graphics->LoadObjModel(L"C:/Users/Taccoa/Documents/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		{
+			return;
+		}
 
 		graphics->CreateConstantBuffer();
 

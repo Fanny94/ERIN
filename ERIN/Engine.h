@@ -5,6 +5,7 @@
 #include "Graphics.h"
 #include "GameLogic.h"
 #include "AssetManager.h"
+#include "Mesh.h"
 #include "Camera.h"
 
 // test input
@@ -31,6 +32,7 @@ private:
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	AssetManager* assetManager;
+	Mesh* mesh;
 	Camera* camera;
 
 	// test input

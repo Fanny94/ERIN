@@ -63,10 +63,10 @@ void Camera::DetectInput(double time)
 	if (keyboardState[DIK_S] & 0x80)
 		moveBackForward -= speed;
 
-	if (keyboardState[DIK_SPACE] & 0x80)
+	if (keyboardState[DIK_Q] & 0x80)
 		moveUpDown += speed;
 
-	if (keyboardState[DIK_LCONTROL] & 0x80)
+	if (keyboardState[DIK_E] & 0x80)
 		moveUpDown -= speed;
 
 	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
