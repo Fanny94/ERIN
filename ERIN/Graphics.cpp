@@ -3,7 +3,6 @@
 
 Graphics::Graphics()
 {
-
 }
 
 Graphics::~Graphics()
@@ -329,7 +328,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 				if (checkChar == ' ')	//v - vert position
 				{
 					float vz, vy, vx;
-					fileIn >> vx >> vy >> vz;	//Store the next three types
+					fileIn >> vz >> vy >> vx;	//Store the next three types
 
 					if (isRHCoordSys)	//If model is from an RH Coord System
 						vertPos.push_back(XMFLOAT3(vx, vy, vz*-1.0f));		//Invert the z axis

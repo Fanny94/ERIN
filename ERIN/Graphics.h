@@ -94,7 +94,6 @@ public:
 	ID3D11BlendState* Transparency;
 	ID3D11Buffer* meshVertBuff;
 	ID3D11Buffer* meshIndexBuff;
-	XMMATRIX meshWorld;
 	int meshSubsets = 0;
 	vector<int> meshSubsetIndexStart;
 	vector<int> meshSubsetTexture;

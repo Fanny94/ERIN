@@ -27,7 +27,7 @@ VS_OUT VS_main(VS_IN input)
 
 	output.Pos = mul(float4(input.Pos, 1), worldViewProj);
 	output.WPos = mul(float4(input.Pos, 1), world);
-	output.Nor = input.Nor;
+	output.Nor = mul(input.Nor, world);
 	output.uv = input.uv;
 
 	return output;
