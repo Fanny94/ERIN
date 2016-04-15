@@ -113,8 +113,6 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Behavior.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="Controls.h" />
     <ClInclude Include="DirectXHelpers.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameLogic.h" />
@@ -124,18 +122,15 @@
     <ClInclude Include="Linker.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Physics.h" />
     <ClInclude Include="PlatformHelpers.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SimpleMath.h" />
-    <ClInclude Include="Transform.h" />
     <ClInclude Include="WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Behavior.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="Controls.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -143,8 +138,7 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>

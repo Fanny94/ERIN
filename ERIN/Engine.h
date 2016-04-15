@@ -18,7 +18,7 @@ public:
 	~Engine();
 
 	void processInput();
-	void update(int deltaTimeMs);
+	void update(double deltaTimeMs);
 	void render();
 
 	HWND InitWindow(HINSTANCE hInstance);

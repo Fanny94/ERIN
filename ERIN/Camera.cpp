@@ -39,7 +39,7 @@ bool Camera::InitDirectInput(HINSTANCE hInstance)
 
 void Camera::DetectInput(double time)
 {
-	speed = 5.0f * time;
+	speed = (float)(5.0f * time);
 	
 	DIMOUSESTATE mouseCurrState;
 
@@ -77,7 +77,6 @@ void Camera::DetectInput(double time)
 	}
 
 	UpdateCamera();
-
 }
 
 void Camera::InitCamera()
@@ -94,7 +93,6 @@ void Camera::InitCamera()
 	frameTime = GetFrameTime();
 
 	DetectInput(frameTime);
-
 }
 
 void Camera::UpdateCamera()
@@ -142,6 +140,25 @@ void Camera::cameraMoveDown()
 	moveUpDown -= speed;
 }
 
+void Camera::cameraMoveLeft(float factor)
+{
+	moveLeftRight -= speed * factor;
+}
+
+void Camera::cameraMoveRight(float factor)
+{
+	moveLeftRight += speed * -factor;
+}
+
+void Camera::cameraMoveUp(float factor)
+{
+	moveUpDown += speed * factor;
+}
+void Camera::cameraMoveDown(float factor)
+{
+	moveUpDown -= speed * -factor;
+}
+
 void Camera::StartTimer()
 {
 	LARGE_INTEGER frequencyCount;
@@ -170,7 +187,7 @@ double Camera::GetFrameTime()
 	frameTimeOld = currentTime.QuadPart;				//Stores this frame as the next last frame
 
 	if (tickCount < 0.0f)
-		tickCount = 0.0f;
+		tickCount = (__int64)0.0f;
 
 	return float(tickCount) / countsPerSecond;
 }

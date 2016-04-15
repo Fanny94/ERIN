@@ -64,6 +64,8 @@ private:
 
 	float deadzoneX;
 	float deadzoneY;
+	float leftStickX;
+	float leftStickY;
 };
 
 #endif // !INPUT_H

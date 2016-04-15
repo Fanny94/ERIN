@@ -40,7 +40,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		//graphics->CreateTriangle();
 
-		if (!graphics->LoadObjModel(L"C:/Users/Taccoa/Documents/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
 			return;
 		}
@@ -133,7 +133,7 @@ void Engine::processInput()
 			this->running = false;
 		}
 
-		//test camera movement
+		// test camera movement
 		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 		{
 			this->camera->cameraMoveLeft();
@@ -150,15 +150,49 @@ void Engine::processInput()
 		{
 			this->camera->cameraMoveDown();
 		}
+
+		// test xbox thumstix
+
+		float leftX = this->gameObject->input->State._left_thumbstick.x;
+		float leftY = this->gameObject->input->State._left_thumbstick.y;
+
+		if (leftX < -0.0f)
+		{
+			this->camera->cameraMoveLeft(leftX);
+		}
+		if (leftX > 0.0f)
+		{
+			this->camera->cameraMoveRight(leftX);
+		}
+		if (leftY < -0.0f)
+		{
+			this->camera->cameraMoveDown(leftY);
+		}
+		if (leftY > 0.0f)
+		{
+			this->camera->cameraMoveUp(leftY);
+		}
+		
+		// left stick
+		/*if ((this->gameObject->input->State._left_thumbstick.x != 0) &&
+			(this->gameObject->input->State._left_thumbstick.y != 0))
+		{
+			this->camera->cameraMoveLeft(this->gameObject->input->State._left_thumbstick.x);
+			this->camera->cameraMoveRight(this->gameObject->input->State._left_thumbstick.x);
+			this->camera->cameraMoveUp(this->gameObject->input->State._left_thumbstick.y);
+			this->camera->cameraMoveDown(this->gameObject->input->State._left_thumbstick.y);
+		}*/
+
+		// right stick
 	}
 
 	//graphics->MatrixPtr->view = camera->camView;
 }
 
-void Engine::update(int deltaTimeMs)
+void Engine::update(double deltaTimeMs)
 {
-	float deltaTimeS;
-	deltaTimeS = (float)(deltaTimeMs) / 1000;
+	double deltaTimeS;
+	deltaTimeS = deltaTimeMs / 1000;
 	// update code
 	// example physics calculation using delta time:
 	// object.x = object.x + (object.speed * deltaTimeS);
