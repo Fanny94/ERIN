@@ -18,9 +18,6 @@ GameObject::GameObject(string name, float x, float y, float z)
 
 GameObject::~GameObject()
 {
-<<<<<<< HEAD
-}
-=======
 	delete this->input;
 }
->>>>>>> origin/master
+

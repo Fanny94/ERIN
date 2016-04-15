@@ -101,8 +101,6 @@ void Engine::processInput()
 			this->running = false;
 		}
 
-<<<<<<< HEAD
-=======
 		if (this->gameObject->input->State._buttons[GamePad_Button_START] == true)
 		{
 			this->running = false;
@@ -147,7 +145,6 @@ void Engine::processInput()
 		{
 			this->camera->cameraMoveDown();
 		}
->>>>>>> origin/master
 	}
 
 	//graphics->MatrixPtr->view = camera->camView;
