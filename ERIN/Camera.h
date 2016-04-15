@@ -30,6 +30,7 @@ public:
 	float moveUpDown = 0.0f;
 	float camYaw = 0.0f;
 	float camPitch = 0.0f;
+	float speed;
 
 	int frameCount = 0;
 	__int64 counterStart = 0;
@@ -48,6 +49,11 @@ public:
 	double GetFrameTime();
 	void InitCamera();
 	void UpdateCamera();
+	void cameraMoveLeft();
+	void cameraMoveRight();
+	void cameraMoveUp();
+	void cameraMoveDown();
+	bool getInput() { return cameraInput; };
 	bool InitDirectInput(HINSTANCE hInstance);
 
 	IDirectInputDevice8* DIKeyboard;
@@ -55,9 +61,10 @@ public:
 
 	DIMOUSESTATE mouseLastState;
 	LPDIRECTINPUT8 DirectInput;
+	bool cameraInput;
 
 private:
-	
+
 };
 
 #endif

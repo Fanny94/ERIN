@@ -39,7 +39,8 @@ bool Camera::InitDirectInput(HINSTANCE hInstance)
 
 void Camera::DetectInput(double time)
 {
-
+	speed = 5.0f * time;
+	
 	DIMOUSESTATE mouseCurrState;
 
 	BYTE keyboardState[256];
@@ -50,23 +51,24 @@ void Camera::DetectInput(double time)
 	DIMouse->GetDeviceState(sizeof(DIMOUSESTATE), &mouseCurrState);
 	DIKeyboard->GetDeviceState(sizeof(keyboardState), (LPVOID)&keyboardState);
 
-	if (keyboardState[DIK_ESCAPE] & 0x80)
-		PostMessage(wndH, WM_DESTROY, 0, 0);
-
-	float speed = 5.0f * time;
-
 	if (keyboardState[DIK_A] & 0x80)
 		moveLeftRight -= speed;
+
 	if (keyboardState[DIK_D] & 0x80)
 		moveLeftRight += speed;
+
 	if (keyboardState[DIK_W] & 0x80)
 		moveBackForward += speed;
+
 	if (keyboardState[DIK_S] & 0x80)
 		moveBackForward -= speed;
+
 	if (keyboardState[DIK_Q] & 0x80)
 		moveUpDown += speed;
+
 	if (keyboardState[DIK_E] & 0x80)
 		moveUpDown -= speed;
+
 	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
 	{
 		camYaw += mouseLastState.lX * 0.001f;
@@ -120,6 +122,25 @@ void Camera::UpdateCamera()
 	camTarget = camPosition + camTarget;
 
 	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
+}
+
+void Camera::cameraMoveLeft()
+{
+	moveLeftRight -= speed;
+}
+
+void Camera::cameraMoveRight()
+{
+	moveLeftRight += speed;
+}
+
+void Camera::cameraMoveUp()
+{
+	moveUpDown += speed;
+}
+void Camera::cameraMoveDown()
+{
+	moveUpDown -= speed;
 }
 
 void Camera::StartTimer()

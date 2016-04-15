@@ -21,5 +21,5 @@ GameObject::GameObject(string name, float x, float y, float z)
 
 GameObject::~GameObject()
 {
-	
+	delete this->input;
 }

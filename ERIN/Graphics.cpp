@@ -4,16 +4,14 @@
 Graphics::Graphics()
 {
 
-	this->camera = new Camera();
 }
 
 Graphics::~Graphics()
 {
-
-	gBackbufferRTV->Release();
-	gSwapChain->Release();
 	gDevice->Release();
 	gDeviceContext->Release();
+	gSwapChain->Release();
+	gBackbufferRTV->Release();
 
 	gVertexLayout->Release();
 	gVertexShader->Release();
@@ -21,6 +19,7 @@ Graphics::~Graphics()
 	gPixelShader->Release();
 
 	gConstantBuffer->Release();
+<<<<<<< HEAD
 	objBuffer->Release();
 
 	this->gDevice = nullptr;
@@ -38,6 +37,8 @@ Graphics::~Graphics()
 	{
 		delete this->camera;
 	}
+=======
+>>>>>>> refs/remotes/origin/master
 }
 
 void Graphics::SetViewport()
@@ -240,7 +241,6 @@ void Graphics::UpdateConstantBuffer()
 
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mapped;
-	MATRICES* MatrixPtr;
 
 	static float rotationCount;
 	rotationCount += 0.01f;

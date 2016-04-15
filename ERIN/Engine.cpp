@@ -5,8 +5,8 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
-	this->camera = new Camera();
 	this->running = true;
+	this->camera = new Camera();
 	this->graphics = new Graphics();
 
 	// test input
@@ -24,7 +24,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		return;
 	}
 
-	camera->wndH = wndHandle;
+	// camera->wndH = wndHandle; Behövs denna raden?? / Marc
 
 	graphics->camera = camera;
 
@@ -73,24 +73,18 @@ Engine::~Engine()
 {
 	delete this->graphics;
 	delete this->gameObject;
+	delete this->camera;
 
 	// finish program
 	//DestroyWindow(wndHandle);
 	
 	// return how the program finished
 	//return (int)msg.wParam;
-	if (!graphics)
-	{
-		delete this->graphics;
-	}
-	if (!camera)
-	{
-		delete this->camera;
-	}
 }
 
 void Engine::processInput()
 {
+
 	gameObject->input->update(); // test object, should be done for all objects
 
 	if (gameObject->input->isConnected())
@@ -138,7 +132,27 @@ void Engine::processInput()
 		{
 			this->running = false;
 		}
+
+		//test camera movement
+		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+		{
+			this->camera->cameraMoveLeft();
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+		{
+			this->camera->cameraMoveRight();
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+		{
+			this->camera->cameraMoveUp();
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+		{
+			this->camera->cameraMoveDown();
+		}
 	}
+
+	//graphics->MatrixPtr->view = camera->camView;
 }
 
 void Engine::update(int deltaTimeMs)

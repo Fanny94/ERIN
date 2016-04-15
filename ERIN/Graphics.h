@@ -59,6 +59,7 @@ public:
 	};
 
 	TriangleVertex* triangleVertices;
+	MATRICES* MatrixPtr;
 	Camera* camera;
 
 	struct Vertex
