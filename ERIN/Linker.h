@@ -12,11 +12,8 @@
 #include <string>
 #include <DirectXMath.h>
 #include "SimpleMath.h"
-<<<<<<< HEAD
 #include <tchar.h>
-=======
 #define DIRECTINPUT_VERSION 0x0800
->>>>>>> refs/remotes/origin/master
 #include <dinput.h>
 
 #pragma comment (lib, "d3d11.lib")

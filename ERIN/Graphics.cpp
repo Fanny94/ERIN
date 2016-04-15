@@ -19,7 +19,6 @@ Graphics::~Graphics()
 	gPixelShader->Release();
 
 	gConstantBuffer->Release();
-<<<<<<< HEAD
 	objBuffer->Release();
 
 	this->gDevice = nullptr;
@@ -37,8 +36,6 @@ Graphics::~Graphics()
 	{
 		delete this->camera;
 	}
-=======
->>>>>>> refs/remotes/origin/master
 }
 
 void Graphics::SetViewport()
