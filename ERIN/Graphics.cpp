@@ -67,7 +67,7 @@ void Graphics::Render()
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gDeviceContext->IASetInputLayout(gVertexLayout);
 
-	gDeviceContext->Draw(3, 0);
+	//gDeviceContext->Draw(3, 0); ?
 
 	UINT32 vertexMS = sizeof(Vertex);
 

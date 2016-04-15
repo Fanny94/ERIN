@@ -95,7 +95,6 @@ void Input::update()
 		_controllerState.Gamepad.sThumbLY = 0;
 	}
 	
-
 	// Check left thumbStick
 
 	float leftThumbY = _controllerState.Gamepad.sThumbLY;
@@ -120,15 +119,6 @@ void Input::update()
 		State._left_thumbstick.x = leftThumbX;
 	}
 
-	/*float normLX = fmaxf(-1, State._left_thumbstick.x / 32767);
-	float normLY = fmaxf(-1, State._left_thumbstick.y / 32767);
-
-	leftStickX = (abs(normLX) < deadzoneX ? 0 : (abs(normLX) - deadzoneX) * (normLX / abs(normLX)));
-	leftStickY = (abs(normLY) < deadzoneY ? 0 : (abs(normLY) - deadzoneY) * (normLY / abs(normLY)));
-
-	if (deadzoneX > 0) leftStickX *= 1 / (1 - deadzoneX);
-	if (deadzoneY > 0) leftStickY *= 1 / (1 - deadzoneY);*/
-
 	// Check the Right DeadZone
 
 	if ((_controllerState.Gamepad.sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
@@ -141,14 +131,25 @@ void Input::update()
 	}
 	// Check right thumbStick
 
-	float rightThumbY = _controllerState.Gamepad.sThumbRY;
+	float rightThumbY = _controllerState.Gamepad.sThumbLY;
+
 	if (rightThumbY)
 	{
+		//State._left_thumbstick.y = leftThumbY;
+		rightThumbY = fmaxf(-1, leftThumbY / 32767);
+		rightThumbY = (abs(rightThumbY) < deadzoneY ? 0 : (abs(rightThumbY) - deadzoneY) * (rightThumbY / abs(rightThumbY)));
+		if (deadzoneY > 0) rightThumbY *= 1 / (1 - deadzoneY);
 		State._right_thumbstick.y = rightThumbY;
 	}
-	float rightThumbX = _controllerState.Gamepad.sThumbRX;
+
+	float rightThumbX = _controllerState.Gamepad.sThumbLX;
+
 	if (rightThumbX)
 	{
+		//State._left_thumbstick.x = leftThumbX;
+		rightThumbX = fmaxf(-1, leftThumbX / 32767);
+		rightThumbX = (abs(rightThumbX) < deadzoneX ? 0 : (abs(rightThumbX) - deadzoneX) * (rightThumbX / abs(rightThumbX)));
+		if (deadzoneX > 0) rightThumbX *= 1 / (1 - deadzoneX);
 		State._right_thumbstick.x = rightThumbX;
 	}
 }

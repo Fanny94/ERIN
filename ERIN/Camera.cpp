@@ -142,12 +142,12 @@ void Camera::cameraMoveDown()
 
 void Camera::cameraMoveLeft(float factor)
 {
-	moveLeftRight -= speed * factor;
+	moveLeftRight -= speed * -factor;
 }
 
 void Camera::cameraMoveRight(float factor)
 {
-	moveLeftRight += speed * -factor;
+	moveLeftRight += speed * factor;
 }
 
 void Camera::cameraMoveUp(float factor)
