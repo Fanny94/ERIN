@@ -1,10 +1,12 @@
 #include "Engine.h"
+#include "Camera.h"
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
 	this->running = true;
+	this->camera = new Camera();
 	this->graphics = new Graphics();
 
 	// test input
@@ -12,8 +14,19 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 	MSG msg = { 0 };
 
-	// create window
-	HWND wndHandle = InitWindow(hInstance);
+	//create window
+	wndHandle = InitWindow(hInstance); //Create Window
+
+	if (!camera->InitDirectInput(hInstance))
+	{
+		MessageBox(0, "Direct Input Initialization - Failed", "Error", MB_OK);
+
+		return;
+	}
+
+	// camera->wndH = wndHandle; Behövs denna raden?? / Marc
+
+	graphics->camera = camera;
 
 	// window is valid
 	if (wndHandle)
@@ -45,8 +58,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 			//processInput();
 
-			
-
+			//switch front- and back-buffer
+		
 		}
 	}
 }
@@ -55,6 +68,7 @@ Engine::~Engine()
 {
 	delete this->graphics;
 	delete this->gameObject;
+	delete this->camera;
 
 	// finish program
 	//DestroyWindow(wndHandle);
@@ -65,6 +79,7 @@ Engine::~Engine()
 
 void Engine::processInput()
 {
+
 	gameObject->input->update(); // test object, should be done for all objects
 
 	if (gameObject->input->isConnected())
@@ -86,7 +101,56 @@ void Engine::processInput()
 			this->running = false;
 		}
 
+<<<<<<< HEAD
+=======
+		if (this->gameObject->input->State._buttons[GamePad_Button_START] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_BACK] == true)
+		{
+			this->running = false;
+		}
+
+		if (this->gameObject->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
+		{
+			this->running = false;
+		}
+
+		if (this->gameObject->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
+		{
+			this->running = false;
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
+		{
+			this->running = false;
+		}
+
+		//test camera movement
+		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+		{
+			this->camera->cameraMoveLeft();
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+		{
+			this->camera->cameraMoveRight();
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+		{
+			this->camera->cameraMoveUp();
+		}
+		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+		{
+			this->camera->cameraMoveDown();
+		}
+>>>>>>> origin/master
 	}
+
+	//graphics->MatrixPtr->view = camera->camView;
 }
 
 void Engine::update(int deltaTimeMs)
@@ -108,6 +172,8 @@ void Engine::render()
 	graphics->UpdateConstantBuffer();
 
 	graphics->Render();
+
+	camera->InitCamera();
 
 	// switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(0, 0);

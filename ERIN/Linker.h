@@ -8,6 +8,8 @@
 #include <vector>
 #include <DirectXMath.h>
 #include "SimpleMath.h"
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dcompiler.lib")

@@ -60,16 +60,32 @@ void Input::update()
 		State._left_trigger = _controllerState.Gamepad.bLeftTrigger / 255.0f;
 	}
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 	// Get the Buttons
-	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_A) State._buttons[GamePad_Button_A] = true;
-	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_B) State._buttons[GamePad_Button_B] = true;
+	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) State._buttons[GamePad_Button_DPAD_UP] = true;
+	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) State._buttons[GamePad_Button_DPAD_DOWN] = true;
+	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) State._buttons[GamePad_Button_DPAD_LEFT] = true;
+	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) State._buttons[GamePad_Button_DPAD_RIGHT] = true;
+
+	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_START) State._buttons[GamePad_Button_START] = true;
+	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_BACK) State._buttons[GamePad_Button_BACK] = true;
+
+	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_LEFT_THUMB) State._buttons[GamePad_Button_LEFT_THUMB] = true;
+	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_RIGHT_THUMB) State._buttons[GamePad_Button_RIGHT_THUMB] = true;
+	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_LEFT_SHOULDER) State._buttons[GamePad_Button_LEFT_SHOULDER] = true;
+	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_RIGHT_SHOULDER) State._buttons[GamePad_Button_RIGHT_SHOULDER] = true;
+
+	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_A) State._buttons[GamePad_Button_A] = true;
+	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_B) State._buttons[GamePad_Button_B] = true;
 	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_X) State._buttons[GamePad_Button_X] = true;
 	if (_controllerState.Gamepad.wButtons == XINPUT_GAMEPAD_Y) State._buttons[GamePad_Button_Y] = true;
 
-	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) State._buttons[GamePad_Button_DPAD_DOWN] = true;
-	
 	// Check to make sure we are not moving during the dead zone
 	// Check the Left DeadZone
+
 	if ((_controllerState.Gamepad.sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
 		_controllerState.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
 		(_controllerState.Gamepad.sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
@@ -93,6 +109,7 @@ void Input::update()
 	}
 
 	// Check the Right DeadZone
+
 	if ((_controllerState.Gamepad.sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
 		_controllerState.Gamepad.sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) &&
 		(_controllerState.Gamepad.sThumbRY < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&

@@ -41,7 +41,7 @@ struct GamePadState
 	// Just to clear all values to default
 	void reset()
 	{
-		for (int i = 0; i<(int)GamePadButton_Max; ++i) _buttons[i] = false;
+		for (int i = 0; i < (int)GamePadButton_Max; ++i) _buttons[i] = false;
 		_left_thumbstick = Vector2(0.0f);
 		_right_thumbstick = Vector2(0.0f);
 		_left_trigger = _right_trigger = 0.0f;
@@ -63,6 +63,9 @@ public:
 private:
 	XINPUT_STATE _controllerState;
 	GamePadIndex playerIndex;
+
+	float deadzoneX;
+	float deadzoneY;
 };
 
 #endif // !INPUT_H

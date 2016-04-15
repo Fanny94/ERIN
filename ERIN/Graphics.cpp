@@ -1,16 +1,17 @@
 #include "Graphics.h"
+#include "Camera.h"
 
 Graphics::Graphics()
 {
+
 }
 
 Graphics::~Graphics()
 {
-
-	gBackbufferRTV->Release();
-	gSwapChain->Release();
 	gDevice->Release();
 	gDeviceContext->Release();
+	gSwapChain->Release();
+	gBackbufferRTV->Release();
 
 	gVertexLayout->Release();
 	gVertexShader->Release();
@@ -18,18 +19,6 @@ Graphics::~Graphics()
 	gPixelShader->Release();
 
 	gConstantBuffer->Release();
-
-	this->gDevice = nullptr;
-	this->gDeviceContext = nullptr;
-	this->gSwapChain = nullptr;
-	this->gBackbufferRTV = nullptr;
-
-	this->gVertexLayout = nullptr;
-	this->gVertexShader = nullptr;
-	this->gVertexBuffer = nullptr;
-	this->gPixelShader = nullptr;
-
-	this->gConstantBuffer = nullptr;
 }
 
 void Graphics::SetViewport()
@@ -191,27 +180,21 @@ void Graphics::CreateConstantBuffer()
 
 void Graphics::UpdateConstantBuffer()
 {
+
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mapped;
-	MATRICES* MatrixPtr;
 
 	static float rotationCount;
 	rotationCount += 0.01f;
 
 	Matrix world;
-	Matrix view;
 	Matrix projection;
 	Matrix worldViewProj;
 
-	Vector3 camPos = Vector3(0, 0, -2);
-	Vector3 focusPos = Vector3(0, 0, 0);
-	Vector3 UpDir = Vector3(0, 1, 0);
-
 	world = XMMatrixRotationZ(XMConvertToRadians(rotationCount)) * XMMatrixTranslation(0, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
-	view = XMMatrixLookAtLH(camPos, focusPos, UpDir);
 
-	worldViewProj = world * view * projection;
+	worldViewProj = world * camera->camView * projection;
 
 	worldViewProj = worldViewProj.Transpose();
 
@@ -230,4 +213,5 @@ void Graphics::UpdateConstantBuffer()
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+
 }
