@@ -125,6 +125,7 @@
     <ClInclude Include="PlatformHelpers.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="Structs.h" />
     <ClInclude Include="WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>

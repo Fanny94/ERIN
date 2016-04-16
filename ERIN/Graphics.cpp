@@ -1,5 +1,4 @@
 #include "Graphics.h"
-#include "Camera.h"
 
 Graphics::Graphics()
 {
@@ -31,10 +30,7 @@ Graphics::~Graphics()
 	this->gPixelShader = nullptr;
 
 	this->gConstantBuffer = nullptr;
-	if (!camera)
-	{
-		delete this->camera;
-	}
+	this->camera = nullptr;
 }
 
 void Graphics::SetViewport()
@@ -67,7 +63,7 @@ void Graphics::Render()
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gDeviceContext->IASetInputLayout(gVertexLayout);
 
-	//gDeviceContext->Draw(3, 0); ?
+	gDeviceContext->Draw(3, 0);
 
 	UINT32 vertexMS = sizeof(Vertex);
 
@@ -182,6 +178,19 @@ void Graphics::CreateShaders()
 
 	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
 	pPS->Release();
+}
+
+void Graphics::CreateTriangle(TriangleVertex* triangleVertices)
+{
+	D3D11_BUFFER_DESC bufferDesc;
+	memset(&bufferDesc, 0, sizeof(bufferDesc));
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.ByteWidth = sizeof(float) * 18;
+
+	D3D11_SUBRESOURCE_DATA data;
+	data.pSysMem = triangleVertices;
+	gDevice->CreateBuffer(&bufferDesc, &data, &gVertexBuffer);
 }
 
 void Graphics::CreateTriangle()

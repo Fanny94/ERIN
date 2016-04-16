@@ -15,7 +15,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	MSG msg = { 0 };
 
 	//create window
-	wndHandle = InitWindow(hInstance); //Create Window
+	wndHandle = InitWindow(hInstance);
 
 	if (!camera->InitDirectInput(hInstance))
 	{
@@ -38,9 +38,9 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		//graphics->CreateTriangle();
+		graphics->CreateTriangle(gameObject->triangle);
 
-		if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/GitHub/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
 			return;
 		}

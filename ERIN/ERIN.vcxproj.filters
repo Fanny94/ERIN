@@ -48,34 +48,34 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Behavior.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameLogic.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Linker.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DirectXHelpers.h">
       <Filter>Helpers</Filter>
@@ -93,13 +93,13 @@
       <Filter>Helpers</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Header files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Structs.h">
+      <Filter>Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Header files">
-      <UniqueIdentifier>{ad7be3c3-839c-4eaf-8d7d-bd87f3245eed}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{02c29090-594f-4b7a-a408-5e7b74bebd96}</UniqueIdentifier>
     </Filter>
@@ -108,6 +108,9 @@
     </Filter>
     <Filter Include="Helpers">
       <UniqueIdentifier>{38b59991-9198-4a59-9b7a-130874ddb00d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ad7be3c3-839c-4eaf-8d7d-bd87f3245eed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

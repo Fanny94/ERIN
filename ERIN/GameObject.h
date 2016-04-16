@@ -1,9 +1,9 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 #include "Input.h"
+#include "Structs.h"
 
 #include <string>
-
 using namespace std;
 
 class GameObject
@@ -23,6 +23,7 @@ public:
 	float GetZ() { return this->z; };
 
 	Input* input;
+	TriangleVertex* triangle;
 
 private:
 	string name;

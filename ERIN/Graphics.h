@@ -1,8 +1,10 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
-
 #include "Linker.h"
+#include "Structs.h"
+#include "Camera.h"
 #include "WICTextureLoader.h"
+
 class Camera;
 
 class Graphics
@@ -14,6 +16,7 @@ public:
 	void Render();
 	void SetViewport();
 	void CreateShaders();
+	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
 	void UpdateConstantBuffer();
@@ -35,11 +38,6 @@ public:
 
 	HRESULT CreateDirect3DContext(HWND wndHandle);
 
-	struct TriangleVertex
-	{
-		float x, y, z;
-		float r, g, b;
-	};
 
 	struct MATRICES
 	{
@@ -49,6 +47,10 @@ public:
 		Matrix projection;
 	};
 
+	TriangleVertex* triangleVertices;
+	MATRICES* MatrixPtr;
+	Camera* camera;
+
 	ID3D11Buffer* objBuffer = nullptr;
 
 	struct OBJ
@@ -57,10 +59,6 @@ public:
 		int hasTexture;
 		float padding[3];
 	};
-
-	TriangleVertex* triangleVertices;
-	MATRICES* MatrixPtr;
-	Camera* camera;
 
 	struct Vertex
 	{
