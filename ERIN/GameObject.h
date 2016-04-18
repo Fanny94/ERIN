@@ -1,5 +1,6 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
+#include "Linker.h"
 #include "Input.h"
 #include "Structs.h"
 
@@ -13,9 +14,11 @@ public:
 	GameObject(string name, float x, float y, float z);
 	~GameObject();
 
-	void SetX() { float x; this->x = x; };
-	void SetY() { float y; this->y = y; };
-	void SetZ() { float z; this->z = z; };
+	void update();
+
+	void SetX(float x) { this->x = x; };
+	void SetY(float y) { this->y = y; };
+	void SetZ(float z) { this->z = z; };
 
 	string GetName() { return this->name; };
 	float GetX() { return this->x; };
@@ -24,6 +27,7 @@ public:
 
 	Input* input;
 	TriangleVertex* triangle;
+	Matrix* objectMatrix;
 
 private:
 	string name;

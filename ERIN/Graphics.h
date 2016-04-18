@@ -13,8 +13,9 @@ public:
 	Graphics();
 	~Graphics();
 
-	void Render();
 	void SetViewport();
+	void Render();
+	void RendPlayer(Matrix transform);
 	void CreateShaders();
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
@@ -47,8 +48,11 @@ public:
 		Matrix projection;
 	};
 
+	Matrix viewProj;
+
 	TriangleVertex* triangleVertices;
 	MATRICES* MatrixPtr;
+	MATRICES* MatrixPtr2;
 	Camera* camera;
 
 	ID3D11Buffer* objBuffer = nullptr;
