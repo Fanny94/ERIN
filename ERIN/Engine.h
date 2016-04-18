@@ -5,6 +5,7 @@
 #include "Graphics.h"
 #include "GameLogic.h"
 #include "AssetManager.h"
+#include "Mesh.h"
 #include "Camera.h"
 
 // test input
@@ -17,7 +18,7 @@ public:
 	~Engine();
 
 	void processInput();
-	void update(int deltaTimeMs);
+	void update(double deltaTimeMs);
 	void render();
 
 	HWND InitWindow(HINSTANCE hInstance);
@@ -31,6 +32,7 @@ private:
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	AssetManager* assetManager;
+	Mesh* mesh;
 	Camera* camera;
 
 	// test input

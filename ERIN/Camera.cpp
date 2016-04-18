@@ -39,7 +39,7 @@ bool Camera::InitDirectInput(HINSTANCE hInstance)
 
 void Camera::DetectInput(double time)
 {
-	speed = 5.0f * time;
+	speed = (float)(5.0f * time);
 	
 	DIMOUSESTATE mouseCurrState;
 
@@ -63,10 +63,10 @@ void Camera::DetectInput(double time)
 	if (keyboardState[DIK_S] & 0x80)
 		moveBackForward -= speed;
 
-	if (keyboardState[DIK_SPACE] & 0x80)
+	if (keyboardState[DIK_Q] & 0x80)
 		moveUpDown += speed;
 
-	if (keyboardState[DIK_LCONTROL] & 0x80)
+	if (keyboardState[DIK_E] & 0x80)
 		moveUpDown -= speed;
 
 	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
@@ -77,7 +77,6 @@ void Camera::DetectInput(double time)
 	}
 
 	UpdateCamera();
-
 }
 
 void Camera::InitCamera()
@@ -94,9 +93,7 @@ void Camera::InitCamera()
 	frameTime = GetFrameTime();
 
 	DetectInput(frameTime);
-
 }
-
 
 void Camera::UpdateCamera()
 {
@@ -104,7 +101,7 @@ void Camera::UpdateCamera()
 	camTarget = XMVector3TransformCoord(worldForward, camRotationMatrix);
 	camTarget = XMVector3Normalize(camTarget);
 
-	Matrix RotateYTempMatrix;
+	Matrix RotateYTempMatrix;                  
 	RotateYTempMatrix = XMMatrixRotationY(camYaw);
 
 	camRight = XMVector3TransformCoord(worldRight, RotateYTempMatrix);
@@ -143,6 +140,25 @@ void Camera::cameraMoveDown()
 	moveUpDown -= speed;
 }
 
+void Camera::cameraMoveLeft(float factor)
+{
+	moveLeftRight -= speed * -factor;
+}
+
+void Camera::cameraMoveRight(float factor)
+{
+	moveLeftRight += speed * factor;
+}
+
+void Camera::cameraMoveUp(float factor)
+{
+	moveUpDown += speed * factor;
+}
+void Camera::cameraMoveDown(float factor)
+{
+	moveUpDown -= speed * -factor;
+}
+
 void Camera::StartTimer()
 {
 	LARGE_INTEGER frequencyCount;
@@ -171,7 +187,7 @@ double Camera::GetFrameTime()
 	frameTimeOld = currentTime.QuadPart;				//Stores this frame as the next last frame
 
 	if (tickCount < 0.0f)
-		tickCount = 0.0f;
+		tickCount = (__int64)0.0f;
 
 	return float(tickCount) / countsPerSecond;
 }

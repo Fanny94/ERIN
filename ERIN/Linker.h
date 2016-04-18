@@ -6,8 +6,13 @@
 #include <d3dcompiler.h>
 #include <math.h>
 #include <vector>
+#include <fstream>
+#include <istream>
+#include <sstream>
+#include <string>
 #include <DirectXMath.h>
 #include "SimpleMath.h"
+#include <tchar.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
@@ -18,6 +23,7 @@
 
 using namespace DirectX::SimpleMath;
 using namespace DirectX;
+using namespace std;
 
 // input
 #define WIN32_LEAN_AND_MEAN

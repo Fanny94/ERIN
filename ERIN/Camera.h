@@ -42,6 +42,7 @@ public:
 
 	HRESULT hr;
 	HWND wndH = NULL;
+
 	// Update camera
 	void DetectInput(double time);
 	void StartTimer();
@@ -49,10 +50,19 @@ public:
 	double GetFrameTime();
 	void InitCamera();
 	void UpdateCamera();
+
+	// Xbox Dpad
 	void cameraMoveLeft();
 	void cameraMoveRight();
 	void cameraMoveUp();
 	void cameraMoveDown();
+
+	// Xbox Thumbstix
+	void cameraMoveLeft(float factor);
+	void cameraMoveRight(float factor);
+	void cameraMoveUp(float factor);
+	void cameraMoveDown(float factor);
+
 	bool getInput() { return cameraInput; };
 	bool InitDirectInput(HINSTANCE hInstance);
 

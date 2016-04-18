@@ -6,6 +6,9 @@ Input::Input(GamePadIndex player)
 {
 	playerIndex = player;
 	State.reset();
+
+	deadzoneX = 0.05f;
+	deadzoneY = 0.02f;
 }
 
 
@@ -90,17 +93,28 @@ void Input::update()
 		_controllerState.Gamepad.sThumbLX = 0;
 		_controllerState.Gamepad.sThumbLY = 0;
 	}
-
+	
 	// Check left thumbStick
-	float leftThumbY = fmaxf(-1, (float)_controllerState.Gamepad.sThumbLY / 32767);
+
+	float leftThumbY = _controllerState.Gamepad.sThumbLY;
 
 	if (leftThumbY)
 	{
+		//State._left_thumbstick.y = leftThumbY;
+		leftThumbY = fmaxf(-1, leftThumbY / 32767);
+		leftThumbY = (abs(leftThumbY) < deadzoneY ? 0 : (abs(leftThumbY) - deadzoneY) * (leftThumbY / abs(leftThumbY)));
+		if (deadzoneY > 0) leftThumbY *= 1 / (1 - deadzoneY);
 		State._left_thumbstick.y = leftThumbY;
 	}
-	float leftThumbX = fmaxf(-1, (float)_controllerState.Gamepad.sThumbLX);
+
+	float leftThumbX = _controllerState.Gamepad.sThumbLX;
+
 	if (leftThumbX)
 	{
+		//State._left_thumbstick.x = leftThumbX;
+		leftThumbX = fmaxf(-1, leftThumbX / 32767);
+		leftThumbX = (abs(leftThumbX) < deadzoneX ? 0 : (abs(leftThumbX) - deadzoneX) * (leftThumbX / abs(leftThumbX)));
+		if (deadzoneX > 0) leftThumbX *= 1 / (1 - deadzoneX);
 		State._left_thumbstick.x = leftThumbX;
 	}
 
@@ -116,14 +130,25 @@ void Input::update()
 	}
 	// Check right thumbStick
 
-	float rightThumbY = fmaxf(-1, (float)_controllerState.Gamepad.sThumbRY);
+	float rightThumbY = _controllerState.Gamepad.sThumbLY;
+
 	if (rightThumbY)
 	{
+		//State._left_thumbstick.y = leftThumbY;
+		rightThumbY = fmaxf(-1, leftThumbY / 32767);
+		rightThumbY = (abs(rightThumbY) < deadzoneY ? 0 : (abs(rightThumbY) - deadzoneY) * (rightThumbY / abs(rightThumbY)));
+		if (deadzoneY > 0) rightThumbY *= 1 / (1 - deadzoneY);
 		State._right_thumbstick.y = rightThumbY;
 	}
-	float rightThumbX = fmaxf(-1, (float)_controllerState.Gamepad.sThumbRX);
+
+	float rightThumbX = _controllerState.Gamepad.sThumbLX;
+
 	if (rightThumbX)
 	{
+		//State._left_thumbstick.x = leftThumbX;
+		rightThumbX = fmaxf(-1, leftThumbX / 32767);
+		rightThumbX = (abs(rightThumbX) < deadzoneX ? 0 : (abs(rightThumbX) - deadzoneX) * (rightThumbX / abs(rightThumbX)));
+		if (deadzoneX > 0) rightThumbX *= 1 / (1 - deadzoneX);
 		State._right_thumbstick.x = rightThumbX;
 	}
 }

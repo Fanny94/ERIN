@@ -14,10 +14,18 @@ GameObject::GameObject(string name, float x, float y, float z)
 	this->z = z;
 
 	this->input = new Input(GamePadIndex_One);
+
+	// test triangle in gameobject
+	this->triangle = new TriangleVertex[3];
+
+	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
+	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
+	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
 }
 
 GameObject::~GameObject()
 {
 	delete this->input;
+	delete this->triangle;
 }
 
