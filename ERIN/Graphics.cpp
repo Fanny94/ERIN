@@ -622,7 +622,6 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 									if (checkChar == ' ')
 									{
 										//Store the material libraries filename
-										fileIn >> meshMatLib;
 										meshMatLib = filePath;
 									}}}}}}
 				break;
