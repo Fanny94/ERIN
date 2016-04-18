@@ -19,6 +19,7 @@ public:
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
+	void CreateTriangleAABBBox(AABBBox* axisAllignedBox);
 	void UpdateConstantBuffer();
 	
 	float get_gWidth() { return this->WIDTH; }
@@ -37,7 +38,6 @@ public:
 	ID3D11Buffer* get_gConstantBuffer() { return this->gConstantBuffer; }
 
 	HRESULT CreateDirect3DContext(HWND wndHandle);
-
 
 	struct MATRICES
 	{

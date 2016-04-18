@@ -1,5 +1,6 @@
-#include "Graphics.h"
+#include "Graphics.h"0
 
+//http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
 Graphics::Graphics()
 {
 }
@@ -241,6 +242,21 @@ void Graphics::CreateConstantBuffer()
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
 }
 
+void Graphics::CreateTriangleAABBBox(AABBBox * axisAllignedBox)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		axisAllignedBox->min.x = min(axisAllignedBox->min.x, triangleVertices[i].x);
+		axisAllignedBox->min.y = min(axisAllignedBox->min.y, triangleVertices[i].y);
+		axisAllignedBox->min.z = min(axisAllignedBox->min.z, triangleVertices[i].z);
+
+		axisAllignedBox->max.x = max(axisAllignedBox->max.x, triangleVertices[i].x);
+		axisAllignedBox->max.y = max(axisAllignedBox->max.y, triangleVertices[i].y);
+		axisAllignedBox->max.z = max(axisAllignedBox->max.z, triangleVertices[i].z);
+	}
+
+}
+
 void Graphics::UpdateConstantBuffer()
 {
 
@@ -254,7 +270,7 @@ void Graphics::UpdateConstantBuffer()
 	Matrix projection;
 	Matrix worldViewProj;
 
-	world = XMMatrixRotationZ(XMConvertToRadians(rotationCount)) * XMMatrixTranslation(0, 0, 0);
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
 
 	worldViewProj = world * camera->camView * projection;
