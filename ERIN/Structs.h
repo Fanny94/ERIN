@@ -7,4 +7,9 @@ struct TriangleVertex
 	float r, g, b;
 };
 
+struct AABBBox
+{
+	XMFLOAT3 min;
+	XMFLOAT3 max;
+};
 #endif // !STRUCTS_H

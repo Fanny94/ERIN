@@ -20,6 +20,8 @@ public:
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
+	void CreateTriangleAABBBox(AABBBox* axisAllignedBox);
+	void CreateSquareAABBBox(AABBBox* axisAllignedBox);
 	void UpdateConstantBuffer();
 	
 	float get_gWidth() { return this->WIDTH; }
@@ -38,7 +40,6 @@ public:
 	ID3D11Buffer* get_gConstantBuffer() { return this->gConstantBuffer; }
 
 	HRESULT CreateDirect3DContext(HWND wndHandle);
-
 
 	struct MATRICES
 	{
@@ -103,6 +104,8 @@ public:
 	vector<wstring> textureNameArray;
 	vector<SurfaceMaterial> material;
 	vector<Vertex> vertexMeshSize;
+	vector<AABBBox> triangleBox;
+	vector<AABBBox> squareBox;
 
 private:
 	float WIDTH = 1080;
