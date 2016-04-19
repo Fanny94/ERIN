@@ -3,6 +3,8 @@
 //http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
 Graphics::Graphics()
 {
+
+
 }
 
 Graphics::~Graphics()
@@ -289,24 +291,26 @@ void Graphics::CreateConstantBuffer()
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
 }
 
-void Graphics::CreateTriangleAABBBox(AABBBox * axisAllignedBox)
+void Graphics::CreateTriangleAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices)
 {
+
 	for (int i = 0; i < 3; i++)
 	{
-		axisAllignedBox->min.x = min(axisAllignedBox->min.x, triangleVertices[i].x);
-		axisAllignedBox->min.y = min(axisAllignedBox->min.y, triangleVertices[i].y);
-		axisAllignedBox->min.z = min(axisAllignedBox->min.z, triangleVertices[i].z);
+	axisAllignedBox->min.x = min(axisAllignedBox->min.x, triangleVertices[0].x);
+	axisAllignedBox->min.y = min(axisAllignedBox->min.y, triangleVertices[1].y);
+	axisAllignedBox->min.z = min(axisAllignedBox->min.z, triangleVertices[2].z);
 
-		axisAllignedBox->max.x = max(axisAllignedBox->max.x, triangleVertices[i].x);
-		axisAllignedBox->max.y = max(axisAllignedBox->max.y, triangleVertices[i].y);
-		axisAllignedBox->max.z = max(axisAllignedBox->max.z, triangleVertices[i].z);
+	axisAllignedBox->max.x = max(axisAllignedBox->max.x, triangleVertices[0].x);
+	axisAllignedBox->max.y = max(axisAllignedBox->max.y, triangleVertices[1].y);
+	axisAllignedBox->max.z = max(axisAllignedBox->max.z, triangleVertices[2].z);
 	}
 
-	triangleBox.push_back(*axisAllignedBox);
+	//triangleBox.push_back(*axisAllignedBox);
 }
 
-void Graphics::CreateSquareAABBBox(AABBBox * axisAllignedBox)
+void Graphics::CreateSquareAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices)
 {
+
 	for (int i = 0; i < vertexMeshSize.size(); i++)
 	{
 		axisAllignedBox->min.x = min(axisAllignedBox->min.x, vertexMeshSize[i].pos.x);
@@ -318,7 +322,7 @@ void Graphics::CreateSquareAABBBox(AABBBox * axisAllignedBox)
 		axisAllignedBox->max.z = max(axisAllignedBox->max.z, vertexMeshSize[i].pos.z);
 	}
 
-	squareBox.push_back(*axisAllignedBox);
+	//squareBox.push_back(*axisAllignedBox);
 
 }
 

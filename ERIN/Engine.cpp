@@ -15,6 +15,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	//create window
 	wndHandle = InitWindow(hInstance);
 
+	AllocConsole();
+
+	freopen("CONOUT$", "w", stdout);
+
 	if (!camera->InitDirectInput(hInstance))
 	{
 		MessageBox(0, "Direct Input Initialization - Failed", "Error", MB_OK);
@@ -38,14 +42,20 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(gameObject->triangle);
 
-		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		graphics->CreateTriangleAABBBox(gameObject->axisAllignedBox, gameObject->triangle);
+		
+		graphics->CreateSquareAABBBox(gameObject->axisAllignedBox, gameObject->triangle);
 
-		if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		{
+			return;
+		}
+		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 
 		{
 			return;
 		}
-
+		*/
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -59,6 +69,7 @@ Engine::~Engine()
 	delete this->gameObject;
 	delete this->camera;
 
+	fclose(stdout);
 	// finish program
 	//DestroyWindow(wndHandle);
 	
@@ -205,6 +216,7 @@ void Engine::update(double deltaTimeMs)
 void Engine::render()
 {
 	graphics->UpdateConstantBuffer();
+	gameLogic->AABBtoAABB(*gameObject->axisAllignedBox, *gameObject->axisAllignedBox);
 
 	graphics->Render();
 	graphics->RendPlayer(*gameObject->objectMatrix);

@@ -1,5 +1,7 @@
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
+#include "Linker.h"
+#include "Structs.h"
 //#include "GameObject.h"
 
 class GameLogic
@@ -18,6 +20,8 @@ public:
 	// Player state(dead), what happens when the player reaches 0 lives.
 	GameLogic();
 	~GameLogic();
+
+	bool AABBtoAABB(AABBBox box1, AABBBox box2);
 
 private:
 

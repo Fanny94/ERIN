@@ -17,11 +17,12 @@ public:
 	void Render();
 	void RendPlayer(Matrix transform);
 	void CreateShaders();
+	
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
-	void CreateTriangleAABBBox(AABBBox* axisAllignedBox);
-	void CreateSquareAABBBox(AABBBox* axisAllignedBox);
+	void CreateTriangleAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices);
+	void CreateSquareAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices);
 	void UpdateConstantBuffer();
 	
 	float get_gWidth() { return this->WIDTH; }
@@ -50,8 +51,8 @@ public:
 	};
 
 	Matrix viewProj;
-
 	TriangleVertex* triangleVertices;
+	AABBBox* axisAllignedBox;
 	MATRICES* MatrixPtr;
 	MATRICES* MatrixPtr2;
 	Camera* camera;
