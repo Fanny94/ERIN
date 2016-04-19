@@ -45,6 +45,9 @@
     <ClCompile Include="WICTextureLoader.cpp">
       <Filter>Helpers</Filter>
     </ClCompile>
+    <ClCompile Include="CustomImport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h">
@@ -97,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="Structs.h">
       <Filter>Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomImport.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
