@@ -303,9 +303,10 @@ void Graphics::CreateTriangleAABBBox(AABBBox* axisAllignedBox, TriangleVertex* t
 	axisAllignedBox->max.x = max(axisAllignedBox->max.x, triangleVertices[0].x);
 	axisAllignedBox->max.y = max(axisAllignedBox->max.y, triangleVertices[1].y);
 	axisAllignedBox->max.z = max(axisAllignedBox->max.z, triangleVertices[2].z);
+
 	}
 
-	//triangleBox.push_back(*axisAllignedBox);
+	triangleBox.push_back(axisAllignedBox);
 }
 
 void Graphics::CreateSquareAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices)
@@ -322,7 +323,7 @@ void Graphics::CreateSquareAABBBox(AABBBox* axisAllignedBox, TriangleVertex* tri
 		axisAllignedBox->max.z = max(axisAllignedBox->max.z, vertexMeshSize[i].pos.z);
 	}
 
-	//squareBox.push_back(*axisAllignedBox);
+	squareBox.push_back(axisAllignedBox);
 
 }
 

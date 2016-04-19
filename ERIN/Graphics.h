@@ -105,8 +105,8 @@ public:
 	vector<wstring> textureNameArray;
 	vector<SurfaceMaterial> material;
 	vector<Vertex> vertexMeshSize;
-	vector<AABBBox> triangleBox;
-	vector<AABBBox> squareBox;
+	vector<AABBBox*> triangleBox;
+	vector<AABBBox*> squareBox;
 
 private:
 	float WIDTH = 1080;

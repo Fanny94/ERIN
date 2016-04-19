@@ -21,7 +21,7 @@ public:
 	GameLogic();
 	~GameLogic();
 
-	bool AABBtoAABB(AABBBox box1, AABBBox box2);
+	bool AABBtoAABB(vector<AABBBox*> box1, vector<AABBBox*> box2);
 
 private:
 

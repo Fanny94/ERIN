@@ -216,7 +216,7 @@ void Engine::update(double deltaTimeMs)
 void Engine::render()
 {
 	graphics->UpdateConstantBuffer();
-	gameLogic->AABBtoAABB(*gameObject->axisAllignedBox, *gameObject->axisAllignedBox);
+	gameLogic->AABBtoAABB(graphics->triangleBox, graphics->squareBox);
 
 	graphics->Render();
 	graphics->RendPlayer(*gameObject->objectMatrix);
