@@ -52,18 +52,18 @@ void Graphics::Render()
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	gDeviceContext->HSSetShader(nullptr, nullptr, 0);
+	/*gDeviceContext->HSSetShader(nullptr, nullptr, 0);
 	gDeviceContext->DSSetShader(nullptr, nullptr, 0);
-	gDeviceContext->GSSetShader(nullptr, nullptr, 0);
+	gDeviceContext->GSSetShader(nullptr, nullptr, 0);*/
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 
 	UINT32 vertexSize = sizeof(float) * 6;
 	UINT32 offset = 0;
-	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
+	/*gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gDeviceContext->IASetInputLayout(gVertexLayout);
 
-	gDeviceContext->Draw(3, 0);
+	gDeviceContext->Draw(3, 0);*/
 
 	UINT32 vertexMS = sizeof(Vertex);
 
@@ -91,6 +91,53 @@ void Graphics::Render()
 		if (!material[meshSubsetTexture[i]].transparent)
 			gDeviceContext->DrawIndexed(indexDrawAmount, indexStart, 0);
 	}
+}
+
+void Graphics::RendPlayer(Matrix transform)
+{
+	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+
+	UINT32 vertexSize = sizeof(float) * 6;
+	UINT32 offset = 0;
+
+	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gDeviceContext->IASetInputLayout(gVertexLayout);
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+
+	Matrix world;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	//world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	// viewProj = camera->camView * projection;
+
+	worldViewProj = transform * camera->camView * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	//world = world.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr2 = (MATRICES*)mapped.pData;
+	MatrixPtr2->worldViewProj = worldViewProj;
+	MatrixPtr2->world = world;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+
+	gDeviceContext->Draw(3, 0);
 }
 
 HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
@@ -243,7 +290,6 @@ void Graphics::CreateConstantBuffer()
 
 void Graphics::UpdateConstantBuffer()
 {
-
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mapped;
 
@@ -256,6 +302,8 @@ void Graphics::UpdateConstantBuffer()
 
 	world = XMMatrixRotationZ(XMConvertToRadians(rotationCount)) * XMMatrixTranslation(0, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	viewProj = camera->camView * projection;
 
 	worldViewProj = world * camera->camView * projection;
 
@@ -622,7 +670,6 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 									if (checkChar == ' ')
 									{
 										//Store the material libraries filename
-										fileIn >> meshMatLib;
 										meshMatLib = filePath;
 									}}}}}}
 				break;
