@@ -27,11 +27,8 @@ public:
 
 	Input* input;
 	TriangleVertex* triangle;
-<<<<<<< HEAD
 	AABBBox* axisAllignedBox;
-=======
 	Matrix* objectMatrix;
->>>>>>> refs/remotes/origin/master
 
 private:
 

@@ -10,9 +10,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 
 	// test input
-	this->gameObject = new GameObject("player", 0.0f, 0.0f, 0.0f);
-
-	MSG msg = { 0 };
+	this->gameObject = new GameObject("player", -0.5f, 0.0f, 0.0f);
 
 	//create window
 	wndHandle = InitWindow(hInstance);
@@ -40,11 +38,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(gameObject->triangle);
 
-<<<<<<< HEAD
-		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Sphere.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
-=======
+		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+
 		if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
->>>>>>> refs/remotes/origin/master
+
 		{
 			return;
 		}
@@ -53,23 +50,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		ShowWindow(wndHandle, nCommandShow);
 
-
-		// read messages
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			// update/render
-
-			//processInput();
-
-			//switch front- and back-buffer
-		
-		}
 	}
 }
 
@@ -228,7 +208,6 @@ void Engine::render()
 
 	graphics->Render();
 	graphics->RendPlayer(*gameObject->objectMatrix);
-
 	camera->InitCamera();
 
 	// switch front- and back-buffer
@@ -276,7 +255,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 		PostQuitMessage(0);
-		break;
+		return 0;
 	}
 
 	//call the default handler function if w do not handle the message here 

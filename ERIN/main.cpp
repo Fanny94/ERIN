@@ -19,29 +19,45 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
+	MSG msg = { 0 };
+
 	Engine* engine = new Engine(hInstance, hPrevInstance, lpCommandLine, nCommandShow);
 
 	const double MS_PER_UPDATE = 8;
 	double previous = clock();
 	double lag = 0.0;
 
-	while (engine->getRunning()) // get engine state, e.g running / shutting down
+
+	while (WM_QUIT != msg.message && engine->getRunning())
 	{
-		double current = clock();
-		double elapsed = current - previous;
-		previous = current;
-		lag += elapsed;
-
-		engine->processInput();
-
-		// TODO not working correctly, and I think I know why (mainloop and an engineloop)
-		while (lag >= MS_PER_UPDATE)
+			// read messages
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
-			engine->update(elapsed);
-			lag -= MS_PER_UPDATE;
+			TranslateMessage(&msg);
+
+			DispatchMessage(&msg);
 		}
 
-		engine->render();
+		else
+		{
+
+			double current = clock();
+			double elapsed = current - previous;
+			previous = current;
+			lag += elapsed;
+
+			engine->processInput();
+
+			// TODO not working correctly, and I think I know why (mainloop and an engineloop)
+			while (lag >= MS_PER_UPDATE)
+			{
+				engine->update(elapsed);
+				lag -= MS_PER_UPDATE;
+			}
+
+			engine->render();
+		}
+
 	}
 
 	delete engine;

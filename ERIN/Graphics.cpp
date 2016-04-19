@@ -1,4 +1,4 @@
-#include "Graphics.h"0
+#include "Graphics.h"
 
 //http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
 Graphics::Graphics()
@@ -301,6 +301,24 @@ void Graphics::CreateTriangleAABBBox(AABBBox * axisAllignedBox)
 		axisAllignedBox->max.y = max(axisAllignedBox->max.y, triangleVertices[i].y);
 		axisAllignedBox->max.z = max(axisAllignedBox->max.z, triangleVertices[i].z);
 	}
+
+	triangleBox.push_back(*axisAllignedBox);
+}
+
+void Graphics::CreateSquareAABBBox(AABBBox * axisAllignedBox)
+{
+	for (int i = 0; i < vertexMeshSize.size(); i++)
+	{
+		axisAllignedBox->min.x = min(axisAllignedBox->min.x, vertexMeshSize[i].pos.x);
+		axisAllignedBox->min.y = min(axisAllignedBox->min.y, vertexMeshSize[i].pos.y);
+		axisAllignedBox->min.z = min(axisAllignedBox->min.z, vertexMeshSize[i].pos.z);
+															
+		axisAllignedBox->max.x = max(axisAllignedBox->max.x, vertexMeshSize[i].pos.x);
+		axisAllignedBox->max.y = max(axisAllignedBox->max.y, vertexMeshSize[i].pos.y);
+		axisAllignedBox->max.z = max(axisAllignedBox->max.z, vertexMeshSize[i].pos.z);
+	}
+
+	squareBox.push_back(*axisAllignedBox);
 
 }
 
