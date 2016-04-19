@@ -1,5 +1,6 @@
 #include "Graphics.h"
 
+//http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
 Graphics::Graphics()
 {
 }
@@ -52,18 +53,18 @@ void Graphics::Render()
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	gDeviceContext->HSSetShader(nullptr, nullptr, 0);
+	/*gDeviceContext->HSSetShader(nullptr, nullptr, 0);
 	gDeviceContext->DSSetShader(nullptr, nullptr, 0);
-	gDeviceContext->GSSetShader(nullptr, nullptr, 0);
+	gDeviceContext->GSSetShader(nullptr, nullptr, 0);*/
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 
 	UINT32 vertexSize = sizeof(float) * 6;
 	UINT32 offset = 0;
-	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
+	/*gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gDeviceContext->IASetInputLayout(gVertexLayout);
 
-	gDeviceContext->Draw(3, 0);
+	gDeviceContext->Draw(3, 0);*/
 
 	UINT32 vertexMS = sizeof(Vertex);
 
@@ -91,6 +92,53 @@ void Graphics::Render()
 		if (!material[meshSubsetTexture[i]].transparent)
 			gDeviceContext->DrawIndexed(indexDrawAmount, indexStart, 0);
 	}
+}
+
+void Graphics::RendPlayer(Matrix transform)
+{
+	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+
+	UINT32 vertexSize = sizeof(float) * 6;
+	UINT32 offset = 0;
+
+	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gDeviceContext->IASetInputLayout(gVertexLayout);
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+
+	Matrix world;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	//world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	// viewProj = camera->camView * projection;
+
+	worldViewProj = transform * camera->camView * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	//world = world.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr2 = (MATRICES*)mapped.pData;
+	MatrixPtr2->worldViewProj = worldViewProj;
+	MatrixPtr2->world = world;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+
+	gDeviceContext->Draw(3, 0);
 }
 
 HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
@@ -241,9 +289,41 @@ void Graphics::CreateConstantBuffer()
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
 }
 
+void Graphics::CreateTriangleAABBBox(AABBBox * axisAllignedBox)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		axisAllignedBox->min.x = min(axisAllignedBox->min.x, triangleVertices[i].x);
+		axisAllignedBox->min.y = min(axisAllignedBox->min.y, triangleVertices[i].y);
+		axisAllignedBox->min.z = min(axisAllignedBox->min.z, triangleVertices[i].z);
+
+		axisAllignedBox->max.x = max(axisAllignedBox->max.x, triangleVertices[i].x);
+		axisAllignedBox->max.y = max(axisAllignedBox->max.y, triangleVertices[i].y);
+		axisAllignedBox->max.z = max(axisAllignedBox->max.z, triangleVertices[i].z);
+	}
+
+	triangleBox.push_back(*axisAllignedBox);
+}
+
+void Graphics::CreateSquareAABBBox(AABBBox * axisAllignedBox)
+{
+	for (int i = 0; i < vertexMeshSize.size(); i++)
+	{
+		axisAllignedBox->min.x = min(axisAllignedBox->min.x, vertexMeshSize[i].pos.x);
+		axisAllignedBox->min.y = min(axisAllignedBox->min.y, vertexMeshSize[i].pos.y);
+		axisAllignedBox->min.z = min(axisAllignedBox->min.z, vertexMeshSize[i].pos.z);
+															
+		axisAllignedBox->max.x = max(axisAllignedBox->max.x, vertexMeshSize[i].pos.x);
+		axisAllignedBox->max.y = max(axisAllignedBox->max.y, vertexMeshSize[i].pos.y);
+		axisAllignedBox->max.z = max(axisAllignedBox->max.z, vertexMeshSize[i].pos.z);
+	}
+
+	squareBox.push_back(*axisAllignedBox);
+
+}
+
 void Graphics::UpdateConstantBuffer()
 {
-
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mapped;
 
@@ -254,8 +334,10 @@ void Graphics::UpdateConstantBuffer()
 	Matrix projection;
 	Matrix worldViewProj;
 
-	world = XMMatrixRotationZ(XMConvertToRadians(rotationCount)) * XMMatrixTranslation(0, 0, 0);
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	viewProj = camera->camView * projection;
 
 	worldViewProj = world * camera->camView * projection;
 

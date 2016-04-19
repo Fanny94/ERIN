@@ -63,7 +63,6 @@ void Input::update()
 		State._left_trigger = _controllerState.Gamepad.bLeftTrigger / 255.0f;
 	}
 
-
 	// Get the Buttons
 	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) State._buttons[GamePad_Button_DPAD_UP] = true;
 	if (_controllerState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) State._buttons[GamePad_Button_DPAD_DOWN] = true;

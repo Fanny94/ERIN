@@ -13,12 +13,15 @@ public:
 	Graphics();
 	~Graphics();
 
-	void Render();
 	void SetViewport();
+	void Render();
+	void RendPlayer(Matrix transform);
 	void CreateShaders();
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
+	void CreateTriangleAABBBox(AABBBox* axisAllignedBox);
+	void CreateSquareAABBBox(AABBBox* axisAllignedBox);
 	void UpdateConstantBuffer();
 	
 	float get_gWidth() { return this->WIDTH; }
@@ -38,7 +41,6 @@ public:
 
 	HRESULT CreateDirect3DContext(HWND wndHandle);
 
-
 	struct MATRICES
 	{
 		Matrix worldViewProj;
@@ -47,8 +49,11 @@ public:
 		Matrix projection;
 	};
 
+	Matrix viewProj;
+
 	TriangleVertex* triangleVertices;
 	MATRICES* MatrixPtr;
+	MATRICES* MatrixPtr2;
 	Camera* camera;
 
 	ID3D11Buffer* objBuffer = nullptr;
@@ -99,6 +104,8 @@ public:
 	vector<wstring> textureNameArray;
 	vector<SurfaceMaterial> material;
 	vector<Vertex> vertexMeshSize;
+	vector<AABBBox> triangleBox;
+	vector<AABBBox> squareBox;
 
 private:
 	float WIDTH = 1080;

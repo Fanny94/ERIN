@@ -10,9 +10,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 
 	// test input
-	this->gameObject = new GameObject("player", 0.0f, 0.0f, 0.0f);
-
-	MSG msg = { 0 };
+	this->gameObject = new GameObject("player", -0.5f, 0.0f, 0.0f);
 
 	//create window
 	wndHandle = InitWindow(hInstance);
@@ -40,7 +38,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(gameObject->triangle);
 
-		if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/GitHub/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+
+		if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+
 		{
 			return;
 		}
@@ -49,23 +50,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		ShowWindow(wndHandle, nCommandShow);
 
-
-		// read messages
-		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			// update/render
-
-			//processInput();
-
-			//switch front- and back-buffer
-		
-		}
 	}
 }
 
@@ -153,7 +137,7 @@ void Engine::processInput()
 
 		// test xbox thumstix
 
-		float leftX = this->gameObject->input->State._left_thumbstick.x;
+		/*float leftX = this->gameObject->input->State._left_thumbstick.x;
 		float leftY = this->gameObject->input->State._left_thumbstick.y;
 
 		if (leftX < -0.0f)
@@ -171,22 +155,37 @@ void Engine::processInput()
 		if (leftY > 0.0f)
 		{
 			this->camera->cameraMoveUp(leftY);
-		}
-		
-		// left stick
-		/*if ((this->gameObject->input->State._left_thumbstick.x != 0) &&
-			(this->gameObject->input->State._left_thumbstick.y != 0))
-		{
-			this->camera->cameraMoveLeft(this->gameObject->input->State._left_thumbstick.x);
-			this->camera->cameraMoveRight(this->gameObject->input->State._left_thumbstick.x);
-			this->camera->cameraMoveUp(this->gameObject->input->State._left_thumbstick.y);
-			this->camera->cameraMoveDown(this->gameObject->input->State._left_thumbstick.y);
 		}*/
 
-		// right stick
-	}
+		float thumbLeftX = this->gameObject->input->State._left_thumbstick.x;
+		float thumbLeftY = this->gameObject->input->State._left_thumbstick.y;
 
-	//graphics->MatrixPtr->view = camera->camView;
+		float playerX = this->gameObject->GetX();
+		float playerY = this->gameObject->GetY();
+
+		float speed = 5.0f; // (float)(5.0f * time);
+
+		if (thumbLeftX < -0.0f)
+		{
+			playerX -= 0.001f;
+			this->gameObject->SetX(playerX);
+		}
+		if (thumbLeftX > 0.0f)
+		{
+			playerX += 0.001f;
+			this->gameObject->SetX(playerX);
+		}
+		if (thumbLeftY < -0.0f)
+		{
+			playerY -= 0.001f;
+			this->gameObject->SetY(playerY);
+		}
+		if (thumbLeftY > 0.0f)
+		{
+			playerY += 0.001f;
+			this->gameObject->SetY(playerY);
+		}
+	}
 }
 
 void Engine::update(double deltaTimeMs)
@@ -200,15 +199,15 @@ void Engine::update(double deltaTimeMs)
 	//printf("Elapsed time: %fS.\n", deltaTimeS);
 
 	//gameObject->input->isConnected();
+	gameObject->update();
 }
 
 void Engine::render()
 {
-
 	graphics->UpdateConstantBuffer();
 
 	graphics->Render();
-
+	graphics->RendPlayer(*gameObject->objectMatrix);
 	camera->InitCamera();
 
 	// switch front- and back-buffer
@@ -256,7 +255,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 		PostQuitMessage(0);
-		break;
+		return 0;
 	}
 
 	//call the default handler function if w do not handle the message here 
