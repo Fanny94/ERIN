@@ -14,7 +14,8 @@ public:
 	GameObject(string name, float x, float y, float z);
 	~GameObject();
 
-	void update();
+	void playerInput();
+	void update(double deltaTimeMs);
 
 	void SetX(float x) { this->x = x; };
 	void SetY(float y) { this->y = y; };
@@ -34,7 +35,20 @@ private:
 
 	string name;
 	float x, y, z;
+
+	float maximumSpeed;
+	float currentSpeed;
+	float speed;
+
+	bool accelerating;
+	float acceleration;
 	float velocity;
+
+	float thumbLeftX;
+	float thumbLeftY;
+
+	float velocityX;
+	float velocityY;
 };
 
 #endif // !GAMEOBJECT_H
