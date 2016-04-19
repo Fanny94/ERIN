@@ -8,6 +8,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->running = true;
 	this->camera = new Camera();
 	this->graphics = new Graphics();
+	this->gameLogic = new GameLogic();
 
 	// test input
 	this->gameObject = new GameObject("player", -0.5f, 0.0f, 0.0f);
@@ -44,7 +45,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangleAABBBox(gameObject->axisAllignedBox, gameObject->triangle);
 		
-		graphics->CreateSquareAABBBox(gameObject->axisAllignedBox, gameObject->triangle);
+		graphics->CreateSquareAABBBox(gameObject->axisAllignedBox);
 
 		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
@@ -68,6 +69,7 @@ Engine::~Engine()
 	delete this->graphics;
 	delete this->gameObject;
 	delete this->camera;
+	delete this->gameLogic;
 
 	fclose(stdout);
 	// finish program
@@ -79,7 +81,6 @@ Engine::~Engine()
 
 void Engine::processInput()
 {
-
 	gameObject->input->update(); // test object, should be done for all objects
 
 	if (gameObject->input->isConnected())

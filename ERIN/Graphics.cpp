@@ -4,7 +4,6 @@
 Graphics::Graphics()
 {
 
-
 }
 
 Graphics::~Graphics()
@@ -309,7 +308,7 @@ void Graphics::CreateTriangleAABBBox(AABBBox* axisAllignedBox, TriangleVertex* t
 	triangleBox.push_back(axisAllignedBox);
 }
 
-void Graphics::CreateSquareAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices)
+void Graphics::CreateSquareAABBBox(AABBBox* axisAllignedBox)
 {
 
 	for (int i = 0; i < vertexMeshSize.size(); i++)

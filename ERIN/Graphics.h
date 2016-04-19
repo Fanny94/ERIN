@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "WICTextureLoader.h"
 
+using namespace std;
 class Camera;
 
 class Graphics
@@ -22,7 +23,7 @@ public:
 	void CreateTriangle();
 	void CreateConstantBuffer();
 	void CreateTriangleAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices);
-	void CreateSquareAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices);
+	void CreateSquareAABBBox(AABBBox* axisAllignedBoxs);
 	void UpdateConstantBuffer();
 	
 	float get_gWidth() { return this->WIDTH; }
