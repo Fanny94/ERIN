@@ -3,6 +3,15 @@
 #define CUSTOMIMPORT_H
 #include "Linker.h"
 
+struct Vertex
+{
+	float pos[3];
+	float nor[3];
+	float uv[2];
+	float tan[3];
+	float bitan[3];
+};
+
 class CustomImport
 {
 private:
@@ -17,6 +26,17 @@ private:
 	float Translation[3];
 	float Roatation[3];
 	float Scale[3];
+	vector<Vertex>* vertex;
+	Vertex vertexTemp;
+	float diffuseColor[3];
+	float ambientColor[3];
+	float specularColor[3];
+	float transparency;
+	float shininess;
+	float reflection;
+	char DiffuseMap[256];
+	char NormalMap[256];
+	char SpecularMap[256];
 public:
 	CustomImport();
 	~CustomImport();
