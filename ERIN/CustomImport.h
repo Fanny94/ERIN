@@ -24,7 +24,7 @@ private:
 	unsigned int AttributeCount;
 	char MeshName[256];
 	float Translation[3];
-	float Roatation[3];
+	float Rotation[3];
 	float Scale[3];
 	vector<Vertex>* vertex;
 	Vertex vertexTemp;

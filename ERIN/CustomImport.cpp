@@ -20,7 +20,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 		fileIn.read((char*)&MeshName, sizeof(char) * 256);
 		fileIn.read((char*)&AttributeCount, sizeof(unsigned int));
 		fileIn.read((char*)&Translation, sizeof(float) * 3);
-		fileIn.read((char*)&Roatation, sizeof(float) * 3);
+		fileIn.read((char*)&Rotation, sizeof(float) * 3);
 		fileIn.read((char*)&Scale, sizeof(float) * 3);
 
 		for (int j = 0; j < VertexCount; j++)
