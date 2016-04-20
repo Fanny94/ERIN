@@ -17,15 +17,18 @@ GameObject::GameObject(string name, float x, float y, float z)
 
 	// test triangle in gameobject
 	this->triangle = new TriangleVertex[3];
-	this->axisAllignedBox = new AABBBox;
+	//this->axisAllignedBox = new AABBBox[2];
 
 	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
 	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
 	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
 
-	this->axisAllignedBox->min = { FLT_MAX, FLT_MAX, FLT_MAX };
-	this->axisAllignedBox->max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
+	/*this->axisAllignedBox[0].min = { FLT_MAX, FLT_MAX, FLT_MAX };
+	this->axisAllignedBox[0].max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
 
+	this->axisAllignedBox[1].min = { FLT_MAX, FLT_MAX, FLT_MAX };
+	this->axisAllignedBox[0].max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
+*/
 	this->objectMatrix = new Matrix();
 }
 
@@ -34,7 +37,7 @@ GameObject::~GameObject()
 	delete this->input;
 	delete this->triangle;
 	delete this->objectMatrix;
-	delete this->axisAllignedBox;
+	//delete this->axisAllignedBox;
 }
 
 void GameObject::update()

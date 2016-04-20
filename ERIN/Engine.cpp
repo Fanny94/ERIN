@@ -16,9 +16,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	//create window
 	wndHandle = InitWindow(hInstance);
 
-	AllocConsole();
 
-	freopen("CONOUT$", "w", stdout);
 
 	if (!camera->InitDirectInput(hInstance))
 	{
@@ -43,14 +41,14 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(gameObject->triangle);
 
-		graphics->CreateTriangleAABBBox(gameObject->axisAllignedBox, gameObject->triangle);
+		graphics->CreateTriangleAABBBox(gameObject->triangle);
 		
-		graphics->CreateSquareAABBBox(gameObject->axisAllignedBox);
-
 		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
 			return;
 		}
+
+		graphics->CreateSquareAABBBox();
 		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 
 		{
@@ -71,7 +69,7 @@ Engine::~Engine()
 	delete this->camera;
 	delete this->gameLogic;
 
-	fclose(stdout);
+	
 	// finish program
 	//DestroyWindow(wndHandle);
 	
@@ -217,7 +215,7 @@ void Engine::update(double deltaTimeMs)
 void Engine::render()
 {
 	graphics->UpdateConstantBuffer();
-	gameLogic->AABBtoAABB(graphics->triangleBox, graphics->squareBox);
+	graphics->AABBtoAABB();
 
 	graphics->Render();
 	graphics->RendPlayer(*gameObject->objectMatrix);

@@ -290,40 +290,68 @@ void Graphics::CreateConstantBuffer()
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
 }
 
-void Graphics::CreateTriangleAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices)
+AABBBox Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
 {
+	this->triAxisAllignedBox.min = { FLT_MAX, FLT_MAX, FLT_MAX };
+	this->triAxisAllignedBox.max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
 
 	for (int i = 0; i < 3; i++)
 	{
-	axisAllignedBox->min.x = min(axisAllignedBox->min.x, triangleVertices[0].x);
-	axisAllignedBox->min.y = min(axisAllignedBox->min.y, triangleVertices[1].y);
-	axisAllignedBox->min.z = min(axisAllignedBox->min.z, triangleVertices[2].z);
-
-	axisAllignedBox->max.x = max(axisAllignedBox->max.x, triangleVertices[0].x);
-	axisAllignedBox->max.y = max(axisAllignedBox->max.y, triangleVertices[1].y);
-	axisAllignedBox->max.z = max(axisAllignedBox->max.z, triangleVertices[2].z);
+		triAxisAllignedBox.min.x = min(triAxisAllignedBox.min.x, triangleVertices[i].x);
+		triAxisAllignedBox.min.y = min(triAxisAllignedBox.min.y, triangleVertices[i].y);
+		triAxisAllignedBox.min.z = min(triAxisAllignedBox.min.z, triangleVertices[i].z);
+		   												 
+		triAxisAllignedBox.max.x = max(triAxisAllignedBox.max.x, triangleVertices[i].x);
+		triAxisAllignedBox.max.y = max(triAxisAllignedBox.max.y, triangleVertices[i].y);
+		triAxisAllignedBox.max.z = max(triAxisAllignedBox.max.z, triangleVertices[i].z);
 
 	}
 
-	triangleBox.push_back(axisAllignedBox);
+	//triangleBox.push_back(axisAllignedBox);
+	return triAxisAllignedBox;
 }
 
-void Graphics::CreateSquareAABBBox(AABBBox* axisAllignedBox)
+vector <AABBBox> Graphics::CreateSquareAABBBox()
 {
+	this->axisAllignedBox.min = { FLT_MAX, FLT_MAX, FLT_MAX };
+	this->axisAllignedBox.max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
 
 	for (int i = 0; i < vertexMeshSize.size(); i++)
 	{
-		axisAllignedBox->min.x = min(axisAllignedBox->min.x, vertexMeshSize[i].pos.x);
-		axisAllignedBox->min.y = min(axisAllignedBox->min.y, vertexMeshSize[i].pos.y);
-		axisAllignedBox->min.z = min(axisAllignedBox->min.z, vertexMeshSize[i].pos.z);
-															
-		axisAllignedBox->max.x = max(axisAllignedBox->max.x, vertexMeshSize[i].pos.x);
-		axisAllignedBox->max.y = max(axisAllignedBox->max.y, vertexMeshSize[i].pos.y);
-		axisAllignedBox->max.z = max(axisAllignedBox->max.z, vertexMeshSize[i].pos.z);
+		axisAllignedBox.min.x = min(axisAllignedBox.min.x, vertexMeshSize[i].pos.x);
+		axisAllignedBox.min.y = min(axisAllignedBox.min.y, vertexMeshSize[i].pos.y);
+		axisAllignedBox.min.z = min(axisAllignedBox.min.z, vertexMeshSize[i].pos.z);
+													
+		axisAllignedBox.max.x = max(axisAllignedBox.max.x, vertexMeshSize[i].pos.x);
+		axisAllignedBox.max.y = max(axisAllignedBox.max.y, vertexMeshSize[i].pos.y);
+		axisAllignedBox.max.z = max(axisAllignedBox.max.z, vertexMeshSize[i].pos.z);
 	}
 
 	squareBox.push_back(axisAllignedBox);
+	return squareBox;
+}
 
+bool Graphics::AABBtoAABB()
+{
+	for (int i = 0; i < squareBox.size(); i++)
+	{
+
+		if (squareBox[i].max.x > triAxisAllignedBox.min.x &&
+			squareBox[i].min.x < triAxisAllignedBox.max.x &&
+			squareBox[i].max.y > triAxisAllignedBox.min.y &&
+			squareBox[i].min.y < triAxisAllignedBox.max.y)
+		{
+			return true;
+			cout << "hit";
+
+		}
+
+		else
+		{
+			return false;
+
+		}
+	}
 }
 
 void Graphics::UpdateConstantBuffer()

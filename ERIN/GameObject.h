@@ -27,7 +27,7 @@ public:
 
 	Input* input;
 	TriangleVertex* triangle;
-	AABBBox* axisAllignedBox;
+	//AABBBox* axisAllignedBox;
 	Matrix* objectMatrix;
 
 private:

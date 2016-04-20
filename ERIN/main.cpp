@@ -21,12 +21,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 
 	MSG msg = { 0 };
 
+	AllocConsole();
+	freopen("CONOUT$", "w", stdout);
+
 	Engine* engine = new Engine(hInstance, hPrevInstance, lpCommandLine, nCommandShow);
 
 	const double MS_PER_UPDATE = 8;
 	double previous = clock();
 	double lag = 0.0;
-
 
 	while (WM_QUIT != msg.message && engine->getRunning())
 	{
@@ -59,7 +61,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 		}
 
 	}
-
+	fclose(stdout);
 	delete engine;
 
 	return 0;

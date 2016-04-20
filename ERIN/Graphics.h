@@ -22,8 +22,9 @@ public:
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
-	void CreateTriangleAABBBox(AABBBox* axisAllignedBox, TriangleVertex* triangleVertices);
-	void CreateSquareAABBBox(AABBBox* axisAllignedBoxs);
+	AABBBox CreateTriangleAABBBox(TriangleVertex* triangleVertices);
+	vector<AABBBox> CreateSquareAABBBox();
+	bool AABBtoAABB();
 	void UpdateConstantBuffer();
 	
 	float get_gWidth() { return this->WIDTH; }
@@ -53,7 +54,8 @@ public:
 
 	Matrix viewProj;
 	TriangleVertex* triangleVertices;
-	AABBBox* axisAllignedBox;
+	AABBBox triAxisAllignedBox;
+	AABBBox axisAllignedBox;
 	MATRICES* MatrixPtr;
 	MATRICES* MatrixPtr2;
 	Camera* camera;
@@ -106,8 +108,8 @@ public:
 	vector<wstring> textureNameArray;
 	vector<SurfaceMaterial> material;
 	vector<Vertex> vertexMeshSize;
-	vector<AABBBox*> triangleBox;
-	vector<AABBBox*> squareBox;
+	vector<AABBBox> triangleBox;
+	vector<AABBBox> squareBox;
 
 private:
 	float WIDTH = 1080;
