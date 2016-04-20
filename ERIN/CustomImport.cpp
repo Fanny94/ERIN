@@ -123,10 +123,12 @@ void CustomImport::LoadCustomFormat(string filePath)
 
 	}*/
 
-	for (int i = 0; i < KeyFrameCount; i++)
+	/*for (int i = 0; i < KeyFrameCount; i++)
 	{
-
-	}
+		 fileIn.read((char*)&KeyFrameID, sizeof(float));
+		 fileIn.read((char*)&KeyFrameTime, sizeof(float));
+		 fileIn.read((char*)&KeyFramePosition, sizeof(float) * 3);
+	}*/
 
 	/*for (int i = 0; i < MorphAnimationCount; i++)
 	{

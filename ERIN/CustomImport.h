@@ -131,6 +131,10 @@ private:
 	float camYaw;
 	float camPitch;
 
+	float KeyFrameID;
+	float KeyFrameTime;
+	float KeyFramePosition[3];
+
 	unsigned int CustomVectorCount;
 	unsigned int CustomFloatCount;
 	unsigned int CustomIntCount;
