@@ -173,4 +173,5 @@ void CustomImport::LoadCustomFormat(string filePath)
 			customString->push_back(customStringTemp);
 		}
 	}*/
+	fileIn.close();
 }
