@@ -58,12 +58,6 @@ Engine::~Engine()
 	delete this->graphics;
 	delete this->gameObject;
 	delete this->camera;
-
-	// finish program
-	//DestroyWindow(wndHandle);
-	
-	// return how the program finished
-	//return (int)msg.wParam;
 }
 
 void Engine::processInput()
@@ -177,10 +171,28 @@ void Engine::update(double deltaTimeMs)
 
 void Engine::render()
 {
+
 	graphics->UpdateConstantBuffer();
 
+	/*
+
+	player shader;
+	player rend;
+	player shader delete;
+
+	for (int i = 0; i < assetmanager->numberOfMeshes; i++)
+	{
+		graphics->CreateShaders("filename");
+		graphics->RendFBX(x);
+		graphics->DeleteShader();
+	}
+
+	*/
+
 	graphics->Render();
+	
 	graphics->RendPlayer(*gameObject->objectMatrix);
+
 	camera->InitCamera();
 
 	// switch front- and back-buffer

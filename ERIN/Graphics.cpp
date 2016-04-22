@@ -53,9 +53,6 @@ void Graphics::Render()
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	/*gDeviceContext->HSSetShader(nullptr, nullptr, 0);
-	gDeviceContext->DSSetShader(nullptr, nullptr, 0);
-	gDeviceContext->GSSetShader(nullptr, nullptr, 0);*/
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 
 	UINT32 vertexSize = sizeof(float) * 6;
@@ -122,7 +119,7 @@ void Graphics::RendPlayer(Matrix transform)
 
 	worldViewProj = worldViewProj.Transpose();
 
-	//world = world.Transpose();
+	transform = transform.Transpose();
 
 	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
 	if (FAILED(result))
@@ -132,13 +129,18 @@ void Graphics::RendPlayer(Matrix transform)
 
 	MatrixPtr2 = (MATRICES*)mapped.pData;
 	MatrixPtr2->worldViewProj = worldViewProj;
-	MatrixPtr2->world = world;
+	MatrixPtr2->world = transform;
 
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 
 	gDeviceContext->Draw(3, 0);
+}
+
+void Graphics::RendFBX()
+{
+
 }
 
 HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
@@ -184,6 +186,51 @@ HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 }
 
 void Graphics::CreateShaders()
+{
+	ID3DBlob* pVS = nullptr;
+	D3DCompileFromFile(
+		L"VertexShader.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"VS_main",		// entry point
+		"vs_4_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pVS,			// double pointer to ID3DBlob
+		nullptr			// pointer for Error Blob messages.			
+		);
+
+	D3D11_INPUT_ELEMENT_DESC inputDesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	gDevice->CreateInputLayout(inputDesc,
+		ARRAYSIZE(inputDesc), pVS->GetBufferPointer(), pVS->GetBufferSize(), &gVertexLayout);
+
+	gDevice->CreateVertexShader(pVS->GetBufferPointer(), pVS->GetBufferSize(), nullptr, &gVertexShader);
+	pVS->Release();
+
+	ID3DBlob* pPS = nullptr;
+	D3DCompileFromFile(
+		L"PixelShader.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"PS_main",		// entry point
+		"ps_4_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pPS,			// double pointer to ID3DBlob
+		nullptr			// pointer for Error Blob messages.		
+		);
+
+	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
+	pPS->Release();
+}
+
+void Graphics::CreateShaders(string shaderFileName)
 {
 	ID3DBlob* pVS = nullptr;
 	D3DCompileFromFile(
