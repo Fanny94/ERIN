@@ -141,6 +141,10 @@ void Graphics::RendPlayer(Matrix transform)
 void Graphics::RendFBX()
 {
 
+//define vertex size
+
+//Eventually map diffuse color to the constantbuffer, to send the information to the pixelshader 
+
 /*for(int i = 0; i < IndexCount; i++)	
 	{
 		Set vertexBuffer;
