@@ -22,6 +22,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		return;
 	}
 
+	// camera->wndH = wndHandle; Behövs denna raden?? / Marc
+
 	graphics->camera = camera;
 
 	// window is valid
@@ -30,20 +32,23 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		// Create SwapChain, Device and Device Context 
 		graphics->CreateDirect3DContext(wndHandle);
 
-		graphics->SetViewport();
+		graphics->SetViewport(); // Set Viewport
 
 		graphics->CreateShaders();
 
 		graphics->CreateTriangle(gameObject->triangle);
 
-		//if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
-
-		if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		{
+			return;
+		}
+		
+		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 
 		{
 			return;
 		}
-
+		*/
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -173,7 +178,7 @@ void Engine::render()
 
 	camera->InitCamera();
 
-	// Switch front- and back-buffer
+	// switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(0, 0);
 }
 
