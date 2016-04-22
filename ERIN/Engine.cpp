@@ -22,8 +22,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		return;
 	}
 
-	// camera->wndH = wndHandle; Behövs denna raden?? / Marc
-
 	graphics->camera = camera;
 
 	// window is valid
@@ -178,7 +176,7 @@ void Engine::render()
 
 	camera->InitCamera();
 
-	// switch front- and back-buffer
+	// Switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(0, 0);
 }
 
@@ -192,7 +190,6 @@ HWND Engine::InitWindow(HINSTANCE hInstance)
 	winClassInfo.lpfnWndProc = WndProc; // This function is called for events
 	winClassInfo.hInstance = hInstance;
 	winClassInfo.lpszClassName = "WindowClass";
-	// Window is the name of the class
 
 	if (!RegisterClassEx(&winClassInfo))
 		return false;

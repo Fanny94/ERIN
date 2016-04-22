@@ -54,7 +54,7 @@ void Graphics::Render()
 {
 	float clearColor[] = { 1, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
-	gDeviceContext->ClearDepthStencilView(gDepthView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
@@ -199,7 +199,7 @@ HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 		gDevice->CreateRenderTargetView(pBackBuffer, NULL, &gBackbufferRTV);
 		pBackBuffer->Release();
 
-		gDeviceContext->OMSetRenderTargets(1, &gBackbufferRTV, NULL);
+		gDeviceContext->OMSetRenderTargets(1, &gBackbufferRTV, gDepthStencilView);
 
 	}
 	return hr;
@@ -244,51 +244,6 @@ void Graphics::CreateShaders()
 		0,				// effect compile options
 		&pPS,			// double pointer to ID3DBlob
 		nullptr			// pointer for Error Blob messages.		
-		);
-
-	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
-	pPS->Release();
-}
-
-void Graphics::CreateShaders(string shaderFileName)
-{
-	ID3DBlob* pVS = nullptr;
-	D3DCompileFromFile(
-		L"VertexShader.hlsl", // filename
-		nullptr,		// optional macros
-		nullptr,		// optional include files
-		"VS_main",		// entry point
-		"vs_4_0",		// shader model (target)
-		0,				// shader compile options
-		0,				// effect compile options
-		&pVS,			// double pointer to ID3DBlob
-		nullptr			// pointer for Error Blob messages.			
-		);
-
-	D3D11_INPUT_ELEMENT_DESC inputDesc[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "UV", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
-	gDevice->CreateInputLayout(inputDesc,
-		ARRAYSIZE(inputDesc), pVS->GetBufferPointer(), pVS->GetBufferSize(), &gVertexLayout);
-
-	gDevice->CreateVertexShader(pVS->GetBufferPointer(), pVS->GetBufferSize(), nullptr, &gVertexShader);
-	pVS->Release();
-
-	ID3DBlob* pPS = nullptr;
-	D3DCompileFromFile(
-		L"PixelShader.hlsl", // filename
-		nullptr,		// optional macros
-		nullptr,		// optional include files
-		"PS_main",		// entry point
-		"ps_4_0",		// shader model (target)
-		0,				// shader compile options
-		0,				// effect compile options
-		&pPS,			// double pointer to ID3DBlob
-		nullptr			// pointer for Error Blob messages.			
 		);
 
 	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
@@ -405,9 +360,9 @@ void Graphics::CreateDepthBuffer()
 	depthDesc.CPUAccessFlags = 0;
 	depthDesc.MiscFlags = 0;
 
-	gDevice->CreateTexture2D(&depthDesc, 0, &gDepthStencilView);
+	gDevice->CreateTexture2D(&depthDesc, 0, &gDepthView);
 
-	gDevice->CreateDepthStencilView(gDepthStencilView, 0, &gDepthView);
+	gDevice->CreateDepthStencilView(gDepthView, 0, &gDepthStencilView);
 
 }
 
