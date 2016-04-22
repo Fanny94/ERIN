@@ -29,7 +29,6 @@ public:
 	void CreateTriangleAABBBox(AABBBox* axisAllignedBox);
 	void CreateSquareAABBBox(AABBBox* axisAllignedBox);
 	void CreateDepthBuffer();
-	void UpdateConstantBuffer();
 	
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
