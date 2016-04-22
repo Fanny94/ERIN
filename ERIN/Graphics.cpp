@@ -141,6 +141,16 @@ void Graphics::RendPlayer(Matrix transform)
 void Graphics::RendFBX()
 {
 
+/*for(int i = 0; i < IndexCount; i++)	
+	{
+		Set vertexBuffer;
+		Set indexBuffer;
+		Set constantbuffer;
+		Material;
+		Texture;
+		DrawIndexed();
+
+	}*/
 }
 
 HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
@@ -334,6 +344,10 @@ void Graphics::CreateConstantBuffer()
 	cOBJBufferDesc.MiscFlags = 0;
 
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
+
+
+
+
 }
 
 void Graphics::CreateTriangleAABBBox(AABBBox * axisAllignedBox)
