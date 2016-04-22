@@ -9,7 +9,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 	ifstream fileIn(filePath, ios::in | ios::binary);
 	
 	fileIn.read((char*)&MeshCount, sizeof(unsigned int));
-	fileIn.read((char*)&MaterialCount, sizeof(unsigned int));
+	//fileIn.read((char*)&MaterialCount, sizeof(unsigned int));
 	//fileIn.read((char*)&GroupCount, sizeof(unsigned int));
 	//fileIn.read((char*)&LightCount, sizeof(unsigned int));
 	//fileIn.read((char*)&CameraCount, sizeof(unsigned int));
@@ -20,28 +20,29 @@ void CustomImport::LoadCustomFormat(string filePath)
 
 	for (int i = 0; i < MeshCount; i++)
 	{
-		fileIn.read((char*)&VertexCount, sizeof(unsigned int));
-		fileIn.read((char*)&MaterialID, sizeof(unsigned int));
-		fileIn.read((char*)&MeshID, sizeof(unsigned int));
-		fileIn.read((char*)&ParentID, sizeof(unsigned int));
-		fileIn.read((char*)&MeshName, sizeof(char) * 256);
-		fileIn.read((char*)&AttributeCount, sizeof(unsigned int));
-		fileIn.read((char*)&Translation, sizeof(float) * 3);
-		fileIn.read((char*)&Rotation, sizeof(float) * 3);
-		fileIn.read((char*)&Scale, sizeof(float) * 3);
+		fileIn.read((char*)&meshTemp.VertexCount, sizeof(unsigned int));
+		fileIn.read((char*)&meshTemp.MaterialID, sizeof(unsigned int));
+		fileIn.read((char*)&meshTemp.MeshID, sizeof(unsigned int));
+		fileIn.read((char*)&meshTemp.ParentID, sizeof(unsigned int));
+		fileIn.read((char*)&meshTemp.MeshName, sizeof(char) * 256);
+		fileIn.read((char*)&meshTemp.AttributeCount, sizeof(unsigned int));
+		fileIn.read((char*)&meshTemp.Translation, sizeof(float) * 3);
+		fileIn.read((char*)&meshTemp.Rotation, sizeof(float) * 3);
+		fileIn.read((char*)&meshTemp.Scale, sizeof(float) * 3);
 
-		for (int j = 0; j < VertexCount; j++)
+		for (int j = 0; j < meshTemp.VertexCount; j++)
 		{
-			fileIn.read((char*)&vertexTemp.pos, sizeof(float) * 3);
-			fileIn.read((char*)&vertexTemp.nor, sizeof(float) * 3);
-			fileIn.read((char*)&vertexTemp.uv, sizeof(float) * 2);
-			fileIn.read((char*)&vertexTemp.tan, sizeof(float) * 3);
-			fileIn.read((char*)&vertexTemp.bitan, sizeof(float) * 3);
-			vertex->push_back(vertexTemp);
+			fileIn.read((char*)&meshTemp.vertexTemp.pos, sizeof(float) * 3);
+			fileIn.read((char*)&meshTemp.vertexTemp.nor, sizeof(float) * 3);
+			fileIn.read((char*)&meshTemp.vertexTemp.uv, sizeof(float) * 2);
+			fileIn.read((char*)&meshTemp.vertexTemp.tan, sizeof(float) * 3);
+			fileIn.read((char*)&meshTemp.vertexTemp.bitan, sizeof(float) * 3);
+			meshTemp.vertex.push_back(meshTemp.vertexTemp);
 		}
+		meshS.push_back(meshTemp);
 	}
 
-	for (int i = 0; i < MaterialCount; i++)
+	/*for (int i = 0; i < MaterialCount; i++)
 	{
 		fileIn.read((char*)&diffuseColor, sizeof(float) * 3);
 		fileIn.read((char*)&ambientColor, sizeof(float) * 3);
@@ -52,7 +53,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 		fileIn.read((char*)&DiffuseMap, sizeof(char) * 256);
 		fileIn.read((char*)&NormalMap, sizeof(char) * 256);
 		fileIn.read((char*)&SpecularMap, sizeof(char) * 256);
-	}
+	}*/
 
 	/*for (int i = 0; i < GroupCount; i++)
 	{
@@ -74,7 +75,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 			fileIn.read((char*)&pointLightTemp.intensity, sizeof(float));
 			fileIn.read((char*)&pointLightTemp.color, sizeof(float) * 3);
 			fileIn.read((char*)&pointLightTemp.position, sizeof(float) * 3);
-			pointLight->push_back(pointLightTemp);
+			pointLight.push_back(pointLightTemp);
 		}
 
 		for (int k = 0; k < SpotLightCount; k++)
@@ -84,7 +85,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 			fileIn.read((char*)&spotLightTemp.position, sizeof(float) * 3);
 			fileIn.read((char*)&spotLightTemp.rotation, sizeof(float) * 3);
 			fileIn.read((char*)&spotLightTemp.scale, sizeof(float) * 3);
-			spotLight->push_back(spotLightTemp);
+			spotLight.push_back(spotLightTemp);
 		}
 
 		for (int l = 0; l < DirectionalLightCount; l++)
@@ -92,7 +93,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 		   fileIn.read((char*)&directionalLightTemp.intensity, sizeof(float));
 		   fileIn.read((char*)&directionalLightTemp.color, sizeof(float) * 3);
 		   fileIn.read((char*)&directionalLightTemp.rotation, sizeof(float) * 3);
-		   directionalLight->push_back(directionalLightTemp);
+		   directionalLight.push_back(directionalLightTemp);
 		}
 
 		for (int m = 0; m < AreaLightCount; m++)
@@ -103,7 +104,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 			fileIn.read((char*)&areaLightTemp.rotation, sizeof(float) * 3);
 			fileIn.read((char*)&areaLightTemp.height, sizeof(float));
 			fileIn.read((char*)&areaLightTemp.width, sizeof(float));
-			areaLight->push_back(areaLightTemp);
+			areaLight.push_back(areaLightTemp);
 		}
 	}*/
 
@@ -146,32 +147,73 @@ void CustomImport::LoadCustomFormat(string filePath)
 		for (int j = 0; j < CustomVectorCount; j++)
 		{
 			fileIn.read((char*)&customVectorTemp.cVector, sizeof(float) * 3);
-			customVector->push_back(customVectorTemp);
+			customVector.push_back(customVectorTemp);
 		}
 
 		for (int k = 0; k < CustomFloatCount; k++)
 		{
 			fileIn.read((char*)&customFloatTemp.cFloat, sizeof(float));
-			customFloat->push_back(customFloatTemp);
+			customFloat.push_back(customFloatTemp);
 		}
 
 		for (int l = 0; l < CustomIntCount; l++)
 		{
 			fileIn.read((char*)&customIntTemp.cInt, sizeof(int));
-			customInt->push_back(customIntTemp);
+			customInt.push_back(customIntTemp);
 		}
 
 		for (int m = 0; m < CustomBoolCount; m++)
 		{
 			fileIn.read((char*)&customBoolTemp.cBool, sizeof(bool));
-			customBool->push_back(customBoolTemp);
+			customBool.push_back(customBoolTemp);
 		}
 
 		for (int n = 0; n < CustomStringCount; n++)
 		{
 			fileIn.read((char*)&customStringTemp.cString, sizeof(char) * 256);
-			customString->push_back(customStringTemp);
+			customString.push_back(customStringTemp);
 		}
 	}*/
 	fileIn.close();
+}
+
+void CustomImport::NewMesh()
+{
+	Mesh newMesh;
+	newMesh.MeshCount = MeshCount;
+	for (int i = 0; i < newMesh.MeshCount; i++)
+	{
+		newMesh.meshTemp.VertexCount = meshS.at(i).VertexCount;
+		newMesh.meshTemp.MaterialID = meshS.at(i).MaterialID;
+		newMesh.meshTemp.MeshID = meshS.at(i).MeshID;
+		newMesh.meshTemp.ParentID = meshS.at(i).ParentID;
+		for (int j = 0; j < 256; j++)
+		{
+			newMesh.meshTemp.MeshName[j] = meshS.at(i).MeshName[j];
+		}
+		newMesh.meshTemp.AttributeCount = meshS.at(i).AttributeCount;
+		for (int k = 0; k < 3; k++)
+		{
+			newMesh.meshTemp.Translation[k] = meshS.at(i).Translation[k];
+			newMesh.meshTemp.Rotation[k] = meshS.at(i).Rotation[k];
+			newMesh.meshTemp.Scale[k] = meshS.at(i).Scale[k];
+		}
+		for (int l = 0; l < newMesh.meshTemp.VertexCount; l++)
+		{
+			for (int m = 0; m < 3; m++)
+			{
+				newMesh.meshTemp.vertexTemp.pos[m] = meshS.at(i).vertex.at(l).pos[m];
+				newMesh.meshTemp.vertexTemp.nor[m] = meshS.at(i).vertex.at(l).nor[m];
+				newMesh.meshTemp.vertexTemp.tan[m] = meshS.at(i).vertex.at(l).tan[m];
+				newMesh.meshTemp.vertexTemp.bitan[m] = meshS.at(i).vertex.at(l).bitan[m];
+			}
+			for (int n = 0; n < 2; n++)
+			{
+				newMesh.meshTemp.vertexTemp.uv[n] = meshS.at(i).vertex.at(l).uv[n];
+			}
+			newMesh.meshTemp.vertex.push_back(newMesh.meshTemp.vertexTemp);
+		}
+		newMesh.mesh.push_back(newMesh.meshTemp);
+	}
+	meshPtr->meshes.push_back(newMesh);
 }

@@ -2,100 +2,107 @@
 #ifndef CUSTOMIMPORT_H
 #define CUSTOMIMPORT_H
 #include "Linker.h"
-
-struct Vertex
-{
-	float pos[3];
-	float nor[3];
-	float uv[2];
-	float tan[3];
-	float bitan[3];
-};
-
-struct PointLight
-{
-	float intensity;
-	float color[3];
-	float position[3];
-};
-
-struct SpotLight
-{
-	float intensity;
-	float color[3];
-	float position[3];
-	float rotation[3];
-	float scale[3];
-};
-
-struct DirectionalLight
-{
-	float intensity;
-	float color[3];
-	float rotation[3];
-};
-
-struct AreaLight
-{
-	float intensity;
-	float color[3];
-	float position[3];
-	float rotation[3];
-	float height;
-	float width;
-};
-
-struct CustomVector
-{
-	float cVector[3];
-};
-
-struct CustomFloat
-{
-	float cFloat;
-};
-
-struct CustomInt
-{
-	int cInt;
-};
-
-struct CustomBool
-{
-	bool cBool;
-};
-
-struct CustomString
-{
-	char cString[256];
-};
+#include "Mesh.h"
 
 class CustomImport
 {
 private:
+	Mesh* meshPtr;
+	struct Vertex
+	{
+		float pos[3];
+		float nor[3];
+		float uv[2];
+		float tan[3];
+		float bitan[3];
+	};
+
+	/*struct PointLight
+	{
+		float intensity;
+		float color[3];
+		float position[3];
+	};
+
+	struct SpotLight
+	{
+		float intensity;
+		float color[3];
+		float position[3];
+		float rotation[3];
+		float scale[3];
+	};
+
+	struct DirectionalLight
+	{
+		float intensity;
+		float color[3];
+		float rotation[3];
+	};
+
+	struct AreaLight
+	{
+		float intensity;
+		float color[3];
+		float position[3];
+		float rotation[3];
+		float height;
+		float width;
+	};
+
+	struct CustomVector
+	{
+		float cVector[3];
+	};
+
+	struct CustomFloat
+	{
+		float cFloat;
+	};
+
+	struct CustomInt
+	{
+		int cInt;
+	};
+
+	struct CustomBool
+	{
+		bool cBool;
+	};
+
+	struct CustomString
+	{
+		char cString[256];
+	};*/
+
+	struct MeshStruct
+	{
+		unsigned int VertexCount;
+		unsigned int MaterialID;
+		unsigned int MeshID;
+		unsigned int ParentID;
+		unsigned int AttributeCount;
+		char MeshName[256];
+		float Translation[3];
+		float Rotation[3];
+		float Scale[3];
+		vector<Vertex> vertex;
+		Vertex vertexTemp;
+	};
+
 	unsigned int MeshCount;
-	unsigned int MaterialCount;
+	vector<MeshStruct> meshS;
+	MeshStruct meshTemp;
+	/*unsigned int MaterialCount;
 	unsigned int GroupCount;
 	unsigned int LightCount;
 	unsigned int CameraCount;
 	unsigned int SkeletonAnimationCount;
 	unsigned int KeyFrameCount;
 	unsigned int MorphAnimationCount;
-	unsigned int CustomAttributesCount;
+	unsigned int CustomAttributesCount;*/
 
-	unsigned int VertexCount;
-	unsigned int MaterialID;
-	unsigned int MeshID;
-	unsigned int ParentID;
-	unsigned int AttributeCount;
-	char MeshName[256];
-	float Translation[3];
-	float Rotation[3];
-	float Scale[3];
-	vector<Vertex>* vertex;
-	Vertex vertexTemp;
-
-	float diffuseColor[3];
+	/*float diffuseColor[3];
 	float ambientColor[3];
 	float specularColor[3];
 	float transparency;
@@ -114,13 +121,13 @@ private:
 	unsigned int SpotLightCount;
 	unsigned int DirectionalLightCount;
 	unsigned int AreaLightCount;
-	vector<PointLight>* pointLight;
+	vector<PointLight> pointLight;
 	PointLight pointLightTemp;
-	vector<SpotLight>* spotLight;
+	vector<SpotLight> spotLight;
 	SpotLight spotLightTemp;
-	vector<DirectionalLight>* directionalLight;
+	vector<DirectionalLight> directionalLight;
 	DirectionalLight directionalLightTemp;
-	vector<AreaLight>* areaLight;
+	vector<AreaLight> areaLight;
 	AreaLight areaLightTemp;
 
 	float camPosition[4];
@@ -140,21 +147,22 @@ private:
 	unsigned int CustomIntCount;
 	unsigned int CustomBoolCount;
 	unsigned int CustomStringCount;
-	vector<CustomVector>* customVector;
+	vector<CustomVector> customVector;
 	CustomVector customVectorTemp;
-	vector<CustomFloat>* customFloat;
+	vector<CustomFloat> customFloat;
 	CustomFloat customFloatTemp;
-	vector<CustomInt>* customInt;
+	vector<CustomInt> customInt;
 	CustomInt customIntTemp;
-	vector<CustomBool>* customBool;
+	vector<CustomBool> customBool;
 	CustomBool customBoolTemp;
-	vector<CustomString>* customString;
-	CustomString customStringTemp;
+	vector<CustomString> customString;
+	CustomString customStringTemp;*/
 
 public:
 	CustomImport();
 	~CustomImport();
 	void LoadCustomFormat(string filePath);
+	void NewMesh();
 };
 
 #endif // !CUSTOMIMPORT_H
