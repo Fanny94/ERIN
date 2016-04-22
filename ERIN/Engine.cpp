@@ -71,6 +71,8 @@ void Engine::processInput()
 
 	if (gameObject->input->isConnected())
 	{
+		gameObject->playerInput();
+
 		if (this->gameObject->input->State._buttons[GamePad_Button_Y] == true)
 		{
 			this->running = false;
@@ -154,35 +156,6 @@ void Engine::processInput()
 		{
 			this->camera->cameraMoveUp(leftY);
 		}*/
-
-		float thumbLeftX = this->gameObject->input->State._left_thumbstick.x;
-		float thumbLeftY = this->gameObject->input->State._left_thumbstick.y;
-
-		float playerX = this->gameObject->GetX();
-		float playerY = this->gameObject->GetY();
-
-		float speed = 5.0f; // (float)(5.0f * time);
-
-		if (thumbLeftX < -0.0f)
-		{
-			playerX -= 0.001f;
-			this->gameObject->SetX(playerX);
-		}
-		if (thumbLeftX > 0.0f)
-		{
-			playerX += 0.001f;
-			this->gameObject->SetX(playerX);
-		}
-		if (thumbLeftY < -0.0f)
-		{
-			playerY -= 0.001f;
-			this->gameObject->SetY(playerY);
-		}
-		if (thumbLeftY > 0.0f)
-		{
-			playerY += 0.001f;
-			this->gameObject->SetY(playerY);
-		}
 	}
 }
 
@@ -197,7 +170,7 @@ void Engine::update(double deltaTimeMs)
 	//printf("Elapsed time: %fS.\n", deltaTimeS);
 
 	//gameObject->input->isConnected();
-	gameObject->update();
+	gameObject->update(deltaTimeMs);
 }
 
 void Engine::render()
