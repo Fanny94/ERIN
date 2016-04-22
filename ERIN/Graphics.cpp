@@ -17,6 +17,9 @@ Graphics::~Graphics()
 	gVertexBuffer->Release();
 	gPixelShader->Release();
 
+	gDepthStencilView->Release();
+	gDepthView->Release();
+
 	gConstantBuffer->Release();
 	objBuffer->Release();
 
@@ -51,6 +54,7 @@ void Graphics::Render()
 {
 	float clearColor[] = { 1, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
@@ -189,6 +193,8 @@ HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 	{
 		ID3D11Texture2D* pBackBuffer = nullptr;
 		gSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+
+		CreateDepthBuffer();
 
 		gDevice->CreateRenderTargetView(pBackBuffer, NULL, &gBackbufferRTV);
 		pBackBuffer->Release();
@@ -349,9 +355,6 @@ void Graphics::CreateConstantBuffer()
 
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
 
-
-
-
 }
 
 void Graphics::CreateTriangleAABBBox(AABBBox * axisAllignedBox)
@@ -384,6 +387,27 @@ void Graphics::CreateSquareAABBBox(AABBBox * axisAllignedBox)
 	}
 
 	squareBox.push_back(*axisAllignedBox);
+
+}
+
+void Graphics::CreateDepthBuffer()
+{
+	D3D11_TEXTURE2D_DESC depthDesc;
+	depthDesc.Width = WIDTH;
+	depthDesc.Height = HEIGHT;
+	depthDesc.MipLevels = 1;
+	depthDesc.ArraySize = 1;
+	depthDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthDesc.SampleDesc.Count = 4;
+	depthDesc.SampleDesc.Quality = 0;
+	depthDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthDesc.CPUAccessFlags = 0;
+	depthDesc.MiscFlags = 0;
+
+	gDevice->CreateTexture2D(&depthDesc, 0, &gDepthStencilView);
+
+	gDevice->CreateDepthStencilView(gDepthStencilView, 0, &gDepthView);
 
 }
 

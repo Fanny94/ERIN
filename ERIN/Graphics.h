@@ -24,6 +24,7 @@ public:
 	void CreateConstantBuffer();
 	void CreateTriangleAABBBox(AABBBox* axisAllignedBox);
 	void CreateSquareAABBBox(AABBBox* axisAllignedBox);
+	void CreateDepthBuffer();
 	void UpdateConstantBuffer();
 	
 	float get_gWidth() { return this->WIDTH; }
@@ -120,6 +121,8 @@ private:
 	ID3D11DeviceContext* gDeviceContext = nullptr;
 	IDXGISwapChain* gSwapChain = nullptr;
 	ID3D11RenderTargetView* gBackbufferRTV = nullptr;
+	ID3D11DepthStencilView* gDepthView = nullptr;
+	ID3D11Texture2D* gDepthStencilView = nullptr;
 
 	ID3D11InputLayout* gVertexLayout = nullptr;
 	ID3D11VertexShader* gVertexShader = nullptr;
