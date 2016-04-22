@@ -9,6 +9,7 @@
 #include "Camera.h"
 
 // test input
+#include "Player.h"
 #include "GameObject.h"
 
 class Engine
@@ -36,6 +37,7 @@ private:
 	Camera* camera;
 
 	// test input
+	Player* player;
 	GameObject* gameObject;
 };
 

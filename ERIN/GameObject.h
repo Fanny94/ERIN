@@ -14,7 +14,7 @@ public:
 	GameObject(string name, float x, float y, float z);
 	~GameObject();
 
-	void playerInput();
+	void behavior();
 	void update(double deltaTimeMs);
 
 	void SetX(float x) { this->x = x; };
@@ -26,7 +26,6 @@ public:
 	float GetY() { return this->y; };
 	float GetZ() { return this->z; };
 
-	Input* input;
 	TriangleVertex* triangle;
 	AABBBox* axisAllignedBox;
 	Matrix* objectMatrix;
@@ -43,9 +42,6 @@ private:
 	bool accelerating;
 	float acceleration;
 	float velocity;
-
-	float thumbLeftX;
-	float thumbLeftY;
 
 	float velocityX;
 	float velocityY;
