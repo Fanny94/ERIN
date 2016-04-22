@@ -14,17 +14,21 @@ public:
 	~Graphics();
 
 	void SetViewport();
+
+	void CreateShaders();
+
 	void Render();
 	void RendPlayer(Matrix transform);
-	void RendFBX(); // parameter Mesh
-	void CreateShaders();
-	void CreateShaders(string shaderFileName);
-	void CreateTriangle(TriangleVertex* triangleVertices);
+	void RendFBX(); // parameter Mesh ( will read from a Mesh object )
+	
+	void UpdateConstantBuffer();
+
 	void CreateTriangle();
+	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateConstantBuffer();
 	void CreateTriangleAABBBox(AABBBox* axisAllignedBox);
 	void CreateSquareAABBBox(AABBBox* axisAllignedBox);
-	void UpdateConstantBuffer();
+
 	
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
