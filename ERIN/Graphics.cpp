@@ -17,6 +17,9 @@ Graphics::~Graphics()
 	gVertexBuffer->Release();
 	gPixelShader->Release();
 
+	gDepthStencilView->Release();
+	gDepthView->Release();
+
 	gConstantBuffer->Release();
 	objBuffer->Release();
 
@@ -51,11 +54,9 @@ void Graphics::Render()
 {
 	float clearColor[] = { 1, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	/*gDeviceContext->HSSetShader(nullptr, nullptr, 0);
-	gDeviceContext->DSSetShader(nullptr, nullptr, 0);
-	gDeviceContext->GSSetShader(nullptr, nullptr, 0);*/
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 
 	UINT32 vertexSize = sizeof(float) * 6;
@@ -122,7 +123,7 @@ void Graphics::RendPlayer(Matrix transform)
 
 	worldViewProj = worldViewProj.Transpose();
 
-	//world = world.Transpose();
+	transform = transform.Transpose();
 
 	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
 	if (FAILED(result))
@@ -132,13 +133,32 @@ void Graphics::RendPlayer(Matrix transform)
 
 	MatrixPtr2 = (MATRICES*)mapped.pData;
 	MatrixPtr2->worldViewProj = worldViewProj;
-	MatrixPtr2->world = world;
+	MatrixPtr2->world = transform;
 
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 
 	gDeviceContext->Draw(3, 0);
+}
+
+void Graphics::RendFBX()
+{
+
+//define vertex size
+
+//Eventually map diffuse color to the constantbuffer, to send the information to the pixelshader 
+
+/*for(int i = 0; i < IndexCount; i++)	
+	{
+		Set vertexBuffer;
+		Set indexBuffer;
+		Set constantbuffer;
+		Material;
+		Texture;
+		DrawIndexed();
+
+	}*/
 }
 
 HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
@@ -174,10 +194,12 @@ HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 		ID3D11Texture2D* pBackBuffer = nullptr;
 		gSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 
+		CreateDepthBuffer();
+
 		gDevice->CreateRenderTargetView(pBackBuffer, NULL, &gBackbufferRTV);
 		pBackBuffer->Release();
 
-		gDeviceContext->OMSetRenderTargets(1, &gBackbufferRTV, NULL);
+		gDeviceContext->OMSetRenderTargets(1, &gBackbufferRTV, gDepthStencilView);
 
 	}
 	return hr;
@@ -221,7 +243,7 @@ void Graphics::CreateShaders()
 		0,				// shader compile options
 		0,				// effect compile options
 		&pPS,			// double pointer to ID3DBlob
-		nullptr			// pointer for Error Blob messages.			
+		nullptr			// pointer for Error Blob messages.		
 		);
 
 	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
@@ -287,6 +309,7 @@ void Graphics::CreateConstantBuffer()
 	cOBJBufferDesc.MiscFlags = 0;
 
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
+
 }
 
 void Graphics::CreateTriangleAABBBox(AABBBox * axisAllignedBox)
@@ -319,6 +342,27 @@ void Graphics::CreateSquareAABBBox(AABBBox * axisAllignedBox)
 	}
 
 	squareBox.push_back(*axisAllignedBox);
+
+}
+
+void Graphics::CreateDepthBuffer()
+{
+	D3D11_TEXTURE2D_DESC depthDesc;
+	depthDesc.Width = WIDTH;
+	depthDesc.Height = HEIGHT;
+	depthDesc.MipLevels = 1;
+	depthDesc.ArraySize = 1;
+	depthDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthDesc.SampleDesc.Count = 4;
+	depthDesc.SampleDesc.Quality = 0;
+	depthDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthDesc.CPUAccessFlags = 0;
+	depthDesc.MiscFlags = 0;
+
+	gDevice->CreateTexture2D(&depthDesc, 0, &gDepthView);
+
+	gDevice->CreateDepthStencilView(gDepthView, 0, &gDepthStencilView);
 
 }
 
