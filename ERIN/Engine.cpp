@@ -151,20 +151,24 @@ void Engine::update(double deltaTimeMs)
 	switch (gameState)
 	{
 	case TitleScreen:
+		cout << "Title Screen" << endl;
 		// Title Screen
 		//TitleScreen->render();	// Example of how to render the title screen
 		gameState = GameRunning;
 		break;
 	case MainMenu:
+		cout << "Main Menu" << endl;
 		// Main Menu
 		//MainMenu->render();		// Example of how to render the main menu
 		break;
 	case GameRunning:
+		cout << "Game running" << endl;
 		// Gameplay loop
 		//GameLogic->startGame;		// Example of how to start a level
 		render();
 		break;
 	case Pause:
+		cout << "Game Paused" << endl;
 		// Pause Menu
 		//GameLogic->Sleep();		// Example of how to pause the game
 		break;
