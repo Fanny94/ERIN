@@ -9,9 +9,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AssetManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Behavior.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -50,9 +47,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AssetManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Behavior.h">
       <Filter>Header Files</Filter>
     </ClInclude>
