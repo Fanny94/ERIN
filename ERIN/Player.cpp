@@ -83,47 +83,52 @@ void Player::update(double dt)
 		velocityY += ((thumbLeftY * maximumSpeed) - velocityY) * abs(thumbLeftY);
 	}
 
+	if ((thumbLeftX && thumbLeftY) != 0)
+	{
+		plannedHeading = XMConvertToDegrees(atan2f(thumbLeftX, thumbLeftY));
+	}
+	
+
 	x = x + velocityX;
 	y = y + velocityY;
 
 	// rotation
-	/*x += dt * getVx();
-	y += dt * getVy();
+	r_x += dt * getVx();
+	r_y += dt * getVy();
 	if (heading != plannedHeading)
 	{
 		computeTurn(dt);
-	}*/
+	}
 
-	//*this->objectMatrix = XMMatrixRotationZ(XMConvertToRadians(0.0f)) * XMMatrixTranslation(x, y, z) * XMMatrixScaling(0.0f, 0.0f, 0.0f);
-	*this->objectMatrix = XMMatrixTranslation(x, y, z);
+	*this->objectMatrix = XMMatrixRotationZ(XMConvertToRadians((float)-heading)) * XMMatrixTranslation(x, y, z) * XMMatrixScaling(1.0f, 1.0f, 1.0f);
 }
-//void Player::computeTurn(double dt)
-//{
-//	double dh = plannedHeading - heading;
-//	if (dh < -180)
-//		dh += 360;
-//	if (dh > 180)
-//		dh -= 360;
-//	if (abs(dh) < turnRate * dt)
-//		heading = plannedHeading;
-//	else
-//	{
-//		int dir = 1;
-//		if (dh < 0)
-//			dir = -1;
-//		heading += turnRate * dt * dir;
-//	}
-//}
+void Player::computeTurn(double dt)
+{
+	double dh = plannedHeading - heading;
+	if (dh < -180)
+		dh += 360;
+	if (dh > 180)
+		dh -= 360;
+	if (abs(dh) < turnRate * dt)
+		heading = plannedHeading;
+	else
+	{
+		int dir = 1;
+		if (dh < 0)
+			dir = -1;
+		heading += turnRate * dt * dir;
+	}
+}
 
-//void Player::turnTo(double newHeading)
-//{
-//	plannedHeading = newHeading;
-//}
-//double Player::getVx()
-//{
-//	return speed * acos(heading * M_PI / 180);
-//}
-//double Player::getVy()
-//{
-//	return speed * asin(heading * M_PI / 180);
-//}
+void Player::turnTo(double newHeading)
+{
+	plannedHeading = newHeading;
+}
+double Player::getVx()
+{
+	return r_speed * acos(heading * M_PI / 180);
+}
+double Player::getVy()
+{
+	return r_speed * asin(heading * M_PI / 180);
+}

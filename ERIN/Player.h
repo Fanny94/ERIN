@@ -32,11 +32,11 @@ public:
 	//AABBBox* axisAllignedBox;
 
 	// rotation
-	/*void computeTurn(double deltaTime);
+	void computeTurn(double deltaTime);
 	void turnTo(double newHeading);
 
 	double getVx();
-	double getVy();*/
+	double getVy();
 
 private:
 
@@ -58,11 +58,11 @@ private:
 	float velocityY;
 
 	// rotation
-	//double x = 0;
-	//double y = 0;
-	//double speed = 15; // m/s;
-	//double heading = 120;
-	//double plannedHeading = 0;
-	//double turnRate = 3; // deg /s
+	double r_x = 0;
+	double r_y = 0;
+	double r_speed = 15; // m/s;
+	double heading = 120;
+	double plannedHeading = 0;
+	double turnRate = 10; // deg /s
 };
 #endif // !PLAYER_H
