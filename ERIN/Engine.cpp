@@ -1,6 +1,9 @@
 #include "Engine.h"
+#include <iostream>
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+using namespace std;
 
 Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
@@ -36,7 +39,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(gameObject->triangle);
 
-		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/stage.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		if (!graphics->LoadObjModel(L"C:/Users/vilu14/Documents/GitHub/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
 			return;
 		}
@@ -145,13 +148,30 @@ void Engine::update(double deltaTimeMs)
 
 	//printf("Elapsed time: %fS.\n", deltaTimeS);
 
+	switch (gameState)
+	{
+	case TitleScreen:
+		// Title Screen
+		gameState = GameRunning;
+		break;
+	case MainMenu:
+		// Main Menu
+		break;
+	case GameRunning:
+		// Gameplay loop
+		render();
+		break;
+	case Pause:
+		// Pause Menu
+		break;
+	}
+
 	player->update(deltaTimeMs);
 	gameObject->update(deltaTimeMs);
 }
 
 void Engine::render()
 {
-
 	graphics->UpdateConstantBuffer();
 
 	/*
