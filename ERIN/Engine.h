@@ -12,6 +12,14 @@
 #include "Player.h"
 #include "GameObject.h"
 
+enum GameStateManager
+{
+	TitleScreen,
+	MainMenu,
+	GameRunning,
+	Pause
+};
+
 class Engine
 {
 public:
@@ -26,6 +34,8 @@ public:
 	HWND wndHandle;
 
 	bool getRunning() { return running; };
+
+	GameStateManager gameState = TitleScreen;
 
 private:
 	bool running;
