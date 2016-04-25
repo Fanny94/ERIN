@@ -6,7 +6,7 @@ GameObject::GameObject()
 {
 }
 
-GameObject::GameObject(string name, float x, float y, float z, bool doHaveBehavior)
+GameObject::GameObject(string name, float x, float y, float z/*, bool doHaveBehavior*/)
 {
 	this->name = name;
 	this->x = x;
@@ -34,10 +34,10 @@ GameObject::GameObject(string name, float x, float y, float z, bool doHaveBehavi
 	this->axisAllignedBox->max = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
 	// behavoir
-	if (doHaveBehavior == true)
+	/*if (doHaveBehavior == true)
 	{
 		this->behavior = new Behavior(Patrol);
-	}
+	}*/
 }
 
 GameObject::~GameObject()

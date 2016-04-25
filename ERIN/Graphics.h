@@ -4,6 +4,7 @@
 #include "Structs.h"
 #include "Camera.h"
 #include "WICTextureLoader.h"
+#include "CustomImport.h"
 
 class Camera;
 
@@ -16,6 +17,7 @@ public:
 	void SetViewport();
 	void Render();
 	void RendPlayer(Matrix transform);
+	void RenderCustom(int meshNumber);
 	void RendFBX(); // parameter Mesh
 	void CreateShaders();
 	void CreateShaders(string shaderFileName);
@@ -26,7 +28,7 @@ public:
 	void CreateSquareAABBBox(AABBBox* axisAllignedBox);
 	void CreateDepthBuffer();
 	void UpdateConstantBuffer();
-	
+
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
 
@@ -109,6 +111,11 @@ public:
 	vector<Vertex> vertexMeshSize;
 	vector<AABBBox> triangleBox;
 	vector<AABBBox> squareBox;
+
+	ID3D11Buffer* customVertBuff = nullptr;
+	ID3D11Buffer* customBuffer = nullptr;
+	HRESULT hr;
+	CustomImport* customImp;
 
 private:
 	float WIDTH = 1080;

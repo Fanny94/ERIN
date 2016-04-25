@@ -23,6 +23,9 @@ Graphics::~Graphics()
 	gConstantBuffer->Release();
 	objBuffer->Release();
 
+	customVertBuff->Release();
+	customVertBuff = nullptr;
+
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
 	this->gSwapChain = nullptr;
@@ -142,21 +145,58 @@ void Graphics::RendPlayer(Matrix transform)
 	gDeviceContext->Draw(3, 0);
 }
 
+void Graphics::RenderCustom(int meshNumber)
+{
+	//Create Vertex Buffer
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(Vertex) * customImp->meshes.at(meshNumber).mesh.at(0).VertexCount;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = &customImp->meshes.at(meshNumber).mesh.at(0).VertexCount;
+
+	hr = gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &customVertBuff);
+
+	UINT32 meshVertexSize = sizeof(Vertex);
+	UINT32 offset = 0;
+	/*D3D11_MAPPED_SUBRESOURCE mappedCustom;
+	hr = graphics->get_gDeviceContext()->Map(customBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedCustom);
+	Mesh* meshPtr;
+	meshPtr = (Mesh*)mappedCustom.pData;*/
+
+	for (int i = 0; i < customImp->meshes.at(meshNumber).mesh.size(); i++)
+	{
+		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
+		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		//graphics->get_gDeviceContext()->UpdateSubresource(customBuffer, 0, NULL, meshPtr, 0, 0);
+		gDeviceContext->PSSetConstantBuffers(0, 1, &customBuffer);
+
+		gDeviceContext->Draw(customImp->meshes.at(meshNumber).mesh.at(i).VertexCount, 0);
+	}
+}
+
 void Graphics::RendFBX()
 {
 
-//define vertex size
+	//define vertex size
 
-//Eventually map diffuse color to the constantbuffer, to send the information to the pixelshader 
+	//Eventually map diffuse color to the constantbuffer, to send the information to the pixelshader 
 
-/*for(int i = 0; i < IndexCount; i++)	
+	/*for(int i = 0; i < IndexCount; i++)
 	{
-		Set vertexBuffer;
-		Set indexBuffer;
-		Set constantbuffer;
-		Material;
-		Texture;
-		DrawIndexed();
+	Set vertexBuffer;
+	Set indexBuffer;
+	Set constantbuffer;
+	Material;
+	Texture;
+	DrawIndexed();
 
 	}*/
 }
@@ -217,7 +257,7 @@ void Graphics::CreateShaders()
 		0,				// shader compile options
 		0,				// effect compile options
 		&pVS,			// double pointer to ID3DBlob
-		nullptr			// pointer for Error Blob messages.			
+		nullptr			// pointer for Error Blob messages.
 		);
 
 	D3D11_INPUT_ELEMENT_DESC inputDesc[] =
@@ -335,7 +375,7 @@ void Graphics::CreateSquareAABBBox(AABBBox * axisAllignedBox)
 		axisAllignedBox->min.x = min(axisAllignedBox->min.x, vertexMeshSize[i].pos.x);
 		axisAllignedBox->min.y = min(axisAllignedBox->min.y, vertexMeshSize[i].pos.y);
 		axisAllignedBox->min.z = min(axisAllignedBox->min.z, vertexMeshSize[i].pos.z);
-															
+
 		axisAllignedBox->max.x = max(axisAllignedBox->max.x, vertexMeshSize[i].pos.x);
 		axisAllignedBox->max.y = max(axisAllignedBox->max.y, vertexMeshSize[i].pos.y);
 		axisAllignedBox->max.z = max(axisAllignedBox->max.z, vertexMeshSize[i].pos.z);
@@ -541,7 +581,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 							wstring vertPart;
 							int whichPart = 0;	//(vPos/vTexCoord/vNorm)
 
-							//Parse this string
+												//Parse this string
 							for (int j = 0; j < VertDef.length(); j++)
 							{
 								if (VertDef[j] != '/')		//If there is no divider "/", add a char to our vertPart
@@ -557,7 +597,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										wstringToInt >> vertPosIndexTemp;
 										vertPosIndexTemp -= 1;			//subtract one since c++ arrays start with 0, and obj start with 1
 
-										//Check to see if the vert pos was the only thing specified
+																		//Check to see if the vert pos was the only thing specified
 										if (j == VertDef.length() - 1)
 										{
 											vertNormIndexTemp = 0;
@@ -613,7 +653,10 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										{
 											indices.push_back(iCheck);			//Set index for this vertex
 											vertAlreadyExists = true;			//If we've made it here, the vertex already exists
-										}}}}
+										}
+									}
+								}
+							}
 							//If this vertex is not already in our vertex arrays, put it there
 							if (!vertAlreadyExists)
 							{
@@ -710,7 +753,10 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										{
 											indices.push_back(iCheck);			//Set index for this vertex
 											vertAlreadyExists = true;			//If we've made it here, the vertex already exists
-										}}}}
+										}
+									}
+								}
+							}
 							if (!vertAlreadyExists)
 							{
 								vertPosIndex.push_back(vertPosIndexTemp);
@@ -725,7 +771,9 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 							meshTriangles++;					//New triangle defined
 							vIndex++;
-						}}}
+						}
+					}
+				}
 				break;
 
 			case 'm':		//mtllib - material library filename
@@ -749,7 +797,12 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 									{
 										//Store the material libraries filename
 										meshMatLib = filePath;
-									}}}}}}
+									}
+								}
+							}
+						}
+					}
+				}
 				break;
 
 			case 'u':		//usemtl - which material to use
@@ -776,17 +829,24 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										fileIn >> meshMaterialsTemp;	//Get next type
 
 										meshMaterials.push_back(meshMaterialsTemp);
-									}}}}}}
+									}
+								}
+							}
+						}
+					}
+				}
 				break;
 
 			default:
 				break;
-			}}}
+			}
+		}
+	}
 	else			//If we could not open the file
 	{
 		gSwapChain->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
 
-		//create message
+															//create message
 		LPCSTR message = "Could not open OBJ file ";
 
 		MessageBox(0, message, "Error", MB_OK);
@@ -796,7 +856,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 	subsetIndexStart.push_back(vIndex); //There won't be another index start after our last subset, so set it here
 
-	//This makes sure the first subset does not contain '0' indices
+										//This makes sure the first subset does not contain '0' indices
 	if (subsetIndexStart[1] == 0)
 	{
 		subsetIndexStart.erase(subsetIndexStart.begin() + 1);
@@ -951,12 +1011,18 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 											material[matCount - 1].texArrayIndex = meshSRV.size();
 											meshSRV.push_back(tempMeshSRV);
 											material[matCount - 1].hasTexture = true;
-										}}}}
+										}
+									}
+								}
+							}
 							//map_d - alpha map
 							else if (checkChar == 'd')
 							{
 								material[matCount - 1].transparent = true;
-							}}}}
+							}
+						}
+					}
+				}
 				break;
 
 			case 'n':		//newmtl - declare new material
@@ -987,12 +1053,19 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										material[matCount].texArrayIndex = 0;
 										matCount++;
 										kdset = false;
-									}}}}}}
+									}
+								}
+							}
+						}
+					}
+				}
 				break;
 
 			default:
 				break;
-			}}}
+			}
+		}
+	}
 	else
 	{
 		gSwapChain->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
@@ -1087,7 +1160,8 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 					normalSum = XMVectorSet(tX, tY, tZ, 0.0f);
 					facesUsing++;
-				}}
+				}
+			}
 			//Get the actual normal by dividing the normalSum by the number of faces sharing the vertex
 			normalSum = normalSum / facesUsing;
 
@@ -1102,7 +1176,8 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 			//Clear normalSum and facesUsing for next vertex
 			normalSum = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 			facesUsing = 0;
-		}}
+		}
+	}
 
 	//Create index buffer
 	D3D11_BUFFER_DESC indexBufferDesc;

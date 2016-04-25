@@ -13,7 +13,7 @@ class GameObject
 {
 public:
 	GameObject();
-	GameObject(string name, float x, float y, float z, bool doHaveBehavior);
+	GameObject(string name, float x, float y, float z/*, bool doHaveBehavior*/);
 	~GameObject();
 
 	void updateBehavoir(Position player);
