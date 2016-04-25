@@ -30,6 +30,7 @@ public:
 	TriangleVertex* triangle;
 	Matrix* objectMatrix;
 	//AABBBox* axisAllignedBox;
+	Position* pos;
 
 	// rotation
 	void computeTurn(double deltaTime);
@@ -63,6 +64,6 @@ private:
 	double r_speed = 15; // m/s;
 	double heading = 120;
 	double plannedHeading = 0;
-	double turnRate = 10; // deg /s
+	double turnRate = 3; // deg /s
 };
 #endif // !PLAYER_H

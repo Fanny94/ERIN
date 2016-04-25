@@ -1,6 +1,11 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 
+struct Position
+{
+	float x, y, z;
+};
+
 struct TriangleVertex
 {
 	float x, y, z;

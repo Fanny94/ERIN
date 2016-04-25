@@ -9,7 +9,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 
 	// test input
-	this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f);
+	this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f, true);
 	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
 
 	//create window
@@ -36,17 +36,17 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(gameObject->triangle);
 
-		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/stage.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		/*if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/stage.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		{
+			return;
+		}*/
+		
+		if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
 			return;
 		}
 		
-		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 
-		{
-			return;
-		}
-		*/
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -146,6 +146,7 @@ void Engine::update(double deltaTimeMs)
 	//printf("Elapsed time: %fS.\n", deltaTimeS);
 
 	player->update(deltaTimeMs);
+	gameObject->updateBehavoir(*player->pos);
 	gameObject->update(deltaTimeMs);
 }
 
