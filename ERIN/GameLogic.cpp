@@ -9,7 +9,7 @@ GameLogic::~GameLogic()
 {
 }
 
-bool GameLogic::AABBtoAABB(vector<AABBBox*> box1, vector<AABBBox*> box2)
+/*bool GameLogic::AABBtoAABB(vector<AABBBox*> box1, vector<AABBBox*> box2)
 {
 
 	if(box1[0]->max.x > box2[0]->min.x &&
@@ -28,4 +28,4 @@ bool GameLogic::AABBtoAABB(vector<AABBBox*> box1, vector<AABBBox*> box2)
 
 	}
 
-}
+}*/

@@ -17,13 +17,15 @@ public:
 	void SetViewport();
 	void Render();
 	void RendPlayer(Matrix transform);
+	void RendAABB();
 	void CreateShaders();
-	
+	void CreateDepthBuffer();
+
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
 	AABBBox CreateTriangleAABBBox(TriangleVertex* triangleVertices);
-	vector<AABBBox> CreateSquareAABBBox();
+	void CreateSquareAABBBox();
 	bool AABBtoAABB();
 	void UpdateConstantBuffer();
 	
@@ -68,7 +70,7 @@ public:
 		int hasTexture;
 		float padding[3];
 	};
-
+	
 	struct Vertex
 	{
 		Vertex() {}
@@ -108,6 +110,8 @@ public:
 	vector<wstring> textureNameArray;
 	vector<SurfaceMaterial> material;
 	vector<Vertex> vertexMeshSize;
+	vector<DWORD> indices;
+
 	vector<AABBBox> triangleBox;
 	vector<AABBBox> squareBox;
 
@@ -117,6 +121,8 @@ private:
 
 	float camPosX;
 	float camPosY;
+
+	AABBBox triangleMinMaxBox;
 
 	ID3D11Device* gDevice = nullptr;
 	ID3D11DeviceContext* gDeviceContext = nullptr;
@@ -128,6 +134,17 @@ private:
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
 
+	//-------------------------------------------
+	ID3D11Buffer* vertAABBBuffer = nullptr;
+	ID3D11InputLayout* AABBLayout = nullptr;
+	ID3D11VertexShader* AABBVertexShader = nullptr;
+	ID3D11PixelShader* AABBPixelShader = nullptr;
+
+	//ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
+	//-------------------------------------------
+
+	ID3D11Texture2D* gDepthView = nullptr;
+	ID3D11DepthStencilView* gDepthStencilView = nullptr;
 	ID3D11Buffer* gConstantBuffer = nullptr;
 };
 

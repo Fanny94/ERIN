@@ -18,6 +18,16 @@ Graphics::~Graphics()
 	gVertexBuffer->Release();
 	gPixelShader->Release();
 
+	vertAABBBuffer->Release();
+	AABBLayout->Release();
+	AABBVertexShader->Release();
+	AABBPixelShader->Release();
+
+	//triangleAABBVertexBuffer->Release();
+
+	gDepthView->Release();
+	gDepthStencilView->Release();
+
 	gConstantBuffer->Release();
 	objBuffer->Release();
 
@@ -52,6 +62,7 @@ void Graphics::Render()
 {
 	float clearColor[] = { 1, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	/*gDeviceContext->HSSetShader(nullptr, nullptr, 0);
@@ -66,7 +77,7 @@ void Graphics::Render()
 	gDeviceContext->IASetInputLayout(gVertexLayout);
 
 	gDeviceContext->Draw(3, 0);*/
-
+	gDeviceContext->IASetInputLayout(gVertexLayout);
 	UINT32 vertexMS = sizeof(Vertex);
 
 	D3D11_MAPPED_SUBRESOURCE mappedOBJ;
@@ -97,6 +108,7 @@ void Graphics::Render()
 
 void Graphics::RendPlayer(Matrix transform)
 {
+
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 
@@ -141,7 +153,54 @@ void Graphics::RendPlayer(Matrix transform)
 
 	gDeviceContext->Draw(3, 0);
 }
+//---------------------------------------------------------------------------
+void Graphics::RendAABB()
+{
+	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
 
+	UINT32 vertexSize = sizeof(XMFLOAT3);
+	UINT32 offset = 0;
+
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gDeviceContext->IASetInputLayout(AABBLayout);
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+
+	Matrix world;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(-1.5, 0, 0);
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	// viewProj = camera->camView * projection;
+
+	worldViewProj = world * camera->camView * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	world = world.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr2 = (MATRICES*)mapped.pData;
+	MatrixPtr2->worldViewProj = worldViewProj;
+	MatrixPtr2->world = world;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->IASetVertexBuffers(0, 1, &vertAABBBuffer, &vertexSize, &offset);
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+	gDeviceContext->Draw(8, 0);
+
+}
+//http://gamedev.stackexchange.com/questions/49779/different-shaders-for-different-objects-directx-11
 HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 {
 	//struct that holds info about the swapchain
@@ -175,10 +234,12 @@ HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 		ID3D11Texture2D* pBackBuffer = nullptr;
 		gSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 
+		CreateDepthBuffer();
+
 		gDevice->CreateRenderTargetView(pBackBuffer, NULL, &gBackbufferRTV);
 		pBackBuffer->Release();
 
-		gDeviceContext->OMSetRenderTargets(1, &gBackbufferRTV, NULL);
+		gDeviceContext->OMSetRenderTargets(1, &gBackbufferRTV, gDepthStencilView);
 
 	}
 	return hr;
@@ -227,6 +288,73 @@ void Graphics::CreateShaders()
 
 	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
 	pPS->Release();
+
+//----------------------------------------------------------------------------------
+	//AABB vertexShader
+	ID3DBlob* pVS_2 = nullptr;
+	D3DCompileFromFile(
+		L"AABBVertexShader.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"VS_main",		// entry point
+		"vs_4_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pVS_2,			// double pointer to ID3DBlob
+		nullptr			// pointer for Error Blob messages.			
+		);
+
+	D3D11_INPUT_ELEMENT_DESC AABBinputDesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+
+	};
+
+	gDevice->CreateInputLayout(AABBinputDesc,
+		ARRAYSIZE(AABBinputDesc), pVS_2->GetBufferPointer(), pVS_2->GetBufferSize(), &AABBLayout);
+
+	gDevice->CreateVertexShader(pVS_2->GetBufferPointer(), pVS_2->GetBufferSize(), nullptr, &AABBVertexShader);
+	pVS_2->Release();
+
+	//AABBPixelShader
+	ID3DBlob* pPS_2 = nullptr;
+	D3DCompileFromFile(
+		L"AABBPixelShader.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"PS_main",		// entry point
+		"ps_4_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pPS_2,			// double pointer to ID3DBlob
+		nullptr			// pointer for Error Blob messages.			
+		);
+
+	gDevice->CreatePixelShader(pPS_2->GetBufferPointer(), pPS_2->GetBufferSize(), nullptr, &AABBPixelShader);
+	pPS_2->Release();
+
+//----------------------------------------------------------------------------------
+}
+
+void Graphics::CreateDepthBuffer()
+{
+	D3D11_TEXTURE2D_DESC desc;
+	desc.Width = WIDTH;
+	desc.Height = HEIGHT;
+	desc.MipLevels = 1;
+	desc.ArraySize = 1;
+	desc.Format = DXGI_FORMAT_D32_FLOAT;
+	desc.SampleDesc.Count = 4;
+	desc.SampleDesc.Quality = 0;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
+
+	gDevice->CreateTexture2D(&desc, 0, &gDepthView);
+
+	gDevice->CreateDepthStencilView(gDepthView, 0, &gDepthStencilView);
+
 }
 
 void Graphics::CreateTriangle(TriangleVertex* triangleVertices)
@@ -292,54 +420,113 @@ void Graphics::CreateConstantBuffer()
 
 AABBBox Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
 {
-	this->triAxisAllignedBox.min = { FLT_MAX, FLT_MAX, FLT_MAX };
-	this->triAxisAllignedBox.max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
+	XMFLOAT3 pMin = { FLT_MAX, FLT_MAX, FLT_MAX };
+	XMFLOAT3 pMax = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
 
 	for (int i = 0; i < 3; i++)
 	{
-		triAxisAllignedBox.min.x = min(triAxisAllignedBox.min.x, triangleVertices[i].x);
-		triAxisAllignedBox.min.y = min(triAxisAllignedBox.min.y, triangleVertices[i].y);
-		triAxisAllignedBox.min.z = min(triAxisAllignedBox.min.z, triangleVertices[i].z);
-		   												 
-		triAxisAllignedBox.max.x = max(triAxisAllignedBox.max.x, triangleVertices[i].x);
-		triAxisAllignedBox.max.y = max(triAxisAllignedBox.max.y, triangleVertices[i].y);
-		triAxisAllignedBox.max.z = max(triAxisAllignedBox.max.z, triangleVertices[i].z);
+		triangleMinMaxBox.points[0].x = min(pMin.x, triangleVertices[i].x);
+		triangleMinMaxBox.points[0].y = min(pMin.y, triangleVertices[i].y);
+		triangleMinMaxBox.points[0].z = min(pMin.z, triangleVertices[i].z);
+					 
+		triangleMinMaxBox.points[1].x = max(pMax.x, triangleVertices[i].x);
+		triangleMinMaxBox.points[1].y = max(pMax.y, triangleVertices[i].y);
+		triangleMinMaxBox.points[1].z = max(pMax.z, triangleVertices[i].z);
 
 	}
+	
 
-	//triangleBox.push_back(axisAllignedBox);
-	return triAxisAllignedBox;
+	/*D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(AABBBox);
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = &triangleBox[0];
+
+	gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &triangleAABBVertexBuffer);*/
+
+	return triangleMinMaxBox;
 }
 
-vector <AABBBox> Graphics::CreateSquareAABBBox()
+void Graphics::CreateSquareAABBBox()
 {
-	this->axisAllignedBox.min = { FLT_MAX, FLT_MAX, FLT_MAX };
-	this->axisAllignedBox.max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
+	XMFLOAT3 pMin = { FLT_MAX, FLT_MAX, FLT_MAX };
+	XMFLOAT3 pMax = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
 
-	for (int i = 0; i < vertexMeshSize.size(); i++)
-	{
-		axisAllignedBox.min.x = min(axisAllignedBox.min.x, vertexMeshSize[i].pos.x);
-		axisAllignedBox.min.y = min(axisAllignedBox.min.y, vertexMeshSize[i].pos.y);
-		axisAllignedBox.min.z = min(axisAllignedBox.min.z, vertexMeshSize[i].pos.z);
-													
-		axisAllignedBox.max.x = max(axisAllignedBox.max.x, vertexMeshSize[i].pos.x);
-		axisAllignedBox.max.y = max(axisAllignedBox.max.y, vertexMeshSize[i].pos.y);
-		axisAllignedBox.max.z = max(axisAllignedBox.max.z, vertexMeshSize[i].pos.z);
-	}
+	//left buttom corner (front) 
+	axisAllignedBox.points[0].x = min(pMin.x, vertexMeshSize[0].pos.x);
+	axisAllignedBox.points[0].y = min(pMin.y, vertexMeshSize[0].pos.y);
+	axisAllignedBox.points[0].z = min(pMin.z, vertexMeshSize[0].pos.z);
+										
+	//right upper corner (back)			
+	axisAllignedBox.points[1].x = max(pMax.x, vertexMeshSize[1].pos.x);
+	axisAllignedBox.points[1].y = max(pMax.y, vertexMeshSize[1].pos.y);
+	axisAllignedBox.points[1].z = max(pMax.z, vertexMeshSize[1].pos.z);
+										
+	//right buttom corner (front)		
+	axisAllignedBox.points[2].x = max(pMax.x, vertexMeshSize[2].pos.x);
+	axisAllignedBox.points[2].y = min(pMin.y, vertexMeshSize[2].pos.y);
+	axisAllignedBox.points[2].z = min(pMin.z, vertexMeshSize[2].pos.z);
+
+	//right upper corner (front)
+	axisAllignedBox.points[3].x = max(pMax.x, vertexMeshSize[3].pos.x);
+	axisAllignedBox.points[3].y = max(pMax.y, vertexMeshSize[3].pos.y);
+	axisAllignedBox.points[3].z = min(pMin.z, vertexMeshSize[3].pos.z);
+
+	//left upper corner (front)
+	axisAllignedBox.points[4].x = min(pMin.x, vertexMeshSize[4].pos.x);
+	axisAllignedBox.points[4].y = max(pMax.y, vertexMeshSize[4].pos.y);
+	axisAllignedBox.points[4].z = min(pMin.z, vertexMeshSize[4].pos.z);
+
+	//right buttom corner (back)
+	axisAllignedBox.points[5].x = max(pMax.x, vertexMeshSize[5].pos.x);
+	axisAllignedBox.points[5].y = min(pMin.y, vertexMeshSize[5].pos.y);
+	axisAllignedBox.points[5].z = max(pMax.z, vertexMeshSize[5].pos.z);
+
+	//left buttom corner (back)
+	axisAllignedBox.points[6].x = min(pMin.x, vertexMeshSize[6].pos.x);
+	axisAllignedBox.points[6].y = min(pMin.y, vertexMeshSize[6].pos.y);
+	axisAllignedBox.points[6].z = max(pMax.z, vertexMeshSize[6].pos.z);
+
+	//left upper corner (back)
+	axisAllignedBox.points[7].x = min(pMin.x, vertexMeshSize[7].pos.x);
+	axisAllignedBox.points[7].y = max(pMax.y, vertexMeshSize[7].pos.y);
+	axisAllignedBox.points[7].z = max(pMax.z, vertexMeshSize[7].pos.z);
 
 	squareBox.push_back(axisAllignedBox);
-	return squareBox;
+
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(AABBBox);
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = &squareBox[0];
+
+	gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &vertAABBBuffer);
+	//return squareBox;
 }
 
 bool Graphics::AABBtoAABB()
 {
-	for (int i = 0; i < squareBox.size(); i++)
+	for (int i = 0; i < 2; i++)
 	{
 
-		if (squareBox[i].max.x > triAxisAllignedBox.min.x &&
-			squareBox[i].min.x < triAxisAllignedBox.max.x &&
-			squareBox[i].max.y > triAxisAllignedBox.min.y &&
-			squareBox[i].min.y < triAxisAllignedBox.max.y)
+		if (squareBox[i].points[1].x > triangleMinMaxBox.points[0].x &&
+			squareBox[i].points[0].x < triangleMinMaxBox.points[1].x &&
+			squareBox[i].points[1].y > triangleMinMaxBox.points[0].y &&
+			squareBox[i].points[0].y < triangleMinMaxBox.points[1].y)
 		{
 			return true;
 			cout << "hit";
@@ -356,6 +543,7 @@ bool Graphics::AABBtoAABB()
 
 void Graphics::UpdateConstantBuffer()
 {
+
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mapped;
 

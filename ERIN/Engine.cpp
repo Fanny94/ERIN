@@ -219,6 +219,7 @@ void Engine::render()
 
 	graphics->Render();
 	graphics->RendPlayer(*gameObject->objectMatrix);
+	graphics->RendAABB();
 	camera->InitCamera();
 
 	// switch front- and back-buffer
