@@ -112,7 +112,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Behavior.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CustomImport.h" />
@@ -132,7 +131,6 @@
     <ClInclude Include="WICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Behavior.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CustomImport.cpp" />
