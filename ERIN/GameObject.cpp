@@ -13,7 +13,7 @@ GameObject::GameObject(string name, float x, float y, float z, bool doHaveBehavi
 	this->y = y;
 	this->z = z;
 
-	this->maximumSpeed = 0.01f;
+	this->maximumSpeed = 0.05f;
 	this->currentSpeed = 0.0f;
 
 	this->speed = 0.0f;
@@ -38,6 +38,8 @@ GameObject::GameObject(string name, float x, float y, float z, bool doHaveBehavi
 	{
 		this->behavior = new Behavior(Patrol);
 	}
+
+	this->pos = new Position{ this->x, this->y, this->z };
 }
 
 GameObject::~GameObject()
@@ -45,6 +47,7 @@ GameObject::~GameObject()
 	delete this->triangle;
 	delete this->axisAllignedBox;
 	delete this->objectMatrix;
+	delete this->pos;
 
 	if (this->behavior)
 	{
@@ -52,7 +55,7 @@ GameObject::~GameObject()
 	}
 }
 
-void GameObject::updateBehavoir(Position player)
+void GameObject::updateBehavior(Position player)
 {
 	if (this->behavior != nullptr)
 	{
@@ -61,12 +64,25 @@ void GameObject::updateBehavoir(Position player)
 	}
 
 	float radians = XMConvertToRadians((float)heading);
-	this->directionX = (float)cos(radians);
-	this->directionY = (float)sin(radians);
+	this->directionX = (float)sin(radians);
+	this->directionY = (float)cos(radians);
+
+	/*if (directionX < 0)
+	{
+		directionX = 0;
+	}
+	if (directionY < 0)
+	{
+		directionY = 0;
+	}*/
 }
 
 void GameObject::update(double dt)
 {
+	this->pos->x = this->x;
+	this->pos->y = this->y;
+	this->pos->z = this->z;
+
 	if (this->behavior->getBehavior() == Follow)
 	{
 		this->accelerating = true;
@@ -85,8 +101,8 @@ void GameObject::update(double dt)
 	else
 	{
 		// Speed += ((MoveDirection * MaximumSpeed) - Speed) * AccelerationFactor
-		velocityX += ((directionX * maximumSpeed) - velocityX) * abs(directionX);
-		velocityY += ((directionY * maximumSpeed) - velocityY) * abs(directionY);
+		velocityX += ((directionX * maximumSpeed) - velocityX) * abs(1.0f);
+		velocityY += ((directionY * maximumSpeed) - velocityY) * abs(1.0f);
 
 		plannedHeading = this->behavior->getHeading(); // XMConvertToDegrees(atan2f(thumbLeftX, thumbLeftY));
 	}

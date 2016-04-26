@@ -17,20 +17,18 @@ void Behavior::update(Position player, Position thisEnemy)
 	float distanceX = abs(player.x - thisEnemy.x);
 	float distanceY = abs(player.y - thisEnemy.y);
 
-	if (abs(player.x) < this->aggroRadius && abs(player.y) < this->aggroRadius)
+	if (distanceX < this->aggroRadius && distanceY < this->aggroRadius)
 	{
 		this->targetInRange = true;
 		this->behavior = Follow;
-		this->heading = XMConvertToDegrees(atan2f(player.x, player.y));
+		Vector2 vec{ player.x - thisEnemy.x, player.y - thisEnemy.y };
+		this->heading = XMConvertToDegrees(atan2f(vec.x, vec.y));
 	}
 	else
 	{
 		this->targetInRange = false;
 		this->behavior = Patrol;
 	}
-
-	/*this->behavior = Follow;
-	this->heading = XMConvertToDegrees(atan2f(player.x, player.y));*/
 
 	// logic
 	//if (targetInRange == true)

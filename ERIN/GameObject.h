@@ -16,7 +16,7 @@ public:
 	GameObject(string name, float x, float y, float z, bool doHaveBehavior);
 	~GameObject();
 
-	void updateBehavoir(Position player);
+	void updateBehavior(Position player);
 	void update(double deltaTimeMs);
 	
 	
@@ -33,6 +33,7 @@ public:
 	AABBBox* axisAllignedBox;
 	Matrix* objectMatrix;
 	Behavior* behavior;
+	Position* pos;
 
 	// rotation
 	void computeTurn(double deltaTime);
@@ -64,9 +65,9 @@ private:
 	double r_x = 0;
 	double r_y = 0;
 	double r_speed = 15; // m/s;
-	double heading = 120;
+	double heading = 0;
 	double plannedHeading = 0;
-	double turnRate = 3; // deg /s
+	double turnRate = 0.1; // deg /s
 };
 
 #endif // !GAMEOBJECT_H
