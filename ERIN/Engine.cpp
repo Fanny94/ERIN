@@ -49,6 +49,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		}
 
 		graphics->CreateSquareAABBBox();
+		graphics->CreateVertexSquareArray();
 		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 
 		{
@@ -220,6 +221,7 @@ void Engine::render()
 	graphics->Render();
 	graphics->RendPlayer(*gameObject->objectMatrix);
 	graphics->RendAABB();
+	graphics->RendTriangleAABB();
 	camera->InitCamera();
 
 	// switch front- and back-buffer

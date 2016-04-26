@@ -18,6 +18,7 @@ public:
 	void Render();
 	void RendPlayer(Matrix transform);
 	void RendAABB();
+	void RendTriangleAABB();
 	void CreateShaders();
 	void CreateDepthBuffer();
 
@@ -25,7 +26,10 @@ public:
 	void CreateTriangle();
 	void CreateConstantBuffer();
 	AABBBox CreateTriangleAABBBox(TriangleVertex* triangleVertices);
-	void CreateSquareAABBBox();
+	AABBBox CreateSquareAABBBox();
+	void CreateVertexSquareArray();
+	void CerateVertexTriangleArray();
+
 	bool AABBtoAABB();
 	void UpdateConstantBuffer();
 	
@@ -56,8 +60,7 @@ public:
 
 	Matrix viewProj;
 	TriangleVertex* triangleVertices;
-	AABBBox triAxisAllignedBox;
-	AABBBox axisAllignedBox;
+
 	MATRICES* MatrixPtr;
 	MATRICES* MatrixPtr2;
 	Camera* camera;
@@ -112,6 +115,8 @@ public:
 	vector<Vertex> vertexMeshSize;
 	vector<DWORD> indices;
 
+	vector<AABBVertex> squareVertexArray;
+	vector<AABBVertex> triangleVertexArray;
 	vector<AABBBox> triangleBox;
 	vector<AABBBox> squareBox;
 
@@ -122,7 +127,14 @@ private:
 	float camPosX;
 	float camPosY;
 
+	XMFLOAT3 pMin;
+	XMFLOAT3 pMax;
+
 	AABBBox triangleMinMaxBox;
+	AABBBox axisAllignedBox;
+
+	AABBBox AABBVertexArray;
+	AABBVertex AABBBufferArray;
 
 	ID3D11Device* gDevice = nullptr;
 	ID3D11DeviceContext* gDeviceContext = nullptr;
@@ -140,7 +152,7 @@ private:
 	ID3D11VertexShader* AABBVertexShader = nullptr;
 	ID3D11PixelShader* AABBPixelShader = nullptr;
 
-	//ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
+	ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
 	//-------------------------------------------
 
 	ID3D11Texture2D* gDepthView = nullptr;

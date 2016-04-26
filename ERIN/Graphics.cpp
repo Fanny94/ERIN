@@ -3,6 +3,8 @@
 //http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
 Graphics::Graphics()
 {
+	pMin = { FLT_MAX, FLT_MAX, FLT_MAX };
+	pMax = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
 
 }
 
@@ -162,7 +164,7 @@ void Graphics::RendAABB()
 	UINT32 vertexSize = sizeof(XMFLOAT3);
 	UINT32 offset = 0;
 
-	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 	gDeviceContext->IASetInputLayout(AABBLayout);
 
 	HRESULT result;
@@ -172,7 +174,7 @@ void Graphics::RendAABB()
 	Matrix projection;
 	Matrix worldViewProj;
 
-	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(-1.5, 0, 0);
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(-2, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
 
 	// viewProj = camera->camView * projection;
@@ -197,10 +199,57 @@ void Graphics::RendAABB()
 
 	gDeviceContext->IASetVertexBuffers(0, 1, &vertAABBBuffer, &vertexSize, &offset);
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
-	gDeviceContext->Draw(8, 0);
+	gDeviceContext->Draw(24, 0);
+
+}
+void Graphics::RendTriangleAABB()
+{
+	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
+
+	UINT32 vertexSize = sizeof(XMFLOAT3);
+	UINT32 offset = 0;
+
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	gDeviceContext->IASetInputLayout(AABBLayout);
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+
+	Matrix world;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(1, 0, -0.5);
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	// viewProj = camera->camView * projection;
+
+	worldViewProj = world * camera->camView * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	world = world.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr2 = (MATRICES*)mapped.pData;
+	MatrixPtr2->worldViewProj = worldViewProj;
+	MatrixPtr2->world = world;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->IASetVertexBuffers(0, 1, &triangleAABBVertexBuffer, &vertexSize, &offset);
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+	gDeviceContext->Draw(24, 0);
 
 }
 //http://gamedev.stackexchange.com/questions/49779/different-shaders-for-different-objects-directx-11
+
 HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 {
 	//struct that holds info about the swapchain
@@ -420,21 +469,20 @@ void Graphics::CreateConstantBuffer()
 
 AABBBox Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
 {
-	XMFLOAT3 pMin = { FLT_MAX, FLT_MAX, FLT_MAX };
-	XMFLOAT3 pMax = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
 
-	for (int i = 0; i < 3; i++)
-	{
-		triangleMinMaxBox.points[0].x = min(pMin.x, triangleVertices[i].x);
-		triangleMinMaxBox.points[0].y = min(pMin.y, triangleVertices[i].y);
-		triangleMinMaxBox.points[0].z = min(pMin.z, triangleVertices[i].z);
-					 
-		triangleMinMaxBox.points[1].x = max(pMax.x, triangleVertices[i].x);
-		triangleMinMaxBox.points[1].y = max(pMax.y, triangleVertices[i].y);
-		triangleMinMaxBox.points[1].z = max(pMax.z, triangleVertices[i].z);
+	triangleMinMaxBox.points[0].x = min(pMin.x, triangleVertices[0].x);
+	triangleMinMaxBox.points[0].y = min(pMin.y, triangleVertices[0].y);
+	triangleMinMaxBox.points[0].z = min(pMin.z, triangleVertices[0].z);
+				 
+	triangleMinMaxBox.points[1].x = max(pMax.x, triangleVertices[1].x);
+	triangleMinMaxBox.points[1].y = max(pMax.y, triangleVertices[1].y);
+	triangleMinMaxBox.points[1].z = max(pMax.z, triangleVertices[1].z);
 
-	}
-	
+	//triangleMinMaxBox.points[2].x = max(pMax.x, triangleVertices[2].x);
+	//triangleMinMaxBox.points[2].y = min(pMin.y, triangleVertices[2].y);
+	//triangleMinMaxBox.points[2].z = min(pMin.z, triangleVertices[2].z);
+
+	triangleBox.push_back(triangleMinMaxBox);
 
 	/*D3D11_BUFFER_DESC vertexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
@@ -454,23 +502,21 @@ AABBBox Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
 	return triangleMinMaxBox;
 }
 
-void Graphics::CreateSquareAABBBox()
+AABBBox Graphics::CreateSquareAABBBox()
 {
-	XMFLOAT3 pMin = { FLT_MAX, FLT_MAX, FLT_MAX };
-	XMFLOAT3 pMax = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
-
-	//left buttom corner (front) 
-	axisAllignedBox.points[0].x = min(pMin.x, vertexMeshSize[0].pos.x);
+	
+	//left bottom corner (front) 
+	/*axisAllignedBox.points[0].x = min(pMin.x, vertexMeshSize[0].pos.x);
 	axisAllignedBox.points[0].y = min(pMin.y, vertexMeshSize[0].pos.y);
 	axisAllignedBox.points[0].z = min(pMin.z, vertexMeshSize[0].pos.z);
 										
 	//right upper corner (back)			
 	axisAllignedBox.points[1].x = max(pMax.x, vertexMeshSize[1].pos.x);
 	axisAllignedBox.points[1].y = max(pMax.y, vertexMeshSize[1].pos.y);
-	axisAllignedBox.points[1].z = max(pMax.z, vertexMeshSize[1].pos.z);
+	axisAllignedBox.points[1].z = max(pMax.z, vertexMeshSize[1].pos.z);*/
 										
-	//right buttom corner (front)		
-	axisAllignedBox.points[2].x = max(pMax.x, vertexMeshSize[2].pos.x);
+	//right bottom corner (front)	
+	/*axisAllignedBox.points[2].x = max(pMax.x, vertexMeshSize[2].pos.x);
 	axisAllignedBox.points[2].y = min(pMin.y, vertexMeshSize[2].pos.y);
 	axisAllignedBox.points[2].z = min(pMin.z, vertexMeshSize[2].pos.z);
 
@@ -497,48 +543,312 @@ void Graphics::CreateSquareAABBBox()
 	//left upper corner (back)
 	axisAllignedBox.points[7].x = min(pMin.x, vertexMeshSize[7].pos.x);
 	axisAllignedBox.points[7].y = max(pMax.y, vertexMeshSize[7].pos.y);
-	axisAllignedBox.points[7].z = max(pMax.z, vertexMeshSize[7].pos.z);
+	axisAllignedBox.points[7].z = max(pMax.z, vertexMeshSize[7].pos.z);*/
+
+	//min and max
+	axisAllignedBox.points[2].x = min(pMin.x, vertexMeshSize[2].pos.x);
+	axisAllignedBox.points[2].y = max(pMax.y, vertexMeshSize[2].pos.y);
+	axisAllignedBox.points[2].z = min(pMin.z, vertexMeshSize[2].pos.z);
+
+	axisAllignedBox.points[7].x = max(pMax.x, vertexMeshSize[7].pos.x);
+	axisAllignedBox.points[7].y = min(pMin.y, vertexMeshSize[7].pos.y);
+	axisAllignedBox.points[7].z = min(pMin.z, vertexMeshSize[7].pos.z);
 
 	squareBox.push_back(axisAllignedBox);
+	return axisAllignedBox;
+
+}
+
+void Graphics::CreateVertexSquareArray()
+{
+
+//8 points of the AABB box
+	AABBVertexArray.points[0].x = min(pMin.x, vertexMeshSize[0].pos.x);
+	AABBVertexArray.points[0].y = min(pMin.y, vertexMeshSize[0].pos.y);
+	AABBVertexArray.points[0].z = min(pMin.z, vertexMeshSize[0].pos.z);
+
+	//right upper corner (back)			
+	AABBVertexArray.points[1].x = max(pMax.x, vertexMeshSize[1].pos.x);
+	AABBVertexArray.points[1].y = max(pMax.y, vertexMeshSize[1].pos.y);
+	AABBVertexArray.points[1].z = max(pMax.z, vertexMeshSize[1].pos.z);
+
+	//Right bottom corner (front)
+	/*AABBVertexArray.points[0].x = axisAllignedBox.points[0].x;
+	AABBVertexArray.points[0].y = axisAllignedBox.points[0].y;
+	AABBVertexArray.points[0].z = axisAllignedBox.points[0].z;
+
+	//left bottom corner (back)
+	AABBVertexArray.points[1].x = axisAllignedBox.points[1].x;
+	AABBVertexArray.points[1].y = axisAllignedBox.points[1].y;
+	AABBVertexArray.points[1].z = axisAllignedBox.points[1].z;*/
+
+	//Right upper corner (front)
+	/*AABBVertexArray.points[2].x = min(pMin.x, vertexMeshSize[2].pos.x);
+	AABBVertexArray.points[2].y = max(pMax.y, vertexMeshSize[2].pos.y);
+	AABBVertexArray.points[2].z = min(pMin.z, vertexMeshSize[2].pos.z);*/
+
+	AABBVertexArray.points[2].x = axisAllignedBox.points[2].x;
+	AABBVertexArray.points[2].y = axisAllignedBox.points[2].y;
+	AABBVertexArray.points[2].z = axisAllignedBox.points[2].z;
+
+	//Left upper corner (front)
+	AABBVertexArray.points[3].x = max(pMax.x, vertexMeshSize[3].pos.x);
+	AABBVertexArray.points[3].y = max(pMax.y, vertexMeshSize[3].pos.y);
+	AABBVertexArray.points[3].z = min(pMin.z, vertexMeshSize[3].pos.z);
+
+	//right upper corner (back)
+	AABBVertexArray.points[4].x = max(pMax.x, vertexMeshSize[4].pos.x);
+	AABBVertexArray.points[4].y = min(pMin.y, vertexMeshSize[4].pos.y);
+	AABBVertexArray.points[4].z = max(pMax.z, vertexMeshSize[4].pos.z);
+
+	//left upper corner (back)
+	AABBVertexArray.points[5].x = min(pMin.x, vertexMeshSize[5].pos.x);
+	AABBVertexArray.points[5].y = min(pMin.y, vertexMeshSize[5].pos.y);
+	AABBVertexArray.points[5].z = max(pMax.z, vertexMeshSize[5].pos.z);
+
+	//Right bottom corner (back)
+	AABBVertexArray.points[6].x = min(pMin.x, vertexMeshSize[6].pos.x);
+	AABBVertexArray.points[6].y = max(pMax.y, vertexMeshSize[6].pos.y);
+	AABBVertexArray.points[6].z = max(pMax.z, vertexMeshSize[6].pos.z);
+
+	AABBVertexArray.points[7].x = axisAllignedBox.points[7].x;
+	AABBVertexArray.points[7].y = axisAllignedBox.points[7].y;
+	AABBVertexArray.points[7].z = axisAllignedBox.points[7].z;
+
+	//left bottom corner (front)
+	/*AABBVertexArray.points[7].x = max(pMax.x, vertexMeshSize[7].pos.x);
+	AABBVertexArray.points[7].y = min(pMin.y, vertexMeshSize[7].pos.y);
+	AABBVertexArray.points[7].z = min(pMin.z, vertexMeshSize[7].pos.z);*/
+
+//buffer array with definition of the lines
+
+	//first quadrant (first)
+	//line 1
+	AABBBufferArray.points[0] = AABBVertexArray.points[0];
+	AABBBufferArray.points[1] = AABBVertexArray.points[1];
+
+	//line 2
+	AABBBufferArray.points[2] = AABBVertexArray.points[1];
+	AABBBufferArray.points[3] = AABBVertexArray.points[3];
+
+	//line 3
+	AABBBufferArray.points[4] = AABBVertexArray.points[2];
+	AABBBufferArray.points[5] = AABBVertexArray.points[3];
+
+	//line 4
+	AABBBufferArray.points[6] = AABBVertexArray.points[2];
+	AABBBufferArray.points[7] = AABBVertexArray.points[0];
+
+	//second quadrant (back)
+	//line 5
+	AABBBufferArray.points[8] = AABBVertexArray.points[4];
+	AABBBufferArray.points[9] = AABBVertexArray.points[5];
+
+	//line 6
+	AABBBufferArray.points[10] = AABBVertexArray.points[5];
+	AABBBufferArray.points[11] = AABBVertexArray.points[7];
+
+	//line 7
+	AABBBufferArray.points[12] = AABBVertexArray.points[6];
+	AABBBufferArray.points[13] = AABBVertexArray.points[7];
+
+	//line 8
+	AABBBufferArray.points[14] = AABBVertexArray.points[6];
+	AABBBufferArray.points[15] = AABBVertexArray.points[4];
+
+	//lines in z
+	//line 9
+	AABBBufferArray.points[16] = AABBVertexArray.points[3];
+	AABBBufferArray.points[17] = AABBVertexArray.points[5];
+
+	//line 10
+	AABBBufferArray.points[18] = AABBVertexArray.points[0];
+	AABBBufferArray.points[19] = AABBVertexArray.points[6];
+
+	//line 11 
+	AABBBufferArray.points[20] = AABBVertexArray.points[1];
+	AABBBufferArray.points[21] = AABBVertexArray.points[7];
+
+	//line 12
+	AABBBufferArray.points[22] = AABBVertexArray.points[2];
+	AABBBufferArray.points[23] = AABBVertexArray.points[4];
+
+	squareVertexArray.push_back(AABBBufferArray);
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(AABBBox);
+	vertexBufferDesc.ByteWidth = sizeof(AABBVertex);
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA vertexBufferData;
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-	vertexBufferData.pSysMem = &squareBox[0];
+	vertexBufferData.pSysMem = &squareVertexArray[0];
 
 	gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &vertAABBBuffer);
-	//return squareBox;
+
+}
+void Graphics::CerateVertexTriangleArray()
+{
+
+	//8 points of the AABB box
+	AABBVertexArray.points[0].x = min(pMin.x, vertexMeshSize[0].pos.x);
+	AABBVertexArray.points[0].y = min(pMin.y, vertexMeshSize[0].pos.y);
+	AABBVertexArray.points[0].z = min(pMin.z, vertexMeshSize[0].pos.z);
+
+	//right upper corner (back)			
+	AABBVertexArray.points[1].x = max(pMax.x, vertexMeshSize[1].pos.x);
+	AABBVertexArray.points[1].y = max(pMax.y, vertexMeshSize[1].pos.y);
+	AABBVertexArray.points[1].z = max(pMax.z, vertexMeshSize[1].pos.z);
+
+	//Right bottom corner (front)
+	AABBVertexArray.points[0].x = triangleMinMaxBox.points[0].x;
+	AABBVertexArray.points[0].y = triangleMinMaxBox.points[0].y;
+	AABBVertexArray.points[0].z = triangleMinMaxBox.points[0].z;
+								  
+	//left bottom corner (back)	  
+	AABBVertexArray.points[1].x = triangleMinMaxBox.points[1].x;
+	AABBVertexArray.points[1].y = triangleMinMaxBox.points[1].y;
+	AABBVertexArray.points[1].z = triangleMinMaxBox.points[1].z;
+
+	//Right upper corner (front)
+	AABBVertexArray.points[2].x = min(pMin.x, vertexMeshSize[2].pos.x);
+	AABBVertexArray.points[2].y = max(pMax.y, vertexMeshSize[2].pos.y);
+	AABBVertexArray.points[2].z = min(pMin.z, vertexMeshSize[2].pos.z);
+
+	/*AABBVertexArray.points[2].x = axisAllignedBox.points[2].x;
+	AABBVertexArray.points[2].y = axisAllignedBox.points[2].y;
+	AABBVertexArray.points[2].z = axisAllignedBox.points[2].z;*/
+
+	//Left upper corner (front)
+	AABBVertexArray.points[3].x = max(pMax.x, vertexMeshSize[3].pos.x);
+	AABBVertexArray.points[3].y = max(pMax.y, vertexMeshSize[3].pos.y);
+	AABBVertexArray.points[3].z = min(pMin.z, vertexMeshSize[3].pos.z);
+
+	//right upper corner (back)
+	AABBVertexArray.points[4].x = max(pMax.x, vertexMeshSize[4].pos.x);
+	AABBVertexArray.points[4].y = min(pMin.y, vertexMeshSize[4].pos.y);
+	AABBVertexArray.points[4].z = max(pMax.z, vertexMeshSize[4].pos.z);
+
+	//left upper corner (back)
+	AABBVertexArray.points[5].x = min(pMin.x, vertexMeshSize[5].pos.x);
+	AABBVertexArray.points[5].y = min(pMin.y, vertexMeshSize[5].pos.y);
+	AABBVertexArray.points[5].z = max(pMax.z, vertexMeshSize[5].pos.z);
+
+	//Right bottom corner (back)
+	AABBVertexArray.points[6].x = min(pMin.x, vertexMeshSize[6].pos.x);
+	AABBVertexArray.points[6].y = max(pMax.y, vertexMeshSize[6].pos.y);
+	AABBVertexArray.points[6].z = max(pMax.z, vertexMeshSize[6].pos.z);
+
+	/*AABBVertexArray.points[7].x = axisAllignedBox.points[7].x;
+	AABBVertexArray.points[7].y = axisAllignedBox.points[7].y;
+	AABBVertexArray.points[7].z = axisAllignedBox.points[7].z;*/
+
+	//left bottom corner (front)
+	AABBVertexArray.points[7].x = max(pMax.x, vertexMeshSize[7].pos.x);
+	AABBVertexArray.points[7].y = min(pMin.y, vertexMeshSize[7].pos.y);
+	AABBVertexArray.points[7].z = min(pMin.z, vertexMeshSize[7].pos.z);
+
+	//buffer array with definition of the lines
+
+	//first quadrant (first)
+	//line 1
+	AABBBufferArray.points[0] = AABBVertexArray.points[0];
+	AABBBufferArray.points[1] = AABBVertexArray.points[1];
+
+	//line 2
+	AABBBufferArray.points[2] = AABBVertexArray.points[1];
+	AABBBufferArray.points[3] = AABBVertexArray.points[3];
+
+	//line 3
+	AABBBufferArray.points[4] = AABBVertexArray.points[2];
+	AABBBufferArray.points[5] = AABBVertexArray.points[3];
+
+	//line 4
+	AABBBufferArray.points[6] = AABBVertexArray.points[2];
+	AABBBufferArray.points[7] = AABBVertexArray.points[0];
+
+	//second quadrant (back)
+	//line 5
+	AABBBufferArray.points[8] = AABBVertexArray.points[4];
+	AABBBufferArray.points[9] = AABBVertexArray.points[5];
+
+	//line 6
+	AABBBufferArray.points[10] = AABBVertexArray.points[5];
+	AABBBufferArray.points[11] = AABBVertexArray.points[7];
+
+	//line 7
+	AABBBufferArray.points[12] = AABBVertexArray.points[6];
+	AABBBufferArray.points[13] = AABBVertexArray.points[7];
+
+	//line 8
+	AABBBufferArray.points[14] = AABBVertexArray.points[6];
+	AABBBufferArray.points[15] = AABBVertexArray.points[4];
+
+	//lines in z
+	//line 9
+	AABBBufferArray.points[16] = AABBVertexArray.points[3];
+	AABBBufferArray.points[17] = AABBVertexArray.points[5];
+
+	//line 10
+	AABBBufferArray.points[18] = AABBVertexArray.points[0];
+	AABBBufferArray.points[19] = AABBVertexArray.points[6];
+
+	//line 11 
+	AABBBufferArray.points[20] = AABBVertexArray.points[1];
+	AABBBufferArray.points[21] = AABBVertexArray.points[7];
+
+	//line 12
+	AABBBufferArray.points[22] = AABBVertexArray.points[2];
+	AABBBufferArray.points[23] = AABBVertexArray.points[4];
+
+	//squareVertexArray.push_back(AABBBufferArray);
+	triangleVertexArray.push_back(AABBBufferArray);
+
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(AABBVertex);
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = &triangleVertexArray[0];
+
+	gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &triangleAABBVertexBuffer);
+
+
+
 }
 
 bool Graphics::AABBtoAABB()
 {
-	for (int i = 0; i < 2; i++)
+	
+	if (axisAllignedBox.points[1].x >= triangleMinMaxBox.points[0].x &&
+		axisAllignedBox.points[0].x <= triangleMinMaxBox.points[1].x &&
+		axisAllignedBox.points[1].y >= triangleMinMaxBox.points[0].y &&
+		axisAllignedBox.points[0].y <= triangleMinMaxBox.points[1].y &&
+		axisAllignedBox.points[1].z >= triangleMinMaxBox.points[0].z &&
+		axisAllignedBox.points[0].z <= triangleMinMaxBox.points[1].z)
 	{
+		return true;
+		cout << "hit";
 
-		if (squareBox[i].points[1].x > triangleMinMaxBox.points[0].x &&
-			squareBox[i].points[0].x < triangleMinMaxBox.points[1].x &&
-			squareBox[i].points[1].y > triangleMinMaxBox.points[0].y &&
-			squareBox[i].points[0].y < triangleMinMaxBox.points[1].y)
-		{
-			return true;
-			cout << "hit";
-
-		}
-
-		else
-		{
-			return false;
-
-		}
 	}
+
+	else
+	{
+		return true;
+		cout << "no hit";
+
+	}
+	
 }
 
 void Graphics::UpdateConstantBuffer()
