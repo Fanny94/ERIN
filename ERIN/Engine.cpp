@@ -76,27 +76,12 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			switch (gameState)
-				case Pause:
-					cout << "Shutting down game!" << endl;
-					this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
-			switch (gameState)
-				case Pause:
-					cout << "Shutting down game!" << endl;
-					this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_B] == true)
 		{
-			switch (gameState)
-			{
-			case Pause:
-				cout << "Shutting down game!" << endl;
-				this->running = false;
-				break;
-			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_A] == true)
 		{
@@ -107,10 +92,24 @@ void Engine::processInput()
 				cout << "Game Running" << endl;
 				break;
 			case Pause:
-				gameState = GameRunning;
-				pMenuOptions = 0;
-				cout << "Game Running" << endl;
-				break;
+				if (pMenuOptions == 0)
+				{
+					gameState = GameRunning;
+					cout << "Game Running" << endl;
+				}
+				else if (pMenuOptions == 1)
+				{
+					cout << "High Score" << endl;
+				}
+				else if (pMenuOptions == 2)
+				{
+					cout << "Help & Options" << endl;
+				}
+				else if (pMenuOptions == 3)
+				{
+					cout << "Shutting down game!";
+					this->running = false;
+				}
 			}
 		}
 
@@ -136,44 +135,16 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
 		{
-			switch (gameState)
-			{
-			case Pause:
-				cout << "Shutting down game!" << endl;
-				this->running = false;
-			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
 		{
-			switch (gameState)
-			{
-			case Pause:
-				switch (gameState)
-				{
-				case Pause:
-					this->running = false;
-				}
-			}
 		}
 
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
 		{
-			switch (gameState)
-			{
-			case Pause:
-				cout << "Shutting down game!" << endl;
-				this->running = false;
-			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
 		{
-			switch (gameState)
-			{
-			case GameRunning:
-				cout << "Shutting down game!" << endl;
-				this->running = false;
-				break;
-			}
 		}
 
 		// Dpad camera movement
