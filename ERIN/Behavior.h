@@ -23,6 +23,7 @@ public:
 	*/
 
 	void update(Position player, Position thisEnemy);
+	void update(Position player, float x, float y, float z);
 
 	double getHeading() { return this->heading; };
 	BehaviorState getBehavior() { return this->behavior; };

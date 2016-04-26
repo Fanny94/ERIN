@@ -39,6 +39,7 @@ private:
 	// test input
 	Player* player;
 	GameObject* gameObject;
+	GameObject** enemies;
 };
 
 #endif // !ENGINE_H

@@ -10,7 +10,13 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->customImport = new CustomImport();
 
 	// test input
-	this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f);
+	this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f, true);
+	this->enemies = new GameObject* [5];
+	this->enemies[0] = new GameObject("enemy1", 5.0f, 0.0f, 0.1f, true);
+	this->enemies[1] = new GameObject("enemy2", 0.0f, 5.0f, 0.1f, true);
+	this->enemies[2] = new GameObject("enemy3", -5.0f, 0.0f, 0.1f, true);
+	this->enemies[3] = new GameObject("enemy4", 0.0f, -5.0f, 0.1f, true);
+
 	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
 
 	//create window
@@ -44,13 +50,12 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		{
 		return;
 		}*/
-
+		
 		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
-
 		{
-		return;
-		}
-		*/
+			return;
+		}*/
+		
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -61,10 +66,19 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 Engine::~Engine()
 {
 	delete this->graphics;
+	delete this->camera;
+
+	// player enemies
 	delete this->player;
 	delete this->gameObject;
 	delete this->camera;
 	delete this->customImport;
+
+	for (int i = 0; i < 4; i++)
+	{
+		delete enemies[i];
+	}
+	delete enemies;
 }
 
 void Engine::processInput()
@@ -147,17 +161,22 @@ void Engine::update(double deltaTimeMs)
 	// update code
 	// example physics calculation using delta time:
 	// object.x = object.x + (object.speed * deltaTimeS);
+	player->update(deltaTimeMs);
+	gameObject->updateBehavior(*player->pos);
+	gameObject->update(deltaTimeMs);
+
+	for (int i = 0; i < 4; i++)
+	{
+		enemies[i]->updateBehavior(*player->pos);
+		enemies[i]->update(deltaTimeMs);
+	}
 
 	//printf("Elapsed time: %fS.\n", deltaTimeS);
-
-	player->update(deltaTimeMs);
-	gameObject->update(deltaTimeMs);
 }
 
 void Engine::render()
 {
-
-	graphics->UpdateConstantBuffer();
+	//graphics->UpdateConstantBuffer();
 
 	/*
 
@@ -176,13 +195,18 @@ void Engine::render()
 
 	graphics->Render();
 	graphics->RendPlayer(*player->objectMatrix);
-	//graphics->RendPlayer(*gameObject->objectMatrix);
-	graphics->RendCustom(customImport->meshes.at(0));
+	graphics->RendPlayer(*gameObject->objectMatrix);
+	graphics->RenderCustom(customImport->meshes.at(0));
+	
+	for (int i = 0; i < 4; i++)
+	{
+		graphics->RendPlayer(*enemies[i]->objectMatrix);
+	}
 
 	camera->InitCamera();
 
 	// Switch front- and back-buffer
-	graphics->get_gSwapChain()->Present(0, 0);
+	graphics->get_gSwapChain()->Present(1, 0);
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)

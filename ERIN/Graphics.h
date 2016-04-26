@@ -19,7 +19,6 @@ public:
 	void RendPlayer(Matrix transform);
 	void RenderCustom(Mesh mesh);
 	void CreateShaders();
-	void CreateShaders(string shaderFileName);
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();

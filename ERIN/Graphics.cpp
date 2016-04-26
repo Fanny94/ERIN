@@ -145,7 +145,7 @@ void Graphics::RendPlayer(Matrix transform)
 	gDeviceContext->Draw(3, 0);
 }
 
-void Graphics::RendCustom(Mesh mesh)
+void Graphics::RenderCustom(Mesh mesh)
 {
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
