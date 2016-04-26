@@ -76,24 +76,49 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			this->running = false;
+			switch (gameState)
+				case Pause:
+					this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
-			this->running = false;
+			switch (gameState)
+				case Pause:
+					this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_B] == true)
 		{
-			this->running = false;
+			switch (gameState)
+			{
+			case Pause:
+				this->running = false;
+				break;
+			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_A] == true)
 		{
-			this->running = false;
+			switch (gameState)
+			{
+			case MainMenu:
+				gameState = GameRunning;
+				break;
+			case Pause:
+				gameState = GameRunning;
+				break;
+			}
 		}
 
 		if (this->player->input->State._buttons[GamePad_Button_START] == true)
 		{
-			this->running = false;
+			switch (gameState)
+			{
+			case TitleScreen:
+				gameState = MainMenu;
+				break;
+			case GameRunning:
+				gameState = Pause;
+				break;
+			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
@@ -102,38 +127,62 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
 		{
-			this->running = false;
+			switch (gameState)
+			{
+			case Pause:
+				this->running = false;
+			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
 		{
-			this->running = false;
+			switch (gameState)
+			{
+			case Pause:
+				switch (gameState)
+				{
+				case Pause:
+					this->running = false;
+				}
+			}
 		}
 
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
 		{
-			this->running = false;
+			switch (gameState)
+			{
+			case Pause:
+				this->running = false;
+			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
 		{
-			this->running = false;
+			switch (gameState)
+			{
+			case Pause:
+				this->running = false;
+			}
 		}
 
 		// Dpad camera movement
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 		{
-			this->camera->cameraMoveLeft();
+			if(gameState == GameRunning)
+				this->camera->cameraMoveLeft();
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
 		{
-			this->camera->cameraMoveRight();
+			if (gameState == GameRunning)
+				this->camera->cameraMoveRight();
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
 		{
-			this->camera->cameraMoveUp();
+			if (gameState == GameRunning)
+				this->camera->cameraMoveUp();
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
 		{
-			this->camera->cameraMoveDown();
+			if (gameState == GameRunning)
+				this->camera->cameraMoveDown();
 		}
 	}
 }
@@ -154,7 +203,7 @@ void Engine::update(double deltaTimeMs)
 		cout << "Title Screen" << endl;
 		// Title Screen
 		//TitleScreen->render();	// Example of how to render the title screen
-		gameState = GameRunning;
+		//gameState = GameRunning;
 		break;
 	case MainMenu:
 		cout << "Main Menu" << endl;
