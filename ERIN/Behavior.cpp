@@ -46,12 +46,16 @@ void Behavior::seperation(Position thisEnemy, Position otherEnemy)
 	float DistanceX = abs(thisEnemy.x - otherEnemy.x);
 	float DistanceY = abs(thisEnemy.y - otherEnemy.y);
 	float SeperationDist = 25.0f;
+	int Counter = 0;
+
 
 	if (DistanceX > 0 && DistanceX < SeperationDist)
 	{
-		
-
+		vector<float> Diff(DistanceX, DistanceY);
+		Counter++;
 	}
+
+
 }
 
 void Behavior::update(Position player, Position thisEnemy)
