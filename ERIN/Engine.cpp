@@ -78,12 +78,14 @@ void Engine::processInput()
 		{
 			switch (gameState)
 				case Pause:
+					cout << "Shutting down game!" << endl;
 					this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
 			switch (gameState)
 				case Pause:
+					cout << "Shutting down game!" << endl;
 					this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_B] == true)
@@ -91,6 +93,7 @@ void Engine::processInput()
 			switch (gameState)
 			{
 			case Pause:
+				cout << "Shutting down game!" << endl;
 				this->running = false;
 				break;
 			}
@@ -101,9 +104,12 @@ void Engine::processInput()
 			{
 			case MainMenu:
 				gameState = GameRunning;
+				cout << "Game Running" << endl;
 				break;
 			case Pause:
 				gameState = GameRunning;
+				pMenuOptions = 0;
+				cout << "Game Running" << endl;
 				break;
 			}
 		}
@@ -114,14 +120,17 @@ void Engine::processInput()
 			{
 			case TitleScreen:
 				gameState = MainMenu;
+				cout << "Main Menu" << endl;
 				break;
 			case GameRunning:
 				gameState = Pause;
+				cout << "Game Pause" << endl << "Pause Menu Option " << pMenuOptions << endl;
 				break;
 			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
+			cout << "Shutting down game!" << endl;
 			this->running = false;
 		}
 
@@ -130,6 +139,7 @@ void Engine::processInput()
 			switch (gameState)
 			{
 			case Pause:
+				cout << "Shutting down game!" << endl;
 				this->running = false;
 			}
 		}
@@ -151,6 +161,7 @@ void Engine::processInput()
 			switch (gameState)
 			{
 			case Pause:
+				cout << "Shutting down game!" << endl;
 				this->running = false;
 			}
 		}
@@ -159,14 +170,8 @@ void Engine::processInput()
 			switch (gameState)
 			{
 			case GameRunning:
-				/*switch (currLevel)
-				{
-				case Level1:
-					gameLogic->levelHandler();
-					break;
-				case Level2:
-					currLevel = Level3;
-				}*/
+				cout << "Shutting down game!" << endl;
+				this->running = false;
 				break;
 			}
 		}
@@ -174,23 +179,79 @@ void Engine::processInput()
 		// Dpad camera movement
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 		{
-			if(gameState == GameRunning)
+			if (gameState == GameRunning)
 				this->camera->cameraMoveLeft();
+			
+			if (gameState == Pause)
+			{
+				if (pMenuOptions == 1)
+				{
+					pMenuOptions = 0;
+					cout << "Pause Menu Option " << pMenuOptions << endl;
+				}
+				else if (pMenuOptions == 3)
+				{
+					pMenuOptions = 2;
+					cout << "Pause Menu Option " << pMenuOptions << endl;
+				}
+			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
 		{
 			if (gameState == GameRunning)
 				this->camera->cameraMoveRight();
+			
+			if (gameState == Pause)
+			{
+				if (pMenuOptions == 0)
+				{
+					pMenuOptions = 1;
+					cout << "Pause Menu Option " << pMenuOptions << endl;
+				}
+				else if (pMenuOptions == 2)
+				{
+					pMenuOptions = 3;
+					cout << "Pause Menu Option " << pMenuOptions << endl;
+				}
+			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
 		{
 			if (gameState == GameRunning)
 				this->camera->cameraMoveUp();
+
+			if (gameState == Pause)
+			{
+				if (pMenuOptions == 2)
+				{
+					pMenuOptions = 0;
+					cout << "Pause Menu Option " << pMenuOptions << endl;
+				}
+				else if (pMenuOptions == 3)
+				{
+					pMenuOptions = 1;
+					cout << "Pause Menu Option " << pMenuOptions << endl;
+				}
+			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
 		{
 			if (gameState == GameRunning)
 				this->camera->cameraMoveDown();
+
+			if (gameState == Pause)
+			{
+				if (pMenuOptions == 0)
+				{
+					pMenuOptions = 2;
+					cout << "Pause Menu Option " << pMenuOptions << endl;
+				}
+				else if (pMenuOptions == 1)
+				{
+					pMenuOptions = 3;
+					cout << "Pause Menu Option " << pMenuOptions << endl;
+				}
+			}
 		}
 	}
 }
@@ -208,43 +269,32 @@ void Engine::update(double deltaTimeMs)
 	switch (gameState)
 	{
 	case TitleScreen:
-		cout << "Title Screen" << endl;
-		// Title Screen
-		//TitleScreen->render();	// Example of how to render the title screen
-		//gameState = GameRunning;
+		//TitleScreen->render();			// Example of how to render the title screen
+
+		for (static bool first = true; first; first = false)
+		{
+			cout << "Title Screen" << endl;
+		}
 		break;
 	case MainMenu:
-		cout << "Main Menu" << endl;
-		// Main Menu
-		//MainMenu->render();		// Example of how to render the main menu
+		//MainMenu->render();				// Example of how to render the main menu
 		break;
 	case GameRunning:
+		//GameLogic->levelHandler();		// Example of how to start a level
+		
 		player->update(deltaTimeMs);
 		gameObject->update(deltaTimeMs);
-		cout << "Game running | " << endl;
 
-		/*switch (currLevel)
-		{
-		case Level1:
-			cout << "Level 1" << endl;
-			break;
-		case Level2:
-			cout << "Level 2" << endl;
-			break;
-		case Level3:
-			cout << "Level 3" << endl;
-		}*/
-		// Gameplay loop
-		//GameLogic->startGame;		// Example of how to start a level
 		render();
 		break;
 	case Pause:
-		cout << "Game Paused" << endl;
-		// Pause Menu
-		//GameLogic->Sleep();		// Example of how to pause the game
+		pause();							// Example of how to pause the game
 		break;
 	}
+}
 
+void Engine::pause()
+{
 
 }
 
