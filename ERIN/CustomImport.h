@@ -137,12 +137,7 @@ public:
 	~CustomImport();
 	void LoadCustomFormat(string filePath);
 	void NewMesh();
-	void RenderCustom(int meshNumber);
-
-	ID3D11Buffer* customVertBuff = nullptr;
-	ID3D11Buffer* customBuffer = nullptr;
-	HRESULT hr;
-	Graphics* graphics;
+	vector<Mesh> meshes;
 };
 
 #endif // !CUSTOMIMPORT_H

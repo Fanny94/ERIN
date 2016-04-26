@@ -4,6 +4,7 @@
 #include "Structs.h"
 #include "Camera.h"
 #include "WICTextureLoader.h"
+#include "Mesh.h"
 
 class Camera;
 
@@ -16,7 +17,7 @@ public:
 	void SetViewport();
 	void Render();
 	void RendPlayer(Matrix transform);
-	void RendFBX(); // parameter Mesh
+	void RenderCustom(Mesh mesh);
 	void CreateShaders();
 	void CreateShaders(string shaderFileName);
 	void CreateTriangle(TriangleVertex* triangleVertices);
@@ -78,6 +79,15 @@ public:
 		XMFLOAT3 normal;
 	};
 
+	struct VertexCustom
+	{
+		float pos[3];
+		float nor[3];
+		float uv[2];
+		float tan[3];
+		float bitan[3];
+	};
+
 	struct SurfaceMaterial
 	{
 		wstring matName;
@@ -130,6 +140,9 @@ private:
 	ID3D11PixelShader* gPixelShader = nullptr;
 
 	ID3D11Buffer* gConstantBuffer = nullptr;
+
+	ID3D11Buffer* customVertBuff = nullptr;
+	HRESULT hr;
 };
 
 #endif // !GRAPHICS_H

@@ -23,6 +23,9 @@ Graphics::~Graphics()
 	gConstantBuffer->Release();
 	objBuffer->Release();
 
+	customVertBuff->Release();
+	this->customVertBuff = nullptr;
+
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
 	this->gSwapChain = nullptr;
@@ -56,18 +59,18 @@ void Graphics::Render()
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+	/*gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);*/
 
-	UINT32 vertexSize = sizeof(float) * 6;
-	UINT32 offset = 0;
+	/*UINT32 vertexSize = sizeof(float) * 6;
+	UINT32 offset = 0;*/
 	/*gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gDeviceContext->IASetInputLayout(gVertexLayout);
 
 	gDeviceContext->Draw(3, 0);*/
 
-	UINT32 vertexMS = sizeof(Vertex);
+	/*UINT32 vertexMS = sizeof(Vertex);
 
 	D3D11_MAPPED_SUBRESOURCE mappedOBJ;
 	HRESULT hr = gDeviceContext->Map(objBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedOBJ);
@@ -92,7 +95,7 @@ void Graphics::Render()
 		int indexDrawAmount = meshSubsetIndexStart[i + 1] - meshSubsetIndexStart[i];
 		if (!material[meshSubsetTexture[i]].transparent)
 			gDeviceContext->DrawIndexed(indexDrawAmount, indexStart, 0);
-	}
+	}*/
 }
 
 void Graphics::RendPlayer(Matrix transform)
@@ -142,23 +145,36 @@ void Graphics::RendPlayer(Matrix transform)
 	gDeviceContext->Draw(3, 0);
 }
 
-void Graphics::RendFBX()
+void Graphics::RendCustom(Mesh mesh)
 {
+	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+	//Create Vertex Buffer
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 
-	//define vertex size
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(VertexCustom) * mesh.mesh.at(0).VertexCount;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
 
-	//Eventually map diffuse color to the constantbuffer, to send the information to the pixelshader 
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = &mesh.mesh.at(0).vertex[0];
 
-	/*for(int i = 0; i < IndexCount; i++)
+	hr = gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &customVertBuff);
+
+	UINT32 meshVertexSize = sizeof(VertexCustom);
+	UINT32 offset = 0;
+
+	for (int i = 0; i < mesh.mesh.size(); i++)
 	{
-	Set vertexBuffer;
-	Set indexBuffer;
-	Set constantbuffer;
-	Material;
-	Texture;
-	DrawIndexed();
+		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
+		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	}*/
+		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
+	}
 }
 
 HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)

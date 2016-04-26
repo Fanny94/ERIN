@@ -176,9 +176,8 @@ void Engine::render()
 
 	graphics->Render();
 	graphics->RendPlayer(*player->objectMatrix);
-	graphics->RendPlayer(*gameObject->objectMatrix);
-	customImport->RenderCustom(0);
-
+	//graphics->RendPlayer(*gameObject->objectMatrix);
+	graphics->RendCustom(customImport->meshes.at(0));
 
 	camera->InitCamera();
 

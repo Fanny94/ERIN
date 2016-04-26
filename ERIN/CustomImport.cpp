@@ -28,20 +28,11 @@ unsigned int MeshCount = 0;
 unsigned int MaterialCount = 0;
 vector<MeshStruct> meshS;
 MeshStruct meshTemp;
-vector<Mesh> meshes;
 
-CustomImport::CustomImport() 
-{
-	this->graphics = new Graphics();
-}
 
-CustomImport::~CustomImport()
-{
-	customVertBuff->Release();
-	customVertBuff = nullptr;
+CustomImport::CustomImport() {}
 
-	delete graphics;
-}
+CustomImport::~CustomImport() {}
 
 void CustomImport::LoadCustomFormat(string filePath)
 {
@@ -256,41 +247,4 @@ void CustomImport::NewMesh()
 		newMesh.mesh.push_back(newMesh.meshTemp);
 	}
 	meshes.push_back(newMesh);
-}
-
-void CustomImport::RenderCustom(int meshNumber)
-{
-	//Create Vertex Buffer
-	D3D11_BUFFER_DESC vertexBufferDesc;
-	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
-
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * meshes.at(meshNumber).mesh.at(0).VertexCount;
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA vertexBufferData;
-	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-	vertexBufferData.pSysMem = &meshes.at(meshNumber).mesh.at(0).VertexCount;
-
-	hr = graphics->get_gDevice()->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &customVertBuff);
-
-	UINT32 meshVertexSize = sizeof(Vertex);
-	UINT32 offset = 0;
-	/*D3D11_MAPPED_SUBRESOURCE mappedCustom;
-	hr = graphics->get_gDeviceContext()->Map(customBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedCustom);
-	Mesh* meshPtr;
-	meshPtr = (Mesh*)mappedCustom.pData;*/
-
-	for (int i = 0; i < meshes.at(meshNumber).mesh.size(); i++)
-	{
-		graphics->get_gDeviceContext()->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
-		graphics->get_gDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		//graphics->get_gDeviceContext()->UpdateSubresource(customBuffer, 0, NULL, meshPtr, 0, 0);
-		graphics->get_gDeviceContext()->PSSetConstantBuffers(0, 1, &customBuffer);
-
-		graphics->get_gDeviceContext()->Draw(meshes.at(meshNumber).mesh.at(i).VertexCount, 0);
-	}
 }
