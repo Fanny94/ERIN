@@ -76,13 +76,7 @@ private:
 	unsigned int MorphAnimationCount;
 	unsigned int CustomAttributesCount;*/
 
-	/*float diffuseColor[3];
-	float ambientColor[3];
-	float specularColor[3];
-	float transparency;
-	float shininess;
-	float reflection;
-	char DiffuseMap[256];
+	/*char DiffuseMap[256];
 	char NormalMap[256];
 	char SpecularMap[256];
 

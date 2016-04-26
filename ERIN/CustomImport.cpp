@@ -24,10 +24,22 @@ struct MeshStruct
 	Vertex vertexTemp;
 };
 
+struct Material
+{
+	float diffuseColor[3];
+	float ambientColor[3];
+	float specularColor[3];
+	float transparency;
+	float shininess;
+	float reflection;
+};
+
 unsigned int MeshCount = 0;
-unsigned int MaterialCount = 0;
 vector<MeshStruct> meshS;
 MeshStruct meshTemp;
+unsigned int MaterialCount = 0;
+vector<Material> material;
+Material materialTemp;
 
 
 CustomImport::CustomImport() {}
@@ -72,18 +84,19 @@ void CustomImport::LoadCustomFormat(string filePath)
 		meshS.push_back(meshTemp);
 	}
 
-	/*for (int i = 0; i < MaterialCount; i++)
+	for (int i = 0; i < MaterialCount; i++)
 	{
-	fileIn.read((char*)&diffuseColor, sizeof(float) * 3);
-	fileIn.read((char*)&ambientColor, sizeof(float) * 3);
-	fileIn.read((char*)&specularColor, sizeof(float) * 3);
-	fileIn.read((char*)&transparency, sizeof(float));
-	fileIn.read((char*)&shininess, sizeof(float));
-	fileIn.read((char*)&reflection, sizeof(float));
-	fileIn.read((char*)&DiffuseMap, sizeof(char) * 256);
-	fileIn.read((char*)&NormalMap, sizeof(char) * 256);
-	fileIn.read((char*)&SpecularMap, sizeof(char) * 256);
-	}*/
+		fileIn.read((char*)&materialTemp.diffuseColor, sizeof(float) * 3);
+		fileIn.read((char*)&materialTemp.specularColor, sizeof(float) * 3);
+		fileIn.read((char*)&materialTemp.ambientColor, sizeof(float) * 3);
+		fileIn.read((char*)&materialTemp.transparency, sizeof(float));
+		fileIn.read((char*)&materialTemp.shininess, sizeof(float));
+		fileIn.read((char*)&materialTemp.reflection, sizeof(float));
+		/*fileIn.read((char*)&DiffuseMap, sizeof(char) * 256);
+		fileIn.read((char*)&NormalMap, sizeof(char) * 256);
+		fileIn.read((char*)&SpecularMap, sizeof(char) * 256);*/
+		material.push_back(materialTemp);
+	}
 
 	/*for (int i = 0; i < GroupCount; i++)
 	{
@@ -212,6 +225,7 @@ void CustomImport::NewMesh()
 	Mesh newMesh;
 	newMesh.MeshCount = MeshCount;
 	newMesh.MaterialCount = MaterialCount;
+
 	for (int i = 0; i < newMesh.MeshCount; i++)
 	{
 		newMesh.meshTemp.VertexCount = meshS.at(i).VertexCount;
@@ -245,6 +259,20 @@ void CustomImport::NewMesh()
 			newMesh.meshTemp.vertex.push_back(newMesh.meshTemp.vertexTemp);
 		}
 		newMesh.mesh.push_back(newMesh.meshTemp);
+	}
+
+	for (int i = 0; i < newMesh.MaterialCount; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			newMesh.materialTemp.diffuseColor[j] = material.at(i).diffuseColor[j];
+			newMesh.materialTemp.specularColor[j] = material.at(i).specularColor[j];
+			newMesh.materialTemp.ambientColor[j] = material.at(i).ambientColor[j];
+		}
+		newMesh.materialTemp.transparency = material.at(i).transparency;
+		newMesh.materialTemp.shininess = material.at(i).shininess;
+		newMesh.materialTemp.reflection = material.at(i).reflection;
+		newMesh.material.push_back(newMesh.materialTemp);
 	}
 	meshes.push_back(newMesh);
 }

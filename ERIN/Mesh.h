@@ -35,9 +35,21 @@ public:
 		Vertex vertexTemp;
 	};
 
+	struct Material
+	{
+		float diffuseColor[3];
+		float ambientColor[3];
+		float specularColor[3];
+		float transparency;
+		float shininess;
+		float reflection;
+	};
+
 	unsigned int MeshCount;
 	vector<MeshStruct> mesh;
-	unsigned int MaterialCount;
 	MeshStruct meshTemp;
+	unsigned int MaterialCount;
+	vector<Material> material;
+	Material materialTemp;
 };
 #endif // !MESH_H
