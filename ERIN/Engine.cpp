@@ -159,12 +159,14 @@ void Engine::processInput()
 			switch (gameState)
 			{
 			case GameRunning:
-				switch (currLevel)
+				/*switch (currLevel)
 				{
 				case Level1:
-					currLevel = Level2;
+					gameLogic->levelHandler();
 					break;
-				}
+				case Level2:
+					currLevel = Level3;
+				}*/
 				break;
 			}
 		}
@@ -217,8 +219,11 @@ void Engine::update(double deltaTimeMs)
 		//MainMenu->render();		// Example of how to render the main menu
 		break;
 	case GameRunning:
-		cout << "Game running | ";
-		switch (currLevel)
+		player->update(deltaTimeMs);
+		gameObject->update(deltaTimeMs);
+		cout << "Game running | " << endl;
+
+		/*switch (currLevel)
 		{
 		case Level1:
 			cout << "Level 1" << endl;
@@ -226,7 +231,9 @@ void Engine::update(double deltaTimeMs)
 		case Level2:
 			cout << "Level 2" << endl;
 			break;
-		}
+		case Level3:
+			cout << "Level 3" << endl;
+		}*/
 		// Gameplay loop
 		//GameLogic->startGame;		// Example of how to start a level
 		render();
@@ -238,8 +245,7 @@ void Engine::update(double deltaTimeMs)
 		break;
 	}
 
-	player->update(deltaTimeMs);
-	gameObject->update(deltaTimeMs);
+
 }
 
 void Engine::render()
