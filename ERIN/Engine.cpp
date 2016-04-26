@@ -43,8 +43,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(gameObject->triangle);
 
-		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
-		customImport->NewMesh();
+		/*customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
+		customImport->NewMesh();*/
 
 		/*if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/stage.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
@@ -71,7 +71,6 @@ Engine::~Engine()
 	// player enemies
 	delete this->player;
 	delete this->gameObject;
-	delete this->camera;
 	delete this->customImport;
 
 	for (int i = 0; i < 4; i++)
@@ -196,7 +195,7 @@ void Engine::render()
 	graphics->Render();
 	graphics->RendPlayer(*player->objectMatrix);
 	graphics->RendPlayer(*gameObject->objectMatrix);
-	graphics->RenderCustom(customImport->meshes.at(0));
+	//graphics->RenderCustom(customImport->meshes.at(0));
 	
 	for (int i = 0; i < 4; i++)
 	{
