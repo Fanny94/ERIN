@@ -2,10 +2,11 @@
 #define MESH_H
 
 #include "Linker.h"
-#include "Graphics.h"
 
 class Mesh
 {
+private:
+
 public:
 	Mesh();
 	~Mesh();
@@ -36,7 +37,7 @@ public:
 
 	unsigned int MeshCount;
 	vector<MeshStruct> mesh;
+	unsigned int MaterialCount;
 	MeshStruct meshTemp;
-	vector<Mesh> meshes;
 };
 #endif // !MESH_H

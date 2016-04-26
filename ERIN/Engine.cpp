@@ -7,6 +7,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->running = true;
 	this->camera = new Camera();
 	this->graphics = new Graphics();
+	this->customImport = new CustomImport();
 
 	// test input
 	this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f, true);
@@ -42,9 +43,12 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(gameObject->triangle);
 
+		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
+		customImport->NewMesh();
+
 		/*if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/stage.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
-			return;
+		return;
 		}*/
 		
 		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
@@ -67,6 +71,8 @@ Engine::~Engine()
 	// player enemies
 	delete this->player;
 	delete this->gameObject;
+	delete this->camera;
+	delete this->customImport;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -180,9 +186,9 @@ void Engine::render()
 
 	for (int i = 0; i < assetmanager->numberOfMeshes; i++)
 	{
-		graphics->CreateShaders("filename");
-		graphics->RendFBX(x);
-		graphics->DeleteShader();
+	graphics->CreateShaders("filename");
+	graphics->RendFBX(x);
+	graphics->DeleteShader();
 	}
 
 	*/
@@ -190,6 +196,7 @@ void Engine::render()
 	graphics->Render();
 	graphics->RendPlayer(*player->objectMatrix);
 	graphics->RendPlayer(*gameObject->objectMatrix);
+	graphics->RenderCustom(customImport->meshes.at(0));
 	
 	for (int i = 0; i < 4; i++)
 	{
@@ -217,7 +224,7 @@ HWND Engine::InitWindow(HINSTANCE hInstance)
 		return false;
 
 	// the window size
-	RECT rc = { 0, 0, (LONG) graphics->get_gWidth() , (LONG) graphics->get_gHeight() };
+	RECT rc = { 0, 0, (LONG)graphics->get_gWidth() , (LONG)graphics->get_gHeight() };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND handle = CreateWindow(

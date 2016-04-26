@@ -38,7 +38,6 @@ GameObject::GameObject(string name, float x, float y, float z, bool doHaveBehavi
 	{
 		this->behavior = new Behavior(Patrol);
 	}
-
 	this->pos = new Position{ this->x, this->y, this->z };
 }
 
