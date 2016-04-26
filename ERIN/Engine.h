@@ -20,6 +20,15 @@ enum GameStateManager
 	Pause
 };
 
+enum CurrLevelManager
+{
+	Level1,
+	Level2,
+	Level3,
+	Level4,
+	Level5
+};
+
 class Engine
 {
 public:
@@ -36,6 +45,7 @@ public:
 	bool getRunning() { return running; };
 
 	GameStateManager gameState = TitleScreen;
+	CurrLevelManager currLevel = Level1;
 
 private:
 	bool running;

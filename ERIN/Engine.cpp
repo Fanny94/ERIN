@@ -158,8 +158,14 @@ void Engine::processInput()
 		{
 			switch (gameState)
 			{
-			case Pause:
-				this->running = false;
+			case GameRunning:
+				switch (currLevel)
+				{
+				case Level1:
+					currLevel = Level2;
+					break;
+				}
+				break;
 			}
 		}
 
@@ -211,7 +217,16 @@ void Engine::update(double deltaTimeMs)
 		//MainMenu->render();		// Example of how to render the main menu
 		break;
 	case GameRunning:
-		cout << "Game running" << endl;
+		cout << "Game running | ";
+		switch (currLevel)
+		{
+		case Level1:
+			cout << "Level 1" << endl;
+			break;
+		case Level2:
+			cout << "Level 2" << endl;
+			break;
+		}
 		// Gameplay loop
 		//GameLogic->startGame;		// Example of how to start a level
 		render();
