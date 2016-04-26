@@ -37,6 +37,7 @@ public:
 
 	unsigned int MeshCount;
 	vector<MeshStruct> mesh;
+	unsigned int MaterialCount;
 	MeshStruct meshTemp;
 };
 #endif // !MESH_H

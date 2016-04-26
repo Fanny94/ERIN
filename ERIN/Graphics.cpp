@@ -23,9 +23,6 @@ Graphics::~Graphics()
 	gConstantBuffer->Release();
 	objBuffer->Release();
 
-	customVertBuff->Release();
-	customVertBuff = nullptr;
-
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
 	this->gSwapChain = nullptr;
@@ -143,43 +140,6 @@ void Graphics::RendPlayer(Matrix transform)
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 
 	gDeviceContext->Draw(3, 0);
-}
-
-void Graphics::RenderCustom(int meshNumber)
-{
-	//Create Vertex Buffer
-	D3D11_BUFFER_DESC vertexBufferDesc;
-	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
-
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * customImp->meshes.at(meshNumber).mesh.at(0).VertexCount;
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA vertexBufferData;
-	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-	vertexBufferData.pSysMem = &customImp->meshes.at(meshNumber).mesh.at(0).VertexCount;
-
-	hr = gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &customVertBuff);
-
-	UINT32 meshVertexSize = sizeof(Vertex);
-	UINT32 offset = 0;
-	/*D3D11_MAPPED_SUBRESOURCE mappedCustom;
-	hr = graphics->get_gDeviceContext()->Map(customBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedCustom);
-	Mesh* meshPtr;
-	meshPtr = (Mesh*)mappedCustom.pData;*/
-
-	for (int i = 0; i < customImp->meshes.at(meshNumber).mesh.size(); i++)
-	{
-		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
-		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		//graphics->get_gDeviceContext()->UpdateSubresource(customBuffer, 0, NULL, meshPtr, 0, 0);
-		gDeviceContext->PSSetConstantBuffers(0, 1, &customBuffer);
-
-		gDeviceContext->Draw(customImp->meshes.at(meshNumber).mesh.at(i).VertexCount, 0);
-	}
 }
 
 void Graphics::RendFBX()

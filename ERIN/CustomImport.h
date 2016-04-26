@@ -3,6 +3,9 @@
 #define CUSTOMIMPORT_H
 #include "Linker.h"
 #include "Mesh.h"
+#include "Graphics.h"
+
+class Graphics;
 
 class CustomImport
 {
@@ -65,8 +68,7 @@ private:
 	char cString[256];
 	};*/
 
-	/*unsigned int MaterialCount;
-	unsigned int GroupCount;
+	/*unsigned int GroupCount;
 	unsigned int LightCount;
 	unsigned int CameraCount;
 	unsigned int SkeletonAnimationCount;
@@ -131,11 +133,16 @@ private:
 	CustomString customStringTemp;*/
 
 public:
-	vector<Mesh> meshes;
 	CustomImport();
 	~CustomImport();
 	void LoadCustomFormat(string filePath);
 	void NewMesh();
+	void RenderCustom(int meshNumber);
+
+	ID3D11Buffer* customVertBuff = nullptr;
+	ID3D11Buffer* customBuffer = nullptr;
+	HRESULT hr;
+	Graphics* graphics;
 };
 
 #endif // !CUSTOMIMPORT_H

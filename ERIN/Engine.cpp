@@ -7,6 +7,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->running = true;
 	this->camera = new Camera();
 	this->graphics = new Graphics();
+	this->customImport = new CustomImport();
 
 	// test input
 	this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f);
@@ -63,6 +64,7 @@ Engine::~Engine()
 	delete this->player;
 	delete this->gameObject;
 	delete this->camera;
+	delete this->customImport;
 }
 
 void Engine::processInput()
@@ -175,7 +177,7 @@ void Engine::render()
 	graphics->Render();
 	graphics->RendPlayer(*player->objectMatrix);
 	graphics->RendPlayer(*gameObject->objectMatrix);
-	graphics->RenderCustom(0);
+	customImport->RenderCustom(0);
 
 
 	camera->InitCamera();
