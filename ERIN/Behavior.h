@@ -16,6 +16,8 @@ public:
 	Behavior(BehaviorState state);
 	~Behavior();
 
+	//Position* pos;
+
 	/*
 	Patrol
 	Follow player
@@ -23,12 +25,13 @@ public:
 	*/
 
 	void update(Position player, Position thisEnemy);
-	void update(Position player, float x, float y, float z);
-
+	void seperation(Position thisEnemy, Position otherEnemy);
+	//Vector2 Cohesion(Position thisEnemey, Position otherEnemy);
 	double getHeading() { return this->heading; };
 	BehaviorState getBehavior() { return this->behavior; };
 
 private:
+	
 	BehaviorState behavior;
 	bool targetInRange;
 	bool bulletComingTowardsMe;
