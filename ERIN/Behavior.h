@@ -30,8 +30,12 @@ public:
 	double getHeading() { return this->heading; };
 	BehaviorState getBehavior() { return this->behavior; };
 
+	float OffS;
+	float OffSY;
+
 private:
-	
+	Position Po;
+	Position* pPo;
 	BehaviorState behavior;
 	bool targetInRange;
 	bool bulletComingTowardsMe;
@@ -39,7 +43,6 @@ private:
 	double heading;
 	float aggroRadius = 10.0f;
 	float fireRadius = 500.0f;
-
 };
 
 #endif // !BEHAVIOR_H

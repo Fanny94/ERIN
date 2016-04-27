@@ -42,6 +42,11 @@ public:
 	double getVx();
 	double getVy();
 
+
+	void GetEnemyPos();
+
+
+
 private:
 
 	string name;
