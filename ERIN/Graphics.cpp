@@ -23,8 +23,8 @@ Graphics::~Graphics()
 	gConstantBuffer->Release();
 	objBuffer->Release();
 
-	/*customVertBuff->Release();
-	this->customVertBuff = nullptr;*/
+	customVertBuff->Release();
+	this->customVertBuff = nullptr;
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
