@@ -17,17 +17,11 @@ enum GameStateManager
 	TitleScreen,
 	MainMenu,
 	GameRunning,
-	Pause
+	Pause,
+	GameOver,
+	HighScore,
+	HelpAndOptions
 };
-
-/*enum CurrLevelManager
-{
-	Level1,
-	Level2,
-	Level3,
-	Level4,
-	Level5
-};*/
 
 class Engine
 {
@@ -37,7 +31,6 @@ public:
 
 	void processInput();
 	void update(double deltaTimeMs);
-	void pause();
 	void render();
 
 	HWND InitWindow(HINSTANCE hInstance);
@@ -49,8 +42,10 @@ public:
 	GameStateManager gameState = TitleScreen;
 	//CurrLevelManager currLevel = Level1;
 
-	// paus
-	int pMenuOptions = 0;
+	// Pause
+	int pMenuOption = 0;
+	// Main Menu
+	int mainMenuOption = 0;
 
 private:
 	bool running;

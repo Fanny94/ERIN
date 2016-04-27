@@ -74,6 +74,207 @@ void Engine::processInput()
 	{
 		player->playerInput();
 
+		switch (gameState)
+		{
+		case TitleScreen:
+			if (this->player->input->State._buttons[GamePad_Button_START] == true)
+			{
+				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				gameState = MainMenu;
+			}
+			break;
+
+		case MainMenu:
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+			{
+				if (mainMenuOption == 1)
+				{
+					mainMenuOption = 0;
+					cout << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				}
+				else if (mainMenuOption == 3)
+				{
+					mainMenuOption = 2;
+					cout << "Main Menu Option " << mainMenuOption << " (Help & Options)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+			{
+				if (mainMenuOption == 0)
+				{
+					mainMenuOption = 1;
+					cout << "Main Menu Option " << mainMenuOption << " (High Score)" << endl;
+				}
+				else if (mainMenuOption == 2)
+				{
+					mainMenuOption = 3;
+					cout << "Main Menu Option " << mainMenuOption << " (Quit)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+			{
+				if (mainMenuOption == 2)
+				{
+					mainMenuOption = 0;
+					cout << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				}
+				else if (mainMenuOption == 3)
+				{
+					mainMenuOption = 1;
+					cout << "Main Menu Option " << mainMenuOption << " (High Score)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+			{
+				if (mainMenuOption == 0)
+				{
+					mainMenuOption = 2;
+					cout << "Main Menu Option " << mainMenuOption << " (Help & Options)" << endl;
+				}
+				else if (mainMenuOption == 1)
+				{
+					mainMenuOption = 3;
+					cout << "Main Menu Option " << mainMenuOption << " (Quit)" << endl;
+				}
+			}
+
+			// If accept
+			if (this->player->input->State._buttons[GamePad_Button_A] == true)
+			{
+				if (mainMenuOption == 0)
+				{
+					cout << "Game Running" << endl;
+					gameState = GameRunning;
+				}
+				else if (mainMenuOption == 1)
+				{
+					cout << "High Score" << endl;
+					//gameState = HighScore;
+				}
+				else if (mainMenuOption == 2)
+				{
+					cout << "Help & Options" << endl;
+					//gameState = HelpAndOptions;
+				}
+				else if (mainMenuOption == 3)
+					this->running = false;
+			}
+			break;
+		case GameRunning:
+			if (this->player->input->State._buttons[GamePad_Button_START] == true)
+			{
+				cout << "Game Paused" << endl << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+				gameState = Pause;
+			}
+
+			// Dpad camera movement
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+			{
+				if (gameState == GameRunning)
+					this->camera->cameraMoveLeft();
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+			{
+				if (gameState == GameRunning)
+					this->camera->cameraMoveRight();
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+			{
+				if (gameState == GameRunning)
+					this->camera->cameraMoveUp();
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+			{
+				if (gameState == GameRunning)
+					this->camera->cameraMoveDown();
+			}
+			break;
+
+		case Pause:
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+			{
+				if (pMenuOption == 1)
+				{
+					pMenuOption = 0;
+					cout << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+				}
+				else if (pMenuOption == 3)
+				{
+					pMenuOption = 2;
+					cout << "Pause Menu Option " << pMenuOption << " (Help & Options)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+			{
+				if (pMenuOption == 0)
+				{
+					pMenuOption = 1;
+					cout << "Pause Menu Option " << pMenuOption << " (High Score)" << endl;
+				}
+				else if (pMenuOption == 2)
+				{
+					pMenuOption = 3;
+					cout << "Pause Menu Option " << pMenuOption << " (Main Menu)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+			{
+				if (pMenuOption == 2)
+				{
+					pMenuOption = 0;
+					cout << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+				}
+				else if (pMenuOption == 3)
+				{
+					pMenuOption = 1;
+					cout << "Pause Menu Option " << pMenuOption << " (High Score)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+			{
+				if (pMenuOption == 0)
+				{
+					pMenuOption = 2;
+					cout << "Pause Menu Option " << pMenuOption << " (Help & Options)" << endl;
+				}
+				else if (pMenuOption == 1)
+				{
+					pMenuOption = 3;
+					cout << "Pause Menu Option " << pMenuOption << " (Main Menu)" << endl;
+				}
+			}
+
+			// If accept
+			if (this->player->input->State._buttons[GamePad_Button_A] == true)
+			{
+				if (pMenuOption == 0)
+				{
+					cout << "Game Running" << endl;
+					gameState = GameRunning;
+				}
+				else if (pMenuOption == 1)
+				{
+					cout << "High Score" << endl;
+					//gameState = HighScore;
+				}
+				else if (pMenuOption == 2)
+				{
+					cout << "Help & Options" << endl;
+					//gameState = HelpAndOptions;
+				}
+				else if (pMenuOption == 3)
+				{
+					cout << "Main Menu" << endl;
+					gameState = MainMenu;
+				}
+			}
+			break;
+		case HighScore:
+			break;
+		case HelpAndOptions:
+			break;
+		}
+
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
 		}
@@ -85,47 +286,10 @@ void Engine::processInput()
 		}
 		if (this->player->input->State._buttons[GamePad_Button_A] == true)
 		{
-			switch (gameState)
-			{
-			case MainMenu:
-				gameState = GameRunning;
-				cout << "Game Running" << endl;
-				break;
-			case Pause:
-				if (pMenuOptions == 0)
-				{
-					gameState = GameRunning;
-					cout << "Game Running" << endl;
-				}
-				else if (pMenuOptions == 1)
-				{
-					cout << "High Score" << endl;
-				}
-				else if (pMenuOptions == 2)
-				{
-					cout << "Help & Options" << endl;
-				}
-				else if (pMenuOptions == 3)
-				{
-					cout << "Shutting down game!";
-					this->running = false;
-				}
-			}
 		}
 
 		if (this->player->input->State._buttons[GamePad_Button_START] == true)
 		{
-			switch (gameState)
-			{
-			case TitleScreen:
-				gameState = MainMenu;
-				cout << "Main Menu" << endl;
-				break;
-			case GameRunning:
-				gameState = Pause;
-				cout << "Game Pause" << endl << "Pause Menu Option " << pMenuOptions << endl;
-				break;
-			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
@@ -133,6 +297,7 @@ void Engine::processInput()
 			this->running = false;
 		}
 
+		// BUMPERS & TRIGGERS
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
 		{
 		}
@@ -147,82 +312,18 @@ void Engine::processInput()
 		{
 		}
 
-		// Dpad camera movement
+		// DPAD
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 		{
-			if (gameState == GameRunning)
-				this->camera->cameraMoveLeft();
-			
-			if (gameState == Pause)
-			{
-				if (pMenuOptions == 1)
-				{
-					pMenuOptions = 0;
-					cout << "Pause Menu Option " << pMenuOptions << endl;
-				}
-				else if (pMenuOptions == 3)
-				{
-					pMenuOptions = 2;
-					cout << "Pause Menu Option " << pMenuOptions << endl;
-				}
-			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
 		{
-			if (gameState == GameRunning)
-				this->camera->cameraMoveRight();
-			
-			if (gameState == Pause)
-			{
-				if (pMenuOptions == 0)
-				{
-					pMenuOptions = 1;
-					cout << "Pause Menu Option " << pMenuOptions << endl;
-				}
-				else if (pMenuOptions == 2)
-				{
-					pMenuOptions = 3;
-					cout << "Pause Menu Option " << pMenuOptions << endl;
-				}
-			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
 		{
-			if (gameState == GameRunning)
-				this->camera->cameraMoveUp();
-
-			if (gameState == Pause)
-			{
-				if (pMenuOptions == 2)
-				{
-					pMenuOptions = 0;
-					cout << "Pause Menu Option " << pMenuOptions << endl;
-				}
-				else if (pMenuOptions == 3)
-				{
-					pMenuOptions = 1;
-					cout << "Pause Menu Option " << pMenuOptions << endl;
-				}
-			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
 		{
-			if (gameState == GameRunning)
-				this->camera->cameraMoveDown();
-
-			if (gameState == Pause)
-			{
-				if (pMenuOptions == 0)
-				{
-					pMenuOptions = 2;
-					cout << "Pause Menu Option " << pMenuOptions << endl;
-				}
-				else if (pMenuOptions == 1)
-				{
-					pMenuOptions = 3;
-					cout << "Pause Menu Option " << pMenuOptions << endl;
-				}
-			}
 		}
 	}
 }
@@ -259,14 +360,8 @@ void Engine::update(double deltaTimeMs)
 		render();
 		break;
 	case Pause:
-		pause();							// Example of how to pause the game
 		break;
 	}
-}
-
-void Engine::pause()
-{
-
 }
 
 void Engine::render()
