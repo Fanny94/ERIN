@@ -42,14 +42,15 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTriangle(gameObject->triangle);
 
 		graphics->CreateTriangleAABBBox(gameObject->triangle);
-		
+		graphics->CerateVertexTriangleArray();
+
 		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
 			return;
 		}
 
-		graphics->CreateSquareAABBBox();
-		graphics->CreateVertexSquareArray();
+		graphics->CreateSquareAABBBox();	
+		graphics->CreateVertexArray();
 		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 
 		{
@@ -216,12 +217,14 @@ void Engine::update(double deltaTimeMs)
 void Engine::render()
 {
 	graphics->UpdateConstantBuffer();
-	graphics->AABBtoAABB();
-
+	
 	graphics->Render();
 	graphics->RendPlayer(*gameObject->objectMatrix);
 	graphics->RendAABB();
 	graphics->RendTriangleAABB();
+
+	graphics->AABBtoAABB();
+
 	camera->InitCamera();
 
 	// switch front- and back-buffer

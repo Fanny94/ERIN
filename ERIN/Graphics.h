@@ -27,7 +27,7 @@ public:
 	void CreateConstantBuffer();
 	AABBBox CreateTriangleAABBBox(TriangleVertex* triangleVertices);
 	AABBBox CreateSquareAABBBox();
-	void CreateVertexSquareArray();
+	void CreateVertexArray();
 	void CerateVertexTriangleArray();
 
 	bool AABBtoAABB();
@@ -117,6 +117,7 @@ public:
 
 	vector<AABBVertex> squareVertexArray;
 	vector<AABBVertex> triangleVertexArray;
+
 	vector<AABBBox> triangleBox;
 	vector<AABBBox> squareBox;
 
@@ -127,13 +128,13 @@ private:
 	float camPosX;
 	float camPosY;
 
-	XMFLOAT3 pMin;
-	XMFLOAT3 pMax;
-
-	AABBBox triangleMinMaxBox;
 	AABBBox axisAllignedBox;
+	AABBBox triAxis;
 
 	AABBBox AABBVertexArray;
+	AABBBox triVertexArray;
+
+	AABBVertex triAABBBuffer;
 	AABBVertex AABBBufferArray;
 
 	ID3D11Device* gDevice = nullptr;

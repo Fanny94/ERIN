@@ -10,6 +10,8 @@ struct TriangleVertex
 struct AABBBox
 {
 	XMFLOAT3 points[8];
+	XMFLOAT3 min;
+	XMFLOAT3 max;
 };
 
 struct AABBVertex
