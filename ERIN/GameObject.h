@@ -13,21 +13,15 @@ class GameObject
 {
 public:
 	GameObject();
-	GameObject(string name, float x, float y, float z, bool doHaveBehavior);
+	GameObject(int objectID, string name, float x, float y, float z, bool doHaveBehavior);
 	~GameObject();
 
-	void updateBehavior(Position player);
+	void updateBehavior(Position player, GameObject* myself, GameObject** allEnemies);
 	void update(double deltaTimeMs);
-	
-	
-	void SetX(float x) { this->x = x; };
-	void SetY(float y) { this->y = y; };
-	void SetZ(float z) { this->z = z; };
 
-	string GetName() { return this->name; };
-	float GetX() { return this->x; };
-	float GetY() { return this->y; };
-	float GetZ() { return this->z; };
+	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
+	int getObjectID() { return this->objectID; };
+	string getName() { return this->name; };
 
 	TriangleVertex* triangle;
 	AABBBox* axisAllignedBox;
@@ -42,13 +36,11 @@ public:
 	double getVx();
 	double getVy();
 
-
+	// flock AI
 	void GetEnemyPos();
 
-
-
 private:
-
+	int objectID;
 	string name;
 	float x, y, z;
 
@@ -58,7 +50,6 @@ private:
 
 	bool accelerating;
 	float acceleration;
-	float velocity;
 
 	float directionX;
 	float directionY;

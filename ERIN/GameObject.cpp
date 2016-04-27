@@ -6,8 +6,9 @@ GameObject::GameObject()
 {
 }
 
-GameObject::GameObject(string name, float x, float y, float z, bool doHaveBehavior)
+GameObject::GameObject(int objectID, string name, float x, float y, float z, bool doHaveBehavior)
 {
+	this->objectID = objectID;
 	this->name = name;
 	this->x = x;
 	this->y = y;
@@ -56,26 +57,33 @@ GameObject::~GameObject()
 	}
 }
 
-void GameObject::updateBehavior(Position player)
+void GameObject::updateBehavior(Position player, GameObject* myself, GameObject** allEnemies)
 {
-	if (this->behavior != nullptr)
+	if (this->behavior)
 	{
 		Position thisEnemy = { this->x, this->y, this->z };
 		this->behavior->update(player, thisEnemy);
-	}
 
-	float radians = XMConvertToRadians((float)heading);
-	this->directionX = (float)sin(radians);
-	this->directionY = (float)cos(radians);
+		// static number of enemies
+		for (int i = 0; i < 4; i++)
+		{
+			if (myself->getObjectID() != allEnemies[i]->getObjectID())
+			{
+				// test lines to see values quick
+				int me = myself->getObjectID();
+				int other = allEnemies[i]->getObjectID();
 
-	/*if (directionX < 0)
-	{
-		directionX = 0;
+				// cohesion calculations
+				this->behavior->cohesion(*myself->pos, *allEnemies[i]->pos);
+			}
+		}
+		//this->behavior->alignment();
+		//this->behavior->separation();
+
+		float radians = XMConvertToRadians((float)heading);
+		this->directionX = (float)sin(radians);
+		this->directionY = (float)cos(radians);
 	}
-	if (directionY < 0)
-	{
-		directionY = 0;
-	}*/
 }
 
 void GameObject::update(double dt)

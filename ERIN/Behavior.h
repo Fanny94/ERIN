@@ -16,33 +16,31 @@ public:
 	Behavior(BehaviorState state);
 	~Behavior();
 
-	//Position* pos;
+	void update(Position player, Position myself);
 
-	/*
-	Patrol
-	Follow player
-	Fire
-	*/
-
-	void update(Position player, Position thisEnemy);
-	void seperation(Position thisEnemy, Position otherEnemy);
-	//Vector2 Cohesion(Position thisEnemey, Position otherEnemy);
-	double getHeading() { return this->heading; };
-	BehaviorState getBehavior() { return this->behavior; };
+	// flock AI
+	Vector2 cohesion(Position ally, Position myself);
+	void alignment();
+	void separation(Position thisEnemy, Position otherEnemy);
 
 	float OffS;
 	float OffSY;
 
+	// AI
+	double getHeading() { return this->heading; };
+	BehaviorState getBehavior() { return this->behavior; };
+
 private:
-	Position Po;
-	Position* pPo;
 	BehaviorState behavior;
 	bool targetInRange;
 	bool bulletComingTowardsMe;
 
 	double heading;
 	float aggroRadius = 10.0f;
-	float fireRadius = 500.0f;
+
+	// flock AI
+	Position Po;
+	Position* pPo;
 };
 
 #endif // !BEHAVIOR_H
