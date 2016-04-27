@@ -16,6 +16,7 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #include <stdio.h>
+#include <vector>
 
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "d3dcompiler.lib")

@@ -12,6 +12,52 @@ Behavior::~Behavior()
 {
 }
 
+//DO NOT REMOVE
+/*Vector2 Behavior::Cohesion(Position thisEnemy, Position otherEnemy)
+{
+	vector<int> ForceVec;
+	vector<int> CenterOfMass;
+	int Neighbors;
+	double Average;
+
+	//Loop through all enemies and check so that it is not checking itself as a someone else
+	for (thisEnemy)
+	{
+		if (!thisEnemy)
+		{
+			CenterOfMass += thisEnemy;
+			Neighbors++
+		}
+	}
+
+	 //If there are Neighbors nearby
+	if (Neighbors > 0)
+	{
+		//Calculate the average of CenterOfMass with Neighbors as parameter
+		Average;
+		ForceVec = CenterOfMass - otherEnemy;
+		ForceVec = ForceVec.Normalize;
+	}
+	return ForceVec;
+}*/
+
+void Behavior::seperation(Position thisEnemy, Position otherEnemy)
+{
+	float DistanceX = abs(thisEnemy.x - otherEnemy.x);
+	float DistanceY = abs(thisEnemy.y - otherEnemy.y);
+	float SeperationDist = 25.0f;
+	int Counter = 0;
+
+
+	if (DistanceX > 0 && DistanceX < SeperationDist)
+	{
+		vector<float> Diff(DistanceX, DistanceY);
+		Counter++;
+	}
+
+
+}
+
 void Behavior::update(Position player, Position thisEnemy)
 {
 	float distanceX = abs(player.x - thisEnemy.x);
@@ -29,6 +75,8 @@ void Behavior::update(Position player, Position thisEnemy)
 		this->targetInRange = false;
 		this->behavior = Patrol;
 	}
+
+
 
 	// logic
 	//if (targetInRange == true)
