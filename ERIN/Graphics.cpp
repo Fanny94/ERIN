@@ -191,6 +191,7 @@ HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 	swapChainD.OutputWindow = wndHandle;
 	swapChainD.SampleDesc.Count = 4;
 	swapChainD.Windowed = TRUE;
+	ShowCursor(FALSE);
 
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
