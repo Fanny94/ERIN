@@ -67,12 +67,11 @@ Engine::~Engine()
 {
 	delete this->graphics;
 	delete this->camera;
+	delete this->customImport;
 
 	// player enemies
 	delete this->player;
 	delete this->gameObject;
-	delete this->camera;
-	delete this->customImport;
 
 	for (int i = 0; i < 4; i++)
 	{
