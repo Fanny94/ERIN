@@ -19,9 +19,9 @@ public:
 	void update(Position player, Position myself);
 
 	// flock AI
-	Vector2 cohesion(Position ally, Position myself);
+	void cohesion(Position myself, Position ally);
 	void alignment();
-	void separation(Position thisEnemy, Position otherEnemy);
+	void separation(Position myself, Position ally);
 
 	float OffS;
 	float OffSY;
@@ -36,7 +36,7 @@ private:
 	bool bulletComingTowardsMe;
 
 	double heading;
-	float aggroRadius = 10.0f;
+	float aggroRadius = 1000.0f;
 
 	// flock AI
 	Position Po;

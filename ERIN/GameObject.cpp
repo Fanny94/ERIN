@@ -13,12 +13,17 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->x = x;
 	this->y = y;
 	this->z = z;
+	float LO = 0.07f, HI = 0.10f, lO = 0.0006f, hI = 0.0009f;
 
-	this->maximumSpeed = 0.05f;
+	float Random = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
+
+	this->maximumSpeed = Random;
 	this->currentSpeed = 0.0f;
 
 	this->speed = 0.0f;
-	this->acceleration = 0.0005f;
+
+	float Ran = lO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (hI - lO)));
+	this->acceleration = Ran;
 
 	// test triangle in gameobject
 	this->triangle = new TriangleVertex[3];
@@ -75,10 +80,13 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 
 				// cohesion calculations
 				this->behavior->cohesion(*myself->pos, *allEnemies[i]->pos);
+
+				//Separation calculations
+				this->behavior->separation(*myself->pos, *allEnemies[i]->pos);
 			}
 		}
 		//this->behavior->alignment();
-		//this->behavior->separation();
+		//
 
 		float radians = XMConvertToRadians((float)heading);
 		this->directionX = (float)sin(radians);
