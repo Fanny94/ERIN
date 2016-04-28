@@ -25,11 +25,11 @@ public:
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
-	AABBBox CreateTriangleAABBBox(TriangleVertex* triangleVertices);
-	AABBBox CreateSquareAABBBox();
-	void CreateVertexArray();
-	void CerateVertexTriangleArray();
-	AABBBox transformBoundingBox(Matrix transform);
+	void CreateTriangleAABBBox(TriangleVertex* triangleVertices);
+	void CreateSquareAABBBox();
+	void AABBSquarePoints();
+	void AABBTrianglePoints();
+	//AABBBox* transformBoundingBox(Matrix transform);
 
 	bool AABBtoAABB();
 	void UpdateConstantBuffer();
@@ -117,7 +117,7 @@ public:
 	vector<DWORD> indices;
 
 	vector<AABBVertex> squareVertexArray;
-	vector<AABBVertex> triangleVertexArray;
+	vector<AABBBox> triangleVertexArray;
 
 	vector<AABBBox> triangleBox;
 	vector<AABBBox> squareBox;
@@ -132,11 +132,11 @@ private:
 	AABBBox axisAllignedBox;
 	AABBBox triAxis;
 
-	AABBBox* newAABB;
+	//AABBBox* newAABB;
 	AABBBox AABBVertexArray;
 	AABBBox triVertexArray;
 
-	AABBVertex triAABBBuffer;
+	AABBBox triAABBBuffer;
 	AABBVertex AABBBufferArray;
 
 	ID3D11Device* gDevice = nullptr;

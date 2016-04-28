@@ -174,7 +174,7 @@ void Graphics::RendAABB()
 	Matrix projection;
 	Matrix worldViewProj;
 
-	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0.3);
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0.5);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
 
 	// viewProj = camera->camView * projection;
@@ -469,8 +469,9 @@ void Graphics::CreateConstantBuffer()
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
 }
 
-AABBBox Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
+void Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
 {
+	//This function defines an AABB box for the triangle with a min and a max value
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -504,14 +505,14 @@ AABBBox Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
 			triAxis.max.z = triangleVertices[i].z;
 		}
 
+		//points is an array of 8 points that later will represent the 4 corners of the AABB triangle
 		triVertexArray.points[0] = triAxis.min;
 		triVertexArray.points[3] = triAxis.max;
 	}
 
 	//squareBox.push_back(AABBVertexArray);
-	return triVertexArray;
 }
-void Graphics::CerateVertexTriangleArray()
+void Graphics::AABBTrianglePoints()
 {
 	//diference between Min and Max
 	float diffX = abs(triVertexArray.points[3].x) - abs(triVertexArray.points[0].x);
@@ -519,6 +520,7 @@ void Graphics::CerateVertexTriangleArray()
 	float diffZ = abs(triVertexArray.points[3].z) - abs(triVertexArray.points[0].z);
 
 
+	//points[0, 1, 2, 3] is the corners of the triangle's AABB 
 	triVertexArray.points[1].x = triVertexArray.points[3].x;
 	triVertexArray.points[1].y = triVertexArray.points[0].y;
 	triVertexArray.points[1].z = triVertexArray.points[0].z;
@@ -527,20 +529,23 @@ void Graphics::CerateVertexTriangleArray()
 	triVertexArray.points[2].y = triVertexArray.points[3].y;
 	triVertexArray.points[2].z = triVertexArray.points[0].z;
 
+	//to define the lines the same vertices is going to be used several times
+	//that's why we get 8 vertices that is going to be drawn for the AABB triangle
 	//Define lines
-	AABBBufferArray.points[0] = triVertexArray.points[0];
-	AABBBufferArray.points[1] = triVertexArray.points[1];
+	triAABBBuffer.points[0] = triVertexArray.points[0];
+	triAABBBuffer.points[1] = triVertexArray.points[1];
 
-	AABBBufferArray.points[2] = triVertexArray.points[0];
-	AABBBufferArray.points[3] = triVertexArray.points[2];
+	triAABBBuffer.points[2] = triVertexArray.points[0];
+	triAABBBuffer.points[3] = triVertexArray.points[2];
 
-	AABBBufferArray.points[4] = triVertexArray.points[1];
-	AABBBufferArray.points[5] = triVertexArray.points[3];
+	triAABBBuffer.points[4] = triVertexArray.points[1];
+	triAABBBuffer.points[5] = triVertexArray.points[3];
 
-	AABBBufferArray.points[6] = triVertexArray.points[2];
-	AABBBufferArray.points[7] = triVertexArray.points[3];
+	triAABBBuffer.points[6] = triVertexArray.points[2];
+	triAABBBuffer.points[7] = triVertexArray.points[3];
 
-	triangleVertexArray.push_back(AABBBufferArray);
+	//pushback points for the lines in the vector that is going to be used in the vertex buffer
+	triangleVertexArray.push_back(triAABBBuffer);
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
@@ -555,36 +560,40 @@ void Graphics::CerateVertexTriangleArray()
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
 	vertexBufferData.pSysMem = &triangleVertexArray[0];
 
+	//We store the points in the triangleVertexBuffer anhd then use it in the render function to be able to render this
 	gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &triangleAABBVertexBuffer);
 
 }
 
-AABBBox Graphics::transformBoundingBox(Matrix transform)
+//AABBBox* Graphics::transformBoundingBox(Matrix transform)
+//{
+//
+//	//.Right returns the first column vector of the matrix
+//	float xa = transform.Right * triVertexArray.points[0].x;
+//	float xb = transform.Right * triVertexArray.points[3].x;
+//
+//	//.Up returns the second column 
+//	float ya = transform.Up * triVertexArray.points[0].y;
+//	float yb = transform.Up * triVertexArray.points[3].y;
+//
+//	//.Backward returns the third column 
+//	float za = transform.Backward * triVertexArray.points[0].z;
+//	float zb = transform.Backward * triVertexArray.points[3].z;
+//
+//	float minValue[3] = { min(xa, xb) + min(ya, yb) + min(za, zb) };
+//	float maxValue[3] = { max(xa, xb) + max(ya, yb) + max(za, zb) };
+//	
+//	newAABB = new AABBBox();
+//		
+//	return newAABB->points[0] = minValue + transform.Translation,
+//		newAABB->points[3] = maxValue + transform.Translation;
+//	
+//
+//}
+
+void Graphics::CreateSquareAABBBox()
 {
-
-	//.Right returns the first column vector of the matrix
-	float xa = transform.Right * triVertexArray.points[0].x;
-	float xb = transform.Right * triVertexArray.points[3].x;
-
-	//.Up returns the second column 
-	float ya = transform.Up * triVertexArray.points[0].y;
-	float yb = transform.Up * triVertexArray.points[3].y;
-
-	//.Backward returns the third column 
-	float za = transform.Backward * triVertexArray.points[0].z;
-	float zb = transform.Backward * triVertexArray.points[3].z;
-
-	float minValue[3] = { min(xa, xb) + min(ya, yb) + min(za, zb) };
-	float maxValue[3] = { max(xa, xb) + max(ya, yb) + max(za, zb) };
-	
-	newAABB = new AABBBox();
-		
-	return newAABB->points[0] = minValue + transform.Translation, newAABB->points[3] = maxValue + transform.Translation;
-
-}
-
-AABBBox Graphics::CreateSquareAABBBox()
-{
+	//This function defines an AABB box for the cube with a min and a max value
 
 	for (int i = 0; i < vertexMeshSize.size(); i++)
 	{
@@ -618,23 +627,26 @@ AABBBox Graphics::CreateSquareAABBBox()
 			axisAllignedBox.max.z = vertexMeshSize[i].pos.z;
 		}
 
+		//points is an array of 8 points that later will represent the 8 corners of the AABB cube 
 		AABBVertexArray.points[0] = axisAllignedBox.min;
 		AABBVertexArray.points[7] = axisAllignedBox.max;
 	}
 
 	//squareBox.push_back(AABBVertexArray);
-	return AABBVertexArray;
 
 }
-void Graphics::CreateVertexArray()
+void Graphics::AABBSquarePoints()
 {
+
+	//This function defines the rest of the points of the AABB cube, including min and max
 
 	//diference between Min and Max
 	float diffX = abs(AABBVertexArray.points[7].x) - abs(AABBVertexArray.points[0].x);
 	float diffY = abs(AABBVertexArray.points[7].y) - abs(AABBVertexArray.points[0].y);
 	float diffZ = abs(AABBVertexArray.points[7].z) - abs(AABBVertexArray.points[0].z);
 
-	//8 points of the AABB box
+
+	//points[0, 1, 2, 3, 4, 5, 6, 7] is the 8 corners of the cube's AABB 
 	//Left Upper Corner (front)
 	AABBVertexArray.points[1].x = AABBVertexArray.points[0].x;
 	AABBVertexArray.points[1].y = AABBVertexArray.points[7].y - diffY;
@@ -667,6 +679,7 @@ void Graphics::CreateVertexArray()
 
 
 //buffer array with definition of the lines
+//Here there are 24 vertices that is going to be drawn because we use a vertex buffer to draw the lines
 //first quadrant (first)
 	//line 1
 	AABBBufferArray.points[0] = AABBVertexArray.points[0];
@@ -719,6 +732,7 @@ void Graphics::CreateVertexArray()
 	AABBBufferArray.points[23] = AABBVertexArray.points[5];
 	
 
+	//pushback points for the lines in the vector that is going to be used in the vertex buffer
 	squareVertexArray.push_back(AABBBufferArray);
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
@@ -734,35 +748,48 @@ void Graphics::CreateVertexArray()
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
 	vertexBufferData.pSysMem = &squareVertexArray[0];
 
+	//We store the points in the vertAABBBuffer anhd then use it in the render function to be able to render this
 	gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &vertAABBBuffer);
 
 }
 
 bool Graphics::AABBtoAABB()
 {
+	//This is the function for collision detection
+	//The fucntion compares min and max values of the two AABB's
+	//here is the problem, the collsion isn't correct
+
+	if (AABBVertexArray.points[7].x < triVertexArray.points[0].x);
+	{
+		cout << "no hit" << endl;
+		return false;
+	}
 	
-	if (AABBVertexArray.points[7].x < newAABB->points[0].x && AABBVertexArray.points[0].x > newAABB->points[3].x)
+	if (AABBVertexArray.points[0].x > triVertexArray.points[3].x)
 	{
 		cout << "no hit";
 		return false;
 	}
 
-	//if (AABBVertexArray.points[7].y < triVertexArray.points[0].y && AABBVertexArray.points[0].y > triVertexArray.points[3].y) 
-	//{
-	//	cout << "no hit";
-	//	return false;
-	//}
-	//	
+	if (AABBVertexArray.points[7].y < triVertexArray.points[0].y)
+	{
+		cout << "no hit";
+		return false;
+	}
+	if (AABBVertexArray.points[0].y > triVertexArray.points[3].y)
+	{
+		cout << "no hit";
+		return false;
+	}
+
 	//if (AABBVertexArray.points[7].z < triVertexArray.points[0].z && AABBVertexArray.points[0].z > triVertexArray.points[3].z) 
 	//{
 	//	cout << "no hit";
 	//	return false;
 	//}
 
-	cout << "hit";
+	//cout << "hit" << endl;
 	return true;
-
-	
 
 }
 

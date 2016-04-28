@@ -42,7 +42,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTriangle(gameObject->triangle);
 
 		graphics->CreateTriangleAABBBox(gameObject->triangle);
-		graphics->CerateVertexTriangleArray();
+		graphics->AABBTrianglePoints();
 
 		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
@@ -50,7 +50,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		}
 
 		graphics->CreateSquareAABBBox();	
-		graphics->CreateVertexArray();
+		graphics->AABBSquarePoints();
 		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 
 		{
@@ -223,7 +223,7 @@ void Engine::render()
 	graphics->RendAABB();
 	graphics->RendTriangleAABB(*gameObject->objectMatrix);
 
-	graphics->transformBoundingBox(*gameObject->objectMatrix);
+	//graphics->transformBoundingBox(*gameObject->objectMatrix);
 	graphics->AABBtoAABB();
 
 	camera->InitCamera();
