@@ -10,7 +10,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->customImport = new CustomImport();
 
 	// test input
-	this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f, true);
+	//this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f, true);
 	this->enemies = new GameObject* [5];
 	this->enemies[0] = new GameObject("enemy1", 5.0f, 0.0f, 0.1f, true);
 	this->enemies[1] = new GameObject("enemy2", 0.0f, 5.0f, 0.1f, true);
@@ -41,7 +41,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		graphics->CreateTriangle(gameObject->triangle);
+		graphics->CreateTriangle(enemies[0]->triangle/*gameObject->triangle*/);
 
 		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
 		customImport->NewMesh();
@@ -71,7 +71,7 @@ Engine::~Engine()
 
 	// player enemies
 	delete this->player;
-	delete this->gameObject;
+	//delete this->gameObject;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -161,8 +161,8 @@ void Engine::update(double deltaTimeMs)
 	// example physics calculation using delta time:
 	// object.x = object.x + (object.speed * deltaTimeS);
 	player->update(deltaTimeMs);
-	gameObject->updateBehavior(*player->pos);
-	gameObject->update(deltaTimeMs);
+	//gameObject->updateBehavior(*player->pos);
+	//gameObject->update(deltaTimeMs);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -194,7 +194,7 @@ void Engine::render()
 
 	graphics->Render();
 	graphics->RendPlayer(*player->objectMatrix);
-	graphics->RendPlayer(*gameObject->objectMatrix);
+	//graphics->RendPlayer(*gameObject->objectMatrix);
 	graphics->RenderCustom(customImport->meshes.at(0));
 	
 	for (int i = 0; i < 4; i++)

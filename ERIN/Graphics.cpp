@@ -1,9 +1,7 @@
 #include "Graphics.h"
 
 //http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
-Graphics::Graphics()
-{
-}
+Graphics::Graphics() {}
 
 Graphics::~Graphics()
 {
@@ -136,7 +134,8 @@ void Graphics::RendPlayer(Matrix transform)
 
 	MatrixPtr2 = (MATRICES*)mapped.pData;
 	MatrixPtr2->worldViewProj = worldViewProj;
-	MatrixPtr2->world = transform;
+	MatrixPtr2->world = world;
+	MatrixPtr2->camPos = camera->camPosition;
 
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
@@ -168,10 +167,32 @@ void Graphics::RenderCustom(Mesh mesh)
 	UINT32 meshVertexSize = sizeof(VertexCustom);
 	UINT32 offset = 0;
 
+	D3D11_MAPPED_SUBRESOURCE mappedCF;
+	hr = gDeviceContext->Map(customFormatBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedCF);
+	CustomFormat* CFPtr;
+	CFPtr = (CustomFormat*)mappedCF.pData;
+	gDeviceContext->Unmap(customFormatBuffer, 0);
+
+	for (int j = 0; j < mesh.material.size(); j++)
+	{
+		CFPtr->diffuseColor[0] = mesh.material.at(j).diffuseColor[0];
+		CFPtr->diffuseColor[1] = mesh.material.at(j).diffuseColor[1];
+		CFPtr->diffuseColor[2] = mesh.material.at(j).diffuseColor[2];
+		CFPtr->ambientColor[0] = mesh.material.at(j).ambientColor[0];
+		CFPtr->ambientColor[1] = mesh.material.at(j).ambientColor[1];
+		CFPtr->ambientColor[2] = mesh.material.at(j).ambientColor[2];
+		CFPtr->specularColor[0] = mesh.material.at(j).specularColor[0];
+		CFPtr->specularColor[1] = mesh.material.at(j).specularColor[1];
+		CFPtr->specularColor[2] = mesh.material.at(j).specularColor[2];
+		CFPtr->shininess = mesh.material.at(j).shininess;
+	}
+
 	for (int i = 0; i < mesh.mesh.size(); i++)
 	{
 		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
 		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
@@ -326,6 +347,15 @@ void Graphics::CreateConstantBuffer()
 
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
 
+	D3D11_BUFFER_DESC cCFBuffer;
+	ZeroMemory(&cCFBuffer, sizeof(cCFBuffer));
+	cCFBuffer.Usage = D3D11_USAGE_DYNAMIC;
+	cCFBuffer.ByteWidth = sizeof(CustomFormat);
+	cCFBuffer.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cCFBuffer.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cCFBuffer.MiscFlags = 0;
+
+	gDevice->CreateBuffer(&cCFBuffer, NULL, &customFormatBuffer);
 }
 
 void Graphics::CreateTriangleAABBBox(AABBBox * axisAllignedBox)
@@ -414,6 +444,7 @@ void Graphics::UpdateConstantBuffer()
 	MatrixPtr = (MATRICES*)mapped.pData;
 	MatrixPtr->worldViewProj = worldViewProj;
 	MatrixPtr->world = world;
+	MatrixPtr->camPos = camera->camPosition;
 
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 

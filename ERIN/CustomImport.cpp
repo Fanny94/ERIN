@@ -247,7 +247,18 @@ void CustomImport::NewMesh()
 		{
 			for (int m = 0; m < 3; m++)
 			{
-				newMesh.meshTemp.vertexTemp.pos[m] = meshS.at(i).vertex.at(l).pos[m];
+				if (m == 0)
+				{
+					newMesh.meshTemp.vertexTemp.pos[2] = meshS.at(i).vertex.at(l).pos[m];
+				}
+				else if (m == 1)
+				{
+					newMesh.meshTemp.vertexTemp.pos[m] = meshS.at(i).vertex.at(l).pos[m];
+				}
+				else if (m == 2)
+				{
+					newMesh.meshTemp.vertexTemp.pos[0] = meshS.at(i).vertex.at(l).pos[m];
+				}
 				newMesh.meshTemp.vertexTemp.nor[m] = meshS.at(i).vertex.at(l).nor[m];
 				newMesh.meshTemp.vertexTemp.tan[m] = meshS.at(i).vertex.at(l).tan[m];
 				newMesh.meshTemp.vertexTemp.bitan[m] = meshS.at(i).vertex.at(l).bitan[m];

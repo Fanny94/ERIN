@@ -50,6 +50,7 @@ public:
 		Matrix world;
 		Matrix view;
 		Matrix projection;
+		XMFLOAT4 camPos;
 	};
 
 	Matrix viewProj;
@@ -66,6 +67,18 @@ public:
 		XMFLOAT4 difColor;
 		int hasTexture;
 		float padding[3];
+	};
+
+	ID3D11Buffer* customFormatBuffer = nullptr;
+
+	struct CustomFormat
+	{
+		float diffuseColor[3];
+		float paddingDC;
+		float ambientColor[3];
+		float paddingAC;
+		float specularColor[3];
+		float shininess;
 	};
 
 	struct Vertex
