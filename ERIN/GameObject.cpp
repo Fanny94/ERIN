@@ -65,18 +65,18 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 		this->behavior->update(player, thisEnemy);
 
 		// static number of enemies
-		for (int i = 0; i < 4; i++)
-		{
-			if (myself->getObjectID() != allEnemies[i]->getObjectID())
-			{
-				// test lines to see values quick
-				int me = myself->getObjectID();
-				int other = allEnemies[i]->getObjectID();
+		//for (int i = 0; i < 4; i++)
+		//{
+		//	if (myself->getObjectID() != allEnemies[i]->getObjectID())
+		//	{
+		//		// test lines to see values quick
+		//		int me = myself->getObjectID();
+		//		int other = allEnemies[i]->getObjectID();
 
-				// cohesion calculations
-				this->behavior->cohesion(*myself->pos, *allEnemies[i]->pos);
-			}
-		}
+		//		// cohesion calculations
+		//		this->behavior->cohesion(*myself->pos, *allEnemies[i]->pos);
+		//	}
+		//}
 		//this->behavior->alignment();
 		//this->behavior->separation();
 

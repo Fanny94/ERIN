@@ -5,6 +5,10 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
 	this->running = true;
+
+	this->gameState = TitleScreen;
+	cout << "Title Screen" << endl;
+
 	this->camera = new Camera();
 	this->graphics = new Graphics();
 	this->customImport = new CustomImport();
@@ -88,8 +92,7 @@ Engine::~Engine()
 
 void Engine::processInput()
 {
-
-	player->input->update(); // test object, should be done for all objects
+	player->input->update();
 
 	if (player->input->isConnected())
 	{
@@ -236,7 +239,7 @@ void Engine::processInput()
 				if (pMenuOption == 0)
 				{
 					pMenuOption = 1;
-					cout << "Pause Menu Option " << pMenuOption << " (High Score)" << endl;
+					cout << "Pause Menu Option " << pMenuOption << " (Restart)" << endl;
 				}
 				else if (pMenuOption == 2)
 				{
@@ -267,7 +270,7 @@ void Engine::processInput()
 				else if (pMenuOption == 1)
 				{
 					pMenuOption = 3;
-					cout << "Pause Menu Option " << pMenuOption << " (Title Screen)" << endl;
+					cout << "Pause Menu Option " << pMenuOption << " (Main Menu)" << endl;
 				}
 			}
 
@@ -307,7 +310,7 @@ void Engine::processInput()
 			break;
 		}
 
-		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
+		/*if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
@@ -322,7 +325,7 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_START] == true)
 		{
-		}
+		}*/
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
 			cout << "Shutting down game!" << endl;
@@ -330,7 +333,7 @@ void Engine::processInput()
 		}
 
 		// BUMPERS & TRIGGERS
-		if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
+		/*if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
 		{
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
@@ -342,10 +345,10 @@ void Engine::processInput()
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
 		{
-		}
+		}*/
 
 		// DPAD
-		if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+		/*if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 		{
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
@@ -356,7 +359,7 @@ void Engine::processInput()
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
 		{
-		}
+		}*/
 	}
 }
 
@@ -370,20 +373,8 @@ void Engine::update(double deltaTimeMs)
 
 	switch (gameState)
 	{
-	case TitleScreen:
-		//TitleScreen->render();			// Example of how to render the title screen
-
-		for (static bool first = true; first; first = false)
-		{
-			cout << "Title Screen" << endl;
-		}
-		break;
-	case MainMenu:
-		//MainMenu->render();				// Example of how to render the main menu
-		break;
 	case GameRunning:
 		//GameLogic->levelHandler();		// Example of how to start a level
-		
 		player->update(deltaTimeMs);
 
 		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
@@ -395,7 +386,14 @@ void Engine::update(double deltaTimeMs)
 			enemies[i]->update(deltaTimeMs);
 		}
 
-		render();
+		//render();
+		break;
+	case TitleScreen:
+		//TitleScreen->render();			// Example of how to render the title screen
+		graphics->TitleScreenRender();
+		break;
+	case MainMenu:
+		//MainMenu->render();				// Example of how to render the main menu
 		break;
 	case Pause:
 		break;
@@ -408,32 +406,38 @@ void Engine::render()
 {
 	//graphics->UpdateConstantBuffer();
 
-	/*
-
-	player shader;
-	player rend;
-	player shader delete;
-
-	for (int i = 0; i < assetmanager->numberOfMeshes; i++)
+	switch (gameState)
 	{
-		graphics->CreateShaders("filename");
-		graphics->RendFBX(x);
-		graphics->DeleteShader();
+	case GameRunning:
+		//GameLogic->levelHandler();		// Example of how to start a level
+
+		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
+		gameObject->update(deltaTimeMs);*/
+		graphics->Render();
+		graphics->RendPlayer(*player->objectMatrix);
+		/*graphics->RendPlayer(*gameObject->objectMatrix);*/
+		//graphics->RenderCustom(customImport->meshes.at(0));
+
+		for (int i = 0; i < 4; i++)
+		{
+			graphics->RendPlayer(*enemies[i]->objectMatrix);
+		}
+
+		camera->InitCamera();
+		
+		break;
+	case TitleScreen:
+		//TitleScreen->render();			// Example of how to render the title screen
+		graphics->TitleScreenRender();
+		break;
+	case MainMenu:
+		//MainMenu->render();				// Example of how to render the main menu
+		graphics->MainMenuRender();
+		break;
+	case Pause:
+		//graphics->PauseRender();
+		break;
 	}
-
-	*/
-
-	graphics->Render();
-	graphics->RendPlayer(*player->objectMatrix);
-	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
-	//graphics->RenderCustom(customImport->meshes.at(0));
-	
-	for (int i = 0; i < 4; i++)
-	{
-		graphics->RendPlayer(*enemies[i]->objectMatrix);
-	}
-
-	camera->InitCamera();
 
 	// Switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(1, 0);

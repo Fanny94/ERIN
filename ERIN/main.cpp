@@ -61,7 +61,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 				lag -= MS_PER_UPDATE;
 			}
 
-			//engine->render();
+			engine->render();
 		}
 
 	}

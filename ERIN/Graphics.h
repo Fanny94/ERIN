@@ -15,9 +15,14 @@ public:
 	~Graphics();
 
 	void SetViewport();
+
 	void Render();
+	void TitleScreenRender();
+	void MainMenuRender();
+	void PauseRender();
 	void RendPlayer(Matrix transform);
 	void RenderCustom(Mesh mesh);
+
 	void CreateShaders();
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();

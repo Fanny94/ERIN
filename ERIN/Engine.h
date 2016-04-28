@@ -41,7 +41,7 @@ public:
 	bool getRunning() { return running; };
 	bool aButtonActive = false;
 
-	GameStateManager gameState = TitleScreen;
+	GameStateManager gameState;
 	//CurrLevelManager currLevel = Level1;
 
 	// Pause
