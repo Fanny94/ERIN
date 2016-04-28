@@ -175,7 +175,7 @@ void Engine::update(double deltaTimeMs)
 
 	for (int i = 0; i < 4; i++)
 	{
-		enemies[i]->updateBehavior(*player->pos, enemies[i], enemies);
+		enemies[i]->updateBehavior(*player->shipPos, enemies[i], enemies);
 		enemies[i]->update(deltaTimeMs);
 	}
 
@@ -202,7 +202,8 @@ void Engine::render()
 	*/
 
 	graphics->Render();
-	graphics->RendPlayer(*player->objectMatrix);
+	graphics->RendPlayer(*player->shipMatrix);
+	graphics->RendPlayer(*player->turretMatrix);
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
 	//graphics->RenderCustom(customImport->meshes.at(0));
 	
