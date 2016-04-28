@@ -9,15 +9,23 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 	this->customImport = new CustomImport();
 
-	// test input
-	//this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f, true);
-	this->enemies = new GameObject* [5];
-	this->enemies[0] = new GameObject("enemy1", 5.0f, 0.0f, 0.1f, true);
-	this->enemies[1] = new GameObject("enemy2", 0.0f, 5.0f, 0.1f, true);
-	this->enemies[2] = new GameObject("enemy3", -5.0f, 0.0f, 0.1f, true);
-	this->enemies[3] = new GameObject("enemy4", 0.0f, -5.0f, 0.1f, true);
-
 	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
+
+	// creating enemies
+	/*size_t size = 10;
+	vector<GameObject> Vector_enemies(size);*/
+	//vector<GameObject> stageObjects;
+
+	/*this->gameObject = new GameObject(0, "triangle", 0.0f, 0.0f, 0.5f, true);
+	Vector_enemies.push_back(*gameObject);
+	delete gameObject;
+	Vector_enemies.clear();*/
+
+	this->enemies = new GameObject*[5];
+	this->enemies[0] = new GameObject(1, "enemy1", 5.0f, 0.0f, 0.1f, true);
+	this->enemies[1] = new GameObject(2, "enemy2", 0.0f, 5.0f, 0.1f, true);
+	this->enemies[2] = new GameObject(3, "enemy3", -5.0f, 0.0f, 0.1f, true);
+	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);
 
 	//create window
 	wndHandle = InitWindow(hInstance);
@@ -41,7 +49,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		graphics->CreateTriangle(enemies[0]->triangle/*gameObject->triangle*/);
+		graphics->CreateTriangle(enemies[0]->triangle);
 
 		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
 		customImport->NewMesh();
@@ -160,13 +168,14 @@ void Engine::update(double deltaTimeMs)
 	// update code
 	// example physics calculation using delta time:
 	// object.x = object.x + (object.speed * deltaTimeS);
+
 	player->update(deltaTimeMs);
-	//gameObject->updateBehavior(*player->pos);
-	//gameObject->update(deltaTimeMs);
+	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
+	gameObject->update(deltaTimeMs);*/
 
 	for (int i = 0; i < 4; i++)
 	{
-		enemies[i]->updateBehavior(*player->pos);
+		enemies[i]->updateBehavior(*player->shipPos, enemies[i], enemies);
 		enemies[i]->update(deltaTimeMs);
 	}
 
@@ -193,8 +202,9 @@ void Engine::render()
 	*/
 
 	graphics->Render();
-	graphics->RendPlayer(*player->objectMatrix);
-	//graphics->RendPlayer(*gameObject->objectMatrix);
+	graphics->RendPlayer(*player->shipMatrix);
+	graphics->RendPlayer(*player->turretMatrix);
+	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
 	graphics->RenderCustom(customImport->meshes.at(0));
 	
 	for (int i = 0; i < 4; i++)
