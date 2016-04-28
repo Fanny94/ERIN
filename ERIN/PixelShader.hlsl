@@ -1,13 +1,6 @@
 SamplerState ObjSamplerState;
 Texture2D ObjTexture: register(t0);
 
-cbuffer OBJ
-{
-	float4 difColor;
-	int hasTexture;
-	float3 padding;
-};
-
 cbuffer CustomFormat
 {
 	float3 diffuseColor;
