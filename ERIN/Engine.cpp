@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include "Camera.h"
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
@@ -10,8 +9,24 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 	this->gameLogic = new GameLogic();
 
-	// test input
-	this->gameObject = new GameObject("player", -0.5f, 0.0f, 0.0f);
+	this->customImport = new CustomImport();
+	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
+
+	// creating enemies
+	/*size_t size = 10;
+	vector<GameObject> Vector_enemies(size);*/
+	//vector<GameObject> stageObjects;
+
+	/*this->gameObject = new GameObject(0, "triangle", 0.0f, 0.0f, 0.5f, true);
+	Vector_enemies.push_back(*gameObject);
+	delete gameObject;
+	Vector_enemies.clear();*/
+
+	this->enemies = new GameObject*[5];
+	this->enemies[0] = new GameObject(1, "enemy1", 5.0f, 0.0f, 0.1f, true);
+	this->enemies[1] = new GameObject(2, "enemy2", 0.0f, 5.0f, 0.1f, true);
+	this->enemies[2] = new GameObject(3, "enemy3", -5.0f, 0.0f, 0.1f, true);
+	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);
 
 	//create window
 	wndHandle = InitWindow(hInstance);
@@ -25,8 +40,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		return;
 	}
 
-	// camera->wndH = wndHandle; Behövs denna raden?? / Marc
-
 	graphics->camera = camera;
 
 	// window is valid
@@ -39,24 +52,29 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		graphics->CreateTriangle(gameObject->triangle);
+		graphics->CreateTriangle(enemies[0]->triangle);
 
-		graphics->CreateTriangleAABBBox(gameObject->triangle);
+		graphics->CreateTriangleAABBBox(player->triangle);
 		graphics->AABBTrianglePoints();
 
-		if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		/*if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
 			return;
-		}
+		}*/
 
 		graphics->CreateSquareAABBBox();	
 		graphics->AABBSquarePoints();
+		
+		/*customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
+		customImport->NewMesh();*/
+	
 		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
-
 		{
 			return;
+
 		}
 		*/
+
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -67,135 +85,90 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 Engine::~Engine()
 {
 	delete this->graphics;
-	delete this->gameObject;
 	delete this->camera;
 	delete this->gameLogic;
 
-	
-	// finish program
-	//DestroyWindow(wndHandle);
-	
-	// return how the program finished
-	//return (int)msg.wParam;
+	// player enemies
+	delete this->player;
+	//delete this->gameObject;
+	delete this->customImport;
+
+	for (int i = 0; i < 4; i++)
+	{
+		delete enemies[i];
+	}
+	delete enemies;
 }
 
 void Engine::processInput()
 {
-	gameObject->input->update(); // test object, should be done for all objects
 
-	if (gameObject->input->isConnected())
+	player->input->update(); // test object, should be done for all objects
+
+	if (player->input->isConnected())
 	{
-		if (this->gameObject->input->State._buttons[GamePad_Button_Y] == true)
+		player->playerInput();
+
+		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
 			this->running = false;
 		}
-		if (this->gameObject->input->State._buttons[GamePad_Button_X] == true)
+		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
 			this->running = false;
 		}
-		if (this->gameObject->input->State._buttons[GamePad_Button_B] == true)
+		if (this->player->input->State._buttons[GamePad_Button_B] == true)
 		{
 			this->running = false;
 		}
-		if (this->gameObject->input->State._buttons[GamePad_Button_A] == true)
+		if (this->player->input->State._buttons[GamePad_Button_A] == true)
 		{
 			this->running = false;
 		}
 
-		if (this->gameObject->input->State._buttons[GamePad_Button_START] == true)
+		if (this->player->input->State._buttons[GamePad_Button_START] == true)
 		{
 			this->running = false;
 		}
-		if (this->gameObject->input->State._buttons[GamePad_Button_BACK] == true)
-		{
-			this->running = false;
-		}
-
-		if (this->gameObject->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
-		{
-			this->running = false;
-		}
-		if (this->gameObject->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
+		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
 			this->running = false;
 		}
 
-		if (this->gameObject->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
+		if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
 		{
 			this->running = false;
 		}
-		if (this->gameObject->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
+		if (this->player->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
 		{
 			this->running = false;
 		}
 
-		// test camera movement
-		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+		if (this->player->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
+		{
+			this->running = false;
+		}
+		if (this->player->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
+		{
+			this->running = false;
+		}
+
+		// Dpad camera movement
+		if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 		{
 			this->camera->cameraMoveLeft();
 		}
-		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+		if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
 		{
 			this->camera->cameraMoveRight();
 		}
-		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+		if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
 		{
 			this->camera->cameraMoveUp();
 		}
-		if (this->gameObject->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+		if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
 		{
 			this->camera->cameraMoveDown();
-		}
-
-		// test xbox thumstix
-
-		/*float leftX = this->gameObject->input->State._left_thumbstick.x;
-		float leftY = this->gameObject->input->State._left_thumbstick.y;
-
-		if (leftX < -0.0f)
-		{
-			this->camera->cameraMoveLeft(leftX);
-		}
-		if (leftX > 0.0f)
-		{
-			this->camera->cameraMoveRight(leftX);
-		}
-		if (leftY < -0.0f)
-		{
-			this->camera->cameraMoveDown(leftY);
-		}
-		if (leftY > 0.0f)
-		{
-			this->camera->cameraMoveUp(leftY);
-		}*/
-
-		float thumbLeftX = this->gameObject->input->State._left_thumbstick.x;
-		float thumbLeftY = this->gameObject->input->State._left_thumbstick.y;
-
-		float playerX = this->gameObject->GetX();
-		float playerY = this->gameObject->GetY();
-
-		float speed = 5.0f; // (float)(5.0f * time);
-
-		if (thumbLeftX < -0.0f)
-		{
-			playerX -= 0.001f;
-			this->gameObject->SetX(playerX);
-		}
-		if (thumbLeftX > 0.0f)
-		{
-			playerX += 0.001f;
-			this->gameObject->SetX(playerX);
-		}
-		if (thumbLeftY < -0.0f)
-		{
-			playerY -= 0.001f;
-			this->gameObject->SetY(playerY);
-		}
-		if (thumbLeftY > 0.0f)
-		{
-			playerY += 0.001f;
-			this->gameObject->SetY(playerY);
 		}
 	}
 }
@@ -208,28 +181,60 @@ void Engine::update(double deltaTimeMs)
 	// example physics calculation using delta time:
 	// object.x = object.x + (object.speed * deltaTimeS);
 
-	//printf("Elapsed time: %fS.\n", deltaTimeS);
+	player->update(deltaTimeMs);
+	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
+	gameObject->update(deltaTimeMs);*/
 
-	//gameObject->input->isConnected();
-	gameObject->update();
+	for (int i = 0; i < 4; i++)
+	{
+		enemies[i]->updateBehavior(*player->shipPos, enemies[i], enemies);
+		enemies[i]->update(deltaTimeMs);
+	}
+
+	//printf("Elapsed time: %fS.\n", deltaTimeS);
 }
 
 void Engine::render()
 {
 	graphics->UpdateConstantBuffer();
 	
-	graphics->Render();
-	graphics->RendPlayer(*gameObject->objectMatrix);
 	graphics->RendAABB();
-	graphics->RendTriangleAABB(*gameObject->objectMatrix);
+	graphics->RendTriangleAABB(*player->shipMatrix);
 
 	//graphics->transformBoundingBox(*gameObject->objectMatrix);
 	graphics->AABBtoAABB();
+	//graphics->UpdateConstantBuffer();
+
+	/*
+
+	player shader;
+	player rend;
+	player shader delete;
+
+	for (int i = 0; i < assetmanager->numberOfMeshes; i++)
+	{
+	graphics->CreateShaders("filename");
+	graphics->RendFBX(x);
+	graphics->DeleteShader();
+	}
+
+	*/
+
+	graphics->Render();
+	graphics->RendPlayer(*player->shipMatrix);
+	graphics->RendPlayer(*player->turretMatrix);
+	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
+	//graphics->RenderCustom(customImport->meshes.at(0));
+	
+	for (int i = 0; i < 4; i++)
+	{
+		graphics->RendPlayer(*enemies[i]->objectMatrix);
+	}
 
 	camera->InitCamera();
 
-	// switch front- and back-buffer
-	graphics->get_gSwapChain()->Present(0, 0);
+	// Switch front- and back-buffer
+	graphics->get_gSwapChain()->Present(1, 0);
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)
@@ -242,13 +247,12 @@ HWND Engine::InitWindow(HINSTANCE hInstance)
 	winClassInfo.lpfnWndProc = WndProc; // This function is called for events
 	winClassInfo.hInstance = hInstance;
 	winClassInfo.lpszClassName = "WindowClass";
-	// Window is the name of the class
 
 	if (!RegisterClassEx(&winClassInfo))
 		return false;
 
 	// the window size
-	RECT rc = { 0, 0, (LONG) graphics->get_gWidth() , (LONG) graphics->get_gHeight() };
+	RECT rc = { 0, 0, (LONG)graphics->get_gWidth() , (LONG)graphics->get_gHeight() };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND handle = CreateWindow(

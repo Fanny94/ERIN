@@ -33,6 +33,9 @@ Graphics::~Graphics()
 	gConstantBuffer->Release();
 	objBuffer->Release();
 
+	/*customVertBuff->Release();
+	this->customVertBuff = nullptr;*/
+
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
 	this->gSwapChain = nullptr;
@@ -66,21 +69,19 @@ void Graphics::Render()
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	/*gDeviceContext->HSSetShader(nullptr, nullptr, 0);
-	gDeviceContext->DSSetShader(nullptr, nullptr, 0);
-	gDeviceContext->GSSetShader(nullptr, nullptr, 0);*/
-	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+	/*gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);*/
 
-	UINT32 vertexSize = sizeof(float) * 6;
-	UINT32 offset = 0;
+	/*UINT32 vertexSize = sizeof(float) * 6;
+	UINT32 offset = 0;*/
 	/*gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	gDeviceContext->IASetInputLayout(gVertexLayout);
 
 	gDeviceContext->Draw(3, 0);*/
-	gDeviceContext->IASetInputLayout(gVertexLayout);
-	UINT32 vertexMS = sizeof(Vertex);
+
+	/*UINT32 vertexMS = sizeof(Vertex);
+>>>>>>> refs/remotes/origin/master
 
 	D3D11_MAPPED_SUBRESOURCE mappedOBJ;
 	HRESULT hr = gDeviceContext->Map(objBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedOBJ);
@@ -105,7 +106,7 @@ void Graphics::Render()
 		int indexDrawAmount = meshSubsetIndexStart[i + 1] - meshSubsetIndexStart[i];
 		if (!material[meshSubsetTexture[i]].transparent)
 			gDeviceContext->DrawIndexed(indexDrawAmount, indexStart, 0);
-	}
+	}*/
 }
 
 void Graphics::RendPlayer(Matrix transform)
@@ -137,7 +138,7 @@ void Graphics::RendPlayer(Matrix transform)
 
 	worldViewProj = worldViewProj.Transpose();
 
-	//world = world.Transpose();
+	transform = transform.Transpose();
 
 	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
 	if (FAILED(result))
@@ -147,7 +148,7 @@ void Graphics::RendPlayer(Matrix transform)
 
 	MatrixPtr2 = (MATRICES*)mapped.pData;
 	MatrixPtr2->worldViewProj = worldViewProj;
-	MatrixPtr2->world = world;
+	MatrixPtr2->world = transform;
 
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
@@ -249,8 +250,37 @@ void Graphics::RendTriangleAABB(Matrix transform)
 
 }
 
-//http://gamedev.stackexchange.com/questions/49779/different-shaders-for-different-objects-directx-11
-//http://www.gamedev.net/page/resources/_/technical/game-programming/swept-aabb-collision-detection-and-response-r3084
+void Graphics::RenderCustom(Mesh mesh)
+{
+	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+	//Create Vertex Buffer
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(VertexCustom) * mesh.mesh.at(0).VertexCount;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = &mesh.mesh.at(0).vertex[0];
+
+	hr = gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &customVertBuff);
+
+	UINT32 meshVertexSize = sizeof(VertexCustom);
+	UINT32 offset = 0;
+
+	for (int i = 0; i < mesh.mesh.size(); i++)
+	{
+		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
+		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
+	}
+}
 
 HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 {
@@ -266,6 +296,7 @@ HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 	swapChainD.OutputWindow = wndHandle;
 	swapChainD.SampleDesc.Count = 4;
 	swapChainD.Windowed = TRUE;
+	ShowCursor(FALSE);
 
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
@@ -308,7 +339,7 @@ void Graphics::CreateShaders()
 		0,				// shader compile options
 		0,				// effect compile options
 		&pVS,			// double pointer to ID3DBlob
-		nullptr			// pointer for Error Blob messages.			
+		nullptr			// pointer for Error Blob messages.
 		);
 
 	D3D11_INPUT_ELEMENT_DESC inputDesc[] =
@@ -334,7 +365,7 @@ void Graphics::CreateShaders()
 		0,				// shader compile options
 		0,				// effect compile options
 		&pPS,			// double pointer to ID3DBlob
-		nullptr			// pointer for Error Blob messages.			
+		nullptr			// pointer for Error Blob messages.		
 		);
 
 	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
@@ -467,6 +498,7 @@ void Graphics::CreateConstantBuffer()
 	cOBJBufferDesc.MiscFlags = 0;
 
 	gDevice->CreateBuffer(&cOBJBufferDesc, NULL, &objBuffer);
+
 }
 
 void Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
@@ -969,7 +1001,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 							wstring vertPart;
 							int whichPart = 0;	//(vPos/vTexCoord/vNorm)
 
-							//Parse this string
+												//Parse this string
 							for (int j = 0; j < VertDef.length(); j++)
 							{
 								if (VertDef[j] != '/')		//If there is no divider "/", add a char to our vertPart
@@ -985,7 +1017,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										wstringToInt >> vertPosIndexTemp;
 										vertPosIndexTemp -= 1;			//subtract one since c++ arrays start with 0, and obj start with 1
 
-										//Check to see if the vert pos was the only thing specified
+																		//Check to see if the vert pos was the only thing specified
 										if (j == VertDef.length() - 1)
 										{
 											vertNormIndexTemp = 0;
@@ -1041,7 +1073,10 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										{
 											indices.push_back(iCheck);			//Set index for this vertex
 											vertAlreadyExists = true;			//If we've made it here, the vertex already exists
-										}}}}
+										}
+									}
+								}
+							}
 							//If this vertex is not already in our vertex arrays, put it there
 							if (!vertAlreadyExists)
 							{
@@ -1138,7 +1173,10 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										{
 											indices.push_back(iCheck);			//Set index for this vertex
 											vertAlreadyExists = true;			//If we've made it here, the vertex already exists
-										}}}}
+										}
+									}
+								}
+							}
 							if (!vertAlreadyExists)
 							{
 								vertPosIndex.push_back(vertPosIndexTemp);
@@ -1153,7 +1191,9 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 							meshTriangles++;					//New triangle defined
 							vIndex++;
-						}}}
+						}
+					}
+				}
 				break;
 
 			case 'm':		//mtllib - material library filename
@@ -1177,7 +1217,12 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 									{
 										//Store the material libraries filename
 										meshMatLib = filePath;
-									}}}}}}
+									}
+								}
+							}
+						}
+					}
+				}
 				break;
 
 			case 'u':		//usemtl - which material to use
@@ -1204,17 +1249,24 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										fileIn >> meshMaterialsTemp;	//Get next type
 
 										meshMaterials.push_back(meshMaterialsTemp);
-									}}}}}}
+									}
+								}
+							}
+						}
+					}
+				}
 				break;
 
 			default:
 				break;
-			}}}
+			}
+		}
+	}
 	else			//If we could not open the file
 	{
 		gSwapChain->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
 
-		//create message
+															//create message
 		LPCSTR message = "Could not open OBJ file ";
 
 		MessageBox(0, message, "Error", MB_OK);
@@ -1224,7 +1276,7 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 	subsetIndexStart.push_back(vIndex); //There won't be another index start after our last subset, so set it here
 
-	//This makes sure the first subset does not contain '0' indices
+										//This makes sure the first subset does not contain '0' indices
 	if (subsetIndexStart[1] == 0)
 	{
 		subsetIndexStart.erase(subsetIndexStart.begin() + 1);
@@ -1379,12 +1431,18 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 											material[matCount - 1].texArrayIndex = meshSRV.size();
 											meshSRV.push_back(tempMeshSRV);
 											material[matCount - 1].hasTexture = true;
-										}}}}
+										}
+									}
+								}
+							}
 							//map_d - alpha map
 							else if (checkChar == 'd')
 							{
 								material[matCount - 1].transparent = true;
-							}}}}
+							}
+						}
+					}
+				}
 				break;
 
 			case 'n':		//newmtl - declare new material
@@ -1415,12 +1473,19 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 										material[matCount].texArrayIndex = 0;
 										matCount++;
 										kdset = false;
-									}}}}}}
+									}
+								}
+							}
+						}
+					}
+				}
 				break;
 
 			default:
 				break;
-			}}}
+			}
+		}
+	}
 	else
 	{
 		gSwapChain->SetFullscreenState(false, NULL);		//Make sure we are out of fullscreen
@@ -1515,7 +1580,8 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 
 					normalSum = XMVectorSet(tX, tY, tZ, 0.0f);
 					facesUsing++;
-				}}
+				}
+			}
 			//Get the actual normal by dividing the normalSum by the number of faces sharing the vertex
 			normalSum = normalSum / facesUsing;
 
@@ -1530,7 +1596,8 @@ bool Graphics::LoadObjModel(wstring filename, ID3D11Buffer** vertBuff, ID3D11Buf
 			//Clear normalSum and facesUsing for next vertex
 			normalSum = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 			facesUsing = 0;
-		}}
+		}
+	}
 
 	//Create index buffer
 	D3D11_BUFFER_DESC indexBufferDesc;

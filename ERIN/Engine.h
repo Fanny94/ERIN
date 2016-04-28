@@ -4,11 +4,12 @@
 #include "Linker.h"
 #include "Graphics.h"
 #include "GameLogic.h"
-#include "AssetManager.h"
 #include "Mesh.h"
 #include "Camera.h"
+#include "CustomImport.h"
 
 // test input
+#include "Player.h"
 #include "GameObject.h"
 
 class Engine
@@ -31,12 +32,14 @@ private:
 	
 	Graphics* graphics;
 	GameLogic* gameLogic;
-	AssetManager* assetManager;
 	Mesh* mesh;
 	Camera* camera;
+	CustomImport* customImport;
 
 	// test input
+	Player* player;
 	GameObject* gameObject;
+	GameObject** enemies;
 };
 
 #endif // !ENGINE_H

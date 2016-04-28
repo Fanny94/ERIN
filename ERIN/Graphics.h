@@ -4,6 +4,7 @@
 #include "Structs.h"
 #include "Camera.h"
 #include "WICTextureLoader.h"
+#include "Mesh.h"
 
 using namespace std;
 class Camera;
@@ -19,12 +20,14 @@ public:
 	void RendPlayer(Matrix transform);
 	void RendAABB();
 	void RendTriangleAABB(Matrix transform);
+	void RenderCustom(Mesh mesh);
 	void CreateShaders();
 	void CreateDepthBuffer();
 
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
+
 	void CreateTriangleAABBBox(TriangleVertex* triangleVertices);
 	void CreateSquareAABBBox();
 	void AABBSquarePoints();
@@ -32,8 +35,9 @@ public:
 	//AABBBox* transformBoundingBox(Matrix transform);
 
 	bool AABBtoAABB();
+
 	void UpdateConstantBuffer();
-	
+
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
 
@@ -83,6 +87,15 @@ public:
 		XMFLOAT3 pos;
 		XMFLOAT2 texCoord;
 		XMFLOAT3 normal;
+	};
+
+	struct VertexCustom
+	{
+		float pos[3];
+		float nor[3];
+		float uv[2];
+		float tan[3];
+		float bitan[3];
 	};
 
 	struct SurfaceMaterial
@@ -143,6 +156,8 @@ private:
 	ID3D11DeviceContext* gDeviceContext = nullptr;
 	IDXGISwapChain* gSwapChain = nullptr;
 	ID3D11RenderTargetView* gBackbufferRTV = nullptr;
+	ID3D11DepthStencilView* gDepthStencilView = nullptr;
+	ID3D11Texture2D* gDepthView = nullptr;
 
 	ID3D11InputLayout* gVertexLayout = nullptr;
 	ID3D11VertexShader* gVertexShader = nullptr;
@@ -158,9 +173,10 @@ private:
 	ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
 	//-------------------------------------------
 
-	ID3D11Texture2D* gDepthView = nullptr;
-	ID3D11DepthStencilView* gDepthStencilView = nullptr;
 	ID3D11Buffer* gConstantBuffer = nullptr;
+
+	ID3D11Buffer* customVertBuff = nullptr;
+	HRESULT hr;
 };
 
 #endif // !GRAPHICS_H

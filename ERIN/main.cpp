@@ -21,7 +21,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 
 	MSG msg = { 0 };
 
+
+	//create console window
 	AllocConsole();
+
+	//if you get an error because of freopen
+	//Go to proporties and write _CRT_SECURE_NO_WARNINGS in preprocessor definitions 
 	freopen("CONOUT$", "w", stdout);
 
 	Engine* engine = new Engine(hInstance, hPrevInstance, lpCommandLine, nCommandShow);
@@ -50,7 +55,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 
 			engine->processInput();
 
-			// TODO not working correctly, and I think I know why (mainloop and an engineloop)
 			while (lag >= MS_PER_UPDATE)
 			{
 				engine->update(elapsed);
@@ -61,6 +65,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 		}
 
 	}
+
 	fclose(stdout);
 	delete engine;
 
