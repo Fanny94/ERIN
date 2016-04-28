@@ -55,7 +55,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 
 			engine->processInput();
 
-			// TODO not working correctly, and I think I know why (mainloop and an engineloop)
 			while (lag >= MS_PER_UPDATE)
 			{
 				engine->update(elapsed);

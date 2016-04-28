@@ -1,19 +1,31 @@
 #include "Engine.h"
-#include <iostream>
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-
-using namespace std;
 
 Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLine, int nCommandShow)
 {
 	this->running = true;
 	this->camera = new Camera();
 	this->graphics = new Graphics();
+	this->customImport = new CustomImport();
 
-	// test input
-	this->gameObject = new GameObject("triangle", 0.0f, 0.0f, 0.5f);
 	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
+
+	// creating enemies
+	/*size_t size = 10;
+	vector<GameObject> Vector_enemies(size);*/
+	//vector<GameObject> stageObjects;
+
+	/*this->gameObject = new GameObject(0, "triangle", 0.0f, 0.0f, 0.5f, true);
+	Vector_enemies.push_back(*gameObject);
+	delete gameObject;
+	Vector_enemies.clear();*/
+
+	this->enemies = new GameObject*[5];
+	this->enemies[0] = new GameObject(1, "enemy1", 5.0f, 0.0f, 0.1f, true);
+	this->enemies[1] = new GameObject(2, "enemy2", 0.0f, 5.0f, 0.1f, true);
+	this->enemies[2] = new GameObject(3, "enemy3", -5.0f, 0.0f, 0.1f, true);
+	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);
 
 	//create window
 	wndHandle = InitWindow(hInstance);
@@ -37,19 +49,21 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		graphics->CreateTriangle(gameObject->triangle);
+		graphics->CreateTriangle(enemies[0]->triangle);
 
-		if (!graphics->LoadObjModel(L"C:/Users/vilu14/Documents/GitHub/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		/*customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
+		customImport->NewMesh();*/
+
+		/*if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/stage.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
 			return;
-		}
+		}*/
 		
 		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
-
 		{
 			return;
-		}
-		*/
+		}*/
+		
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -60,9 +74,16 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 Engine::~Engine()
 {
 	delete this->graphics;
-	delete this->player;
-	delete this->gameObject;
 	delete this->camera;
+	delete this->player;
+	//delete this->gameObject;
+	delete this->customImport;
+
+	for (int i = 0; i < 4; i++)
+	{
+		delete enemies[i];
+	}
+	delete enemies;
 }
 
 void Engine::processInput()
@@ -347,8 +368,6 @@ void Engine::update(double deltaTimeMs)
 	// example physics calculation using delta time:
 	// object.x = object.x + (object.speed * deltaTimeS);
 
-	//printf("Elapsed time: %fS.\n", deltaTimeS);
-
 	switch (gameState)
 	{
 	case TitleScreen:
@@ -366,18 +385,28 @@ void Engine::update(double deltaTimeMs)
 		//GameLogic->levelHandler();		// Example of how to start a level
 		
 		player->update(deltaTimeMs);
-		gameObject->update(deltaTimeMs);
+
+		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
+		gameObject->update(deltaTimeMs);*/
+
+		for (int i = 0; i < 4; i++)
+		{
+			enemies[i]->updateBehavior(*player->pos, enemies[i], enemies);
+			enemies[i]->update(deltaTimeMs);
+		}
 
 		render();
 		break;
 	case Pause:
 		break;
 	}
+
+	// printf("Elapsed time: %fS.\n", deltaTimeS);
 }
 
 void Engine::render()
 {
-	graphics->UpdateConstantBuffer();
+	//graphics->UpdateConstantBuffer();
 
 	/*
 
@@ -396,13 +425,18 @@ void Engine::render()
 
 	graphics->Render();
 	graphics->RendPlayer(*player->objectMatrix);
-	graphics->RendPlayer(*gameObject->objectMatrix);
+	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
+	//graphics->RenderCustom(customImport->meshes.at(0));
 	
+	for (int i = 0; i < 4; i++)
+	{
+		graphics->RendPlayer(*enemies[i]->objectMatrix);
+	}
 
 	camera->InitCamera();
 
 	// Switch front- and back-buffer
-	graphics->get_gSwapChain()->Present(0, 0);
+	graphics->get_gSwapChain()->Present(1, 0);
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)
@@ -420,7 +454,7 @@ HWND Engine::InitWindow(HINSTANCE hInstance)
 		return false;
 
 	// the window size
-	RECT rc = { 0, 0, (LONG) graphics->get_gWidth() , (LONG) graphics->get_gHeight() };
+	RECT rc = { 0, 0, (LONG)graphics->get_gWidth() , (LONG)graphics->get_gHeight() };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 	HWND handle = CreateWindow(

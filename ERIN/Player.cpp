@@ -32,6 +32,8 @@ Player::Player(string name, float x, float y, float z)
 	//this->axisAllignedBox = new AABBBox;
 	/*this->axisAllignedBox->min = XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX);
 	this->axisAllignedBox->max = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);*/
+
+	this->pos = new Position{ this->x, this->y, this->z };
 }
 
 Player::~Player()
@@ -40,6 +42,7 @@ Player::~Player()
 	delete this->triangle;
 	delete this->objectMatrix;
 	//delete this->axisAllignedBox;
+	delete this->pos;
 }
 
 
@@ -63,6 +66,10 @@ void Player::playerInput()
 
 void Player::update(double dt)
 {
+	this->pos->x = this->x;
+	this->pos->y = this->y;
+	this->pos->z = this->z;
+
 	if (!accelerating)
 	{
 		// deacceleration
@@ -87,7 +94,6 @@ void Player::update(double dt)
 	{
 		plannedHeading = XMConvertToDegrees(atan2f(thumbLeftX, thumbLeftY));
 	}
-	
 
 	x = x + velocityX;
 	y = y + velocityY;

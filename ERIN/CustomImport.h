@@ -3,98 +3,72 @@
 #define CUSTOMIMPORT_H
 #include "Linker.h"
 #include "Mesh.h"
+#include "Graphics.h"
+
+class Graphics;
 
 class CustomImport
 {
 private:
-	Mesh* meshPtr;
-	struct Vertex
-	{
-		float pos[3];
-		float nor[3];
-		float uv[2];
-		float tan[3];
-		float bitan[3];
-	};
-
 	/*struct PointLight
 	{
-		float intensity;
-		float color[3];
-		float position[3];
+	float intensity;
+	float color[3];
+	float position[3];
 	};
 
 	struct SpotLight
 	{
-		float intensity;
-		float color[3];
-		float position[3];
-		float rotation[3];
-		float scale[3];
+	float intensity;
+	float color[3];
+	float position[3];
+	float rotation[3];
+	float scale[3];
 	};
 
 	struct DirectionalLight
 	{
-		float intensity;
-		float color[3];
-		float rotation[3];
+	float intensity;
+	float color[3];
+	float rotation[3];
 	};
 
 	struct AreaLight
 	{
-		float intensity;
-		float color[3];
-		float position[3];
-		float rotation[3];
-		float height;
-		float width;
+	float intensity;
+	float color[3];
+	float position[3];
+	float rotation[3];
+	float height;
+	float width;
 	};
 
 	struct CustomVector
 	{
-		float cVector[3];
+	float cVector[3];
 	};
 
 	struct CustomFloat
 	{
-		float cFloat;
+	float cFloat;
 	};
 
 	struct CustomInt
 	{
-		int cInt;
+	int cInt;
 	};
 
 	struct CustomBool
 	{
-		bool cBool;
+	bool cBool;
 	};
 
 	struct CustomString
 	{
-		char cString[256];
+	char cString[256];
 	};*/
 
-	struct MeshStruct
-	{
-		unsigned int VertexCount;
-		unsigned int MaterialID;
-		unsigned int MeshID;
-		unsigned int ParentID;
-		unsigned int AttributeCount;
-		char MeshName[256];
-		float Translation[3];
-		float Rotation[3];
-		float Scale[3];
-		vector<Vertex> vertex;
-		Vertex vertexTemp;
-	};
-
-	unsigned int MeshCount;
-	vector<MeshStruct> meshS;
-	MeshStruct meshTemp;
-	/*unsigned int MaterialCount;
-	unsigned int GroupCount;
+	/*unsigned int GroupCount;
 	unsigned int LightCount;
 	unsigned int CameraCount;
 	unsigned int SkeletonAnimationCount;
@@ -163,6 +137,7 @@ public:
 	~CustomImport();
 	void LoadCustomFormat(string filePath);
 	void NewMesh();
+	vector<Mesh> meshes;
 };
 
 #endif // !CUSTOMIMPORT_H
