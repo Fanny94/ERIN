@@ -37,7 +37,7 @@ public:
 	HWND wndHandle;
 
 	bool getRunning() { return running; };
-
+	bool aButtonActive = false;
 
 	GameStateManager gameState = TitleScreen;
 	//CurrLevelManager currLevel = Level1;

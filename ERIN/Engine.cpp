@@ -139,26 +139,32 @@ void Engine::processInput()
 			}
 
 			// If accept
-			if (this->player->input->State._buttons[GamePad_Button_A] == true)
+			if (aButtonActive == false)
 			{
-				if (mainMenuOption == 0)
+				if (this->player->input->State._buttons[GamePad_Button_A] == true)
 				{
-					cout << "Game Running" << endl;
-					gameState = GameRunning;
+					if (mainMenuOption == 0)
+					{
+						cout << "Game Running" << endl;
+						gameState = GameRunning;
+					}
+					else if (mainMenuOption == 1)
+					{
+						cout << "High Score" << endl;
+						//gameState = HighScore;
+					}
+					else if (mainMenuOption == 2)
+					{
+						cout << "Help & Options" << endl;
+						//gameState = HelpAndOptions;
+					}
+					else if (mainMenuOption == 3)
+						this->running = false;
 				}
-				else if (mainMenuOption == 1)
-				{
-					cout << "High Score" << endl;
-					//gameState = HighScore;
-				}
-				else if (mainMenuOption == 2)
-				{
-					cout << "Help & Options" << endl;
-					//gameState = HelpAndOptions;
-				}
-				else if (mainMenuOption == 3)
-					this->running = false;
 			}
+
+			if (this->player->input->State._buttons[GamePad_Button_A] == false)
+				aButtonActive = false;
 			break;
 		case GameRunning:
 			if (this->player->input->State._buttons[GamePad_Button_START] == true)
@@ -227,7 +233,7 @@ void Engine::processInput()
 				else if (pMenuOption == 3)
 				{
 					pMenuOption = 1;
-					cout << "Pause Menu Option " << pMenuOption << " (High Score)" << endl;
+					cout << "Pause Menu Option " << pMenuOption << " (Restart)" << endl;
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
@@ -240,32 +246,37 @@ void Engine::processInput()
 				else if (pMenuOption == 1)
 				{
 					pMenuOption = 3;
-					cout << "Pause Menu Option " << pMenuOption << " (Main Menu)" << endl;
+					cout << "Pause Menu Option " << pMenuOption << " (Title Screen)" << endl;
 				}
 			}
 
 			// If accept
-			if (this->player->input->State._buttons[GamePad_Button_A] == true)
+			if(aButtonActive == false)
 			{
-				if (pMenuOption == 0)
+				if (this->player->input->State._buttons[GamePad_Button_A] == true)
 				{
-					cout << "Game Running" << endl;
-					gameState = GameRunning;
-				}
-				else if (pMenuOption == 1)
-				{
-					cout << "High Score" << endl;
-					//gameState = HighScore;
-				}
-				else if (pMenuOption == 2)
-				{
-					cout << "Help & Options" << endl;
-					//gameState = HelpAndOptions;
-				}
-				else if (pMenuOption == 3)
-				{
-					cout << "Main Menu" << endl;
-					gameState = MainMenu;
+					if (pMenuOption == 0)
+					{
+						cout << "Game Running" << endl;
+						gameState = GameRunning;
+					}
+					else if (pMenuOption == 1)
+					{
+						cout << "Restart" << endl;
+						//gameState = GameRunning;
+					}
+					else if (pMenuOption == 2)
+					{
+						cout << "Help & Options" << endl;
+						//gameState = HelpAndOptions;
+					}
+					else if (pMenuOption == 3)
+					{
+						cout << "Main Menu" << endl;
+						pMenuOption = 0;
+						gameState = MainMenu;
+						aButtonActive = true;
+					}
 				}
 			}
 			break;
