@@ -119,6 +119,13 @@ void Graphics::PauseRender()
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
+void Graphics::HighScoreRender()
+{
+	float clearColor[] = { 1, 0, 1, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
 void Graphics::RendPlayer(Matrix transform)
 {
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);

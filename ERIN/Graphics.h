@@ -20,6 +20,7 @@ public:
 	void TitleScreenRender();
 	void MainMenuRender();
 	void PauseRender();
+	void HighScoreRender();
 	void RendPlayer(Matrix transform);
 	void RenderCustom(Mesh mesh);
 

@@ -175,7 +175,8 @@ void Engine::processInput()
 					else if (mainMenuOption == 1)
 					{
 						cout << "High Score" << endl;
-						//gameState = HighScore;
+						mainMenuOption = 0;
+						gameState = HighScore;
 					}
 					else if (mainMenuOption == 2)
 					{
@@ -275,36 +276,38 @@ void Engine::processInput()
 			}
 
 			// If accept
-			if(aButtonActive == false)
+			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
 			{
-				if (this->player->input->State._buttons[GamePad_Button_A] == true)
+				if (pMenuOption == 0)
 				{
-					if (pMenuOption == 0)
-					{
-						cout << "Game Running" << endl;
-						gameState = GameRunning;
-					}
-					else if (pMenuOption == 1)
-					{
-						cout << "Restart" << endl;
-						//gameState = GameRunning;
-					}
-					else if (pMenuOption == 2)
-					{
-						cout << "Help & Options" << endl;
-						//gameState = HelpAndOptions;
-					}
-					else if (pMenuOption == 3)
-					{
-						cout << "Main Menu" << endl;
-						pMenuOption = 0;
-						gameState = MainMenu;
-						aButtonActive = true;
-					}
+					cout << "Game Running" << endl;
+					gameState = GameRunning;
+				}
+				else if (pMenuOption == 1)
+				{
+					cout << "Restart" << endl;
+					//gameState = GameRunning;
+				}
+				else if (pMenuOption == 2)
+				{
+					cout << "Help & Options" << endl;
+					//gameState = HelpAndOptions;
+				}
+				else if (pMenuOption == 3)
+				{
+					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+					pMenuOption = 0;
+					gameState = MainMenu;
+					aButtonActive = true;
 				}
 			}
 			break;
 		case HighScore:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				gameState = MainMenu;
+			}
 			break;
 		case HelpAndOptions:
 			break;
@@ -437,6 +440,8 @@ void Engine::render()
 	case Pause:
 		//graphics->PauseRender();
 		break;
+	case HighScore:
+		graphics->HighScoreRender();
 	}
 
 	// Switch front- and back-buffer

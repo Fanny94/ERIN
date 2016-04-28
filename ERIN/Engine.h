@@ -40,6 +40,7 @@ public:
 
 	bool getRunning() { return running; };
 	bool aButtonActive = false;
+	bool bButtonActive = false;
 
 	GameStateManager gameState;
 	//CurrLevelManager currLevel = Level1;
