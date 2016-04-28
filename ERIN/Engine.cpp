@@ -181,7 +181,8 @@ void Engine::processInput()
 					else if (mainMenuOption == 2)
 					{
 						cout << "Help & Options" << endl;
-						//gameState = HelpAndOptions;
+						mainMenuOption = 0;
+						gameState = HelpAndOptions;
 					}
 					else if (mainMenuOption == 3)
 						this->running = false;
@@ -286,7 +287,9 @@ void Engine::processInput()
 				else if (pMenuOption == 1)
 				{
 					cout << "Restart" << endl;
-					//gameState = GameRunning;
+					pMenuOption = 0;
+					Reset();
+					gameState = GameRunning;
 				}
 				else if (pMenuOption == 2)
 				{
@@ -310,6 +313,11 @@ void Engine::processInput()
 			}
 			break;
 		case HelpAndOptions:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				gameState = MainMenu;
+			}
 			break;
 		}
 
@@ -392,17 +400,22 @@ void Engine::update(double deltaTimeMs)
 		//render();
 		break;
 	case TitleScreen:
-		//TitleScreen->render();			// Example of how to render the title screen
 		graphics->TitleScreenRender();
 		break;
 	case MainMenu:
-		//MainMenu->render();				// Example of how to render the main menu
 		break;
 	case Pause:
 		break;
 	}
 
 	// printf("Elapsed time: %fS.\n", deltaTimeS);
+}
+
+void Engine::Reset()
+{
+	player->SetX(0);
+	player->SetY(0);
+	player->SetZ(0);
 }
 
 void Engine::render()
@@ -442,6 +455,10 @@ void Engine::render()
 		break;
 	case HighScore:
 		graphics->HighScoreRender();
+		break;
+	case HelpAndOptions:
+		graphics->HelpAndOptionsRender();
+		break;
 	}
 
 	// Switch front- and back-buffer

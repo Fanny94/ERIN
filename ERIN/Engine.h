@@ -33,6 +33,7 @@ public:
 
 	void processInput();
 	void update(double deltaTimeMs);
+	void Reset();
 	void render();
 
 	HWND InitWindow(HINSTANCE hInstance);

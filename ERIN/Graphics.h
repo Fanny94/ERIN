@@ -21,6 +21,7 @@ public:
 	void MainMenuRender();
 	void PauseRender();
 	void HighScoreRender();
+	void HelpAndOptionsRender();
 	void RendPlayer(Matrix transform);
 	void RenderCustom(Mesh mesh);
 
