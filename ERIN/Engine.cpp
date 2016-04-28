@@ -7,8 +7,9 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->running = true;
 	this->camera = new Camera();
 	this->graphics = new Graphics();
-	this->customImport = new CustomImport();
+	this->gameLogic = new GameLogic();
 
+	this->customImport = new CustomImport();
 	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
 
 	// creating enemies
@@ -29,6 +30,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 	//create window
 	wndHandle = InitWindow(hInstance);
+
+
 
 	if (!camera->InitDirectInput(hInstance))
 	{
@@ -51,19 +54,27 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
-		/*customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
-		customImport->NewMesh();*/
+		graphics->CreateTriangleAABBBox(player->triangle);
+		graphics->AABBTrianglePoints();
 
-		/*if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/stage.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
-		{
-		return;
-		}*/
-		
-		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		/*if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
 		{
 			return;
 		}*/
+
+		graphics->CreateSquareAABBBox();	
+		graphics->AABBSquarePoints();
 		
+		/*customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
+		customImport->NewMesh();*/
+	
+		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
+		{
+			return;
+
+		}
+		*/
+
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -75,6 +86,7 @@ Engine::~Engine()
 {
 	delete this->graphics;
 	delete this->camera;
+	delete this->gameLogic;
 
 	// player enemies
 	delete this->player;
@@ -184,6 +196,13 @@ void Engine::update(double deltaTimeMs)
 
 void Engine::render()
 {
+	graphics->UpdateConstantBuffer();
+	
+	graphics->RendAABB();
+	graphics->RendTriangleAABB(*player->shipMatrix);
+
+	//graphics->transformBoundingBox(*gameObject->objectMatrix);
+	graphics->AABBtoAABB();
 	//graphics->UpdateConstantBuffer();
 
 	/*
