@@ -174,7 +174,7 @@ void Graphics::RendAABB()
 	Matrix projection;
 	Matrix worldViewProj;
 
-	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(-2, 0, 0);
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0.3);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
 
 	// viewProj = camera->camView * projection;
@@ -202,7 +202,7 @@ void Graphics::RendAABB()
 	gDeviceContext->Draw(24, 0);
 
 }
-void Graphics::RendTriangleAABB()
+void Graphics::RendTriangleAABB(Matrix transform)
 {
 	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
@@ -220,16 +220,16 @@ void Graphics::RendTriangleAABB()
 	Matrix projection;
 	Matrix worldViewProj;
 
-	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(-0.71, 0, -0.3);
+	//world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
 
 	// viewProj = camera->camView * projection;
 
-	worldViewProj = world * camera->camView * projection;
+	worldViewProj = transform * camera->camView * projection;
 
 	worldViewProj = worldViewProj.Transpose();
 
-	world = world.Transpose();
+	//world = world.Transpose();
 
 	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
 	if (FAILED(result))
@@ -559,6 +559,30 @@ void Graphics::CerateVertexTriangleArray()
 
 }
 
+AABBBox Graphics::transformBoundingBox(Matrix transform)
+{
+
+	//.Right returns the first column vector of the matrix
+	float xa = transform.Right * triVertexArray.points[0].x;
+	float xb = transform.Right * triVertexArray.points[3].x;
+
+	//.Up returns the second column 
+	float ya = transform.Up * triVertexArray.points[0].y;
+	float yb = transform.Up * triVertexArray.points[3].y;
+
+	//.Backward returns the third column 
+	float za = transform.Backward * triVertexArray.points[0].z;
+	float zb = transform.Backward * triVertexArray.points[3].z;
+
+	float minValue[3] = { min(xa, xb) + min(ya, yb) + min(za, zb) };
+	float maxValue[3] = { max(xa, xb) + max(ya, yb) + max(za, zb) };
+	
+	newAABB = new AABBBox();
+		
+	return newAABB->points[0] = minValue + transform.Translation, newAABB->points[3] = maxValue + transform.Translation;
+
+}
+
 AABBBox Graphics::CreateSquareAABBBox()
 {
 
@@ -717,24 +741,29 @@ void Graphics::CreateVertexArray()
 bool Graphics::AABBtoAABB()
 {
 	
-	if (AABBVertexArray.points[7].x < triVertexArray.points[0].x ||
-		AABBVertexArray.points[0].x > triVertexArray.points[3].x ||
-		AABBVertexArray.points[7].y < triVertexArray.points[0].y ||
-		AABBVertexArray.points[0].y > triVertexArray.points[3].y ||
-		AABBVertexArray.points[7].z < triVertexArray.points[0].z ||
-		AABBVertexArray.points[0].z > triVertexArray.points[3].z)
+	if (AABBVertexArray.points[7].x < newAABB->points[0].x && AABBVertexArray.points[0].x > newAABB->points[3].x)
 	{
-		return false;
 		cout << "no hit";
+		return false;
 	}
 
-	else
-	{
-		return true;
-		cout << "hit";
-	}
+	//if (AABBVertexArray.points[7].y < triVertexArray.points[0].y && AABBVertexArray.points[0].y > triVertexArray.points[3].y) 
+	//{
+	//	cout << "no hit";
+	//	return false;
+	//}
+	//	
+	//if (AABBVertexArray.points[7].z < triVertexArray.points[0].z && AABBVertexArray.points[0].z > triVertexArray.points[3].z) 
+	//{
+	//	cout << "no hit";
+	//	return false;
+	//}
+
+	cout << "hit";
+	return true;
 
 	
+
 }
 
 void Graphics::UpdateConstantBuffer()

@@ -221,8 +221,9 @@ void Engine::render()
 	graphics->Render();
 	graphics->RendPlayer(*gameObject->objectMatrix);
 	graphics->RendAABB();
-	graphics->RendTriangleAABB();
+	graphics->RendTriangleAABB(*gameObject->objectMatrix);
 
+	graphics->transformBoundingBox(*gameObject->objectMatrix);
 	graphics->AABBtoAABB();
 
 	camera->InitCamera();

@@ -18,7 +18,7 @@ public:
 	void Render();
 	void RendPlayer(Matrix transform);
 	void RendAABB();
-	void RendTriangleAABB();
+	void RendTriangleAABB(Matrix transform);
 	void CreateShaders();
 	void CreateDepthBuffer();
 
@@ -29,6 +29,7 @@ public:
 	AABBBox CreateSquareAABBBox();
 	void CreateVertexArray();
 	void CerateVertexTriangleArray();
+	AABBBox transformBoundingBox(Matrix transform);
 
 	bool AABBtoAABB();
 	void UpdateConstantBuffer();
@@ -131,6 +132,7 @@ private:
 	AABBBox axisAllignedBox;
 	AABBBox triAxis;
 
+	AABBBox* newAABB;
 	AABBBox AABBVertexArray;
 	AABBBox triVertexArray;
 
