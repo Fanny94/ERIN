@@ -226,7 +226,9 @@ void CustomImport::NewMesh()
 	newMesh.MeshCount = MeshCount;
 	newMesh.MaterialCount = MaterialCount;
 
-	for (int i = 0; i < newMesh.MeshCount; i++)
+	int count = meshS.size() - newMesh.MeshCount;
+
+	for (int i = count; i < meshS.size(); i++)
 	{
 		newMesh.meshTemp.VertexCount = meshS.at(i).VertexCount;
 		newMesh.meshTemp.MaterialID = meshS.at(i).MaterialID;
@@ -243,6 +245,9 @@ void CustomImport::NewMesh()
 			newMesh.meshTemp.Rotation[k] = meshS.at(i).Rotation[k];
 			newMesh.meshTemp.Scale[k] = meshS.at(i).Scale[k];
 		}
+
+		newMesh.world = XMMatrixTranslation(newMesh.meshTemp.Translation[0], newMesh.meshTemp.Translation[1], newMesh.meshTemp.Translation[2]);
+
 		for (int l = 0; l < newMesh.meshTemp.VertexCount; l++)
 		{
 			for (int m = 0; m < 3; m++)
@@ -266,8 +271,9 @@ void CustomImport::NewMesh()
 		}
 		newMesh.mesh.push_back(newMesh.meshTemp);
 	}
+	int mcount = material.size() - newMesh.MaterialCount;
 
-	for (int i = 0; i < newMesh.MaterialCount; i++)
+	for (int i = mcount; i < material.size(); i++)
 	{
 		for (int j = 0; j < 3; j++)
 		{

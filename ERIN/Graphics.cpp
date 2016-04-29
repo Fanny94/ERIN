@@ -101,7 +101,7 @@ void Graphics::RendPlayer(Matrix transform)
 	gDeviceContext->Draw(3, 0);
 }
 
-void Graphics::RenderCustom(Mesh mesh)
+void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 {
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
@@ -124,8 +124,6 @@ void Graphics::RenderCustom(Mesh mesh)
 	UINT32 meshVertexSize = sizeof(VertexCustom);
 	UINT32 offset = 0;
 
-	Matrix world;
-
 	D3D11_MAPPED_SUBRESOURCE mappedCF;
 	hr = gDeviceContext->Map(customFormatBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedCF);
 	CustomFormat* CFPtr;
@@ -145,15 +143,13 @@ void Graphics::RenderCustom(Mesh mesh)
 		CFPtr->specularColor[2] = mesh.material.at(j).specularColor[2];
 		CFPtr->shininess = mesh.material.at(j).shininess;
 	}
-
-	for (int i = 0; i < mesh.mesh.size(); i++)
+	
+	for (int i = 0; i < mesh.MeshCount; i++)
 	{
 		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
 		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		world = XMMatrixTranslation(mesh.mesh.at(i).Translation[0], mesh.mesh.at(i).Translation[1], mesh.mesh.at(i).Translation[2]);
-
-		CustomUpdateBuffer(world);
+		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
 

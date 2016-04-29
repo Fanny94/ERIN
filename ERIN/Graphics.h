@@ -17,7 +17,7 @@ public:
 	void SetViewport();
 	void Render();
 	void RendPlayer(Matrix transform);
-	void RenderCustom(Mesh mesh);
+	void RenderCustom(Mesh mesh, Matrix transform);
 	void CustomUpdateBuffer(Matrix transform);
 	void CreateShaders();
 	void CreateTriangle(TriangleVertex* triangleVertices);
@@ -60,13 +60,6 @@ public:
 	MATRICES* MatrixPtr;
 	MATRICES* MatrixPtr2;
 	Camera* camera;
-
-	struct OBJ
-	{
-		XMFLOAT4 difColor;
-		int hasTexture;
-		float padding[3];
-	};
 
 	ID3D11Buffer* customFormatBuffer = nullptr;
 

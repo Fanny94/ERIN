@@ -53,6 +53,9 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
 		customImport->NewMesh();
+
+		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryDataSphere.bin");
+		customImport->NewMesh();
 		
 		graphics->CreateConstantBuffer();
 
@@ -194,7 +197,13 @@ void Engine::render()
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
-	graphics->RenderCustom(customImport->meshes.at(0));
+
+	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0) ;
+
+	for (int j = 0; j < 2; j++)
+	{
+		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
+	}
 	
 	for (int i = 0; i < 4; i++)
 	{

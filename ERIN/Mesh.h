@@ -51,5 +51,6 @@ public:
 	unsigned int MaterialCount;
 	vector<Material> material;
 	Material materialTemp;
+	Matrix world;
 };
 #endif // !MESH_H
