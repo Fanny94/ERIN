@@ -16,6 +16,9 @@ public:
 	GameObject(int objectID, string name, float x, float y, float z, bool doHaveBehavior);
 	~GameObject();
 
+	bool inUse;
+	void Reset();
+
 	void updateBehavior(Position player, GameObject* myself, GameObject** allEnemies);
 	void update(double deltaTimeMs);
 

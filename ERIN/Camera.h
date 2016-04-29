@@ -50,6 +50,7 @@ public:
 	double GetFrameTime();
 	void InitCamera();
 	void UpdateCamera();
+	void ResetCamera();
 
 	// Xbox Dpad
 	void cameraMoveLeft();

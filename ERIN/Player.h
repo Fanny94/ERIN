@@ -17,6 +17,8 @@ public:
 	void playerInput();
 	void update(double deltaTime);
 
+	void PlayerReset();
+
 	void SetX(float x) { this->x = x; };
 	void SetY(float y) { this->y = y; };
 	void SetZ(float z) { this->z = z; };

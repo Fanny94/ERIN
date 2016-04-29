@@ -288,7 +288,12 @@ void Engine::processInput()
 				{
 					cout << "Restart" << endl;
 					pMenuOption = 0;
-					Reset();
+					player->PlayerReset();
+					for (int i = 0; i < 4; i++)
+					{
+						enemies[i]->Reset();
+					}
+					camera->ResetCamera();
 					gameState = GameRunning;
 				}
 				else if (pMenuOption == 2)
@@ -409,13 +414,6 @@ void Engine::update(double deltaTimeMs)
 	}
 
 	// printf("Elapsed time: %fS.\n", deltaTimeS);
-}
-
-void Engine::Reset()
-{
-	player->SetX(0);
-	player->SetY(0);
-	player->SetZ(0);
 }
 
 void Engine::render()
