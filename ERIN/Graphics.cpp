@@ -542,7 +542,7 @@ void Graphics::CreateSquareAABBBox(Mesh mesh)
 {
 	//This function defines an AABB box for the cube with a min and a max value
 
-		//go through each vertex of the mesh
+	//go through each vertex of the mesh
 	for (int i = 0; i < mesh.mesh.at(0).VertexCount; i++)
 	{
 
@@ -590,6 +590,8 @@ void Graphics::CreateSquareAABBBox(Mesh mesh)
 		AABBVertexArray.points[0] = axisAllignedBox.min;
 		AABBVertexArray.points[7] = axisAllignedBox.max;
 	}
+	
+	boxArray.push_back(AABBVertexArray);
 }
 void Graphics::AABBSquarePoints()
 {
@@ -714,24 +716,24 @@ bool Graphics::AABBtoAABB()
 	//The fucntion compares min and max values of the two AABB's
 	//here is the problem, the collsion isn't correct
 
-	if (AABBVertexArray.points[7].x < triVertexArray.points[0].x);
+	if (boxArray.at(0).points[7].x < boxArray.at(1).points[0].x);
 	{
 		cout << "no hit" << endl;
 		return false;
 	}
 	
-	if (AABBVertexArray.points[0].x > triVertexArray.points[3].x)
+	if (boxArray.at(0).points[0].x > boxArray.at(1).points[7].x)
 	{
 		cout << "no hit";
 		return false;
 	}
 
-	if (AABBVertexArray.points[7].y < triVertexArray.points[0].y)
+	if (boxArray.at(0).points[7].y < boxArray.at(1).points[0].y)
 	{
 		cout << "no hit";
 		return false;
 	}
-	if (AABBVertexArray.points[0].y > triVertexArray.points[3].y)
+	if (boxArray.at(0).points[0].y > boxArray.at(1).points[7].y)
 	{
 		cout << "no hit";
 		return false;

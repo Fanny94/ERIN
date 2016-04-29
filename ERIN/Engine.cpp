@@ -201,7 +201,7 @@ void Engine::render()
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
 
 	graphics->RendTriangleAABB(*player->shipMatrix);
-	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
+	customImport->meshes.at(1).world = XMMatrixTranslation(0, 0, 0);
 	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
 	for (int j = 0; j < 2; j++)
 	{

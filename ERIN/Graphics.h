@@ -37,7 +37,7 @@ public:
 	void AABBSquarePoints();
 	void AABBTrianglePoints();
 	//AABBBox* transformBoundingBox(Matrix transform);
-
+	
 	bool AABBtoAABB();
 
 	void UpdateConstantBuffer();
@@ -100,6 +100,7 @@ public:
 
 	vector<AABBVertex> squareVertexArray;
 	vector<AABBBox> triangleVertexArray;
+	vector<AABBBox> boxArray;
 
 private:
 	float WIDTH = 1080;
