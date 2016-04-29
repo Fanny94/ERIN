@@ -36,9 +36,6 @@ public:
 	double getVx();
 	double getVy();
 
-	// flock AI
-	void GetEnemyPos();
-
 private:
 	int objectID;
 	string name;

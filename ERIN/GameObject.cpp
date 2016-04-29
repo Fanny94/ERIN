@@ -41,7 +41,7 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	}
 	this->pos = new Position{ this->x, this->y, this->z };
 
-	GetEnemyPos();
+	//GetEnemyPos();
 
 }
 
@@ -165,22 +165,3 @@ double GameObject::getVy()
 	return r_speed * asin(heading * M_PI / 180);
 }
 
-void GameObject::GetEnemyPos()
-{
-	/*float* EnemyPosX;
-	float* EnemyPosY;*/
-	int count = 0;
-
-	float EnemyPos[1], EnemyPosY[1];
-	
-	EnemyPos[count] = x;
-	EnemyPosY[count] = y;
-	//EnemyPos[count] = y;
-	//EnemyPosY[count] = y;
-
-
-
-	pos->xPos[count] = EnemyPos[count];
-	pos->yPos[count] = EnemyPosY[count];
-	count++;
-}
