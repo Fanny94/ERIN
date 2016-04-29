@@ -57,10 +57,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryData.bin");
 		customImport->NewMesh();
 
-		//customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryDataSphere.bin");
-		customImport->NewMesh();
+		//customImport->LoadCustomFormat("../BinaryData.bin");
+		//customImport->NewMesh();
 		
-		graphics->CreateTriangleAABBBox(player->triangle);
+		/*graphics->CreateTriangleAABBBox(player->triangle);
 
 		graphics->AABBTrianglePoints();
 
@@ -68,7 +68,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		{
 			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
 		}
-		graphics->AABBSquarePoints();
+		graphics->AABBSquarePoints();*/
 		
 		graphics->CreateConstantBuffer();
 
@@ -198,20 +198,20 @@ void Engine::render()
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
+	/*graphics->RendTriangleAABB(*player->shipMatrix);*/
 
-	graphics->RendTriangleAABB(*player->shipMatrix);
-	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
-	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
-	for (int j = 0; j < 2; j++)
+	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0) ;
+
+	for (int j = 0; j < 1; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
 
 	//render 2 AABB boxes
-	for (int k = 0; k < 2; k++)
+	/*for (int k = 0; k < 2; k++)
 	{
 		graphics->RendAABB(customImport->meshes.at(k).world);
-	}
+	}*/
 
 	for (int i = 0; i < 4; i++)
 	{

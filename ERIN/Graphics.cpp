@@ -20,19 +20,21 @@ Graphics::~Graphics()
 	gVertexBuffer->Release();
 	gPixelShader->Release();
 
-	vertAABBBuffer->Release();
+	/*vertAABBBuffer->Release();
 	AABBLayout->Release();
 	AABBVertexShader->Release();
-	AABBPixelShader->Release();
+	AABBPixelShader->Release();*/
 
-	triangleAABBVertexBuffer->Release();
+	/*triangleAABBVertexBuffer->Release();*/
 
 	gDepthView->Release();
 	gDepthStencilView->Release();
 
 	gConstantBuffer->Release();
 
-	customVertBuff->Release();
+	customFormatBuffer->Release();
+	this->customFormatBuffer = nullptr;
+
 	this->customVertBuff = nullptr;
 
 	this->gDevice = nullptr;
@@ -140,7 +142,6 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 
 	D3D11_MAPPED_SUBRESOURCE mappedCF;
 	hr = gDeviceContext->Map(customFormatBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedCF);
-	CustomFormat* CFPtr;
 	CFPtr = (CustomFormat*)mappedCF.pData;
 	gDeviceContext->Unmap(customFormatBuffer, 0);
 
@@ -169,6 +170,8 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
+
+	customVertBuff->Release();
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)
