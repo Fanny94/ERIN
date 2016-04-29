@@ -51,6 +51,9 @@ public:
 	double getTVx();
 	double getTVy();
 
+	// collision
+	TSphere* sphere;
+
 private:
 
 	string name;

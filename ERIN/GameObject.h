@@ -18,6 +18,7 @@ public:
 
 	void updateBehavior(Position player, GameObject* myself, GameObject** allEnemies);
 	void update(double deltaTimeMs);
+	void reset();
 
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
 	int getObjectID() { return this->objectID; };
@@ -35,6 +36,12 @@ public:
 
 	double getVx();
 	double getVy();
+
+	// flock AI
+	void GetEnemyPos();
+
+	// collision
+	TSphere* sphere;
 
 private:
 	int objectID;

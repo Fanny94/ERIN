@@ -25,4 +25,11 @@ struct AABBVertex
 {
 	XMFLOAT3 points[24];
 };
+
+struct TSphere
+{
+	Vector3		m_vecCenter;
+	float       m_fRadius;
+};
+
 #endif // !STRUCTS_H

@@ -37,6 +37,12 @@ Player::Player(string name, float x, float y, float z)
 
 	this->shipPos = new Position{ this->x, this->y, this->z };
 	this->turretPos = new Position{this->x + 1.0f, this->y, this->z };
+
+
+	// collision
+	this->sphere = new TSphere();
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+	this->sphere->m_fRadius = 0.1f;
 }
 
 Player::~Player()
@@ -49,6 +55,7 @@ Player::~Player()
 	//delete this->axisAllignedBox;
 	delete this->shipPos;
 	delete this->turretPos;
+	delete this->sphere;
 }
 
 
@@ -135,6 +142,8 @@ void Player::update(double dt)
 	{
 		turretComputeTurn(dt);
 	}
+
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 
 	// turret matrix
 	*this->turretMatrix = 

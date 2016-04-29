@@ -17,7 +17,7 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 
 	float Random = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
 
-	this->maximumSpeed = Random;
+	this->maximumSpeed = 0.01f; //Random;
 	this->currentSpeed = 0.0f;
 
 	this->speed = 0.0f;
@@ -43,14 +43,17 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 
 	//GetEnemyPos();
 
+	this->sphere = new TSphere();
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+	this->sphere->m_fRadius = 0.1f;
 }
 
 GameObject::~GameObject()
 {
 	delete this->triangle;
 	delete this->objectMatrix;
-
 	delete this->pos;
+	delete this->sphere;
 
 	if (this->behavior)
 	{
@@ -131,8 +134,33 @@ void GameObject::update(double dt)
 		computeTurn(dt);
 	}
 
-	*this->objectMatrix = XMMatrixRotationZ(XMConvertToRadians((float)-heading)) * XMMatrixTranslation(x, y, z) * XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+
+	*this->objectMatrix = 
+		XMMatrixRotationZ(XMConvertToRadians((float)-heading)) 
+		* XMMatrixTranslation(x, y, z) 
+		* XMMatrixScaling(1.0f, 1.0f, 1.0f);
 }
+
+void GameObject::reset()
+{
+	this->x = 0.0f;
+	this->y = 0.0f;
+	this->z = 0.0f;
+	
+	this->currentSpeed = 0.0f;
+	this->speed = 0.0f;
+
+	delete this->objectMatrix;
+	this->objectMatrix = new Matrix();
+
+	this->pos->x = this->x;
+	this->pos->y = this->y;
+	this->pos->z = this->z;
+
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+}
+
 void GameObject::computeTurn(double dt)
 {
 	double dh = plannedHeading - heading;

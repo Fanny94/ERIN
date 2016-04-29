@@ -14,15 +14,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
 
-	// creating enemies
-	/*size_t size = 10;
-	vector<GameObject> Vector_enemies(size);*/
-	//vector<GameObject> stageObjects;
-
-	/*this->gameObject = new GameObject(0, "triangle", 0.0f, 0.0f, 0.5f, true);
-	Vector_enemies.push_back(*gameObject);
-	delete gameObject;
-	Vector_enemies.clear();*/
+	
 
 	this->enemies = new GameObject*[5];
 	this->enemies[0] = new GameObject(1, "enemy1", 5.0f, 0.0f, 0.1f, true);
@@ -32,8 +24,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 	//create window
 	wndHandle = InitWindow(hInstance);
-
-
 
 	if (!camera->InitDirectInput(hInstance))
 	{
@@ -56,25 +46,25 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
-		graphics->CreateTriangleAABBBox(player->triangle);
-		graphics->AABBTrianglePoints();
+		customImport->LoadCustomFormat("../BinaryData.bin");
+		customImport->NewMesh();
 
-		graphics->CreateSquareAABBBox();	
-		graphics->AABBSquarePoints();
+		//customImport->LoadCustomFormat("../BinaryDataSphere.bin");
+		//customImport->NewMesh();
 		
-		/*customImport->LoadCustomFormat("../BinaryData.bin");
-		customImport->NewMesh();*/
-	
-		/*if (!graphics->LoadObjModel(L"../Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
-		{
-			return;
-		}
-		*/
+		/*graphics->CreateTriangleAABBBox(player->triangle);
 
+		graphics->AABBTrianglePoints();*/
+
+		/*for (int i = 0; i < 2; i++)
+		{
+			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
+		}
+		graphics->AABBSquarePoints();*/
+		
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
-
 	}
 }
 
@@ -82,12 +72,12 @@ Engine::~Engine()
 {
 	delete this->graphics;
 	delete this->camera;
+	delete this->customImport;
 	delete this->gameLogic;
 
 	// player enemies
 	delete this->player;
 	//delete this->gameObject;
-	delete this->customImport;
 
 	delete this->objectpool;
 
@@ -190,41 +180,45 @@ void Engine::update(double deltaTimeMs)
 		enemies[i]->update(deltaTimeMs);
 	}
 
+	for (int i = 0; i < 4; i++)
+	{
+		if (sphereToSphere(*player->sphere, *enemies[i]->sphere))
+		{
+			cout << "sphere hit" << endl;
+			enemies[i]->reset();
+		}
+	}
+
 	//printf("Elapsed time: %fS.\n", deltaTimeS);
 }
 
 void Engine::render()
 {
-	graphics->UpdateConstantBuffer();
-	
-	graphics->RendAABB();
-	graphics->RendTriangleAABB(*player->shipMatrix);
-
-	//graphics->transformBoundingBox(*gameObject->objectMatrix);
-	graphics->AABBtoAABB();
 	//graphics->UpdateConstantBuffer();
 
-	/*
-
-	player shader;
-	player rend;
-	player shader delete;
-
-	for (int i = 0; i < assetmanager->numberOfMeshes; i++)
-	{
-	graphics->CreateShaders("filename");
-	graphics->RendFBX(x);
-	graphics->DeleteShader();
-	}
-
-	*/
+	//graphics->transformBoundingBox(*gameObject->objectMatrix);
+	//graphics->AABBtoAABB();
 
 	graphics->Render();
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
-	//graphics->RenderCustom(customImport->meshes.at(0));
-	
+	/*graphics->RendTriangleAABB(*player->shipMatrix);*/
+
+	graphics->RendTriangleAABB(*player->shipMatrix);
+	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
+	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
+	/*for (int j = 0; j < 2; j++)
+	{
+		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
+	}*/
+
+	//render 2 AABB boxes
+	/*for (int k = 0; k < 2; k++)
+	{
+		graphics->RendAABB(customImport->meshes.at(k).world);
+	}*/
+
 	for (int i = 0; i < 4; i++)
 	{
 		graphics->RendPlayer(*enemies[i]->objectMatrix);
@@ -234,6 +228,29 @@ void Engine::render()
 
 	// Switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(1, 0);
+}
+
+bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)
+{
+	//Calculate the squared distance between the centers of both spheres
+	Vector3 vecDist(tSph2.m_vecCenter - tSph1.m_vecCenter);
+
+	double dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
+
+	float fDistSq(dotProduct);
+
+	//Calculate the squared sum of both radii
+	float fRadiiSumSquared(tSph1.m_fRadius + tSph2.m_fRadius);
+	fRadiiSumSquared *= fRadiiSumSquared;
+
+	//Check for collision
+	//If the distance squared is less than or equal to the square sum
+	//of the radii, then we have a collision
+	if (fDistSq <= fRadiiSumSquared)
+		return true;
+
+	//If not, then return false
+	return false;
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)

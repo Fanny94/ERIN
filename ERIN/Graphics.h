@@ -18,10 +18,15 @@ public:
 	void SetViewport();
 	void Render();
 	void RendPlayer(Matrix transform);
+
+	void RenderCustom(Mesh mesh, Matrix transform);
+	void CustomUpdateBuffer(Matrix transform);
+
+	void RendAABB(Matrix transform);
 	void RendBullet(Matrix transform);
 	void RendAABB();
 	void RendTriangleAABB(Matrix transform);
-	void RenderCustom(Mesh mesh);
+
 	void CreateShaders();
 	void CreateDepthBuffer();
 
@@ -30,7 +35,7 @@ public:
 	void CreateConstantBuffer();
 
 	void CreateTriangleAABBBox(TriangleVertex* triangleVertices);
-	void CreateSquareAABBBox();
+	void CreateSquareAABBBox(Mesh mesh);
 	void AABBSquarePoints();
 	void AABBTrianglePoints();
 	//AABBBox* transformBoundingBox(Matrix transform);
@@ -62,6 +67,7 @@ public:
 		Matrix world;
 		Matrix view;
 		Matrix projection;
+		XMFLOAT4 camPos;
 	};
 
 	Matrix viewProj;
@@ -71,25 +77,20 @@ public:
 	MATRICES* MatrixPtr2;
 	Camera* camera;
 
-	ID3D11Buffer* objBuffer = nullptr;
+	ID3D11Buffer* customFormatBuffer = nullptr;
 
-	struct OBJ
+	struct CustomFormat
 	{
-		XMFLOAT4 difColor;
-		int hasTexture;
-		float padding[3];
+		float diffuseColor[3];
+		float paddingDC;
+		float ambientColor[3];
+		float paddingAC;
+		float specularColor[3];
+		float shininess;
 	};
+
+	CustomFormat* CFPtr;
 	
-	struct Vertex
-	{
-		Vertex() {}
-		Vertex(float x, float y, float z, float u, float v, float nx, float ny, float nz) : pos(x, y, z), texCoord(u, v), normal(nx, ny, nz) {}
-
-		XMFLOAT3 pos;
-		XMFLOAT2 texCoord;
-		XMFLOAT3 normal;
-	};
-
 	struct VertexCustom
 	{
 		float pos[3];
@@ -99,42 +100,10 @@ public:
 		float bitan[3];
 	};
 
-	struct SurfaceMaterial
-	{
-		wstring matName;
-		XMFLOAT4 difColor;
-		int texArrayIndex;
-		bool hasTexture;
-		bool transparent;
-	};
-
-	bool LoadObjModel(wstring filename,		//.obj filename
-		ID3D11Buffer** vertBuff,			//mesh vertex buffer
-		ID3D11Buffer** indexBuff,			//mesh index buffer
-		vector<int>& subsetIndexStart,		//start index of each subset
-		vector<int>& subsetMaterialArray,	//index value of material for each subset
-		vector<SurfaceMaterial>& material,	//vector of material structures
-		int& subsetCount,					//Number of subsets in mesh
-		bool isRHCoordSys,					//true if model was created in right hand coord system
-		bool computeNormals);				//true to compute the normals, false to use the files normals
-
-	ID3D11BlendState* Transparency;
-	ID3D11Buffer* meshVertBuff;
-	ID3D11Buffer* meshIndexBuff;
-	int meshSubsets = 0;
-	vector<int> meshSubsetIndexStart;
-	vector<int> meshSubsetTexture;
-	vector<ID3D11ShaderResourceView*> meshSRV;
-	vector<wstring> textureNameArray;
-	vector<SurfaceMaterial> material;
-	vector<Vertex> vertexMeshSize;
 	vector<DWORD> indices;
 
 	vector<AABBVertex> squareVertexArray;
 	vector<AABBBox> triangleVertexArray;
-
-	vector<AABBBox> triangleBox;
-	vector<AABBBox> squareBox;
 
 private:
 	float WIDTH = 1080;
@@ -165,14 +134,12 @@ private:
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
 
-	//-------------------------------------------
 	ID3D11Buffer* vertAABBBuffer = nullptr;
 	ID3D11InputLayout* AABBLayout = nullptr;
 	ID3D11VertexShader* AABBVertexShader = nullptr;
 	ID3D11PixelShader* AABBPixelShader = nullptr;
 
 	ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
-	//-------------------------------------------
 
 	ID3D11Buffer* gConstantBuffer = nullptr;
 
