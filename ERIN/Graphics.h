@@ -101,7 +101,6 @@ public:
 	vector<AABBVertex> squareVertexArray;
 	vector<AABBBox> triangleVertexArray;
 	vector<AABBBox> boxArray;
-
 private:
 	float WIDTH = 1080;
 	float HEIGHT = 720;
