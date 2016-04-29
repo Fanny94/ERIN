@@ -113,99 +113,7 @@ void Graphics::RendPlayer(Matrix transform)
 
 	gDeviceContext->Draw(3, 0);
 }
-//---------------------------------------------------------------------------
-void Graphics::RendAABB()
-{
-	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
-	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
 
-	UINT32 vertexSize = sizeof(XMFLOAT3);
-	UINT32 offset = 0;
-
-	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-	gDeviceContext->IASetInputLayout(AABBLayout);
-
-	HRESULT result;
-	D3D11_MAPPED_SUBRESOURCE mapped;
-
-	Matrix world;
-	Matrix projection;
-	Matrix worldViewProj;
-
-	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0.5);
-	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
-
-	// viewProj = camera->camView * projection;
-
-	worldViewProj = world * camera->camView * projection;
-
-	worldViewProj = worldViewProj.Transpose();
-
-	world = world.Transpose();
-
-	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-	if (FAILED(result))
-	{
-		return;
-	}
-
-	MatrixPtr2 = (MATRICES*)mapped.pData;
-	MatrixPtr2->worldViewProj = worldViewProj;
-	MatrixPtr2->world = world;
-
-	gDeviceContext->Unmap(gConstantBuffer, 0);
-
-	gDeviceContext->IASetVertexBuffers(0, 1, &vertAABBBuffer, &vertexSize, &offset);
-	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
-	gDeviceContext->Draw(24, 0);
-
-}
-void Graphics::RendTriangleAABB(Matrix transform)
-{
-	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
-	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
-
-	UINT32 vertexSize = sizeof(XMFLOAT3);
-	UINT32 offset = 0;
-
-	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-	gDeviceContext->IASetInputLayout(AABBLayout);
-
-	HRESULT result;
-	D3D11_MAPPED_SUBRESOURCE mapped;
-
-	Matrix world;
-	Matrix projection;
-	Matrix worldViewProj;
-
-	//world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
-	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
-
-	// viewProj = camera->camView * projection;
-
-	worldViewProj = transform * camera->camView * projection;
-
-	worldViewProj = worldViewProj.Transpose();
-
-	//world = world.Transpose();
-
-	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-	if (FAILED(result))
-	{
-		return;
-	}
-
-	MatrixPtr2 = (MATRICES*)mapped.pData;
-	MatrixPtr2->worldViewProj = worldViewProj;
-	MatrixPtr2->world = world;
-
-	gDeviceContext->Unmap(gConstantBuffer, 0);
-
-	gDeviceContext->IASetVertexBuffers(0, 1, &triangleAABBVertexBuffer, &vertexSize, &offset);
-	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
-	gDeviceContext->Draw(8, 0);
-
-}
 
 void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 {
@@ -552,7 +460,6 @@ void Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
 		triVertexArray.points[3] = triAxis.max;
 	}
 
-	//squareBox.push_back(AABBVertexArray);
 }
 void Graphics::AABBTrianglePoints()
 {
@@ -633,49 +540,58 @@ void Graphics::AABBTrianglePoints()
 //
 //}
 
-void Graphics::CreateSquareAABBBox()
+void Graphics::CreateSquareAABBBox(Mesh mesh)
 {
 	//This function defines an AABB box for the cube with a min and a max value
 
-	for (int i = 0; i < vertexMeshSize.size(); i++)
+		//go through each vertex of the mesh
+	for (int i = 0; i < mesh.mesh.at(0).VertexCount; i++)
 	{
-		//min
+
 		//left bottom corner (front)
-		if (vertexMeshSize[i].pos.x < axisAllignedBox.min.x)
+		//if vertex position x is smaller than the AABB box's min value
+		//the new min value == that vertex position in x
+		if (mesh.mesh.at(0).vertex.at(i).pos[0] < axisAllignedBox.min.x)
 		{
-			axisAllignedBox.min.x = vertexMeshSize[i].pos.x;
-		}
-		if (vertexMeshSize[i].pos.y < axisAllignedBox.min.y)
-		{
-			axisAllignedBox.min.y = vertexMeshSize[i].pos.y;
-		}
-		if (vertexMeshSize[i].pos.z < axisAllignedBox.min.z)
-		{
-			axisAllignedBox.min.z = vertexMeshSize[i].pos.z;
-		}
-	
-		//max
-		//right upper corner (back)
-		if (vertexMeshSize[i].pos.x > axisAllignedBox.max.x)
-		{
-			axisAllignedBox.max.x = vertexMeshSize[i].pos.x;
-		}
-		if (vertexMeshSize[i].pos.y > axisAllignedBox.max.y)
-		{
-			axisAllignedBox.max.y = vertexMeshSize[i].pos.y;
-		}
-		if (vertexMeshSize[i].pos.z > axisAllignedBox.max.z)
-		{
-			axisAllignedBox.max.z = vertexMeshSize[i].pos.z;
+			axisAllignedBox.min.x = mesh.mesh.at(0).vertex.at(i).pos[0];
 		}
 
-		//points is an array of 8 points that later will represent the 8 corners of the AABB cube 
+		//the new min value == that vertex position in y
+		if (mesh.mesh.at(0).vertex.at(i).pos[1] < axisAllignedBox.min.y)
+		{
+			axisAllignedBox.min.y = mesh.mesh.at(0).vertex.at(i).pos[1];
+		}
+
+		//the new min value == that vertex position in z
+		if (mesh.mesh.at(0).vertex.at(i).pos[2] < axisAllignedBox.min.z)
+		{
+			axisAllignedBox.min.z = mesh.mesh.at(0).vertex.at(i).pos[2];
+		}
+
+		//right upper corner (back)
+		//the new max value == that vertex position in x
+		if (mesh.mesh.at(0).vertex.at(i).pos[0] > axisAllignedBox.max.x)
+		{
+			axisAllignedBox.max.x = mesh.mesh.at(0).vertex.at(i).pos[0];
+		}
+
+		//the new max value == that vertex position in y
+		if (mesh.mesh.at(0).vertex.at(i).pos[1] > axisAllignedBox.max.y)
+		{
+			axisAllignedBox.max.y = mesh.mesh.at(0).vertex.at(i).pos[1];
+		}
+
+		//the new max value == that vertex position in z
+		if (mesh.mesh.at(0).vertex.at(i).pos[2] > axisAllignedBox.max.z)
+		{
+			axisAllignedBox.max.z = mesh.mesh.at(0).vertex.at(i).pos[2];
+		}
+
+		//points == 8 points that later will represent the 8 corners of the AABB cube
+		//this is min and max of the mesch
 		AABBVertexArray.points[0] = axisAllignedBox.min;
 		AABBVertexArray.points[7] = axisAllignedBox.max;
 	}
-
-	//squareBox.push_back(AABBVertexArray);
-
 }
 void Graphics::AABBSquarePoints()
 {
@@ -686,7 +602,6 @@ void Graphics::AABBSquarePoints()
 	float diffX = abs(AABBVertexArray.points[7].x) - abs(AABBVertexArray.points[0].x);
 	float diffY = abs(AABBVertexArray.points[7].y) - abs(AABBVertexArray.points[0].y);
 	float diffZ = abs(AABBVertexArray.points[7].z) - abs(AABBVertexArray.points[0].z);
-
 
 	//points[0, 1, 2, 3, 4, 5, 6, 7] is the 8 corners of the cube's AABB 
 	//Left Upper Corner (front)
@@ -706,18 +621,18 @@ void Graphics::AABBSquarePoints()
 
 	//Right bottom corner (back)
 	AABBVertexArray.points[4].x = AABBVertexArray.points[7].x;
-	AABBVertexArray.points[4].y = AABBVertexArray.points[0].y;
-	AABBVertexArray.points[4].z = AABBVertexArray.points[3].z - diffZ;
+	AABBVertexArray.points[4].y = AABBVertexArray.points[3].y;
+	AABBVertexArray.points[4].z = AABBVertexArray.points[7].z;
 	
 	//Left bottom corner (back)
-	AABBVertexArray.points[5].x = AABBVertexArray.points[4].x - diffX;
+	AABBVertexArray.points[5].x = AABBVertexArray.points[0].x;
 	AABBVertexArray.points[5].y = AABBVertexArray.points[0].y;
 	AABBVertexArray.points[5].z = AABBVertexArray.points[4].z;
 
 	//Left upper corner (back)
-	AABBVertexArray.points[6].x = AABBVertexArray.points[7].x - diffX;
+	AABBVertexArray.points[6].x = AABBVertexArray.points[0].x;
 	AABBVertexArray.points[6].y = AABBVertexArray.points[7].y;
-	AABBVertexArray.points[6].z = AABBVertexArray.points[0].z - diffZ;
+	AABBVertexArray.points[6].z = AABBVertexArray.points[7].z;
 
 
 //buffer array with definition of the lines
@@ -834,7 +749,98 @@ bool Graphics::AABBtoAABB()
 	return true;
 
 }
+void Graphics::RendAABB(Matrix transform)
+{
+	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
 
+	UINT32 vertexSize = sizeof(XMFLOAT3);
+	UINT32 offset = 0;
+
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	gDeviceContext->IASetInputLayout(AABBLayout);
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+
+	Matrix world;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	//world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	// viewProj = camera->camView * projection;
+
+	worldViewProj = transform * camera->camView * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	transform = transform.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr2 = (MATRICES*)mapped.pData;
+	MatrixPtr2->worldViewProj = worldViewProj;
+	MatrixPtr2->world = transform;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->IASetVertexBuffers(0, 1, &vertAABBBuffer, &vertexSize, &offset);
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+	gDeviceContext->Draw(24, 0);
+
+}
+void Graphics::RendTriangleAABB(Matrix transform)
+{
+	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
+
+	UINT32 vertexSize = sizeof(XMFLOAT3);
+	UINT32 offset = 0;
+
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	gDeviceContext->IASetInputLayout(AABBLayout);
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+
+	Matrix world;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	//world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	// viewProj = camera->camView * projection;
+
+	worldViewProj = transform * camera->camView * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	//world = world.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr2 = (MATRICES*)mapped.pData;
+	MatrixPtr2->worldViewProj = worldViewProj;
+	MatrixPtr2->world = world;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->IASetVertexBuffers(0, 1, &triangleAABBVertexBuffer, &vertexSize, &offset);
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+	gDeviceContext->Draw(8, 0);
+
+}
 void Graphics::UpdateConstantBuffer()
 {
 

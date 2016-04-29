@@ -54,16 +54,20 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
-		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
+		customImport->LoadCustomFormat("C:/Users/Fanny/Documents/LitetSpel/ERIN/BinaryData.bin");
 		customImport->NewMesh();
 
-		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryDataSphere.bin");
+		//customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryDataSphere.bin");
 		customImport->NewMesh();
 		
 		graphics->CreateTriangleAABBBox(player->triangle);
+
 		graphics->AABBTrianglePoints();
 
-		graphics->CreateSquareAABBBox();	
+		for (int i = 0; i < 2; i++)
+		{
+			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
+		}
 		graphics->AABBSquarePoints();
 		
 		graphics->CreateConstantBuffer();
@@ -186,42 +190,30 @@ void Engine::update(double deltaTimeMs)
 
 void Engine::render()
 {
-	graphics->UpdateConstantBuffer();
-	
-	graphics->RendAABB();
-	graphics->RendTriangleAABB(*player->shipMatrix);
+	//graphics->UpdateConstantBuffer();
 
 	//graphics->transformBoundingBox(*gameObject->objectMatrix);
 	graphics->AABBtoAABB();
-	//graphics->UpdateConstantBuffer();
-
-	/*
-
-	player shader;
-	player rend;
-	player shader delete;
-
-	for (int i = 0; i < assetmanager->numberOfMeshes; i++)
-	{
-	graphics->CreateShaders("filename");
-	graphics->RendFBX(x);
-	graphics->DeleteShader();
-	}
-
-	*/
 
 	graphics->Render();
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
 
-	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0) ;
-
+	graphics->RendTriangleAABB(*player->shipMatrix);
+	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
+	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
 	for (int j = 0; j < 2; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
-	
+
+	//render 2 AABB boxes
+	for (int k = 0; k < 2; k++)
+	{
+		graphics->RendAABB(customImport->meshes.at(k).world);
+	}
+
 	for (int i = 0; i < 4; i++)
 	{
 		graphics->RendPlayer(*enemies[i]->objectMatrix);
