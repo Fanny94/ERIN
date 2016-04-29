@@ -114,6 +114,7 @@ void Player::PlayerReset()
 	this->SetX(0);
 	this->SetY(0);
 	this->SetZ(0);
+
 	this->heading = 0;
 	this->plannedHeading = 0;
 }

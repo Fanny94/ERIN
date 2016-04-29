@@ -299,7 +299,7 @@ void Engine::processInput()
 				else if (pMenuOption == 2)
 				{
 					cout << "Help & Options" << endl;
-					//gameState = HelpAndOptions;
+					gameState = HelpAndOptions;
 				}
 				else if (pMenuOption == 3)
 				{
