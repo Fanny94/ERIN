@@ -29,8 +29,6 @@ float4 PS_main(VS_OUT input) : SV_Target
 	float4 v = normalize(input.CamPos - input.WPos);
 	float3 r = reflect(-s, input.Nor);
 
-	/*if (hasTexture == true)
-		diffuse = ObjTexture.Sample(ObjSamplerState, input.uv).xyz;*/
 
 	input.Nor = normalize(input.Nor);
 

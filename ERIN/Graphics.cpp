@@ -604,6 +604,7 @@ void Graphics::AABBSquarePoints()
 	float diffZ = abs(AABBVertexArray.points[7].z) - abs(AABBVertexArray.points[0].z);
 
 	//points[0, 1, 2, 3, 4, 5, 6, 7] is the 8 corners of the cube's AABB 
+
 	//Left Upper Corner (front)
 	AABBVertexArray.points[1].x = AABBVertexArray.points[0].x;
 	AABBVertexArray.points[1].y = AABBVertexArray.points[7].y - diffY;
@@ -633,7 +634,6 @@ void Graphics::AABBSquarePoints()
 	AABBVertexArray.points[6].x = AABBVertexArray.points[0].x;
 	AABBVertexArray.points[6].y = AABBVertexArray.points[7].y;
 	AABBVertexArray.points[6].z = AABBVertexArray.points[7].z;
-
 
 //buffer array with definition of the lines
 //Here there are 24 vertices that is going to be drawn because we use a vertex buffer to draw the lines

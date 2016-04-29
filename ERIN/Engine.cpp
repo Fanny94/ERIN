@@ -54,7 +54,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
-		customImport->LoadCustomFormat("C:/Users/Fanny/Documents/LitetSpel/ERIN/BinaryData.bin");
+		customImport->LoadCustomFormat("../BinaryData.bin");
 		customImport->NewMesh();
 
 		//customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryDataSphere.bin");
@@ -193,7 +193,6 @@ void Engine::render()
 	//graphics->UpdateConstantBuffer();
 
 	//graphics->transformBoundingBox(*gameObject->objectMatrix);
-	graphics->AABBtoAABB();
 
 	graphics->Render();
 	graphics->RendPlayer(*player->shipMatrix);
@@ -201,7 +200,7 @@ void Engine::render()
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
 
 	graphics->RendTriangleAABB(*player->shipMatrix);
-	customImport->meshes.at(1).world = XMMatrixTranslation(0, 0, 0);
+	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
 	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
 	for (int j = 0; j < 2; j++)
 	{
@@ -219,6 +218,7 @@ void Engine::render()
 		graphics->RendPlayer(*enemies[i]->objectMatrix);
 	}
 
+	graphics->AABBtoAABB();
 	camera->InitCamera();
 
 	// Switch front- and back-buffer
