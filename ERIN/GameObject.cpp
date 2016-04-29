@@ -13,12 +13,17 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->x = x;
 	this->y = y;
 	this->z = z;
+	float LO = 0.07f, HI = 0.10f, lO = 0.0006f, hI = 0.0009f;
 
-	this->maximumSpeed = 0.05f;
+	float Random = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
+
+	this->maximumSpeed = Random;
 	this->currentSpeed = 0.0f;
 
 	this->speed = 0.0f;
-	this->acceleration = 0.0005f;
+
+	float Ran = lO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (hI - lO)));
+	this->acceleration = Ran;
 
 	// test triangle in gameobject
 	this->triangle = new TriangleVertex[3];
@@ -29,11 +34,6 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 
 	this->objectMatrix = new Matrix();
 
-	// collision
-	this->axisAllignedBox = new AABBBox;
-	this->axisAllignedBox->min = XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX);
-	this->axisAllignedBox->max = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-
 	// behavoir
 	if (doHaveBehavior == true)
 	{
@@ -42,13 +42,17 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->pos = new Position{ this->x, this->y, this->z };
 
 	GetEnemyPos();
+
+	this->sphere = new TSphere();
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+	this->sphere->m_fRadius = 0.1f;
 }
 
 GameObject::~GameObject()
 {
 	delete this->triangle;
-	delete this->axisAllignedBox;
 	delete this->objectMatrix;
+
 	delete this->pos;
 
 	if (this->behavior)
@@ -85,12 +89,19 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 		//		int me = myself->getObjectID();
 		//		int other = allEnemies[i]->getObjectID();
 
+				// cohesion calculations
+				this->behavior->cohesion(*myself->pos, *allEnemies[i]->pos);
+
+				//Separation calculations
+				this->behavior->separation(*myself->pos, *allEnemies[i]->pos);
+			}
+		}
 		//		// cohesion calculations
 		//		this->behavior->cohesion(*myself->pos, *allEnemies[i]->pos);
 		//	}
 		//}
 		//this->behavior->alignment();
-		//this->behavior->separation();
+		//
 
 		float radians = XMConvertToRadians((float)heading);
 		this->directionX = (float)sin(radians);
@@ -139,7 +150,12 @@ void GameObject::update(double dt)
 		computeTurn(dt);
 	}
 
-	*this->objectMatrix = XMMatrixRotationZ(XMConvertToRadians((float)-heading)) * XMMatrixTranslation(x, y, z) * XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+
+	*this->objectMatrix = 
+		XMMatrixRotationZ(XMConvertToRadians((float)-heading)) 
+		* XMMatrixTranslation(x, y, z) 
+		* XMMatrixScaling(1.0f, 1.0f, 1.0f);
 }
 void GameObject::computeTurn(double dt)
 {
@@ -157,6 +173,7 @@ void GameObject::computeTurn(double dt)
 			dir = -1;
 		heading += turnRate * dt * dir;
 	}
+
 }
 
 void GameObject::turnTo(double newHeading)

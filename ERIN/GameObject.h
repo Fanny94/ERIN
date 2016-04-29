@@ -27,7 +27,7 @@ public:
 	string getName() { return this->name; };
 
 	TriangleVertex* triangle;
-	AABBBox* axisAllignedBox;
+	//AABBBox* axisAllignedBox;
 	Matrix* objectMatrix;
 	Behavior* behavior;
 	Position* pos;
@@ -41,6 +41,9 @@ public:
 
 	// flock AI
 	void GetEnemyPos();
+
+	// collision
+	TSphere* sphere;
 
 private:
 	int objectID;

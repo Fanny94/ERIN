@@ -15,6 +15,8 @@
 #include <tchar.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#include <iostream>
+
 #include <stdio.h>
 #include <vector>
 

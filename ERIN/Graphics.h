@@ -6,6 +6,7 @@
 #include "WICTextureLoader.h"
 #include "Mesh.h"
 
+using namespace std;
 class Camera;
 
 class Graphics
@@ -23,15 +24,30 @@ public:
 	void HighScoreRender();
 	void HelpAndOptionsRender();
 	void RendPlayer(Matrix transform);
+
+	void RenderCustom(Mesh mesh, Matrix transform);
+	void CustomUpdateBuffer(Matrix transform);
+
+	void RendAABB(Matrix transform);
+	void RendTriangleAABB(Matrix transform);
+
 	void RenderCustom(Mesh mesh);
 
 	void CreateShaders();
+	void CreateDepthBuffer();
+
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
-	void CreateTriangleAABBBox(AABBBox* axisAllignedBox);
-	void CreateSquareAABBBox(AABBBox* axisAllignedBox);
-	void CreateDepthBuffer();
+
+	void CreateTriangleAABBBox(TriangleVertex* triangleVertices);
+	void CreateSquareAABBBox(Mesh mesh);
+	void AABBSquarePoints();
+	void AABBTrianglePoints();
+	//AABBBox* transformBoundingBox(Matrix transform);
+
+	bool AABBtoAABB();
+
 	void UpdateConstantBuffer();
 
 	float get_gWidth() { return this->WIDTH; }
@@ -57,33 +73,29 @@ public:
 		Matrix world;
 		Matrix view;
 		Matrix projection;
+		XMFLOAT4 camPos;
 	};
 
 	Matrix viewProj;
-
 	TriangleVertex* triangleVertices;
+
 	MATRICES* MatrixPtr;
 	MATRICES* MatrixPtr2;
 	Camera* camera;
 
-	ID3D11Buffer* objBuffer = nullptr;
+	ID3D11Buffer* customFormatBuffer = nullptr;
 
-	struct OBJ
+	struct CustomFormat
 	{
-		XMFLOAT4 difColor;
-		int hasTexture;
-		float padding[3];
+		float diffuseColor[3];
+		float paddingDC;
+		float ambientColor[3];
+		float paddingAC;
+		float specularColor[3];
+		float shininess;
 	};
 
-	struct Vertex
-	{
-		Vertex() {}
-		Vertex(float x, float y, float z, float u, float v, float nx, float ny, float nz) : pos(x, y, z), texCoord(u, v), normal(nx, ny, nz) {}
-
-		XMFLOAT3 pos;
-		XMFLOAT2 texCoord;
-		XMFLOAT3 normal;
-	};
+	CustomFormat* CFPtr;
 
 	struct VertexCustom
 	{
@@ -94,37 +106,10 @@ public:
 		float bitan[3];
 	};
 
-	struct SurfaceMaterial
-	{
-		wstring matName;
-		XMFLOAT4 difColor;
-		int texArrayIndex;
-		bool hasTexture;
-		bool transparent;
-	};
+	vector<DWORD> indices;
 
-	bool LoadObjModel(wstring filename,		//.obj filename
-		ID3D11Buffer** vertBuff,			//mesh vertex buffer
-		ID3D11Buffer** indexBuff,			//mesh index buffer
-		vector<int>& subsetIndexStart,		//start index of each subset
-		vector<int>& subsetMaterialArray,	//index value of material for each subset
-		vector<SurfaceMaterial>& material,	//vector of material structures
-		int& subsetCount,					//Number of subsets in mesh
-		bool isRHCoordSys,					//true if model was created in right hand coord system
-		bool computeNormals);				//true to compute the normals, false to use the files normals
-
-	ID3D11BlendState* Transparency;
-	ID3D11Buffer* meshVertBuff;
-	ID3D11Buffer* meshIndexBuff;
-	int meshSubsets = 0;
-	vector<int> meshSubsetIndexStart;
-	vector<int> meshSubsetTexture;
-	vector<ID3D11ShaderResourceView*> meshSRV;
-	vector<wstring> textureNameArray;
-	vector<SurfaceMaterial> material;
-	vector<Vertex> vertexMeshSize;
-	vector<AABBBox> triangleBox;
-	vector<AABBBox> squareBox;
+	vector<AABBVertex> squareVertexArray;
+	vector<AABBBox> triangleVertexArray;
 
 private:
 	float WIDTH = 1080;
@@ -132,6 +117,16 @@ private:
 
 	float camPosX;
 	float camPosY;
+
+	AABBBox axisAllignedBox;
+	AABBBox triAxis;
+
+	//AABBBox* newAABB;
+	AABBBox AABBVertexArray;
+	AABBBox triVertexArray;
+
+	AABBBox triAABBBuffer;
+	AABBVertex AABBBufferArray;
 
 	ID3D11Device* gDevice = nullptr;
 	ID3D11DeviceContext* gDeviceContext = nullptr;
@@ -144,6 +139,13 @@ private:
 	ID3D11VertexShader* gVertexShader = nullptr;
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
+
+	ID3D11Buffer* vertAABBBuffer = nullptr;
+	ID3D11InputLayout* AABBLayout = nullptr;
+	ID3D11VertexShader* AABBVertexShader = nullptr;
+	ID3D11PixelShader* AABBPixelShader = nullptr;
+
+	ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
 
 	ID3D11Buffer* gConstantBuffer = nullptr;
 

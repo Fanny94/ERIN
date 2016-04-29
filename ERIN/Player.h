@@ -29,17 +29,31 @@ public:
 	float GetZ() { return this->z; };
 
 	Input* input;
-	TriangleVertex* triangle;
-	Matrix* objectMatrix;
+
+	// turret magic
+	TriangleVertex* triangle; // is replaced by ship (TriangleVertex)
+	TriangleVertex* ship;
+	TriangleVertex* turret;
+	Matrix* objectMatrix; // is replaced by shipMatrix
+	Matrix* shipMatrix;
+	Matrix* turretMatrix;
+
 	//AABBBox* axisAllignedBox;
-	Position* pos;
+	Position* shipPos;
+	Position* turretPos;
 
 	// rotation
 	void computeTurn(double deltaTime);
+	void turretComputeTurn(double deltaTime);
 	void turnTo(double newHeading);
 
 	double getVx();
 	double getVy();
+	double getTVx();
+	double getTVy();
+
+	// collision
+	TSphere* sphere;
 
 private:
 
@@ -56,16 +70,27 @@ private:
 
 	float thumbLeftX;
 	float thumbLeftY;
+	float thumbRightX;
+	float thumbRightY;
 
 	float velocityX;
 	float velocityY;
 
-	// rotation
+	// ship rotation
 	double r_x = 0;
 	double r_y = 0;
-	double r_speed = 15; // m/s;
-	double heading = 120;
+	double r_speed = 10; // m/s;
+	double heading = 0;
 	double plannedHeading = 0;
-	double turnRate = 3; // deg /s
+	double turnRate = 0.5; // deg /s
+
+	// turrent rotation
+	double tr_x = 0;
+	double tr_y = 0;
+	double tr_speed = 20; // m/s;
+	double turrent_heading = 0;
+	double turret_plannedHeading = 0;
+	double turret_turnRate = 1.0; // deg /s
+	
 };
 #endif // !PLAYER_H

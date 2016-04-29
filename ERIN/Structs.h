@@ -16,7 +16,20 @@ struct TriangleVertex
 
 struct AABBBox
 {
+	XMFLOAT3 points[8];
 	XMFLOAT3 min;
 	XMFLOAT3 max;
 };
+
+struct AABBVertex
+{
+	XMFLOAT3 points[24];
+};
+
+struct TSphere
+{
+	Vector3		m_vecCenter;
+	float       m_fRadius;
+};
+
 #endif // !STRUCTS_H
