@@ -34,11 +34,6 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 
 	this->objectMatrix = new Matrix();
 
-	// collision
-	this->axisAllignedBox = new AABBBox;
-	this->axisAllignedBox->min = XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX);
-	this->axisAllignedBox->max = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-
 	// behavoir
 	if (doHaveBehavior == true)
 	{
@@ -47,13 +42,14 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->pos = new Position{ this->x, this->y, this->z };
 
 	GetEnemyPos();
+
 }
 
 GameObject::~GameObject()
 {
 	delete this->triangle;
-	delete this->axisAllignedBox;
 	delete this->objectMatrix;
+
 	delete this->pos;
 
 	if (this->behavior)
@@ -153,6 +149,7 @@ void GameObject::computeTurn(double dt)
 			dir = -1;
 		heading += turnRate * dt * dir;
 	}
+
 }
 
 void GameObject::turnTo(double newHeading)

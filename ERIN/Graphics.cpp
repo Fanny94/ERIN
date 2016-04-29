@@ -1,7 +1,12 @@
 #include "Graphics.h"
 
 //http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
-Graphics::Graphics() {}
+
+Graphics::Graphics()
+{
+	axisAllignedBox.min = { FLT_MAX, FLT_MAX, FLT_MAX };
+	axisAllignedBox.max = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
+}
 
 Graphics::~Graphics()
 {
@@ -15,8 +20,15 @@ Graphics::~Graphics()
 	gVertexBuffer->Release();
 	gPixelShader->Release();
 
-	gDepthStencilView->Release();
+	vertAABBBuffer->Release();
+	AABBLayout->Release();
+	AABBVertexShader->Release();
+	AABBPixelShader->Release();
+
+	triangleAABBVertexBuffer->Release();
+
 	gDepthView->Release();
+	gDepthStencilView->Release();
 
 	gConstantBuffer->Release();
 
@@ -86,6 +98,7 @@ void Graphics::Render()
 
 void Graphics::RendPlayer(Matrix transform)
 {
+
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 
@@ -99,6 +112,99 @@ void Graphics::RendPlayer(Matrix transform)
 	CustomUpdateBuffer(transform);
 
 	gDeviceContext->Draw(3, 0);
+}
+//---------------------------------------------------------------------------
+void Graphics::RendAABB()
+{
+	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
+
+	UINT32 vertexSize = sizeof(XMFLOAT3);
+	UINT32 offset = 0;
+
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	gDeviceContext->IASetInputLayout(AABBLayout);
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+
+	Matrix world;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0.5);
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	// viewProj = camera->camView * projection;
+
+	worldViewProj = world * camera->camView * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	world = world.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr2 = (MATRICES*)mapped.pData;
+	MatrixPtr2->worldViewProj = worldViewProj;
+	MatrixPtr2->world = world;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->IASetVertexBuffers(0, 1, &vertAABBBuffer, &vertexSize, &offset);
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+	gDeviceContext->Draw(24, 0);
+
+}
+void Graphics::RendTriangleAABB(Matrix transform)
+{
+	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
+
+	UINT32 vertexSize = sizeof(XMFLOAT3);
+	UINT32 offset = 0;
+
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	gDeviceContext->IASetInputLayout(AABBLayout);
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+
+	Matrix world;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	//world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	// viewProj = camera->camView * projection;
+
+	worldViewProj = transform * camera->camView * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	//world = world.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr2 = (MATRICES*)mapped.pData;
+	MatrixPtr2->worldViewProj = worldViewProj;
+	MatrixPtr2->world = world;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->IASetVertexBuffers(0, 1, &triangleAABBVertexBuffer, &vertexSize, &offset);
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+	gDeviceContext->Draw(8, 0);
+
 }
 
 void Graphics::RenderCustom(Mesh mesh, Matrix transform)
@@ -275,6 +381,73 @@ void Graphics::CreateShaders()
 
 	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
 	pPS->Release();
+
+//----------------------------------------------------------------------------------
+	//AABB vertexShader
+	ID3DBlob* pVS_2 = nullptr;
+	D3DCompileFromFile(
+		L"AABBVertexShader.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"VS_main",		// entry point
+		"vs_4_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pVS_2,			// double pointer to ID3DBlob
+		nullptr			// pointer for Error Blob messages.			
+		);
+
+	D3D11_INPUT_ELEMENT_DESC AABBinputDesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+
+	};
+
+	gDevice->CreateInputLayout(AABBinputDesc,
+		ARRAYSIZE(AABBinputDesc), pVS_2->GetBufferPointer(), pVS_2->GetBufferSize(), &AABBLayout);
+
+	gDevice->CreateVertexShader(pVS_2->GetBufferPointer(), pVS_2->GetBufferSize(), nullptr, &AABBVertexShader);
+	pVS_2->Release();
+
+	//AABBPixelShader
+	ID3DBlob* pPS_2 = nullptr;
+	D3DCompileFromFile(
+		L"AABBPixelShader.hlsl", // filename
+		nullptr,		// optional macros
+		nullptr,		// optional include files
+		"PS_main",		// entry point
+		"ps_4_0",		// shader model (target)
+		0,				// shader compile options
+		0,				// effect compile options
+		&pPS_2,			// double pointer to ID3DBlob
+		nullptr			// pointer for Error Blob messages.			
+		);
+
+	gDevice->CreatePixelShader(pPS_2->GetBufferPointer(), pPS_2->GetBufferSize(), nullptr, &AABBPixelShader);
+	pPS_2->Release();
+
+//----------------------------------------------------------------------------------
+}
+
+void Graphics::CreateDepthBuffer()
+{
+	D3D11_TEXTURE2D_DESC desc;
+	desc.Width = WIDTH;
+	desc.Height = HEIGHT;
+	desc.MipLevels = 1;
+	desc.ArraySize = 1;
+	desc.Format = DXGI_FORMAT_D32_FLOAT;
+	desc.SampleDesc.Count = 4;
+	desc.SampleDesc.Quality = 0;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	desc.CPUAccessFlags = 0;
+	desc.MiscFlags = 0;
+
+	gDevice->CreateTexture2D(&desc, 0, &gDepthView);
+
+	gDevice->CreateDepthStencilView(gDepthView, 0, &gDepthStencilView);
+
 }
 
 void Graphics::CreateTriangle(TriangleVertex* triangleVertices)
@@ -338,62 +511,333 @@ void Graphics::CreateConstantBuffer()
 	gDevice->CreateBuffer(&cCFBuffer, NULL, &customFormatBuffer);
 }
 
-void Graphics::CreateTriangleAABBBox(AABBBox * axisAllignedBox)
+void Graphics::CreateTriangleAABBBox(TriangleVertex* triangleVertices)
 {
+	//This function defines an AABB box for the triangle with a min and a max value
+
 	for (int i = 0; i < 3; i++)
 	{
-		axisAllignedBox->min.x = min(axisAllignedBox->min.x, triangleVertices[i].x);
-		axisAllignedBox->min.y = min(axisAllignedBox->min.y, triangleVertices[i].y);
-		axisAllignedBox->min.z = min(axisAllignedBox->min.z, triangleVertices[i].z);
+		//min
+		//left bottom corner (front)
+		if (triangleVertices[i].x < triAxis.min.x)
+		{
+			triAxis.min.x = triangleVertices[i].x;
+		}
+		if (triangleVertices[i].y < triAxis.min.y)
+		{
+			triAxis.min.y = triangleVertices[i].y;
+		}
+		if (triangleVertices[i].z < triAxis.min.z)
+		{
+			triAxis.min.z = triangleVertices[i].z;
+		}
 
-		axisAllignedBox->max.x = max(axisAllignedBox->max.x, triangleVertices[i].x);
-		axisAllignedBox->max.y = max(axisAllignedBox->max.y, triangleVertices[i].y);
-		axisAllignedBox->max.z = max(axisAllignedBox->max.z, triangleVertices[i].z);
+		//max
+		//right upper corner (back)
+		if (triangleVertices[i].x > triAxis.max.x)
+		{
+			triAxis.max.x = triangleVertices[i].x;
+		}
+		if (triangleVertices[i].y > triAxis.max.y)
+		{
+			triAxis.max.y = triangleVertices[i].y;
+		}
+		if (triangleVertices[i].z > triAxis.max.z)
+		{
+			triAxis.max.z = triangleVertices[i].z;
+		}
+
+		//points is an array of 8 points that later will represent the 4 corners of the AABB triangle
+		triVertexArray.points[0] = triAxis.min;
+		triVertexArray.points[3] = triAxis.max;
 	}
 
-	triangleBox.push_back(*axisAllignedBox);
+	//squareBox.push_back(AABBVertexArray);
+}
+void Graphics::AABBTrianglePoints()
+{
+	//diference between Min and Max
+	float diffX = abs(triVertexArray.points[3].x) - abs(triVertexArray.points[0].x);
+	float diffY = abs(triVertexArray.points[3].y) - abs(triVertexArray.points[0].y);
+	float diffZ = abs(triVertexArray.points[3].z) - abs(triVertexArray.points[0].z);
+
+
+	//points[0, 1, 2, 3] is the corners of the triangle's AABB 
+	triVertexArray.points[1].x = triVertexArray.points[3].x;
+	triVertexArray.points[1].y = triVertexArray.points[0].y;
+	triVertexArray.points[1].z = triVertexArray.points[0].z;
+	
+	triVertexArray.points[2].x = triVertexArray.points[0].x;
+	triVertexArray.points[2].y = triVertexArray.points[3].y;
+	triVertexArray.points[2].z = triVertexArray.points[0].z;
+
+	//to define the lines the same vertices is going to be used several times
+	//that's why we get 8 vertices that is going to be drawn for the AABB triangle
+	//Define lines
+	triAABBBuffer.points[0] = triVertexArray.points[0];
+	triAABBBuffer.points[1] = triVertexArray.points[1];
+
+	triAABBBuffer.points[2] = triVertexArray.points[0];
+	triAABBBuffer.points[3] = triVertexArray.points[2];
+
+	triAABBBuffer.points[4] = triVertexArray.points[1];
+	triAABBBuffer.points[5] = triVertexArray.points[3];
+
+	triAABBBuffer.points[6] = triVertexArray.points[2];
+	triAABBBuffer.points[7] = triVertexArray.points[3];
+
+	//pushback points for the lines in the vector that is going to be used in the vertex buffer
+	triangleVertexArray.push_back(triAABBBuffer);
+
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(AABBVertex);
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = &triangleVertexArray[0];
+
+	//We store the points in the triangleVertexBuffer anhd then use it in the render function to be able to render this
+	gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &triangleAABBVertexBuffer);
+
 }
 
-void Graphics::CreateSquareAABBBox(AABBBox * axisAllignedBox)
+//AABBBox* Graphics::transformBoundingBox(Matrix transform)
+//{
+//
+//	//.Right returns the first column vector of the matrix
+//	float xa = transform.Right * triVertexArray.points[0].x;
+//	float xb = transform.Right * triVertexArray.points[3].x;
+//
+//	//.Up returns the second column 
+//	float ya = transform.Up * triVertexArray.points[0].y;
+//	float yb = transform.Up * triVertexArray.points[3].y;
+//
+//	//.Backward returns the third column 
+//	float za = transform.Backward * triVertexArray.points[0].z;
+//	float zb = transform.Backward * triVertexArray.points[3].z;
+//
+//	float minValue[3] = { min(xa, xb) + min(ya, yb) + min(za, zb) };
+//	float maxValue[3] = { max(xa, xb) + max(ya, yb) + max(za, zb) };
+//	
+//	newAABB = new AABBBox();
+//		
+//	return newAABB->points[0] = minValue + transform.Translation,
+//		newAABB->points[3] = maxValue + transform.Translation;
+//	
+//
+//}
+
+void Graphics::CreateSquareAABBBox()
 {
+	//This function defines an AABB box for the cube with a min and a max value
+
 	for (int i = 0; i < vertexMeshSize.size(); i++)
 	{
-		axisAllignedBox->min.x = min(axisAllignedBox->min.x, vertexMeshSize[i].pos.x);
-		axisAllignedBox->min.y = min(axisAllignedBox->min.y, vertexMeshSize[i].pos.y);
-		axisAllignedBox->min.z = min(axisAllignedBox->min.z, vertexMeshSize[i].pos.z);
+		//min
+		//left bottom corner (front)
+		if (vertexMeshSize[i].pos.x < axisAllignedBox.min.x)
+		{
+			axisAllignedBox.min.x = vertexMeshSize[i].pos.x;
+		}
+		if (vertexMeshSize[i].pos.y < axisAllignedBox.min.y)
+		{
+			axisAllignedBox.min.y = vertexMeshSize[i].pos.y;
+		}
+		if (vertexMeshSize[i].pos.z < axisAllignedBox.min.z)
+		{
+			axisAllignedBox.min.z = vertexMeshSize[i].pos.z;
+		}
+	
+		//max
+		//right upper corner (back)
+		if (vertexMeshSize[i].pos.x > axisAllignedBox.max.x)
+		{
+			axisAllignedBox.max.x = vertexMeshSize[i].pos.x;
+		}
+		if (vertexMeshSize[i].pos.y > axisAllignedBox.max.y)
+		{
+			axisAllignedBox.max.y = vertexMeshSize[i].pos.y;
+		}
+		if (vertexMeshSize[i].pos.z > axisAllignedBox.max.z)
+		{
+			axisAllignedBox.max.z = vertexMeshSize[i].pos.z;
+		}
 
-		axisAllignedBox->max.x = max(axisAllignedBox->max.x, vertexMeshSize[i].pos.x);
-		axisAllignedBox->max.y = max(axisAllignedBox->max.y, vertexMeshSize[i].pos.y);
-		axisAllignedBox->max.z = max(axisAllignedBox->max.z, vertexMeshSize[i].pos.z);
+		//points is an array of 8 points that later will represent the 8 corners of the AABB cube 
+		AABBVertexArray.points[0] = axisAllignedBox.min;
+		AABBVertexArray.points[7] = axisAllignedBox.max;
 	}
 
-	squareBox.push_back(*axisAllignedBox);
+	//squareBox.push_back(AABBVertexArray);
+
+}
+void Graphics::AABBSquarePoints()
+{
+
+	//This function defines the rest of the points of the AABB cube, including min and max
+
+	//diference between Min and Max
+	float diffX = abs(AABBVertexArray.points[7].x) - abs(AABBVertexArray.points[0].x);
+	float diffY = abs(AABBVertexArray.points[7].y) - abs(AABBVertexArray.points[0].y);
+	float diffZ = abs(AABBVertexArray.points[7].z) - abs(AABBVertexArray.points[0].z);
+
+
+	//points[0, 1, 2, 3, 4, 5, 6, 7] is the 8 corners of the cube's AABB 
+	//Left Upper Corner (front)
+	AABBVertexArray.points[1].x = AABBVertexArray.points[0].x;
+	AABBVertexArray.points[1].y = AABBVertexArray.points[7].y - diffY;
+	AABBVertexArray.points[1].z = AABBVertexArray.points[0].z;
+
+	//Right upper corner (front)
+	AABBVertexArray.points[2].x = AABBVertexArray.points[7].x;
+	AABBVertexArray.points[2].y = AABBVertexArray.points[1].y;
+	AABBVertexArray.points[2].z = AABBVertexArray.points[0].z;
+
+	//Right Bottom corner (front) 
+	AABBVertexArray.points[3].x = AABBVertexArray.points[2].x;
+	AABBVertexArray.points[3].y = AABBVertexArray.points[0].y;
+	AABBVertexArray.points[3].z = AABBVertexArray.points[0].z;
+
+	//Right bottom corner (back)
+	AABBVertexArray.points[4].x = AABBVertexArray.points[7].x;
+	AABBVertexArray.points[4].y = AABBVertexArray.points[0].y;
+	AABBVertexArray.points[4].z = AABBVertexArray.points[3].z - diffZ;
+	
+	//Left bottom corner (back)
+	AABBVertexArray.points[5].x = AABBVertexArray.points[4].x - diffX;
+	AABBVertexArray.points[5].y = AABBVertexArray.points[0].y;
+	AABBVertexArray.points[5].z = AABBVertexArray.points[4].z;
+
+	//Left upper corner (back)
+	AABBVertexArray.points[6].x = AABBVertexArray.points[7].x - diffX;
+	AABBVertexArray.points[6].y = AABBVertexArray.points[7].y;
+	AABBVertexArray.points[6].z = AABBVertexArray.points[0].z - diffZ;
+
+
+//buffer array with definition of the lines
+//Here there are 24 vertices that is going to be drawn because we use a vertex buffer to draw the lines
+//first quadrant (first)
+	//line 1
+	AABBBufferArray.points[0] = AABBVertexArray.points[0];
+	AABBBufferArray.points[1] = AABBVertexArray.points[3];
+
+	//line 2
+	AABBBufferArray.points[2] = AABBVertexArray.points[0];
+	AABBBufferArray.points[3] = AABBVertexArray.points[1];
+
+	//line 3
+	AABBBufferArray.points[4] = AABBVertexArray.points[1];
+	AABBBufferArray.points[5] = AABBVertexArray.points[2];
+
+	//line 4
+	AABBBufferArray.points[6] = AABBVertexArray.points[2];
+	AABBBufferArray.points[7] = AABBVertexArray.points[3];
+
+	//second quadrant (back)
+	//line 5
+	AABBBufferArray.points[8] = AABBVertexArray.points[4];
+	AABBBufferArray.points[9] = AABBVertexArray.points[5];
+
+	//line 6
+	AABBBufferArray.points[10] = AABBVertexArray.points[5];
+	AABBBufferArray.points[11] = AABBVertexArray.points[6];
+
+	//line 7
+	AABBBufferArray.points[12] = AABBVertexArray.points[6];
+	AABBBufferArray.points[13] = AABBVertexArray.points[7];
+
+	//line 8
+	AABBBufferArray.points[14] = AABBVertexArray.points[7];
+	AABBBufferArray.points[15] = AABBVertexArray.points[4];
+
+	//z lines
+	//line 9
+	AABBBufferArray.points[16] = AABBVertexArray.points[1];
+	AABBBufferArray.points[17] = AABBVertexArray.points[6];
+
+	//line 10
+	AABBBufferArray.points[18] = AABBVertexArray.points[2];
+	AABBBufferArray.points[19] = AABBVertexArray.points[7];
+
+	//line 11 
+	AABBBufferArray.points[20] = AABBVertexArray.points[3];
+	AABBBufferArray.points[21] = AABBVertexArray.points[4];
+
+	//line 12
+	AABBBufferArray.points[22] = AABBVertexArray.points[0];
+	AABBBufferArray.points[23] = AABBVertexArray.points[5];
+	
+
+	//pushback points for the lines in the vector that is going to be used in the vertex buffer
+	squareVertexArray.push_back(AABBBufferArray);
+
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(AABBVertex);
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = &squareVertexArray[0];
+
+	//We store the points in the vertAABBBuffer anhd then use it in the render function to be able to render this
+	gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &vertAABBBuffer);
 
 }
 
-void Graphics::CreateDepthBuffer()
+bool Graphics::AABBtoAABB()
 {
-	D3D11_TEXTURE2D_DESC depthDesc;
-	depthDesc.Width = WIDTH;
-	depthDesc.Height = HEIGHT;
-	depthDesc.MipLevels = 1;
-	depthDesc.ArraySize = 1;
-	depthDesc.Format = DXGI_FORMAT_D32_FLOAT;
-	depthDesc.SampleDesc.Count = 4;
-	depthDesc.SampleDesc.Quality = 0;
-	depthDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	depthDesc.CPUAccessFlags = 0;
-	depthDesc.MiscFlags = 0;
+	//This is the function for collision detection
+	//The fucntion compares min and max values of the two AABB's
+	//here is the problem, the collsion isn't correct
 
-	gDevice->CreateTexture2D(&depthDesc, 0, &gDepthView);
+	if (AABBVertexArray.points[7].x < triVertexArray.points[0].x);
+	{
+		cout << "no hit" << endl;
+		return false;
+	}
+	
+	if (AABBVertexArray.points[0].x > triVertexArray.points[3].x)
+	{
+		cout << "no hit";
+		return false;
+	}
 
-	gDevice->CreateDepthStencilView(gDepthView, 0, &gDepthStencilView);
+	if (AABBVertexArray.points[7].y < triVertexArray.points[0].y)
+	{
+		cout << "no hit";
+		return false;
+	}
+	if (AABBVertexArray.points[0].y > triVertexArray.points[3].y)
+	{
+		cout << "no hit";
+		return false;
+	}
+
+	//if (AABBVertexArray.points[7].z < triVertexArray.points[0].z && AABBVertexArray.points[0].z > triVertexArray.points[3].z) 
+	//{
+	//	cout << "no hit";
+	//	return false;
+	//}
+
+	//cout << "hit" << endl;
+	return true;
 
 }
 
 void Graphics::UpdateConstantBuffer()
 {
+
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mapped;
 

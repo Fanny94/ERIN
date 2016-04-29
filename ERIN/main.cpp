@@ -21,6 +21,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 
 	MSG msg = { 0 };
 
+
 	//create console window
 	AllocConsole();
 
@@ -33,7 +34,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 	const double MS_PER_UPDATE = 8;
 	double previous = clock();
 	double lag = 0.0;
-
 
 	while (WM_QUIT != msg.message && engine->getRunning())
 	{

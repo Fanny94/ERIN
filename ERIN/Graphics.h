@@ -6,6 +6,7 @@
 #include "WICTextureLoader.h"
 #include "Mesh.h"
 
+using namespace std;
 class Camera;
 
 class Graphics
@@ -17,15 +18,28 @@ public:
 	void SetViewport();
 	void Render();
 	void RendPlayer(Matrix transform);
+
 	void RenderCustom(Mesh mesh, Matrix transform);
 	void CustomUpdateBuffer(Matrix transform);
+
+	void RendAABB();
+	void RendTriangleAABB(Matrix transform);
+
 	void CreateShaders();
+	void CreateDepthBuffer();
+
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
-	void CreateTriangleAABBBox(AABBBox* axisAllignedBox);
-	void CreateSquareAABBBox(AABBBox* axisAllignedBox);
-	void CreateDepthBuffer();
+
+	void CreateTriangleAABBBox(TriangleVertex* triangleVertices);
+	void CreateSquareAABBBox();
+	void AABBSquarePoints();
+	void AABBTrianglePoints();
+	//AABBBox* transformBoundingBox(Matrix transform);
+
+	bool AABBtoAABB();
+
 	void UpdateConstantBuffer();
 
 	float get_gWidth() { return this->WIDTH; }
@@ -55,8 +69,8 @@ public:
 	};
 
 	Matrix viewProj;
-
 	TriangleVertex* triangleVertices;
+
 	MATRICES* MatrixPtr;
 	MATRICES* MatrixPtr2;
 	Camera* camera;
@@ -72,7 +86,7 @@ public:
 		float specularColor[3];
 		float shininess;
 	};
-
+	
 	struct Vertex
 	{
 		Vertex() {}
@@ -93,6 +107,11 @@ public:
 	};
 
 	vector<Vertex> vertexMeshSize;
+	vector<DWORD> indices;
+
+	vector<AABBVertex> squareVertexArray;
+	vector<AABBBox> triangleVertexArray;
+
 	vector<AABBBox> triangleBox;
 	vector<AABBBox> squareBox;
 
@@ -102,6 +121,16 @@ private:
 
 	float camPosX;
 	float camPosY;
+
+	AABBBox axisAllignedBox;
+	AABBBox triAxis;
+
+	//AABBBox* newAABB;
+	AABBBox AABBVertexArray;
+	AABBBox triVertexArray;
+
+	AABBBox triAABBBuffer;
+	AABBVertex AABBBufferArray;
 
 	ID3D11Device* gDevice = nullptr;
 	ID3D11DeviceContext* gDeviceContext = nullptr;
@@ -114,6 +143,15 @@ private:
 	ID3D11VertexShader* gVertexShader = nullptr;
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
+
+	//-------------------------------------------
+	ID3D11Buffer* vertAABBBuffer = nullptr;
+	ID3D11InputLayout* AABBLayout = nullptr;
+	ID3D11VertexShader* AABBVertexShader = nullptr;
+	ID3D11PixelShader* AABBPixelShader = nullptr;
+
+	ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
+	//-------------------------------------------
 
 	ID3D11Buffer* gConstantBuffer = nullptr;
 

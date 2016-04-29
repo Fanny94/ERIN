@@ -7,8 +7,9 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->running = true;
 	this->camera = new Camera();
 	this->graphics = new Graphics();
-	this->customImport = new CustomImport();
+	this->gameLogic = new GameLogic();
 
+	this->customImport = new CustomImport();
 	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
 
 	// creating enemies
@@ -29,6 +30,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 	//create window
 	wndHandle = InitWindow(hInstance);
+
+
 
 	if (!camera->InitDirectInput(hInstance))
 	{
@@ -57,6 +60,12 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryDataSphere.bin");
 		customImport->NewMesh();
 		
+		graphics->CreateTriangleAABBBox(player->triangle);
+		graphics->AABBTrianglePoints();
+
+		graphics->CreateSquareAABBBox();	
+		graphics->AABBSquarePoints();
+		
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -68,6 +77,7 @@ Engine::~Engine()
 	delete this->graphics;
 	delete this->camera;
 	delete this->customImport;
+	delete this->gameLogic;
 
 	// player enemies
 	delete this->player;
@@ -176,6 +186,13 @@ void Engine::update(double deltaTimeMs)
 
 void Engine::render()
 {
+	graphics->UpdateConstantBuffer();
+	
+	graphics->RendAABB();
+	graphics->RendTriangleAABB(*player->shipMatrix);
+
+	//graphics->transformBoundingBox(*gameObject->objectMatrix);
+	graphics->AABBtoAABB();
 	//graphics->UpdateConstantBuffer();
 
 	/*
