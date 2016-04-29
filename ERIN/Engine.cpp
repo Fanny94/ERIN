@@ -31,8 +31,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	//create window
 	wndHandle = InitWindow(hInstance);
 
-
-
 	if (!camera->InitDirectInput(hInstance))
 	{
 		MessageBox(0, "Direct Input Initialization - Failed", "Error", MB_OK);
@@ -54,21 +52,21 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
-		customImport->LoadCustomFormat("C:/Users/Fanny/Documents/LitetSpel/ERIN/BinaryData.bin");
-		customImport->NewMesh();
+		/*customImport->LoadCustomFormat("../BinaryData.bin");
+		customImport->NewMesh();*/
 
-		//customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryDataSphere.bin");
-		customImport->NewMesh();
+		/*customImport->LoadCustomFormat("../BinaryDataSphere.bin");
+		customImport->NewMesh();*/
 		
-		graphics->CreateTriangleAABBBox(player->triangle);
+		/*graphics->CreateTriangleAABBBox(player->triangle);
 
-		graphics->AABBTrianglePoints();
+		graphics->AABBTrianglePoints();*/
 
-		for (int i = 0; i < 2; i++)
+		/*for (int i = 0; i < 2; i++)
 		{
 			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
 		}
-		graphics->AABBSquarePoints();
+		graphics->AABBSquarePoints();*/
 		
 		graphics->CreateConstantBuffer();
 
@@ -185,6 +183,14 @@ void Engine::update(double deltaTimeMs)
 		enemies[i]->update(deltaTimeMs);
 	}
 
+	for (int i = 0; i < 4; i++)
+	{
+		if (sphereToSphere(*player->sphere, *enemies[i]->sphere))
+		{
+			cout << "sphere hit" << endl;
+		}
+	}
+
 	//printf("Elapsed time: %fS.\n", deltaTimeS);
 }
 
@@ -193,26 +199,26 @@ void Engine::render()
 	//graphics->UpdateConstantBuffer();
 
 	//graphics->transformBoundingBox(*gameObject->objectMatrix);
-	graphics->AABBtoAABB();
+	//graphics->AABBtoAABB();
 
 	graphics->Render();
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
 
-	graphics->RendTriangleAABB(*player->shipMatrix);
-	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
+	//graphics->RendTriangleAABB(*player->shipMatrix);
+	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
 	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
-	for (int j = 0; j < 2; j++)
+	/*for (int j = 0; j < 1; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
-	}
+	}*/
 
 	//render 2 AABB boxes
-	for (int k = 0; k < 2; k++)
+	/*for (int k = 0; k < 2; k++)
 	{
 		graphics->RendAABB(customImport->meshes.at(k).world);
-	}
+	}*/
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -223,6 +229,29 @@ void Engine::render()
 
 	// Switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(1, 0);
+}
+
+bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)
+{
+	//Calculate the squared distance between the centers of both spheres
+	Vector3 vecDist(tSph2.m_vecCenter - tSph1.m_vecCenter);
+
+	double dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
+
+	float fDistSq(dotProduct);
+
+	//Calculate the squared sum of both radii
+	float fRadiiSumSquared(tSph1.m_fRadius + tSph2.m_fRadius);
+	fRadiiSumSquared *= fRadiiSumSquared;
+
+	//Check for collision
+	//If the distance squared is less than or equal to the square sum
+	//of the radii, then we have a collision
+	if (fDistSq <= fRadiiSumSquared)
+		return true;
+
+	//If not, then return false
+	return false;
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)

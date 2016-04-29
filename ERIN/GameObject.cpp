@@ -43,6 +43,9 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 
 	GetEnemyPos();
 
+	this->sphere = new TSphere();
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+	this->sphere->m_fRadius = 0.1f;
 }
 
 GameObject::~GameObject()
@@ -131,7 +134,12 @@ void GameObject::update(double dt)
 		computeTurn(dt);
 	}
 
-	*this->objectMatrix = XMMatrixRotationZ(XMConvertToRadians((float)-heading)) * XMMatrixTranslation(x, y, z) * XMMatrixScaling(1.0f, 1.0f, 1.0f);
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+
+	*this->objectMatrix = 
+		XMMatrixRotationZ(XMConvertToRadians((float)-heading)) 
+		* XMMatrixTranslation(x, y, z) 
+		* XMMatrixScaling(1.0f, 1.0f, 1.0f);
 }
 void GameObject::computeTurn(double dt)
 {

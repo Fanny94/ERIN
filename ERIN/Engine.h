@@ -22,6 +22,8 @@ public:
 	void update(double deltaTimeMs);
 	void render();
 
+	bool sphereToSphere(const TSphere& tSph1, const TSphere& tSph2);
+
 	HWND InitWindow(HINSTANCE hInstance);
 	HWND wndHandle;
 

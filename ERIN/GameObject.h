@@ -39,6 +39,9 @@ public:
 	// flock AI
 	void GetEnemyPos();
 
+	// collision
+	TSphere* sphere;
+
 private:
 	int objectID;
 	string name;
