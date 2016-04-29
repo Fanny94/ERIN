@@ -22,7 +22,7 @@ public:
 	void RenderCustom(Mesh mesh, Matrix transform);
 	void CustomUpdateBuffer(Matrix transform);
 
-	void RendAABB();
+	void RendAABB(Matrix transform);
 	void RendTriangleAABB(Matrix transform);
 
 	void CreateShaders();
@@ -33,7 +33,7 @@ public:
 	void CreateConstantBuffer();
 
 	void CreateTriangleAABBBox(TriangleVertex* triangleVertices);
-	void CreateSquareAABBBox();
+	void CreateSquareAABBBox(Mesh mesh);
 	void AABBSquarePoints();
 	void AABBTrianglePoints();
 	//AABBBox* transformBoundingBox(Matrix transform);
@@ -87,16 +87,6 @@ public:
 		float shininess;
 	};
 	
-	struct Vertex
-	{
-		Vertex() {}
-		Vertex(float x, float y, float z, float u, float v, float nx, float ny, float nz) : pos(x, y, z), texCoord(u, v), normal(nx, ny, nz) {}
-
-		XMFLOAT3 pos;
-		XMFLOAT2 texCoord;
-		XMFLOAT3 normal;
-	};
-
 	struct VertexCustom
 	{
 		float pos[3];
@@ -106,14 +96,10 @@ public:
 		float bitan[3];
 	};
 
-	vector<Vertex> vertexMeshSize;
 	vector<DWORD> indices;
 
 	vector<AABBVertex> squareVertexArray;
 	vector<AABBBox> triangleVertexArray;
-
-	vector<AABBBox> triangleBox;
-	vector<AABBBox> squareBox;
 
 private:
 	float WIDTH = 1080;
@@ -144,14 +130,12 @@ private:
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
 
-	//-------------------------------------------
 	ID3D11Buffer* vertAABBBuffer = nullptr;
 	ID3D11InputLayout* AABBLayout = nullptr;
 	ID3D11VertexShader* AABBVertexShader = nullptr;
 	ID3D11PixelShader* AABBPixelShader = nullptr;
 
 	ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
-	//-------------------------------------------
 
 	ID3D11Buffer* gConstantBuffer = nullptr;
 
