@@ -156,6 +156,54 @@ void Graphics::RendPlayer(Matrix transform)
 
 	gDeviceContext->Draw(3, 0);
 }
+
+void Graphics::RendBullet(Matrix transform)
+{
+
+	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+
+	UINT32 vertexSize = sizeof(float) * 6;
+	UINT32 offset = 0;
+
+	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gDeviceContext->IASetInputLayout(gVertexLayout);
+
+	HRESULT result;
+	D3D11_MAPPED_SUBRESOURCE mapped;
+
+	Matrix world;
+	Matrix projection;
+	Matrix worldViewProj;
+
+	//world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
+	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
+
+	// viewProj = camera->camView * projection;
+
+	worldViewProj = transform * camera->camView * projection;
+
+	worldViewProj = worldViewProj.Transpose();
+
+	transform = transform.Transpose();
+
+	result = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
+	if (FAILED(result))
+	{
+		return;
+	}
+
+	MatrixPtr2 = (MATRICES*)mapped.pData;
+	MatrixPtr2->worldViewProj = worldViewProj;
+	MatrixPtr2->world = transform;
+
+	gDeviceContext->Unmap(gConstantBuffer, 0);
+
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+
+	gDeviceContext->Draw(3, 0);
+}
 //---------------------------------------------------------------------------
 void Graphics::RendAABB()
 {

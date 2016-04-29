@@ -3,6 +3,7 @@
 #include "Linker.h"
 #include "Input.h"
 #include "Structs.h"
+#include "ObjectPool.h"
 
 # define M_PI 3.14159265358979323846
 using namespace std;
@@ -85,7 +86,6 @@ private:
 	double tr_speed = 20; // m/s;
 	double turrent_heading = 0;
 	double turret_plannedHeading = 0;
-	double turret_turnRate = 1.0; // deg /s
-	
+	double turret_turnRate = 1.0; // deg /s	
 };
 #endif // !PLAYER_H

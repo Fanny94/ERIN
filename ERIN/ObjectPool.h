@@ -1,6 +1,7 @@
 #pragma once
 #include "Bullet.h"
-
+//#include <ctime>
+//#include <time.h>
 
 class ObjectPool
 {
@@ -8,12 +9,12 @@ public:
 	ObjectPool();
 	~ObjectPool();
 	void createb(float x, float y, int lifeTime);
-	void iniErry();
-	
+	void fire();
 private:
-	int timeLeft; //How long a bullet will last
 	float x, y;
+	int lifeTime;
+	Bullet* firstAvailable;
 	static const int poolSize = 100;
 	Bullet bullets[poolSize];
+	Bullet fbull;
 };
-

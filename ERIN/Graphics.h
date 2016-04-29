@@ -18,6 +18,7 @@ public:
 	void SetViewport();
 	void Render();
 	void RendPlayer(Matrix transform);
+	void RendBullet(Matrix transform);
 	void RendAABB();
 	void RendTriangleAABB(Matrix transform);
 	void RenderCustom(Mesh mesh);

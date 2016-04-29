@@ -1,14 +1,16 @@
 #include "ObjectPool.h"
 
-
-
 ObjectPool::ObjectPool()
 {
-	//firstOne = &bullets[0];
+	firstAvailable = &bullets[0];
 
+	for (int i = 0; i < poolSize - 1; i++)
+	{
+		bullets[i].setNext(&bullets[i + 1]);
+	}
 
+	bullets[poolSize - 1].setNext(NULL);
 }
-
 
 ObjectPool::~ObjectPool()
 {
@@ -16,17 +18,19 @@ ObjectPool::~ObjectPool()
 
 void ObjectPool::createb(float x, float y, int lifeTime)
 {
-	for (int i = 0; i < poolSize; i++)
-	{
-		if (!bullets[i].getInUse())
-		{
-			bullets[i].iniBullet(x, y, lifeTime);
-			return;
-		}
-	}
+	assert(firstAvailable != NULL);
+
+	Bullet* newBullet = firstAvailable;
+	firstAvailable = newBullet->getNext();
+	
+	newBullet->iniBullet(x, y, lifeTime);
 }
 
-void ObjectPool::iniErry()
+void ObjectPool::fire()
 {
-	createb(x, y, timeLeft);
+	if (fbull.canFire = true)
+	{
+		createb(x, y, lifeTime);
+		fbull.countdown = 60;
+	}
 }

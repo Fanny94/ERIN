@@ -35,6 +35,7 @@ private:
 	Mesh* mesh;
 	Camera* camera;
 	CustomImport* customImport;
+	ObjectPool* objectpool;
 
 	// test input
 	Player* player;
