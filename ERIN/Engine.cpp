@@ -12,15 +12,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
 
-	// creating enemies
-	/*size_t size = 10;
-	vector<GameObject> Vector_enemies(size);*/
-	//vector<GameObject> stageObjects;
-
-	/*this->gameObject = new GameObject(0, "triangle", 0.0f, 0.0f, 0.5f, true);
-	Vector_enemies.push_back(*gameObject);
-	delete gameObject;
-	Vector_enemies.clear();*/
+	
 
 	this->enemies = new GameObject*[5];
 	this->enemies[0] = new GameObject(1, "enemy1", 5.0f, 0.0f, 0.1f, true);
@@ -52,11 +44,11 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
-		/*customImport->LoadCustomFormat("../BinaryData.bin");
-		customImport->NewMesh();*/
+		customImport->LoadCustomFormat("../BinaryData.bin");
+		customImport->NewMesh();
 
-		/*customImport->LoadCustomFormat("../BinaryDataSphere.bin");
-		customImport->NewMesh();*/
+		//customImport->LoadCustomFormat("../BinaryDataSphere.bin");
+		//customImport->NewMesh();
 		
 		/*graphics->CreateTriangleAABBBox(player->triangle);
 
@@ -205,11 +197,12 @@ void Engine::render()
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
+	/*graphics->RendTriangleAABB(*player->shipMatrix);*/
 
-	//graphics->RendTriangleAABB(*player->shipMatrix);
-	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
+	graphics->RendTriangleAABB(*player->shipMatrix);
+	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
 	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
-	/*for (int j = 0; j < 1; j++)
+	/*for (int j = 0; j < 2; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}*/
