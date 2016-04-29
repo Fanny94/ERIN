@@ -290,7 +290,6 @@ void Graphics::CreateShaders()
 	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
 	pPS->Release();
 
-//----------------------------------------------------------------------------------
 	//AABB vertexShader
 	ID3DBlob* pVS_2 = nullptr;
 	D3DCompileFromFile(
@@ -334,7 +333,6 @@ void Graphics::CreateShaders()
 	gDevice->CreatePixelShader(pPS_2->GetBufferPointer(), pPS_2->GetBufferSize(), nullptr, &AABBPixelShader);
 	pPS_2->Release();
 
-//----------------------------------------------------------------------------------
 }
 
 void Graphics::CreateDepthBuffer()
