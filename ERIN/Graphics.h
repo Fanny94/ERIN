@@ -86,6 +86,8 @@ public:
 		float specularColor[3];
 		float shininess;
 	};
+
+	CustomFormat* CFPtr;
 	
 	struct Vertex
 	{

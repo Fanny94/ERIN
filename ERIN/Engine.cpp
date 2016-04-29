@@ -54,11 +54,11 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
-		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
+		customImport->LoadCustomFormat("../BinaryDataSphere.bin");
 		customImport->NewMesh();
 
-		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryDataSphere.bin");
-		customImport->NewMesh();
+		//customImport->LoadCustomFormat("../BinaryData.bin");
+		//customImport->NewMesh();
 		
 		graphics->CreateTriangleAABBBox(player->triangle);
 		graphics->AABBTrianglePoints();
@@ -217,7 +217,7 @@ void Engine::render()
 
 	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0) ;
 
-	for (int j = 0; j < 2; j++)
+	for (int j = 0; j < 1; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
