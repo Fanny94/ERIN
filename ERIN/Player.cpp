@@ -42,7 +42,7 @@ Player::Player(string name, float x, float y, float z)
 	// collision
 	this->sphere = new TSphere();
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
-	this->sphere->m_fRadius = 0.01f;
+	this->sphere->m_fRadius = 0.1f;
 }
 
 Player::~Player()
@@ -55,6 +55,7 @@ Player::~Player()
 	//delete this->axisAllignedBox;
 	delete this->shipPos;
 	delete this->turretPos;
+	delete this->sphere;
 }
 
 

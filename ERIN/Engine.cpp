@@ -180,6 +180,7 @@ void Engine::update(double deltaTimeMs)
 		if (sphereToSphere(*player->sphere, *enemies[i]->sphere))
 		{
 			cout << "sphere hit" << endl;
+			enemies[i]->reset();
 		}
 	}
 
@@ -200,7 +201,7 @@ void Engine::render()
 	/*graphics->RendTriangleAABB(*player->shipMatrix);*/
 
 	graphics->RendTriangleAABB(*player->shipMatrix);
-	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
+	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
 	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
 	/*for (int j = 0; j < 2; j++)
 	{
