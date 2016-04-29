@@ -58,17 +58,17 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->NewMesh();
 
 		//customImport->LoadCustomFormat("../BinaryData.bin");
-		//customImport->NewMesh();
+		customImport->NewMesh();
 		
-		/*graphics->CreateTriangleAABBBox(player->triangle);
+		//graphics->CreateTriangleAABBBox(player->triangle);
 
-		graphics->AABBTrianglePoints();
+		//graphics->AABBTrianglePoints();
 
 		for (int i = 0; i < 2; i++)
 		{
 			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
 		}
-		graphics->AABBSquarePoints();*/
+		graphics->AABBSquarePoints();
 		
 		graphics->CreateConstantBuffer();
 
@@ -200,18 +200,18 @@ void Engine::render()
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
 	/*graphics->RendTriangleAABB(*player->shipMatrix);*/
 
-	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0) ;
+	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0) ;
 
-	for (int j = 0; j < 1; j++)
+	for (int j = 0; j < 2; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
 
 	//render 2 AABB boxes
-	/*for (int k = 0; k < 2; k++)
+	for (int k = 0; k < 2; k++)
 	{
 		graphics->RendAABB(customImport->meshes.at(k).world);
-	}*/
+	}
 
 	for (int i = 0; i < 4; i++)
 	{
