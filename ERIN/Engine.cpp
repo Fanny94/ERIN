@@ -54,31 +54,21 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
+		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
+		customImport->NewMesh();
+
+		customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryDataSphere.bin");
+		customImport->NewMesh();
+		
 		graphics->CreateTriangleAABBBox(player->triangle);
 		graphics->AABBTrianglePoints();
-
-		/*if (!graphics->LoadObjModel(L"C:/Users/Fanny/Documents/LitetSpel/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
-		{
-			return;
-		}*/
 
 		graphics->CreateSquareAABBBox();	
 		graphics->AABBSquarePoints();
 		
-		/*customImport->LoadCustomFormat("C:/Users/Taccoa/Documents/GitHub/FBX-Exporter/FBX importer.exporter/BinaryData.bin");
-		customImport->NewMesh();*/
-	
-		/*if (!graphics->LoadObjModel(L"C:/Users/Marc/Documents/Visual Studio 2015/Projects/ERIN/Cube.obj", &graphics->meshVertBuff, &graphics->meshIndexBuff, graphics->meshSubsetIndexStart, graphics->meshSubsetTexture, graphics->material, graphics->meshSubsets, true, false))
-		{
-			return;
-
-		}
-		*/
-
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
-
 	}
 }
 
@@ -86,12 +76,12 @@ Engine::~Engine()
 {
 	delete this->graphics;
 	delete this->camera;
+	delete this->customImport;
 	delete this->gameLogic;
 
 	// player enemies
 	delete this->player;
 	//delete this->gameObject;
-	delete this->customImport;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -224,7 +214,13 @@ void Engine::render()
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
-	//graphics->RenderCustom(customImport->meshes.at(0));
+
+	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0) ;
+
+	for (int j = 0; j < 2; j++)
+	{
+		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
+	}
 	
 	for (int i = 0; i < 4; i++)
 	{
