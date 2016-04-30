@@ -22,7 +22,7 @@ void ObjectPool::createb(float x, float y, int lifeTime)
 
 	Bullet* newBullet = firstAvailable;
 	firstAvailable = newBullet->getNext();
-	
+
 	newBullet->iniBullet(x, y, lifeTime);
 }
 

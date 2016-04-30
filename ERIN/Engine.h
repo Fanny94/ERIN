@@ -31,7 +31,7 @@ public:
 
 private:
 	bool running;
-	
+
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	Mesh* mesh;

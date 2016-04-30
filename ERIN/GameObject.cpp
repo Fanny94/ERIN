@@ -13,11 +13,11 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->x = x;
 	this->y = y;
 	this->z = z;
-	float LO = 0.07f, HI = 0.10f, lO = 0.0006f, hI = 0.0009f;
+	float LO = 0.07f, HI = 0.15f, lO = 0.0006f, hI = 0.0009f;
 
 	float Random = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
 
-	this->maximumSpeed = 0.01f; //Random;
+	this->maximumSpeed = Random; //Random;
 	this->currentSpeed = 0.0f;
 
 	this->speed = 0.0f;
@@ -45,7 +45,7 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 
 	this->sphere = new TSphere();
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
-	this->sphere->m_fRadius = 0.1f;
+	this->sphere->m_fRadius = 0.5f;
 }
 
 GameObject::~GameObject()
@@ -107,7 +107,7 @@ void GameObject::update(double dt)
 	{
 		this->accelerating = false;
 	}
-	
+
 	if (!accelerating)
 	{
 		// deacceleration
@@ -136,9 +136,9 @@ void GameObject::update(double dt)
 
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 
-	*this->objectMatrix = 
-		XMMatrixRotationZ(XMConvertToRadians((float)-heading)) 
-		* XMMatrixTranslation(x, y, z) 
+	*this->objectMatrix =
+		XMMatrixRotationZ(XMConvertToRadians((float)-heading))
+		* XMMatrixTranslation(x, y, z)
 		* XMMatrixScaling(1.0f, 1.0f, 1.0f);
 }
 
@@ -147,7 +147,7 @@ void GameObject::reset()
 	this->x = 0.0f;
 	this->y = 0.0f;
 	this->z = 0.0f;
-	
+
 	this->currentSpeed = 0.0f;
 	this->speed = 0.0f;
 

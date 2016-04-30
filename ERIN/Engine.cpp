@@ -12,9 +12,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->objectpool = new ObjectPool();
 
 	this->customImport = new CustomImport();
-	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
-
-	
+	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
 
 	this->enemies = new GameObject*[5];
 	this->enemies[0] = new GameObject(1, "enemy1", 5.0f, 0.0f, 0.1f, true);
@@ -51,7 +49,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		//customImport->LoadCustomFormat("../BinaryDataSphere.bin");
 		//customImport->NewMesh();
-		
+
 		/*graphics->CreateTriangleAABBBox(player->triangle);
 
 		graphics->AABBTrianglePoints();*/
@@ -61,7 +59,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
 		}
 		graphics->AABBSquarePoints();*/
-		
+
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -75,7 +73,6 @@ Engine::~Engine()
 	delete this->customImport;
 	delete this->gameLogic;
 
-	// player enemies
 	delete this->player;
 	//delete this->gameObject;
 
@@ -164,22 +161,22 @@ void Engine::processInput()
 
 void Engine::update(double deltaTimeMs)
 {
-	double deltaTimeS;
-	deltaTimeS = deltaTimeMs / 1000;
-	// update code
-	// example physics calculation using delta time:
-	// object.x = object.x + (object.speed * deltaTimeS);
+	double deltaTimeS; // millisecond
+	deltaTimeS = deltaTimeMs / 1000; // seconds
 
+	// Player Update
 	player->update(deltaTimeMs);
 	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
 	gameObject->update(deltaTimeMs);*/
 
+	// Enemies Updates
 	for (int i = 0; i < 4; i++)
 	{
 		enemies[i]->updateBehavior(*player->shipPos, enemies[i], enemies);
 		enemies[i]->update(deltaTimeMs);
 	}
 
+	// Collision
 	for (int i = 0; i < 4; i++)
 	{
 		if (sphereToSphere(*player->sphere, *enemies[i]->sphere))
@@ -188,42 +185,46 @@ void Engine::update(double deltaTimeMs)
 			enemies[i]->reset();
 		}
 	}
-
-	//printf("Elapsed time: %fS.\n", deltaTimeS);
 }
 
 void Engine::render()
 {
 	//graphics->UpdateConstantBuffer();
 
-	//graphics->transformBoundingBox(*gameObject->objectMatrix);
-	//graphics->AABBtoAABB();
-
 	graphics->Render();
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
-	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
-	/*graphics->RendTriangleAABB(*player->shipMatrix);*/
-
-	graphics->RendTriangleAABB(*player->shipMatrix);
-	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
-	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
-	/*for (int j = 0; j < 2; j++)
+	
+	// Custom Importer
+	/*
+	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
+	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
+	for (int j = 0; j < 1; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
-	}*/
+	}
+	*/
 
-	//render 2 AABB boxes
-	/*for (int k = 0; k < 2; k++)
+	// AABB
+	/*
+	graphics->RendTriangleAABB(*player->shipMatrix);
+	graphics->transformBoundingBox(*gameObject->objectMatrix);
+	graphics->AABBtoAABB();
+
+	render 2 AABB boxes
+	for (int k = 0; k < 2; k++)
 	{
 		graphics->RendAABB(customImport->meshes.at(k).world);
-	}*/
+	}
+	*/
 
+	// Enemy rendering
 	for (int i = 0; i < 4; i++)
 	{
 		graphics->RendPlayer(*enemies[i]->objectMatrix);
 	}
 
+	// Camera Update
 	camera->InitCamera();
 
 	// Switch front- and back-buffer
