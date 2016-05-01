@@ -96,8 +96,8 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			this->objectpool->fire();
-			//this->running = false;
+			//this->objectpool->fire();
+			this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
