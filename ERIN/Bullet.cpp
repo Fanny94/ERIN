@@ -41,9 +41,10 @@ void Bullet::update(double dT)
 		* XMMatrixTranslation(this->state.alive.x, this->state.alive.y, this->state.alive.z);
 }
 
-void Bullet::iniBullet(float X, float Y, int lifeTime)
+void Bullet::iniBullet(float X, float Y, float Z, int lifeTime)
 {
 	state.alive.x = X;
 	state.alive.y = Y;
+	state.alive.z = Z;
 	timeLeft = lifeTime;
 }

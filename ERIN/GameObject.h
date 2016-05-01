@@ -38,7 +38,6 @@ public:
 	double getVy();
 
 	// flock AI
-	void GetEnemyPos();
 
 	// collision
 	TSphere* sphere;

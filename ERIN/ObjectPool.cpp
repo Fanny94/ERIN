@@ -16,21 +16,25 @@ ObjectPool::~ObjectPool()
 {
 }
 
-void ObjectPool::createb(float x, float y, int lifeTime)
+void ObjectPool::createb(float x, float y, float z, int lifeTime)
 {
 	assert(firstAvailable != NULL);
 
 	Bullet* newBullet = firstAvailable;
 	firstAvailable = newBullet->getNext();
 
-	newBullet->iniBullet(x, y, lifeTime);
+	newBullet->iniBullet(x, y, z, lifeTime);
 }
 
 void ObjectPool::fire()
 {
+	createb(x, y, z, lifeTime);
+	fbull.countdown = 60;
 	if (fbull.canFire = true)
 	{
-		createb(x, y, lifeTime);
-		fbull.countdown = 60;
+		for (int i = 0; i < poolSize; i++)
+		{
+			graph->RendPlayer(*ptrBull[i]->bulletMatrix);
+		}
 	}
 }
