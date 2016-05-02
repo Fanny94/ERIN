@@ -20,6 +20,12 @@ struct TSphere
 	float       m_fRadius;
 };
 
+struct TAABB
+{
+	Vector3 m_vecMax;
+	Vector3 m_vecMin;
+};
+
 struct Wall
 {
 	Vector3 point;

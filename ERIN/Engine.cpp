@@ -331,6 +331,21 @@ bool Engine::pointInSphere(const TSphere& tSph, const Vector3& vecPoint)
 	return false;
 }
 
+bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
+{
+
+	//Check if Box1's max is greater than Box2's min and Box1's min is less than Box2's max
+	return(tBox1.m_vecMax.x > tBox2.m_vecMin.x &&
+		tBox1.m_vecMin.x < tBox2.m_vecMax.x &&
+		tBox1.m_vecMax.y > tBox2.m_vecMin.y &&
+		tBox1.m_vecMin.y < tBox2.m_vecMax.y &&
+		tBox1.m_vecMax.z > tBox2.m_vecMin.z &&
+		tBox1.m_vecMin.z < tBox2.m_vecMax.z);
+
+	//If not, it will return false
+
+}
+
 HWND Engine::InitWindow(HINSTANCE hInstance)
 {
 	// Every window created must belkong to a class
