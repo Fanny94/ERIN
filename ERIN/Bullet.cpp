@@ -8,7 +8,9 @@ Bullet::Bullet()
 
 	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
 	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };	
+	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
+
+	//this->bulletPos = new Position{ this->state.alive.x, this->state.alive.y, this->state.alive.z };
 }
 
 
@@ -16,6 +18,7 @@ Bullet::~Bullet()
 {
 	delete this->bulletMatrix;
 	delete this->triangle;
+	//delete this->bulletPos;
 }
 
 void Bullet::update(double dT)
@@ -24,6 +27,7 @@ void Bullet::update(double dT)
 	
 	timeLeft --;
 	lastFire --;
+
 
 	if (timeLeft <= 0)
 	{

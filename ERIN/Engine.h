@@ -43,6 +43,7 @@ private:
 
 	// test input
 	Player* player;
+	Player pplay;
 	GameObject* gameObject;
 	GameObject** enemies;
 };

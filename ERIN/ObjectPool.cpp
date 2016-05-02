@@ -60,16 +60,17 @@ void ObjectPool::fire()
 		newBullet->iniBullet(0, 0, 0, fbull.timeLeft);
 		fbull.lastFire = 100;
 	}*/
-	//if (fbull.lastFire <= 0)
+	//if (fbull.canFire=true)
 	//{
 		for (int i = 0; i < poolSize; i++)
 		{
 			if (!bullets[i].getInUse())
 			{
-				bullets[i].iniBullet(0, 0, 0, fbull.timeLeft);
+				bullets[i].iniBullet(fbull.state.alive.x, fbull.state.alive.y, fbull.state.alive.z, fbull.timeLeft);//(bullets[i].bulletPos->x, bullets[i].bulletPos->y, bullets[i].bulletPos->z, fbull.timeLeft);
 				bullets[i].inUse = true;
+				//fbull.canFire = false;
 				//animate();
-				fbull.lastFire = 2;
+				//pfbull.lastFire = 200;
 				return;
 			}
 		}

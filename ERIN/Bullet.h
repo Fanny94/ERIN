@@ -20,17 +20,16 @@ public:
 	bool getInUse() { return this->inUse; };
 	void setNext(Bullet* Next) { state.Next = Next; };
 	
-	bool canFire;
+	bool canFire = false;
 	int countdown = 60;
 
 	Position* bulletPos;
 	Matrix* bulletMatrix;
 	//bool inUse;
-	int lastFire = 0;
-	int timeLeft = 900; //How long a bullet will last
+	int lastFire = 300;
+	int timeLeft = 700; //How long a bullet will last
 	bool inUse;
-
-private:
+	
 	union 
 	{
 		struct alive
@@ -41,6 +40,10 @@ private:
 		
 		Bullet* Next;
 	} state;
+
+
+private:
+
 
 	double bullet_heading = 0;
 	double bullet_plannedHeading = 0;

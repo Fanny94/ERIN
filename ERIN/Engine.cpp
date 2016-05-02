@@ -159,11 +159,15 @@ void Engine::update(double deltaTimeMs)
 	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
 	gameObject->update(deltaTimeMs);*/
 
+	//BUllet Updates
 	for (int i = 0; i < BulletObjectpool->getSize(); i++)
 	{
 		if (BulletObjectpool->bullets[i].getInUse())
 		{
 			BulletObjectpool->bullets[i].update(deltaTimeMs);
+			/*BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
+			BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
+			BulletObjectpool->bullets[i].state.alive.z = player->shipPos->z;*/
 		}
 	}
 
