@@ -69,38 +69,10 @@ void Graphics::Render()
 	float clearColor[] = { 1, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-	/*UINT32 vertexMS = sizeof(Vertex);
-
-	D3D11_MAPPED_SUBRESOURCE mappedOBJ;
-	HRESULT hr = gDeviceContext->Map(objBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedOBJ);
-	OBJ* OBJPtr;
-	OBJPtr = (OBJ*)mappedOBJ.pData;
-
-	for (int i = 0; i < meshSubsets; ++i)
-	{
-		gDeviceContext->IASetIndexBuffer(meshIndexBuff, DXGI_FORMAT_R32_UINT, 0);
-		gDeviceContext->IASetVertexBuffers(0, 1, &meshVertBuff, &vertexMS, &offset);
-
-		OBJPtr->difColor = material[meshSubsetTexture[i]].difColor;
-		OBJPtr->hasTexture = material[meshSubsetTexture[i]].hasTexture;
-
-		gDeviceContext->UpdateSubresource(objBuffer, 0, NULL, &OBJPtr, 0, 0);
-		gDeviceContext->PSSetConstantBuffers(0, 1, &objBuffer);
-
-		if (material[meshSubsetTexture[i]].hasTexture)
-			gDeviceContext->PSSetShaderResources(0, 1, &meshSRV[material[meshSubsetTexture[i]].texArrayIndex]);
-
-		int indexStart = meshSubsetIndexStart[i];
-		int indexDrawAmount = meshSubsetIndexStart[i + 1] - meshSubsetIndexStart[i];
-		if (!material[meshSubsetTexture[i]].transparent)
-			gDeviceContext->DrawIndexed(indexDrawAmount, indexStart, 0);
-	}*/
 }
 
 void Graphics::RendPlayer(Matrix transform)
 {
-
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 

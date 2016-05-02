@@ -2,11 +2,11 @@
 
 struct Vertex
 {
-	float pos[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float nor[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float uv[2] = { 0.0000000000, 0.0000000000};
-	float tan[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float bitan[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
+	float pos[3];
+	float nor[3];
+	float uv[2];
+	float tan[3];
+	float bitan[3];
 };
 
 struct MeshStruct
@@ -84,6 +84,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 			meshTemp.vertex.push_back(meshTemp.vertexTemp);
 		}
 		meshS.push_back(meshTemp);
+		meshTemp.vertex.clear();
 	}
 
 	for (int i = 0; i < MaterialCount; i++)
