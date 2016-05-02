@@ -22,6 +22,7 @@ public:
 	void render();
 
 	bool sphereToSphere(const TSphere& tSph1, const TSphere& tSph2);
+	bool sphereToPlane(const TSphere& tSph, const Vector3& vecPoint, const Vector3& vecNormal);
 
 	HWND InitWindow(HINSTANCE hInstance);
 	HWND wndHandle;
@@ -41,7 +42,8 @@ private:
 	Bullet* inu;
 	Bullet** bullets;
 
-	// test input
+	Wall* walls;
+
 	Player* player;
 	GameObject* gameObject;
 	GameObject** enemies;

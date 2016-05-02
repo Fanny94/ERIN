@@ -20,6 +20,20 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->enemies[2] = new GameObject(3, "enemy3", -5.0f, 0.0f, 0.1f, true);
 	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);
 
+	this->walls = new Wall[3];
+	// upper
+	this->walls[0].point = Vector3(0, 10, 0);
+	this->walls[0].normal = Vector3(0, -1, 0);
+	// left
+	this->walls[1].point = Vector3(-10, 0, 0);
+	this->walls[1].normal = Vector3(1, 0, 0);
+	// lower
+	this->walls[2].point = Vector3(0, -10, 0);
+	this->walls[2].normal = Vector3(0, 1, 0);
+	// right
+	this->walls[3].point = Vector3(10, 0, 0);
+	this->walls[3].normal = Vector3(-1, 0, 0);
+
 	//create window
 	wndHandle = InitWindow(hInstance);
 
@@ -175,6 +189,36 @@ void Engine::update(double deltaTimeMs)
 	}
 
 	// Collision
+	/*for (int i = 0; i < 4; i++)
+	{
+		if (sphereToPlane(*player->sphere, walls[i].point, walls[i].normal))
+		{
+			
+		}
+	}*/
+
+
+	/*if (sphereToPlane(*player->sphere, walls[0].point, walls[0].normal))
+	{
+		cout << "upper wall hit" << endl;
+		player->SetY(walls[0].point.y);
+	}
+	if (sphereToPlane(*player->sphere, walls[1].point, walls[1].normal))
+	{
+		cout << "left wall hit" << endl;
+		player->SetX(walls[1].point.x);
+	}
+	if (sphereToPlane(*player->sphere, walls[2].point, walls[2].normal))
+	{
+		cout << "lower wall hit" << endl;
+		player->SetY(walls[2].point.x);
+	}
+	if (sphereToPlane(*player->sphere, walls[3].point, walls[3].normal))
+	{
+		cout << "right wall hit" << endl;
+		player->SetX(walls[3].point.x);
+	}*/
+
 	for (int i = 0; i < 4; i++)
 	{
 		if (sphereToSphere(*player->sphere, *enemies[i]->sphere))
@@ -192,9 +236,9 @@ void Engine::render()
 	graphics->Render();
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
-	
+
 	// Custom Importer
-	
+
 	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
 	//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
 	for (int j = 0; j < 1; j++)
@@ -226,25 +270,44 @@ void Engine::render()
 
 bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)
 {
-	//Calculate the squared distance between the centers of both spheres
+	// Calculate the squared distance between the centers of both spheres
 	Vector3 vecDist(tSph2.m_vecCenter - tSph1.m_vecCenter);
 
 	double dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
 
 	float fDistSq(dotProduct);
 
-	//Calculate the squared sum of both radii
+	// Calculate the squared sum of both radii
 	float fRadiiSumSquared(tSph1.m_fRadius + tSph2.m_fRadius);
 	fRadiiSumSquared *= fRadiiSumSquared;
 
-	//Check for collision
-	//If the distance squared is less than or equal to the square sum
-	//of the radii, then we have a collision
+	// Check for collision
+	// If the distance squared is less than or equal to the square sum
+	// of the radii, then we have a collision
 	if (fDistSq <= fRadiiSumSquared)
 		return true;
 
-	//If not, then return false
+	// If not, then return false
 	return false;
+}
+
+bool Engine::sphereToPlane(const TSphere& tSph, const Vector3& vecPoint, const Vector3& vecNormal)
+{
+	// Calculate a vector from the point on the plane to the center of the sphere
+	Vector3 vecTemp(tSph.m_vecCenter - vecPoint);
+
+	// Calculate the distance: dot product of the new vector with the plane's normal
+	double dotProduct = vecTemp.x * vecNormal.x + vecTemp.y * vecNormal.y + vecTemp.z * vecNormal.z;
+	float fDist(dotProduct);
+
+	if (fDist > tSph.m_fRadius)
+	{
+		// The sphere is not touching the plane
+		return false;
+	}
+
+	// Else, the sphere is colliding with the plane
+	return true;
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)
