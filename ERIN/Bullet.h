@@ -3,6 +3,8 @@
 
 #include "Linker.h"
 #include "Structs.h"
+#include <ctime>
+#include <time.h>
 
 class Bullet
 {
@@ -23,6 +25,9 @@ public:
 
 	Position* bulletPos;
 	Matrix* bulletMatrix;
+	//bool inUse;
+	int lastFire = 0;
+	int timeLeft = 900; //How long a bullet will last
 	bool inUse;
 
 private:
@@ -36,14 +41,14 @@ private:
 		
 		Bullet* Next;
 	} state;
-	
+
 	double bullet_heading = 0;
 	double bullet_plannedHeading = 0;
 
-	int timeLeft = 10; //How long a bullet will last
 	
 	
-	float maxspd = 0.01f;
+	
+	float maxspd = 0.02f;
 	
 	float damage; // if needed
 

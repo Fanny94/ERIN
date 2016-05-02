@@ -30,7 +30,7 @@ void ObjectPool::animate()
 	}
 }
 
-void ObjectPool::createb(float x, float y, float z, int lifeTime)
+/*void ObjectPool::createb(float x, float y, float z, int lifeTime, bool inUse)
 {
 	//assert(firstAvailable != NULL);
 
@@ -38,7 +38,7 @@ void ObjectPool::createb(float x, float y, float z, int lifeTime)
 	{
 		if (!bullets[i].getInUse())
 		{
-			bullets[i].iniBullet(x, y, z, lifeTime);
+			bullets[i].iniBullet(x, y, z, lifeTime, inUse);
 			bullets[i].inUse = true;
 		}
 	}
@@ -47,16 +47,31 @@ void ObjectPool::createb(float x, float y, float z, int lifeTime)
 	firstAvailable = newBullet->getNext();
 
 	newBullet->iniBullet(x, y, z, lifeTime);*/
-}
+//}
 
 void ObjectPool::fire()
 {
-	if (fbull.canFire = true)
+	
+	/*if (fbull.lastFire == 0)
 	{
+		Bullet* newBullet = firstAvailable;
+		firstAvailable = newBullet->getNext();
+
+		newBullet->iniBullet(0, 0, 0, fbull.timeLeft);
+		fbull.lastFire = 100;
+	}*/
+	//if (fbull.lastFire <= 0)
+	//{
 		for (int i = 0; i < poolSize; i++)
 		{
-			createb(0, 0, 0, lifeTime);
-			//graph->RendPlayer(*ptrBull[i]->bulletMatrix);
+			if (!bullets[i].getInUse())
+			{
+				bullets[i].iniBullet(0, 0, 0, fbull.timeLeft);
+				bullets[i].inUse = true;
+				//animate();
+				fbull.lastFire = 2;
+				return;
+			}
 		}
-	}
+	//}
 }
