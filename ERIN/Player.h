@@ -37,7 +37,6 @@ public:
 	Matrix* shipMatrix;
 	Matrix* turretMatrix;
 
-	//AABBBox* axisAllignedBox;
 	Position* shipPos;
 	Position* turretPos;
 

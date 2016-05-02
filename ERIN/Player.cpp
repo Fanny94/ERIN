@@ -31,10 +31,6 @@ Player::Player(string name, float x, float y, float z)
 	this->shipMatrix = new Matrix();
 	this->turretMatrix = new Matrix();
 
-	//this->axisAllignedBox = new AABBBox;
-	/*this->axisAllignedBox->min = XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX);
-	this->axisAllignedBox->max = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);*/
-
 	this->shipPos = new Position{ this->x, this->y, this->z };
 	this->turretPos = new Position{ this->x + 1.0f, this->y, this->z };
 
@@ -51,7 +47,6 @@ Player::~Player()
 	//delete this->objectMatrix;
 	delete this->shipMatrix;
 	delete this->turretMatrix;
-	//delete this->axisAllignedBox;
 	delete this->shipPos;
 	delete this->turretPos;
 	delete this->sphere;

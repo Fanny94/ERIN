@@ -50,16 +50,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		//customImport->LoadCustomFormat("../BinaryDataSphere.bin");
 		//customImport->NewMesh();
 
-		/*graphics->CreateTriangleAABBBox(player->triangle);
-
-		graphics->AABBTrianglePoints();*/
-
-		/*for (int i = 0; i < 2; i++)
-		{
-			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
-		}
-		graphics->AABBSquarePoints();*/
-
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -203,19 +193,6 @@ void Engine::render()
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
-
-	// AABB
-	/*
-	graphics->RendTriangleAABB(*player->shipMatrix);
-	graphics->transformBoundingBox(*gameObject->objectMatrix);
-	graphics->AABBtoAABB();
-
-	render 2 AABB boxes
-	for (int k = 0; k < 2; k++)
-	{
-		graphics->RendAABB(customImport->meshes.at(k).world);
-	}
-	*/
 
 	// Enemy rendering
 	for (int i = 0; i < 4; i++)
