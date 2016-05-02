@@ -196,14 +196,13 @@ void Engine::render()
 	graphics->RendPlayer(*player->turretMatrix);
 	
 	// Custom Importer
-	/*
-	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
-	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
+	
+	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
+	//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
 	for (int j = 0; j < 1; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
-	*/
 
 	// AABB
 	/*
