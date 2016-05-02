@@ -13,11 +13,11 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->x = x;
 	this->y = y;
 	this->z = z;
-	float LO = 0.07f, HI = 0.10f, lO = 0.0006f, hI = 0.0009f;
+	float LO = 0.07f, HI = 0.15f, lO = 0.0006f, hI = 0.0009f;
 
 	float Random = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
 
-	this->maximumSpeed = Random;
+	this->maximumSpeed = Random; //Random;
 	this->currentSpeed = 0.0f;
 
 	this->speed = 0.0f;
@@ -41,19 +41,19 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	}
 	this->pos = new Position{ this->x, this->y, this->z };
 
-	GetEnemyPos();
+	//GetEnemyPos();
 
 	this->sphere = new TSphere();
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
-	this->sphere->m_fRadius = 0.1f;
+	this->sphere->m_fRadius = 0.5f;
 }
 
 GameObject::~GameObject()
 {
 	delete this->triangle;
 	delete this->objectMatrix;
-
 	delete this->pos;
+	delete this->sphere;
 
 	if (this->behavior)
 	{
@@ -81,27 +81,24 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 		this->behavior->update(player, thisEnemy);
 
 		// static number of enemies
-		//for (int i = 0; i < 4; i++)
-		//{
-		//	if (myself->getObjectID() != allEnemies[i]->getObjectID())
-		//	{
-		//		// test lines to see values quick
-		//		int me = myself->getObjectID();
-		//		int other = allEnemies[i]->getObjectID();
+		for (int i = 0; i < 4; i++)
+		{
+			if (myself->getObjectID() != allEnemies[i]->getObjectID())
+			{
+				// test lines to see values quick
+				int me = myself->getObjectID();
+				int other = allEnemies[i]->getObjectID();
 
 				// cohesion calculations
 				this->behavior->cohesion(*myself->pos, *allEnemies[i]->pos);
 
-				//Separation calculations
+				// Separation calculations
 				this->behavior->separation(*myself->pos, *allEnemies[i]->pos);
 			}
 		}
-		//		// cohesion calculations
-		//		this->behavior->cohesion(*myself->pos, *allEnemies[i]->pos);
-		//	}
-		//}
+	
 		//this->behavior->alignment();
-		//
+		
 
 		float radians = XMConvertToRadians((float)heading);
 		this->directionX = (float)sin(radians);
@@ -123,7 +120,7 @@ void GameObject::update(double dt)
 	{
 		this->accelerating = false;
 	}
-	
+
 	if (!accelerating)
 	{
 		// deacceleration
@@ -152,11 +149,31 @@ void GameObject::update(double dt)
 
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 
-	*this->objectMatrix = 
-		XMMatrixRotationZ(XMConvertToRadians((float)-heading)) 
-		* XMMatrixTranslation(x, y, z) 
+	*this->objectMatrix =
+		XMMatrixRotationZ(XMConvertToRadians((float)-heading))
+		* XMMatrixTranslation(x, y, z)
 		* XMMatrixScaling(1.0f, 1.0f, 1.0f);
 }
+
+void GameObject::reset()
+{
+	this->x = 0.0f;
+	this->y = 0.0f;
+	this->z = 0.0f;
+
+	this->currentSpeed = 0.0f;
+	this->speed = 0.0f;
+
+	delete this->objectMatrix;
+	this->objectMatrix = new Matrix();
+
+	this->pos->x = this->x;
+	this->pos->y = this->y;
+	this->pos->z = this->z;
+
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+}
+
 void GameObject::computeTurn(double dt)
 {
 	double dh = plannedHeading - heading;
@@ -189,22 +206,3 @@ double GameObject::getVy()
 	return r_speed * asin(heading * M_PI / 180);
 }
 
-void GameObject::GetEnemyPos()
-{
-	/*float* EnemyPosX;
-	float* EnemyPosY;*/
-	int count = 0;
-
-	float EnemyPos[1], EnemyPosY[1];
-	
-	EnemyPos[count] = x;
-	EnemyPosY[count] = y;
-	//EnemyPos[count] = y;
-	//EnemyPosY[count] = y;
-
-
-
-	pos->xPos[count] = EnemyPos[count];
-	pos->yPos[count] = EnemyPosY[count];
-	count++;
-}

@@ -38,7 +38,6 @@ public:
 	Matrix* shipMatrix;
 	Matrix* turretMatrix;
 
-	//AABBBox* axisAllignedBox;
 	Position* shipPos;
 	Position* turretPos;
 
@@ -90,7 +89,6 @@ private:
 	double tr_speed = 20; // m/s;
 	double turrent_heading = 0;
 	double turret_plannedHeading = 0;
-	double turret_turnRate = 1.0; // deg /s
-	
+	double turret_turnRate = 1.0; // deg /s	
 };
 #endif // !PLAYER_H

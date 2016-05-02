@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "CustomImport.h"
+#include "ObjectPool.h"
 #include "Player.h"
 #include "GameObject.h"
 
@@ -55,12 +56,16 @@ public:
 
 private:
 	bool running;
-	
+
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	Mesh* mesh;
 	Camera* camera;
 	CustomImport* customImport;
+	ObjectPool* BulletObjectpool;
+
+	Bullet* inu;
+	Bullet** bullets;
 
 	// test input
 	Player* player;

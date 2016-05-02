@@ -21,13 +21,13 @@ public:
 
 	void updateBehavior(Position player, GameObject* myself, GameObject** allEnemies);
 	void update(double deltaTimeMs);
+	void reset();
 
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };
 
 	TriangleVertex* triangle;
-	//AABBBox* axisAllignedBox;
 	Matrix* objectMatrix;
 	Behavior* behavior;
 	Position* pos;
@@ -40,7 +40,6 @@ public:
 	double getVy();
 
 	// flock AI
-	void GetEnemyPos();
 
 	// collision
 	TSphere* sphere;

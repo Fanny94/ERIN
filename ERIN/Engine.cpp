@@ -13,9 +13,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 	this->gameLogic = new GameLogic();
 
-	this->customImport = new CustomImport();
-	this->player = new Player("player", 1.0f, 0.0f, 0.0f);
+	this->BulletObjectpool = new ObjectPool();
 
+	this->customImport = new CustomImport();
+	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
 
 
 	this->enemies = new GameObject*[5];
@@ -53,17 +54,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		//customImport->LoadCustomFormat("../BinaryDataSphere.bin");
 		//customImport->NewMesh();
-		
-		/*graphics->CreateTriangleAABBBox(player->triangle);
 
-		graphics->AABBTrianglePoints();*/
-
-		/*for (int i = 0; i < 2; i++)
-		{
-			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
-		}
-		graphics->AABBSquarePoints();*/
-		
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -77,9 +68,10 @@ Engine::~Engine()
 	delete this->customImport;
 	delete this->gameLogic;
 
-	// player enemies
 	delete this->player;
 	//delete this->gameObject;
+
+	delete this->BulletObjectpool;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -177,14 +169,17 @@ void Engine::processInput()
 						gameState = HighScore;
 					}
 					else if (mainMenuOption == 2)
-		{
+					{
 						cout << "Help & Options" << endl;
 						mainMenuOption = 0;
 						gameState = HelpAndOptions;
 					}
 					else if (mainMenuOption == 3)
-			this->running = false;
-		}
+						this->running = false;
+			
+		
+
+				}
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_A] == false)
@@ -324,9 +319,11 @@ void Engine::processInput()
 			break;
 		}
 
-		/*if (this->player->input->State._buttons[GamePad_Button_Y] == true)
+		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
+			this->BulletObjectpool->fire();
 		}
+		/*
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
 		}
@@ -379,34 +376,43 @@ void Engine::processInput()
 
 void Engine::update(double deltaTimeMs)
 {
-	double deltaTimeS;
-	deltaTimeS = deltaTimeMs / 1000;
-	// update code
-	// example physics calculation using delta time:
-	// object.x = object.x + (object.speed * deltaTimeS);
+	double deltaTimeS; // millisecond
+	deltaTimeS = deltaTimeMs / 1000; // seconds
 
 	switch (gameState)
 	{
 	case GameRunning:
 		//GameLogic->levelHandler();		// Example of how to start a level
-	player->update(deltaTimeMs);
+		// Player Update
+		player->update(deltaTimeMs);
 
-	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
-	gameObject->update(deltaTimeMs);*/
+		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
+		gameObject->update(deltaTimeMs);*/
 
-	for (int i = 0; i < 4; i++)
-	{
-		enemies[i]->updateBehavior(*player->shipPos, enemies[i], enemies);
-		enemies[i]->update(deltaTimeMs);
-	}
-
-	for (int i = 0; i < 4; i++)
-	{
-		if (sphereToSphere(*player->sphere, *enemies[i]->sphere))
+		for (int i = 0; i < BulletObjectpool->getSize(); i++)
 		{
-			cout << "sphere hit" << endl;
+			if (BulletObjectpool->bullets[i].getInUse())
+			{
+				BulletObjectpool->bullets[i].update(deltaTimeMs);
+			}
 		}
-	}
+
+		// Enemies Updates
+		for (int i = 0; i < 4; i++)
+		{
+			enemies[i]->updateBehavior(*player->shipPos, enemies[i], enemies);
+			enemies[i]->update(deltaTimeMs);
+		}
+
+		// Collision
+		for (int i = 0; i < 4; i++)
+		{
+			if (sphereToSphere(*player->sphere, *enemies[i]->sphere))
+			{
+				cout << "sphere hit" << endl;
+				enemies[i]->reset();
+			}
+		}
 
 	//printf("Elapsed time: %fS.\n", deltaTimeS);
 		//render();
@@ -421,49 +427,49 @@ void Engine::update(double deltaTimeMs)
 	}
 
 	// printf("Elapsed time: %fS.\n", deltaTimeS);
+
 }
 
 void Engine::render()
 {
 	//graphics->UpdateConstantBuffer();
 
-	//graphics->transformBoundingBox(*gameObject->objectMatrix);
-	//graphics->AABBtoAABB();
-
-	graphics->Render();
-	graphics->RendPlayer(*player->shipMatrix);
-	graphics->RendPlayer(*player->turretMatrix);
-	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
-	/*graphics->RendTriangleAABB(*player->shipMatrix);*/
-
-	graphics->RendTriangleAABB(*player->shipMatrix);
-	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
-	//	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
-	/*for (int j = 0; j < 2; j++)
+	switch (gameState)
 	{
 	case GameRunning:
-		//GameLogic->levelHandler();		// Example of how to start a level
-		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
-	}*/
 
-		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
-		gameObject->update(deltaTimeMs);*/
 		graphics->Render();
-		graphics->RendPlayer(*player->objectMatrix);
-		/*graphics->RendPlayer(*gameObject->objectMatrix);*/
-		//graphics->RenderCustom(customImport->meshes.at(0));
-	//render 2 AABB boxes
-	/*for (int k = 0; k < 2; k++)
-	{
-		graphics->RendAABB(customImport->meshes.at(k).world);
-	}*/
-	
-	for (int i = 0; i < 4; i++)
-	{
-		graphics->RendPlayer(*enemies[i]->objectMatrix);
-	}
+		graphics->RendPlayer(*player->shipMatrix);
+		graphics->RendPlayer(*player->turretMatrix);
 
-	camera->InitCamera();
+		//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
+		//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
+		for (int j = 0; j < 1; j++)
+		{
+
+			//GameLogic->levelHandler();		// Example of how to start a level
+			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
+		}
+
+		//graphics->RenderCustom(customImport->meshes.at(0));
+	
+		//Bullet rendering
+		for (int i = 0; i < BulletObjectpool->getSize(); i++)
+		{
+			if (BulletObjectpool->bullets[i].getInUse())
+			{
+				graphics->RendPlayer(*BulletObjectpool->bullets[i].bulletMatrix);
+			}
+		}
+
+		// Enemy rendering
+		for (int i = 0; i < 4; i++)
+		{
+			graphics->RendPlayer(*enemies[i]->objectMatrix);
+		}
+
+		// Camera Update
+		camera->InitCamera();
 
 		break;
 	case TitleScreen:
