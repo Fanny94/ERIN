@@ -108,13 +108,6 @@ private:
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
 
-	ID3D11Buffer* vertAABBBuffer = nullptr;
-	ID3D11InputLayout* AABBLayout = nullptr;
-	ID3D11VertexShader* AABBVertexShader = nullptr;
-	ID3D11PixelShader* AABBPixelShader = nullptr;
-
-	ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
-
 	ID3D11Buffer* gConstantBuffer = nullptr;
 
 	ID3D11Buffer* customVertBuff = nullptr;
