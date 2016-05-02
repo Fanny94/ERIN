@@ -66,14 +66,9 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		{
 			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
 		}
-<<<<<<< HEAD
 
 		graphics->AABBSquarePoints();
 
-=======
-		graphics->AABBSquarePoints();*/
-		
->>>>>>> parent of 29730e6... two boxes
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -212,17 +207,10 @@ void Engine::render()
 	graphics->RendPlayer(*player->turretMatrix);
 	/*graphics->RendPlayer(*gameObject->objectMatrix);*/
 	/*graphics->RendTriangleAABB(*player->shipMatrix);*/
-<<<<<<< HEAD
 	
 	// Custom Importer
-	
-	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
-	//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
-=======
 
 	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0) ;
-
->>>>>>> parent of 29730e6... two boxes
 	for (int j = 0; j < 1; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
@@ -233,14 +221,10 @@ void Engine::render()
 	graphics->AABBtoAABB();*/
 
 	//render 2 AABB boxes
-<<<<<<< HEAD
 	for (int k = 0; k < 1; k++)
-=======
-	/*for (int k = 0; k < 2; k++)
->>>>>>> parent of 29730e6... two boxes
 	{
 		graphics->RendAABB(customImport->meshes.at(k).world);
-	}*/
+	}
 
 	// Enemy rendering
 	for (int i = 0; i < 4; i++)
