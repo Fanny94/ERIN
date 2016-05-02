@@ -206,7 +206,7 @@ void Engine::update(double deltaTimeMs)
 	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 	{
 		cout << "upper wall hit" << endl;
-		player->setThumbLeftY(0.0f);
+		//player->setThumbLeftY(0.0f);
 	}
 	if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
 	{
