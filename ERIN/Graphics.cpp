@@ -137,7 +137,40 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 
 	hr = gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &customVertBuff);
 
-	gDeviceContext->Draw(3, 0);
+	UINT32 meshVertexSize = sizeof(VertexCustom);
+	UINT32 offset = 0;
+
+	D3D11_MAPPED_SUBRESOURCE mappedCF;
+	hr = gDeviceContext->Map(customFormatBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedCF);
+	CFPtr = (CustomFormat*)mappedCF.pData;
+	gDeviceContext->Unmap(customFormatBuffer, 0);
+
+	for (int j = 0; j < mesh.material.size(); j++)
+	{
+		CFPtr->diffuseColor[0] = mesh.material.at(j).diffuseColor[0];
+		CFPtr->diffuseColor[1] = mesh.material.at(j).diffuseColor[1];
+		CFPtr->diffuseColor[2] = mesh.material.at(j).diffuseColor[2];
+		CFPtr->ambientColor[0] = mesh.material.at(j).ambientColor[0];
+		CFPtr->ambientColor[1] = mesh.material.at(j).ambientColor[1];
+		CFPtr->ambientColor[2] = mesh.material.at(j).ambientColor[2];
+		CFPtr->specularColor[0] = mesh.material.at(j).specularColor[0];
+		CFPtr->specularColor[1] = mesh.material.at(j).specularColor[1];
+		CFPtr->specularColor[2] = mesh.material.at(j).specularColor[2];
+		CFPtr->shininess = mesh.material.at(j).shininess;
+	}
+
+	for (int i = 0; i < mesh.MeshCount; i++)
+	{
+		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
+		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		CustomUpdateBuffer(transform);
+
+		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
+
+		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
+	}
+	customVertBuff->Release();
 }
 
 void Graphics::RendBullet(Matrix transform)
@@ -200,48 +233,6 @@ void Graphics::RendBullet(Matrix transform)
 
 	gDeviceContext->Draw(3, 0);*/
 }
-//---------------------------------------------------------------------------
-//void Graphics::RendAABB()
-//{
-//	gDeviceContext->VSSetShader(AABBVertexShader, nullptr, 0);
-//	gDeviceContext->PSSetShader(AABBPixelShader, nullptr, 0);
-//
-//	UINT32 vertexSize = sizeof(XMFLOAT3);
-//	UINT32 offset = 0;
-//
-//	D3D11_MAPPED_SUBRESOURCE mappedCF;
-//	hr = gDeviceContext->Map(customFormatBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedCF);
-//	CFPtr = (CustomFormat*)mappedCF.pData;
-//	gDeviceContext->Unmap(customFormatBuffer, 0);
-//
-//	for (int j = 0; j < mesh.material.size(); j++)
-//	{
-//		CFPtr->diffuseColor[0] = mesh.material.at(j).diffuseColor[0];
-//		CFPtr->diffuseColor[1] = mesh.material.at(j).diffuseColor[1];
-//		CFPtr->diffuseColor[2] = mesh.material.at(j).diffuseColor[2];
-//		CFPtr->ambientColor[0] = mesh.material.at(j).ambientColor[0];
-//		CFPtr->ambientColor[1] = mesh.material.at(j).ambientColor[1];
-//		CFPtr->ambientColor[2] = mesh.material.at(j).ambientColor[2];
-//		CFPtr->specularColor[0] = mesh.material.at(j).specularColor[0];
-//		CFPtr->specularColor[1] = mesh.material.at(j).specularColor[1];
-//		CFPtr->specularColor[2] = mesh.material.at(j).specularColor[2];
-//		CFPtr->shininess = mesh.material.at(j).shininess;
-//	}
-//	
-//	for (int i = 0; i < mesh.MeshCount; i++)
-//	{
-//		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
-//		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//
-//		CustomUpdateBuffer(transform);
-//
-//		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
-//
-//		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
-//	}
-//
-//	customVertBuff->Release();
-//}
 
 void Graphics::CustomUpdateBuffer(Matrix transform)
 {

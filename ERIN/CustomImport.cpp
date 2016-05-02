@@ -2,24 +2,24 @@
 
 struct Vertex
 {
-	float pos[3];
-	float nor[3];
-	float uv[2];
-	float tan[3];
-	float bitan[3];
+	float pos[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
+	float nor[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
+	float uv[2] = { 0.0000000000, 0.0000000000};
+	float tan[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
+	float bitan[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
 };
 
 struct MeshStruct
 {
-	unsigned int VertexCount = 0;
-	unsigned int MaterialID = 0;
-	unsigned int MeshID = 0;
-	unsigned int ParentID = 0;
-	unsigned int AttributeCount = 0;
-	char MeshName[256] = "";
-	float Translation[3] = { 0.0, 0.0, 0.0 };
-	float Rotation[3] = { 0.0, 0.0, 0.0 };
-	float Scale[3] = { 0.0, 0.0, 0.0 };
+	unsigned int VertexCount;
+	unsigned int MaterialID;
+	unsigned int MeshID;
+	unsigned int ParentID;
+	unsigned int AttributeCount;
+	char MeshName[256];
+	float Translation[3];
+	float Rotation[3];
+	float Scale[3];
 	vector<Vertex> vertex;
 	Vertex vertexTemp;
 };
@@ -40,6 +40,8 @@ MeshStruct meshTemp;
 unsigned int MaterialCount = 0;
 vector<Material> material;
 Material materialTemp;
+
+float dump;
 
 
 CustomImport::CustomImport() {}
