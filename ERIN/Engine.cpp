@@ -209,14 +209,8 @@ void Engine::render()
 	/*graphics->RendTriangleAABB(*player->shipMatrix);*/
 	
 	// Custom Importer
-<<<<<<< HEAD
-
-	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0) ;
-=======
-	
 	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
 	//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
->>>>>>> refs/remotes/origin/master
 	for (int j = 0; j < 1; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
