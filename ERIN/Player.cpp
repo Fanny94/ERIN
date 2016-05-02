@@ -36,7 +36,12 @@ Player::Player(string name, float x, float y, float z)
 	this->axisAllignedBox->max = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);*/
 
 	this->shipPos = new Position{ this->x, this->y, this->z };
-	this->turretPos = new Position{this->x + 1.0f, this->y, this->z };
+	this->turretPos = new Position{ this->x + 1.0f, this->y, this->z };
+
+	// collision
+	this->sphere = new TSphere();
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+	this->sphere->m_fRadius = 0.5f;
 }
 
 Player::~Player()
@@ -49,6 +54,7 @@ Player::~Player()
 	//delete this->axisAllignedBox;
 	delete this->shipPos;
 	delete this->turretPos;
+	delete this->sphere;
 }
 
 
@@ -100,7 +106,6 @@ void Player::update(double dt)
 	else
 	{
 		// Speed += ((MoveDirection * MaximumSpeed) - Speed) * AccelerationFactor
-
 		velocityX += ((thumbLeftX * maximumSpeed) - velocityX) * abs(thumbLeftX);
 		velocityY += ((thumbLeftY * maximumSpeed) - velocityY) * abs(thumbLeftY);
 	}
@@ -136,8 +141,10 @@ void Player::update(double dt)
 		turretComputeTurn(dt);
 	}
 
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+
 	// turret matrix
-	*this->turretMatrix = 
+	*this->turretMatrix =
 		XMMatrixScaling(0.5f, 0.5f, 5.0f)
 		* XMMatrixRotationZ(XMConvertToRadians((float)-turrent_heading))
 		* XMMatrixTranslation(this->x + 1.0f, this->y, this->z);
