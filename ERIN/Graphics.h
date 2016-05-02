@@ -22,25 +22,12 @@ public:
 	void RenderCustom(Mesh mesh, Matrix transform);
 	void CustomUpdateBuffer(Matrix transform);
 
-	void RendAABB(Matrix transform);
-	void RendBullet(Matrix transform);
-	void RendAABB();
-	void RendTriangleAABB(Matrix transform);
-
 	void CreateShaders();
 	void CreateDepthBuffer();
 
 	void CreateTriangle(TriangleVertex* triangleVertices);
 	void CreateTriangle();
 	void CreateConstantBuffer();
-
-	void CreateTriangleAABBBox(TriangleVertex* triangleVertices);
-	void CreateSquareAABBBox(Mesh mesh);
-	void AABBSquarePoints();
-	void AABBTrianglePoints();
-	//AABBBox* transformBoundingBox(Matrix transform);
-
-	bool AABBtoAABB();
 
 	void UpdateConstantBuffer();
 
@@ -102,25 +89,12 @@ public:
 
 	vector<DWORD> indices;
 
-	vector<AABBVertex> squareVertexArray;
-	vector<AABBBox> triangleVertexArray;
-
 private:
 	float WIDTH = 1080;
 	float HEIGHT = 720;
 
 	float camPosX;
 	float camPosY;
-
-	AABBBox axisAllignedBox;
-	AABBBox triAxis;
-
-	//AABBBox* newAABB;
-	AABBBox AABBVertexArray;
-	AABBBox triVertexArray;
-
-	AABBBox triAABBBuffer;
-	AABBVertex AABBBufferArray;
 
 	ID3D11Device* gDevice = nullptr;
 	ID3D11DeviceContext* gDeviceContext = nullptr;
@@ -133,13 +107,6 @@ private:
 	ID3D11VertexShader* gVertexShader = nullptr;
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
-
-	ID3D11Buffer* vertAABBBuffer = nullptr;
-	ID3D11InputLayout* AABBLayout = nullptr;
-	ID3D11VertexShader* AABBVertexShader = nullptr;
-	ID3D11PixelShader* AABBPixelShader = nullptr;
-
-	ID3D11Buffer* triangleAABBVertexBuffer = nullptr;
 
 	ID3D11Buffer* gConstantBuffer = nullptr;
 

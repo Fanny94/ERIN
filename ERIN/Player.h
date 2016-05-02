@@ -3,7 +3,6 @@
 #include "Linker.h"
 #include "Input.h"
 #include "Structs.h"
-#include "ObjectPool.h"
 
 # define M_PI 3.14159265358979323846
 using namespace std;
@@ -37,7 +36,6 @@ public:
 	Matrix* shipMatrix;
 	Matrix* turretMatrix;
 
-	//AABBBox* axisAllignedBox;
 	Position* shipPos;
 	Position* turretPos;
 

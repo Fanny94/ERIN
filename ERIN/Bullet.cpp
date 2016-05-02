@@ -20,14 +20,18 @@ Bullet::~Bullet()
 
 void Bullet::update(double dT)
 {
+	if (!inUse) return;
+	
 	timeLeft --;
 
 	if (timeLeft == 0)
 	{
 		inUse = false;
+		state.alive.x = 0;
+		state.alive.y = 0;
+		state.alive.z = 0;
+		timeLeft = 0;
 	}
-	
-	countdown--;
 
 	state.alive.Velx += (maxspd-state.alive.Velx);
 	state.alive.Vely += (maxspd-state.alive.Vely);
@@ -36,7 +40,7 @@ void Bullet::update(double dT)
 	state.alive.y = state.alive.y + state.alive.Vely;
 
 	//bullet matrix
-	*this->bulletMatrix = XMMatrixScaling(0.2f, 0.2f, 0.2f)
+	*this->bulletMatrix = XMMatrixScaling(0.3f, 0.3f, 0.3f)
 		* XMMatrixRotationZ(XMConvertToRadians((float)-bullet_heading))
 		* XMMatrixTranslation(this->state.alive.x, this->state.alive.y, this->state.alive.z);
 }

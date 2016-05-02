@@ -9,7 +9,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 	this->gameLogic = new GameLogic();
 
-	this->objectpool = new ObjectPool();
+	this->BulletObjectpool = new ObjectPool();
 
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
@@ -50,16 +50,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataSphere.bin");
 		customImport->NewMesh();
 
-		/*graphics->CreateTriangleAABBBox(player->triangle);
-
-		graphics->AABBTrianglePoints();*/
-
-		/*for (int i = 0; i < 2; i++)
-		{
-			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
-		}
-		graphics->AABBSquarePoints();*/
-
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -76,7 +66,7 @@ Engine::~Engine()
 	delete this->player;
 	//delete this->gameObject;
 
-	delete this->objectpool;
+	delete this->BulletObjectpool;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -96,8 +86,8 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			//this->objectpool->fire();
-			this->running = false;
+			this->BulletObjectpool->fire();
+			//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
@@ -169,6 +159,14 @@ void Engine::update(double deltaTimeMs)
 	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
 	gameObject->update(deltaTimeMs);*/
 
+	for (int i = 0; i < BulletObjectpool->getSize(); i++)
+	{
+		if (BulletObjectpool->bullets[i].getInUse())
+		{
+			BulletObjectpool->bullets[i].update(deltaTimeMs);
+		}
+	}
+
 	// Enemies Updates
 	for (int i = 0; i < 4; i++)
 	{
@@ -205,18 +203,14 @@ void Engine::render()
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
 
-	// AABB
-	/*
-	graphics->RendTriangleAABB(*player->shipMatrix);
-	graphics->transformBoundingBox(*gameObject->objectMatrix);
-	graphics->AABBtoAABB();
-
-	render 2 AABB boxes
-	for (int k = 0; k < 2; k++)
+	//Bullet rendering
+	for (int i = 0; i < BulletObjectpool->getSize(); i++)
 	{
-		graphics->RendAABB(customImport->meshes.at(k).world);
+		if (BulletObjectpool->bullets[i].getInUse())
+		{
+			graphics->RendPlayer(*BulletObjectpool->bullets[i].bulletMatrix);
+		}
 	}
-	*/
 
 	// Enemy rendering
 	for (int i = 0; i < 4; i++)

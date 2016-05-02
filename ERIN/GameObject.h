@@ -25,7 +25,6 @@ public:
 	string getName() { return this->name; };
 
 	TriangleVertex* triangle;
-	//AABBBox* axisAllignedBox;
 	Matrix* objectMatrix;
 	Behavior* behavior;
 	Position* pos;
