@@ -7,8 +7,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "CustomImport.h"
-
-// test input
+#include "ObjectPool.h"
 #include "Player.h"
 #include "GameObject.h"
 
@@ -37,7 +36,10 @@ private:
 	Mesh* mesh;
 	Camera* camera;
 	CustomImport* customImport;
-	ObjectPool* objectpool;
+	ObjectPool* BulletObjectpool;
+
+	Bullet* inu;
+	Bullet** bullets;
 
 	// test input
 	Player* player;

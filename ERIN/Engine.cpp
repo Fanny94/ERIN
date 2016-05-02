@@ -9,7 +9,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 	this->gameLogic = new GameLogic();
 
-	this->objectpool = new ObjectPool();
+	this->BulletObjectpool = new ObjectPool();
 
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
@@ -66,7 +66,7 @@ Engine::~Engine()
 	delete this->player;
 	//delete this->gameObject;
 
-	delete this->objectpool;
+	delete this->BulletObjectpool;
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -86,8 +86,8 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			//this->objectpool->fire();
-			this->running = false;
+			this->BulletObjectpool->fire();
+			//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
@@ -159,6 +159,14 @@ void Engine::update(double deltaTimeMs)
 	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
 	gameObject->update(deltaTimeMs);*/
 
+	for (int i = 0; i < BulletObjectpool->getSize(); i++)
+	{
+		if (BulletObjectpool->bullets[i].getInUse())
+		{
+			BulletObjectpool->bullets[i].update(deltaTimeMs);
+		}
+	}
+
 	// Enemies Updates
 	for (int i = 0; i < 4; i++)
 	{
@@ -192,6 +200,15 @@ void Engine::render()
 	for (int j = 0; j < 1; j++)
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
+	}
+
+	//Bullet rendering
+	for (int i = 0; i < BulletObjectpool->getSize(); i++)
+	{
+		if (BulletObjectpool->bullets[i].getInUse())
+		{
+			graphics->RendPlayer(*BulletObjectpool->bullets[i].bulletMatrix);
+		}
 	}
 
 	// Enemy rendering

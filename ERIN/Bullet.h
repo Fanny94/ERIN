@@ -23,7 +23,7 @@ public:
 
 	Position* bulletPos;
 	Matrix* bulletMatrix;
-	
+	bool inUse;
 
 private:
 	union 
@@ -41,9 +41,9 @@ private:
 	double bullet_plannedHeading = 0;
 
 	int timeLeft = 10; //How long a bullet will last
-	bool inUse;
 	
-	float maxspd = 0.2f;
+	
+	float maxspd = 0.01f;
 	
 	float damage; // if needed
 
