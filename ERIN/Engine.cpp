@@ -62,14 +62,12 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->AABBTrianglePoints();*/
 
 
-		/*for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 2; i++)
 		{
 			graphics->CreateSquareAABBBox(customImport->meshes.at(i));
 		}
 
 		graphics->AABBSquarePoints();
-		
-		graphics->AABBSquarePoints();*/
 
 		graphics->CreateConstantBuffer();
 
@@ -219,24 +217,24 @@ void Engine::render()
 	graphics->RendPlayer(*player->turretMatrix);
 	
 	// Custom Importer
-	/*
+	
 	customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
-	graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
+	//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
 	for (int j = 0; j < 1; j++)
 
 	{
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
-	}*/
+	}
 
 	/*graphics->RendTriangleAABB(*player->shipMatrix);
 	graphics->transformBoundingBox(*gameObject->objectMatrix);
-	graphics->AABBtoAABB();
+	graphics->AABBtoAABB();*/
 
-	render 2 AABB boxes
+	//render 2 AABB boxes
 	for (int k = 0; k < 2; k++)
 	{
 		graphics->RendAABB(customImport->meshes.at(k).world);
-	}*/
+	}
 
 	// Enemy rendering
 	for (int i = 0; i < 4; i++)
@@ -244,7 +242,7 @@ void Engine::render()
 		graphics->RendPlayer(*enemies[i]->objectMatrix);
 	}
 
-	//graphics->AABBtoAABB();
+	graphics->AABBtoAABB();
 
 	// Camera Update
 	camera->InitCamera();
