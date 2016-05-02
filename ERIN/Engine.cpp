@@ -241,9 +241,9 @@ void Engine::render()
 	graphics->Render();
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
-	
+
 	// Custom Importer
-	
+
 	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
 	//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
 	for (int j = 0; j < 1; j++)
@@ -294,6 +294,25 @@ bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)
 
 	//If not, then return false
 	return false;
+}
+
+bool Engine::sphereToPlane(const TSphere& tSph, const Vector3& vecPoint, const Vector3& vecNormal)
+{
+	// Calculate a vector from the point on the plane to the center of the sphere
+	Vector3 vecTemp(tSph.m_vecCenter - vecPoint);
+
+	// Calculate the distance: dot product of the new vector with the plane's normal
+	double dotProduct = vecTemp.x * vecNormal.x + vecTemp.y * vecNormal.y + vecTemp.z * vecNormal.z;
+	float fDist(dotProduct);
+
+	if (fDist > tSph.m_fRadius)
+	{
+		// The sphere is not touching the plane
+		return false;
+	}
+
+	// Else, the sphere is colliding with the plane
+	return true;
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)

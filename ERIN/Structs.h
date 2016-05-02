@@ -20,4 +20,10 @@ struct TSphere
 	float       m_fRadius;
 };
 
+struct Wall
+{
+	Vector3 point;
+	Vector3 normal;
+};
+
 #endif // !STRUCTS_H
