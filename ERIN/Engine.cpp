@@ -275,24 +275,22 @@ void Engine::render()
 
 bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)
 {
-	//Calculate the squared distance between the centers of both spheres
+	// Calculate the squared distance between the centers of both spheres
 	Vector3 vecDist(tSph2.m_vecCenter - tSph1.m_vecCenter);
-
 	double dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
-
 	float fDistSq(dotProduct);
 
-	//Calculate the squared sum of both radii
+	// Calculate the squared sum of both radii
 	float fRadiiSumSquared(tSph1.m_fRadius + tSph2.m_fRadius);
 	fRadiiSumSquared *= fRadiiSumSquared;
 
-	//Check for collision
-	//If the distance squared is less than or equal to the square sum
-	//of the radii, then we have a collision
+	// Check for collision
+	// If the distance squared is less than or equal to the square sum
+	// of the radii, then we have a collision
 	if (fDistSq <= fRadiiSumSquared)
 		return true;
 
-	//If not, then return false
+	// If not, then return false
 	return false;
 }
 
@@ -313,6 +311,24 @@ bool Engine::sphereToPlane(const TSphere& tSph, const Vector3& vecPoint, const V
 
 	// Else, the sphere is colliding with the plane
 	return true;
+}
+
+bool Engine::pointInSphere(const TSphere& tSph, const Vector3& vecPoint)
+{
+	// Calculate the squared distance from the point to the center of the sphere
+	Vector3 vecDist(tSph.m_vecCenter - vecPoint);
+	double dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
+	float fDistSq(dotProduct);
+
+	// Calculate if the squared distance between the sphere's center and the point
+	// is less than the squared radius of the sphere
+	if (fDistSq < (tSph.m_fRadius * tSph.m_fRadius))
+	{
+		return true;
+	}
+
+	// If not, return false
+	return false;
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)

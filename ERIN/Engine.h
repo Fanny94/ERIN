@@ -23,6 +23,7 @@ public:
 
 	bool sphereToSphere(const TSphere& tSph1, const TSphere& tSph2);
 	bool sphereToPlane(const TSphere& tSph, const Vector3& vecPoint, const Vector3& vecNormal);
+	bool pointInSphere(const TSphere& tSph, const Vector3& vecPoint);
 
 	HWND InitWindow(HINSTANCE hInstance);
 	HWND wndHandle;
