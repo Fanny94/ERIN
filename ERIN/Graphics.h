@@ -23,6 +23,8 @@ public:
 	void CustomUpdateBuffer(Matrix transform);
 
 	void RendAABB(Matrix transform);
+	void RendBullet(Matrix transform);
+	void RendAABB();
 	void RendTriangleAABB(Matrix transform);
 
 	void CreateShaders();

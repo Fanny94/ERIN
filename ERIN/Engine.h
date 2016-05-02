@@ -22,6 +22,8 @@ public:
 	void update(double deltaTimeMs);
 	void render();
 
+	bool sphereToSphere(const TSphere& tSph1, const TSphere& tSph2);
+
 	HWND InitWindow(HINSTANCE hInstance);
 	HWND wndHandle;
 
@@ -29,12 +31,13 @@ public:
 
 private:
 	bool running;
-	
+
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	Mesh* mesh;
 	Camera* camera;
 	CustomImport* customImport;
+	ObjectPool* objectpool;
 
 	// test input
 	Player* player;
