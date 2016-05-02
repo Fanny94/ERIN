@@ -42,7 +42,11 @@ private:
 	Bullet* inu;
 	Bullet** bullets;
 
-	Wall* walls;
+	Wall* upper_wall;
+	Wall* left_wall;
+	Wall* lower_wall;
+	Wall* right_wall;
+
 
 	Player* player;
 	GameObject* gameObject;

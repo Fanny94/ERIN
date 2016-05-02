@@ -17,22 +17,35 @@ public:
 	void playerInput();
 	void update(double deltaTime);
 
+	void stopX();
+	void stopY();
+
+	void setThumbLeftX(float x) { this->thumbLeftX = x; };
+	void setThumbLeftY(float y) { this->thumbLeftY = y; };
+
+	void setAccelerating(bool acc) { this->accelerating = acc; };
 	void SetX(float x) { this->x = x; };
 	void SetY(float y) { this->y = y; };
 	void SetZ(float z) { this->z = z; };
+
+	void setSpeed(float speed) { this->speed = speed; };
+	void setVelocityX(float vX) { this->velocityX = vX; };
+	void setVelocityY(float vY) { this->velocityY = vY; };
 
 	string GetName() { return this->name; };
 	float GetX() { return this->x; };
 	float GetY() { return this->y; };
 	float GetZ() { return this->z; };
 
+	float getSpeed() { return this->speed;  };
+	float getVelocityX() { return this->velocityX; };
+	float getVelocityY() { return this->velocityY; };
+
 	Input* input;
 
 	// turret magic
-	TriangleVertex* triangle; // is replaced by ship (TriangleVertex)
 	TriangleVertex* ship;
 	TriangleVertex* turret;
-	Matrix* objectMatrix; // is replaced by shipMatrix
 	Matrix* shipMatrix;
 	Matrix* turretMatrix;
 
@@ -58,7 +71,6 @@ private:
 	float x, y, z;
 
 	float maximumSpeed;
-	float currentSpeed;
 	float speed;
 
 	bool accelerating;

@@ -14,18 +14,16 @@ Player::Player(string name, float x, float y, float z)
 	this->z = z;
 
 	this->maximumSpeed = 0.1f;
-	this->currentSpeed = 0.0f;
-
 	this->speed = 0.0f;
 	this->acceleration = 0.0005f;
 
 	this->input = new Input(GamePadIndex_One);
 
-	this->triangle = new TriangleVertex[3];
+	this->ship = new TriangleVertex[3];
 
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
+	this->ship[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
+	this->ship[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
+	this->ship[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
 
 	//this->objectMatrix = new Matrix();
 	this->shipMatrix = new Matrix();
@@ -43,7 +41,7 @@ Player::Player(string name, float x, float y, float z)
 Player::~Player()
 {
 	delete this->input;
-	delete this->triangle;
+	delete this->ship;
 	//delete this->objectMatrix;
 	delete this->shipMatrix;
 	delete this->turretMatrix;
@@ -85,6 +83,7 @@ void Player::update(double dt)
 
 	this->turretPos->x = this->x;
 	this->turretPos->y = this->y;
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 
 	if (!accelerating)
 	{
@@ -136,7 +135,6 @@ void Player::update(double dt)
 		turretComputeTurn(dt);
 	}
 
-	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 
 	// turret matrix
 	*this->turretMatrix =
@@ -148,6 +146,14 @@ void Player::update(double dt)
 	*this->shipMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f)
 		* XMMatrixRotationZ(XMConvertToRadians((float)-heading))
 		* XMMatrixTranslation(this->x, this->y, this->z);
+}
+void Player::stopX()
+{
+	this->velocityX = 0.0f;
+}
+void Player::stopY()
+{
+	this->velocityY = 0.0f;
 }
 void Player::computeTurn(double dt)
 {

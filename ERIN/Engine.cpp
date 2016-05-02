@@ -20,19 +20,23 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->enemies[2] = new GameObject(3, "enemy3", -5.0f, 0.0f, 0.1f, true);
 	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);
 
-	this->walls = new Wall[3];
 	// upper
-	this->walls[0].point = Vector3(0, 10, 0);
-	this->walls[0].normal = Vector3(0, -1, 0);
+	this->upper_wall = new Wall();
+	this->upper_wall->point = Vector3(0, 10, 0);
+	this->upper_wall->normal = Vector3(0, -1, 0);
 	// left
-	this->walls[1].point = Vector3(-10, 0, 0);
-	this->walls[1].normal = Vector3(1, 0, 0);
+	this->left_wall = new Wall();
+	this->left_wall->point = Vector3(-10, 0, 0);
+	this->left_wall->normal = Vector3(1, 0, 0);
 	// lower
-	this->walls[2].point = Vector3(0, -10, 0);
-	this->walls[2].normal = Vector3(0, 1, 0);
+	this->lower_wall = new Wall();
+	this->lower_wall->point = Vector3(0, -10, 0);
+	this->lower_wall->normal = Vector3(0, 1, 0);
 	// right
-	this->walls[3].point = Vector3(10, 0, 0);
-	this->walls[3].normal = Vector3(-1, 0, 0);
+	this->right_wall = new Wall();
+	this->right_wall->point = Vector3(10, 0, 0);
+	this->right_wall->normal = Vector3(-1, 0, 0);
+
 
 	//create window
 	wndHandle = InitWindow(hInstance);
@@ -87,6 +91,11 @@ Engine::~Engine()
 		delete enemies[i];
 	}
 	delete enemies;
+
+	delete this->upper_wall;
+	delete this->left_wall;
+	delete this->lower_wall;
+	delete this->right_wall;
 }
 
 void Engine::processInput()
@@ -189,35 +198,26 @@ void Engine::update(double deltaTimeMs)
 	}
 
 	// Collision
-	/*for (int i = 0; i < 4; i++)
-	{
-		if (sphereToPlane(*player->sphere, walls[i].point, walls[i].normal))
-		{
-			
-		}
-	}*/
-
-
-	/*if (sphereToPlane(*player->sphere, walls[0].point, walls[0].normal))
+	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 	{
 		cout << "upper wall hit" << endl;
-		player->SetY(walls[0].point.y);
+		player->setThumbLeftY(0.0f);
 	}
-	if (sphereToPlane(*player->sphere, walls[1].point, walls[1].normal))
+	if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
 	{
 		cout << "left wall hit" << endl;
-		player->SetX(walls[1].point.x);
+		//player->SetX(left_wall->point.x);
 	}
-	if (sphereToPlane(*player->sphere, walls[2].point, walls[2].normal))
+	if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
 	{
 		cout << "lower wall hit" << endl;
-		player->SetY(walls[2].point.x);
+		//player->SetY(lower_wall->point.x);
 	}
-	if (sphereToPlane(*player->sphere, walls[3].point, walls[3].normal))
+	if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
 	{
 		cout << "right wall hit" << endl;
-		player->SetX(walls[3].point.x);
-	}*/
+		//player->SetX(right_wall->point.x);
+	}
 
 	for (int i = 0; i < 4; i++)
 	{
