@@ -11,15 +11,15 @@ struct Vertex
 
 struct MeshStruct
 {
-	unsigned int VertexCount = 0;
-	unsigned int MaterialID = 0;
-	unsigned int MeshID = 0;
-	unsigned int ParentID = 0;
-	unsigned int AttributeCount = 0;
-	char MeshName[256] = "";
-	float Translation[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float Rotation[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float Scale[3] = { 1.0000000000, 1.0000000000, 1.0000000000 };
+	unsigned int VertexCount;
+	unsigned int MaterialID;
+	unsigned int MeshID;
+	unsigned int ParentID;
+	unsigned int AttributeCount;
+	char MeshName[256];
+	float Translation[3];
+	float Rotation[3];
+	float Scale[3];
 	vector<Vertex> vertex;
 	Vertex vertexTemp;
 };
@@ -76,18 +76,6 @@ void CustomImport::LoadCustomFormat(string filePath)
 
 		for (int j = 0; j < meshTemp.VertexCount; j++)
 		{
-			if (j == 45)
-				fileIn.read((char*)&dump, sizeof(float));
-			if (j == 92)
-				fileIn.read((char*)&dump, sizeof(float));
-			if (j == 107)
-				fileIn.read((char*)&dump, sizeof(float));
-			if (j == 261)
-				fileIn.read((char*)&dump, sizeof(float));
-			if (j == 308)
-				fileIn.read((char*)&dump, sizeof(float));
-			if (j == 323)
-				fileIn.read((char*)&dump, sizeof(float));
 			fileIn.read((char*)&meshTemp.vertexTemp.pos, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.nor, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.uv, sizeof(float) * 2);
