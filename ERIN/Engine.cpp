@@ -63,10 +63,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
-		customImport->LoadCustomFormat("../BinaryDataSphere.bin");
+		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 
-		customImport->LoadCustomFormat("../BinaryData.bin");
+		customImport->LoadCustomFormat("../BinaryDataCube.dat");
 		customImport->NewMesh();
 		customImport->NewMesh();
 
@@ -247,9 +247,9 @@ void Engine::render()
 	for (int j = 0; j < 3; j++)
 	{
 		if(j == 1)
-			customImport->meshes.at(j).world = XMMatrixTranslation(6, 0, 0);
-		if (j == 2)
 			customImport->meshes.at(j).world = XMMatrixTranslation(6, 2, 0);
+		if (j == 2)
+			customImport->meshes.at(j).world = XMMatrixTranslation(6, 0, 0);
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
 
