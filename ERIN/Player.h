@@ -44,7 +44,7 @@ public:
 	void turretComputeTurn(double deltaTime);
 	void turnTo(double newHeading);
 
-	int getHeading() { return turrent_heading; };
+	double getHeading() { return turrent_heading; };
 
 	double getVx();
 	double getVy();
