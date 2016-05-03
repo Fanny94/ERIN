@@ -206,22 +206,22 @@ void Engine::update(double deltaTimeMs)
 	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 	{
 		cout << "upper wall hit" << endl;
-		//player->setThumbLeftY(0.0f);
+		player->SetY(upper_wall->point.y - 0.5f);
 	}
 	if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
 	{
 		cout << "left wall hit" << endl;
-		//player->SetX(left_wall->point.x);
+		player->SetX(left_wall->point.x + 0.5f);
 	}
 	if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
 	{
 		cout << "lower wall hit" << endl;
-		//player->SetY(lower_wall->point.x);
+		player->SetY(lower_wall->point.y + 0.5f);
 	}
 	if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
 	{
 		cout << "right wall hit" << endl;
-		//player->SetX(right_wall->point.x);
+		player->SetX(right_wall->point.x - 0.5f);
 	}
 
 	for (int i = 0; i < 4; i++)
