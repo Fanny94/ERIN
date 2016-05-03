@@ -14,28 +14,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
 
-	/*this->enemies = new GameObject*[5];
-	this->enemies[0] = new GameObject(1, "enemy1", 5.0f, 0.0f, 0.1f, true);
-	this->enemies[1] = new GameObject(2, "enemy2", 0.0f, 5.0f, 0.1f, true);
-	this->enemies[2] = new GameObject(3, "enemy3", -5.0f, 0.0f, 0.1f, true);
-	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);*/
-
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	/*this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);*/
-
 	this->triangle = new TriangleVertex[3];
 	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
 	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
@@ -139,7 +117,8 @@ void Engine::processInput()
 		{
 			if (this->ready)
 			{
-				this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+				cout << "enemy created" << endl;
+				this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
 				this->ready = false;
 			}
 			//this->running = false;

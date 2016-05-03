@@ -35,7 +35,7 @@ private:
 
 	// test cooldown function
 	bool ready;
-	const float cooldown = 2.0f;
+	const float cooldown = 1.0f;
 	double currentTime;
 	void updateCooldown(double dt);
 	// test cooldown function #end

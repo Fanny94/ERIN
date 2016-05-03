@@ -23,8 +23,8 @@ public:
 	void setObjectID(int objectID) { this->objectID = objectID; };
 	void setObjectName(string name) { this->name = name; };
 	void setObjectPosX(float x) { this->x = x; };
-	void setObjectPosY(float y) { this->x = y; };
-	void setObjectPosZ(float z) { this->x = z; };
+	void setObjectPosY(float y) { this->y = y; };
+	void setObjectPosZ(float z) { this->z = z; };
 
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
 	void setAcceleration(float acceleration) { this->acceleration = acceleration; };
