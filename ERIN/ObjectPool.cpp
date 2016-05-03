@@ -42,16 +42,20 @@ ObjectPool::~ObjectPool()
 
 void ObjectPool::fire(float x, float y, double heading)
 {
+	if (fbull.getCooldown())
+	{
 		for (int i = 0; i < this->b_poolSize; i++)
 		{
 			if (!bullets[i].getInUse())
 			{
 				bullets[i].iniBullet(x, y, 0.0f, fbull.timeLeft);
 				bullets[i].bullet_heading = heading;
-				bullets[i].inUse = true;
+				bullets[i].setInUse(true);
+				fbull.setCooldown(false);
 				return;
 			}
 		}
+	}
 }
 
 void ObjectPool::createEnemy(float x, float y, float z)

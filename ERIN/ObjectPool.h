@@ -25,13 +25,12 @@ public:
 	int getEnemyPoolSize() { return this->e_poolSize; };
 	static const int e_poolSize = 5;
 	GameObject enemies[e_poolSize];
-
+	Bullet fbull;
 
 private:
 	// Bullets
 	int lifeTime;
 	Bullet* firstAvailable;
-	Bullet fbull;
 	Bullet** ptrBull;
 
 	// Enemies

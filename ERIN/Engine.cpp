@@ -110,8 +110,8 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
-			//this->running = false;
+				this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+				//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
@@ -184,6 +184,7 @@ void Engine::update(double deltaTimeMs)
 	double deltaTimeS; // millisecond
 	deltaTimeS = deltaTimeMs / 1000; // seconds
 
+	Objectpool->fbull.bulletupdateCooldown(deltaTimeS);
 	updateCooldown(deltaTimeS);
 	// Player Update
 	player->update(deltaTimeMs);
@@ -246,6 +247,7 @@ void Engine::update(double deltaTimeMs)
 				{
 					Objectpool->enemies[t].reset();
 					Objectpool->enemies[t].setInUse(false);
+					Objectpool->bullets[i].setInUse(false);
 				}
 
 			}
