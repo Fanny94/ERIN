@@ -20,11 +20,6 @@ Bullet::~Bullet()
 void Bullet::update(double dT)
 {
 
-	/*double deltaTimeS; // millisecond
-	deltaTimeS = dT / 1000; // seconds
-
-	bulletupdateCooldown(deltaTimeS);*/
-
 	if (timeLeft <= 0)
 	{
 		inUse = false;
@@ -48,19 +43,6 @@ void Bullet::update(double dT)
 	*this->bulletMatrix = XMMatrixScaling(0.3f, 0.3f, 0.3f)
 		* XMMatrixRotationZ(XMConvertToRadians((float)-bullet_heading))
 		* XMMatrixTranslation(this->state.alive.x, this->state.alive.y, this->state.alive.z);
-}
-
-void Bullet::bulletupdateCooldown(double bdt)
-{
-	if (this->bcooldown <= this->bcurrentTime)
-	{
-		this->bcurrentTime = 0.0f;
-		this->bReady = true;
-	}
-	else
-	{
-		this->bcurrentTime += bdt;
-	}
 }
 
 void Bullet::iniBullet(float X, float Y, float Z, int lifeTime)

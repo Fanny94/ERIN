@@ -18,8 +18,10 @@ public:
 	float SPosx;
 	float SPosy;
 	float SHead;
-
-
+	bool getCooldown() { return this->bReady; };
+	void setCooldown(bool bReady) { this->bReady = bReady; };
+	void bulletupdateCooldown(double bdt);
+	
 	// Enemies
 	void createEnemy(float x, float y, float z);
 	int getEnemyPoolSize() { return this->e_poolSize; };
@@ -28,6 +30,12 @@ public:
 	Bullet fbull;
 
 private:
+	//coldown for bullets
+	bool bReady;
+	const float bcooldown = 0.2f;
+	double bcurrentTime;
+	//coldown for bullets
+
 	// Bullets
 	int lifeTime;
 	Bullet* firstAvailable;

@@ -22,9 +22,6 @@ public:
 	
 	void setNext(Bullet* Next) { state.Next = Next; };
 	
-	bool getCooldown() { return this->bReady; };
-	void setCooldown(bool bReady) { this->bReady = bReady; };
-	
 	Position* bulletPos;
 	Matrix* bulletMatrix;
 	int timeLeft = 700; //How long a bullet will last
@@ -42,16 +39,8 @@ public:
 	} state;
 
 	double bullet_heading = 0;
-	void bulletupdateCooldown(double bdt);
 
 private:
-
-	//coldown for bullets
-	bool bReady;
-	const float bcooldown = 0.2f;
-	double bcurrentTime;
-	//coldown for bullets
-
 	bool inUse;
 	float maxspd = 0.08f;
 	float damage; // if needed

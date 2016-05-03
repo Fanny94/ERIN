@@ -111,7 +111,11 @@ void Engine::processInput()
 		// fire
 		if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
 		{
-			this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+			if (Objectpool->getCooldown()==true)
+			{
+				this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+				Objectpool->setCooldown(false);
+			}
 		}
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
@@ -188,7 +192,7 @@ void Engine::update(double deltaTimeMs)
 	double deltaTimeS; // millisecond
 	deltaTimeS = deltaTimeMs / 1000; // seconds
 
-	Objectpool->fbull.bulletupdateCooldown(deltaTimeS);
+	Objectpool->bulletupdateCooldown(deltaTimeS);
 	updateCooldown(deltaTimeS);
 	// Player Update
 	player->update(deltaTimeMs);
