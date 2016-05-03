@@ -2,11 +2,11 @@
 
 struct Vertex
 {
-	float pos[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float nor[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float uv[2] = { 0.0000000000, 0.0000000000};
-	float tan[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float bitan[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
+	float pos[3];
+	float nor[3];
+	float uv[2];
+	float tan[3];
+	float bitan[3];
 };
 
 struct MeshStruct
@@ -40,9 +40,6 @@ MeshStruct meshTemp;
 unsigned int MaterialCount = 0;
 vector<Material> material;
 Material materialTemp;
-
-float dump;
-
 
 CustomImport::CustomImport() {}
 
@@ -78,12 +75,17 @@ void CustomImport::LoadCustomFormat(string filePath)
 		{
 			fileIn.read((char*)&meshTemp.vertexTemp.pos, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.nor, sizeof(float) * 3);
+			meshTemp.vertexTemp.nor[0] = 0;
+			meshTemp.vertexTemp.nor[1] = 0;
+			meshTemp.vertexTemp.nor[2] = 1;
+
 			fileIn.read((char*)&meshTemp.vertexTemp.uv, sizeof(float) * 2);
 			fileIn.read((char*)&meshTemp.vertexTemp.tan, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.bitan, sizeof(float) * 3);
 			meshTemp.vertex.push_back(meshTemp.vertexTemp);
 		}
 		meshS.push_back(meshTemp);
+		meshTemp.vertex.clear();
 	}
 
 	for (int i = 0; i < MaterialCount; i++)
@@ -261,6 +263,7 @@ void CustomImport::NewMesh()
 				else if (m == 2)
 					newMesh.meshTemp.vertexTemp.pos[0] = meshS.at(i).vertex.at(l).pos[m];
 
+				//newMesh.meshTemp.vertexTemp.pos[m] = meshS.at(i).vertex.at(l).pos[m];
 				newMesh.meshTemp.vertexTemp.nor[m] = meshS.at(i).vertex.at(l).nor[m];
 				newMesh.meshTemp.vertexTemp.tan[m] = meshS.at(i).vertex.at(l).tan[m];
 				newMesh.meshTemp.vertexTemp.bitan[m] = meshS.at(i).vertex.at(l).bitan[m];

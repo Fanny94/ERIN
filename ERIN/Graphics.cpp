@@ -2,10 +2,7 @@
 
 //http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
 
-Graphics::Graphics()
-{
-
-}
+Graphics::Graphics() {}
 
 Graphics::~Graphics()
 {
@@ -65,7 +62,6 @@ void Graphics::Render()
 
 void Graphics::RendPlayer(Matrix transform)
 {
-
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 
@@ -80,7 +76,6 @@ void Graphics::RendPlayer(Matrix transform)
 
 	gDeviceContext->Draw(3, 0);
 }
-
 
 void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 {
