@@ -88,7 +88,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		customImport->LoadCustomFormat("../BinaryDataCube.dat");
 		customImport->NewMesh();
-		customImport->NewMesh();
+		//customImport->NewMesh();
 
 		graphics->CreateConstantBuffer();
 
@@ -278,12 +278,12 @@ void Engine::render()
 	graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
-	for (int j = 0; j < 3; j++)
+	for (int j = 0; j < 2; j++)
 	{
 		if(j == 1)
-			customImport->meshes.at(j).world = XMMatrixTranslation(6, 2, 0);
-		if (j == 2)
 			customImport->meshes.at(j).world = XMMatrixTranslation(6, 0, 0);
+		if (j == 2)
+			customImport->meshes.at(j).world = XMMatrixTranslation(6, 2, 0);
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
 
