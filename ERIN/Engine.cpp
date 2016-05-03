@@ -272,7 +272,6 @@ void Engine::render()
 
 			//Objectpool->bullets[i].bullet_heading = XMConvertToDegrees(atan2f(player->thumbRightX, player->thumbRightY));
 			
-			Objectpool->SHead = player->getHeading();
 			Objectpool->SPosx = player->shipPos->x;
 			Objectpool->SPosy = player->shipPos->y;
 			Objectpool->SHead = (float)player->getHeading();
