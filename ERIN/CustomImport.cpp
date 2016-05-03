@@ -59,7 +59,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 	//fileIn.read((char*)&MorphAnimationCount, sizeof(unsigned int));
 	//fileIn.read((char*)&CustomAttributesCount, sizeof(unsigned int));
 
-	for (int i = 0; i < MeshCount; i++)
+	for (size_t i = 0; i < MeshCount; i++)
 	{
 		fileIn.read((char*)&meshTemp.VertexCount, sizeof(unsigned int));
 		fileIn.read((char*)&meshTemp.MaterialID, sizeof(unsigned int));
@@ -71,7 +71,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 		fileIn.read((char*)&meshTemp.Rotation, sizeof(float) * 3);
 		fileIn.read((char*)&meshTemp.Scale, sizeof(float) * 3);
 
-		for (int j = 0; j < meshTemp.VertexCount; j++)
+		for (size_t j = 0; j < meshTemp.VertexCount; j++)
 		{
 			fileIn.read((char*)&meshTemp.vertexTemp.pos, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.nor, sizeof(float) * 3);
@@ -88,7 +88,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 		meshTemp.vertex.clear();
 	}
 
-	for (int i = 0; i < MaterialCount; i++)
+	for (size_t i = 0; i < MaterialCount; i++)
 	{
 		fileIn.read((char*)&materialTemp.diffuseColor, sizeof(float) * 3);
 		fileIn.read((char*)&materialTemp.specularColor, sizeof(float) * 3);
@@ -232,7 +232,7 @@ void CustomImport::NewMesh()
 
 	int count = meshS.size() - newMesh.MeshCount;
 
-	for (int i = count; i < meshS.size(); i++)
+	for (size_t i = count; i < meshS.size(); i++)
 	{
 		newMesh.meshTemp.VertexCount = meshS.at(i).VertexCount;
 		newMesh.meshTemp.MaterialID = meshS.at(i).MaterialID;
@@ -252,7 +252,7 @@ void CustomImport::NewMesh()
 
 		newMesh.world = XMMatrixTranslation(newMesh.meshTemp.Translation[0], newMesh.meshTemp.Translation[1], newMesh.meshTemp.Translation[2]);
 
-		for (int l = 0; l < newMesh.meshTemp.VertexCount; l++)
+		for (size_t l = 0; l < newMesh.meshTemp.VertexCount; l++)
 		{
 			for (int m = 0; m < 3; m++)
 			{
@@ -278,7 +278,7 @@ void CustomImport::NewMesh()
 	}
 	int mcount = material.size() - newMesh.MaterialCount;
 
-	for (int i = mcount; i < material.size(); i++)
+	for (size_t i = mcount; i < material.size(); i++)
 	{
 		for (int j = 0; j < 3; j++)
 		{

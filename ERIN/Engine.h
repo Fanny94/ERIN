@@ -36,8 +36,8 @@ private:
 	// test cooldown function
 	bool ready;
 	const float cooldown = 2.0f;
-	float currentTime;
-	void updateCooldown(float dt);
+	double currentTime;
+	void updateCooldown(double dt);
 	// test cooldown function #end
 
 	Graphics* graphics;

@@ -299,7 +299,7 @@ void Engine::render()
 			//BulletObjectpool->bullets[i].bullet_heading = player->getHeading();
 			Objectpool->SPosx = player->shipPos->x;
 			Objectpool->SPosy = player->shipPos->y;
-			Objectpool->SHead = player->getHeading();
+			Objectpool->SHead = (float)player->getHeading();
 			
 			//BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
 			//BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
@@ -396,7 +396,7 @@ bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 
 }
 
-void Engine::updateCooldown(float dt)
+void Engine::updateCooldown(double dt)
 {
 	if (this->cooldown <= this->currentTime)
 	{
