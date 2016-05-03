@@ -15,6 +15,10 @@ public:
 	int getBulletPoolSize() { return this->b_poolSize; };
 	static const int b_poolSize = 100;
 	Bullet bullets[b_poolSize];
+	float SPosx;
+	float SPosy;
+	float SHead;
+
 
 	// Enemies
 	void createEnemy(float x, float y, float z);
@@ -22,13 +26,7 @@ public:
 	static const int e_poolSize = 20;
 	GameObject enemies[e_poolSize];
 
-	int getSize() { return this->poolSize; };
-	static const int poolSize = 100;
-	Bullet bullets[poolSize];
-	void animate();
-	float SPosx;
-	float SPosy;
-	float SHead;
+
 private:
 	// Bullets
 	int lifeTime;
