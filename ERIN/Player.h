@@ -17,14 +17,14 @@ public:
 	void playerInput();
 	void update(double deltaTime);
 
-	void SetX(float x) { this->x = x; };
-	void SetY(float y) { this->y = y; };
-	void SetZ(float z) { this->z = z; };
+	void setX(float x) { this->x = x; };
+	void setY(float y) { this->y = y; };
+	void setZ(float z) { this->z = z; };
 
 	string GetName() { return this->name; };
-	float GetX() { return this->x; };
-	float GetY() { return this->y; };
-	float GetZ() { return this->z; };
+	float getX() { return this->x; };
+	float getY() { return this->y; };
+	float getZ() { return this->z; };
 
 	Input* input;
 
