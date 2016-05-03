@@ -233,14 +233,33 @@ void Engine::update(double deltaTimeMs)
 		player->setX(right_wall->point.x - 0.5f);
 	}
 
+	//Collision Bullets
+	for (int t = 0; t < Objectpool->e_poolSize; t++)
+	{
+		if (Objectpool->enemies[t].getInUse())
+		{
+			for (int i = 0; i < Objectpool->b_poolSize; i++)
+			{
+				float x = Objectpool->bullets[i].state.alive.x;
+				float y = Objectpool->bullets[i].state.alive.y;
+				if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
+				{
+					Objectpool->enemies[t].reset();
+					Objectpool->enemies[t].setInUse(false);
+				}
+
+			}
+		}
+	}
+
 	// Collision Enemies
 	for (int i = 0; i < Objectpool->e_poolSize; i++)
 	{
 		if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
 		{
 			cout << "sphere hit" << endl;
-			Objectpool->enemies[i].reset();
-			Objectpool->enemies[i].setInUse(false);
+			//Objectpool->enemies[i].reset();
+			//Objectpool->enemies[i].setInUse(false);
 		}
 	}
 }
@@ -256,7 +275,7 @@ void Engine::render()
 	// Custom Importer
 	for (int j = 0; j < 3; j++)
 	{
-		if(j == 1)
+		if (j == 1)
 			customImport->meshes.at(j).world = XMMatrixTranslation(6, 2, 0);
 		if (j == 2)
 			customImport->meshes.at(j).world = XMMatrixTranslation(6, 0, 0);
