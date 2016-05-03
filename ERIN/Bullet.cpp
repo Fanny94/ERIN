@@ -1,5 +1,4 @@
 #include "Bullet.h"
-#define PI 3.14159265
 
 Bullet::Bullet()
 {
@@ -34,15 +33,27 @@ void Bullet::update(double dT)
 	}
 
 
-	state.alive.Velx += (maxspd-state.alive.Velx);
-	state.alive.Vely += (maxspd-state.alive.Vely);
+	//state.alive.Velx = ((maxspd*bullet_heading)-state.alive.Velx);
+	//state.alive.Vely = ((maxspd*bullet_heading)-state.alive.Vely);
+
+	float mag = sqrt(state.alive.x*state.alive.x + state.alive.y*state.alive.y);
+
+	state.alive.Velx = state.alive.x / mag * maxspd;
+	state.alive.Vely = state.alive.y / mag * maxspd;
+
 
 	state.alive.x = state.alive.x + state.alive.Velx;
 	state.alive.y = state.alive.y + state.alive.Vely;
-	
+
+
+
+	/*velocityX += ((thumbLeftX * maximumSpeed) - velocityX) * abs(thumbLeftX);
+	velocityY += ((thumbLeftY * maximumSpeed) - velocityY) * abs(thumbLeftY);*/
+
+
 	//bullet matrix
-	*this->bulletMatrix = XMMatrixScaling(0.3f, 0.3f, 0.3f)
-		//* XMMatrixRotationZ(XMConvertToRadians((float)-bullet_heading))
+	*this->bulletMatrix = XMMatrixScaling(0.9f, 0.9f, 0.9f)
+		* XMMatrixRotationZ(XMConvertToRadians((float)-bullet_heading))
 		* XMMatrixTranslation(this->state.alive.x, this->state.alive.y, this->state.alive.z);
 	
 

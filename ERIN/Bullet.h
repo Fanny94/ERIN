@@ -50,7 +50,7 @@ public:
 private:
 	double bullet_plannedHeading = 0;
 
-	float maxspd = 0.05f;
+	float maxspd = 0.1f;
 	
 	float damage; // if needed
 

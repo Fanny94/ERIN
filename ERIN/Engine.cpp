@@ -196,9 +196,6 @@ void Engine::update(double deltaTimeMs)
 		if (Objectpool->bullets[i].getInUse())
 		{
 			Objectpool->bullets[i].update(deltaTimeMs);
-			/*BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
-			BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
-			BulletObjectpool->bullets[i].state.alive.z = player->shipPos->z;*/
 		}
 	}
 
@@ -273,9 +270,9 @@ void Engine::render()
 		{
 			graphics->RendPlayer(*Objectpool->bullets[i].bulletMatrix);
 
-			Objectpool->bullets[i].bullet_heading = XMConvertToDegrees(atan2f(player->thumbRightX, player->thumbRightY));
+			//Objectpool->bullets[i].bullet_heading = XMConvertToDegrees(atan2f(player->thumbRightX, player->thumbRightY));
 			
-			//BulletObjectpool->bullets[i].bullet_heading = player->getHeading();
+			Objectpool->SHead = player->getHeading();
 			Objectpool->SPosx = player->shipPos->x;
 			Objectpool->SPosy = player->shipPos->y;
 			Objectpool->SHead = (float)player->getHeading();
