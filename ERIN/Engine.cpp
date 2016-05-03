@@ -108,10 +108,14 @@ void Engine::processInput()
 		// Update player accelerating bool
 		player->playerInput();
 
-		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
+		// fire
+		if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
 		{
 			this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
-			//this->running = false;
+		}
+		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
+		{
+			this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
@@ -143,11 +147,11 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
 		{
-			this->running = false;
+			//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
 		{
-			this->running = false;
+			//this->running = false;
 		}
 
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
