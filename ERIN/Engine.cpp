@@ -20,6 +20,25 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->enemies[2] = new GameObject(3, "enemy3", -5.0f, 0.0f, 0.1f, true);
 	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);
 
+
+	// upper
+	this->upper_wall = new Wall();
+	this->upper_wall->point = Vector3(0, 10, 0);
+	this->upper_wall->normal = Vector3(0, -1, 0);
+	// left
+	this->left_wall = new Wall();
+	this->left_wall->point = Vector3(-10, 0, 0);
+	this->left_wall->normal = Vector3(1, 0, 0);
+	// lower
+	this->lower_wall = new Wall();
+	this->lower_wall->point = Vector3(0, -10, 0);
+	this->lower_wall->normal = Vector3(0, 1, 0);
+	// right
+	this->right_wall = new Wall();
+	this->right_wall->point = Vector3(10, 0, 0);
+	this->right_wall->normal = Vector3(-1, 0, 0);
+
+
 	//create window
 	wndHandle = InitWindow(hInstance);
 
@@ -74,6 +93,11 @@ Engine::~Engine()
 		delete enemies[i];
 	}
 	delete enemies;
+
+	delete this->upper_wall;
+	delete this->left_wall;
+	delete this->lower_wall;
+	delete this->right_wall;
 }
 
 void Engine::processInput()
@@ -160,11 +184,15 @@ void Engine::update(double deltaTimeMs)
 	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
 	gameObject->update(deltaTimeMs);*/
 
+	//BUllet Updates
 	for (int i = 0; i < BulletObjectpool->getSize(); i++)
 	{
 		if (BulletObjectpool->bullets[i].getInUse())
 		{
 			BulletObjectpool->bullets[i].update(deltaTimeMs);
+			/*BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
+			BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
+			BulletObjectpool->bullets[i].state.alive.z = player->shipPos->z;*/
 		}
 	}
 
@@ -176,6 +204,27 @@ void Engine::update(double deltaTimeMs)
 	}
 
 	// Collision
+	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
+	{
+		cout << "upper wall hit" << endl;
+		//player->setThumbLeftY(0.0f);
+	}
+	if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
+	{
+		cout << "left wall hit" << endl;
+		//player->SetX(left_wall->point.x);
+	}
+	if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
+	{
+		cout << "lower wall hit" << endl;
+		//player->SetY(lower_wall->point.x);
+	}
+	if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
+	{
+		cout << "right wall hit" << endl;
+		//player->SetX(right_wall->point.x);
+	}
+
 	for (int i = 0; i < 4; i++)
 	{
 		if (sphereToSphere(*player->sphere, *enemies[i]->sphere))
@@ -193,10 +242,8 @@ void Engine::render()
 	graphics->Render();
 	graphics->RendPlayer(*player->shipMatrix);
 	graphics->RendPlayer(*player->turretMatrix);
-	
+
 	// Custom Importer
-	
-	//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
 	for (int j = 0; j < 3; j++)
 	{
 		if(j == 1)
@@ -230,25 +277,75 @@ void Engine::render()
 
 bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)
 {
-	//Calculate the squared distance between the centers of both spheres
+	// Calculate the squared distance between the centers of both spheres
 	Vector3 vecDist(tSph2.m_vecCenter - tSph1.m_vecCenter);
-
 	double dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
-
 	float fDistSq(dotProduct);
 
-	//Calculate the squared sum of both radii
+	// Calculate the squared sum of both radii
 	float fRadiiSumSquared(tSph1.m_fRadius + tSph2.m_fRadius);
 	fRadiiSumSquared *= fRadiiSumSquared;
 
-	//Check for collision
-	//If the distance squared is less than or equal to the square sum
-	//of the radii, then we have a collision
+	// Check for collision
+	// If the distance squared is less than or equal to the square sum
+	// of the radii, then we have a collision
 	if (fDistSq <= fRadiiSumSquared)
 		return true;
 
-	//If not, then return false
+	// If not, then return false
 	return false;
+}
+
+bool Engine::sphereToPlane(const TSphere& tSph, const Vector3& vecPoint, const Vector3& vecNormal)
+{
+	// Calculate a vector from the point on the plane to the center of the sphere
+	Vector3 vecTemp(tSph.m_vecCenter - vecPoint);
+
+	// Calculate the distance: dot product of the new vector with the plane's normal
+	double dotProduct = vecTemp.x * vecNormal.x + vecTemp.y * vecNormal.y + vecTemp.z * vecNormal.z;
+	float fDist(dotProduct);
+
+	if (fDist > tSph.m_fRadius)
+	{
+		// The sphere is not touching the plane
+		return false;
+	}
+
+	// Else, the sphere is colliding with the plane
+	return true;
+}
+
+bool Engine::pointInSphere(const TSphere& tSph, const Vector3& vecPoint)
+{
+	// Calculate the squared distance from the point to the center of the sphere
+	Vector3 vecDist(tSph.m_vecCenter - vecPoint);
+	double dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
+	float fDistSq(dotProduct);
+
+	// Calculate if the squared distance between the sphere's center and the point
+	// is less than the squared radius of the sphere
+	if (fDistSq < (tSph.m_fRadius * tSph.m_fRadius))
+	{
+		return true;
+	}
+
+	// If not, return false
+	return false;
+}
+
+bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
+{
+
+	//Check if Box1's max is greater than Box2's min and Box1's min is less than Box2's max
+	return(tBox1.m_vecMax.x > tBox2.m_vecMin.x &&
+		tBox1.m_vecMin.x < tBox2.m_vecMax.x &&
+		tBox1.m_vecMax.y > tBox2.m_vecMin.y &&
+		tBox1.m_vecMin.y < tBox2.m_vecMax.y &&
+		tBox1.m_vecMax.z > tBox2.m_vecMin.z &&
+		tBox1.m_vecMin.z < tBox2.m_vecMax.z);
+
+	//If not, it will return false
+
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)

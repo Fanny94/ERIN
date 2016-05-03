@@ -1,14 +1,13 @@
 #pragma once
 #include "Bullet.h"
-//#include <ctime>
-//#include <time.h>
+
 
 class ObjectPool
 {
 public:
 	ObjectPool();
 	~ObjectPool();
-	void createb(float x, float y, float z, int lifeTime);
+	//void createb(float x, float y, float z, int lifeTime);
 	void fire();
 	int getSize() { return this->poolSize; };
 	static const int poolSize = 100;
