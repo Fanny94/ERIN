@@ -11,7 +11,7 @@ public:
 	~ObjectPool();
 
 	// Bullets
-	void fire();
+	void fire(float x, float y, double heading);
 	int getBulletPoolSize() { return this->b_poolSize; };
 	static const int b_poolSize = 100;
 	Bullet bullets[b_poolSize];

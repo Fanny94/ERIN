@@ -40,14 +40,14 @@ ObjectPool::~ObjectPool()
 {
 }
 
-void ObjectPool::fire()
+void ObjectPool::fire(float x, float y, double heading)
 {
 		for (int i = 0; i < this->b_poolSize; i++)
 		{
 			if (!bullets[i].getInUse())
 			{
-				bullets[i].iniBullet(SPosx, SPosy, fbull.state.alive.z, fbull.timeLeft);
-				bullets[i].bullet_heading = SHead;
+				bullets[i].iniBullet(x, y, 0.0f, fbull.timeLeft);
+				bullets[i].bullet_heading = heading;
 				bullets[i].inUse = true;
 				return;
 			}

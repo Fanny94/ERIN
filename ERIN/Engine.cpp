@@ -110,7 +110,7 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			this->Objectpool->fire();
+			this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
 			//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
@@ -215,22 +215,22 @@ void Engine::update(double deltaTimeMs)
 	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 	{
 		cout << "upper wall hit" << endl;
-		player->SetY(upper_wall->point.y - 0.5f);
+		player->setY(upper_wall->point.y - 0.5f);
 	}
 	if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
 	{
 		cout << "left wall hit" << endl;
-		player->SetX(left_wall->point.x + 0.5f);
+		player->setX(left_wall->point.x + 0.5f);
 	}
 	if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
 	{
 		cout << "lower wall hit" << endl;
-		player->SetY(lower_wall->point.y + 0.5f);
+		player->setY(lower_wall->point.y + 0.5f);
 	}
 	if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
 	{
 		cout << "right wall hit" << endl;
-		player->SetX(right_wall->point.x - 0.5f);
+		player->setX(right_wall->point.x - 0.5f);
 	}
 
 	// Collision Enemies
@@ -269,16 +269,6 @@ void Engine::render()
 		if (Objectpool->bullets[i].getInUse())
 		{
 			graphics->RendPlayer(*Objectpool->bullets[i].bulletMatrix);
-
-			//Objectpool->bullets[i].bullet_heading = XMConvertToDegrees(atan2f(player->thumbRightX, player->thumbRightY));
-			
-			Objectpool->SHead = player->getHeading();
-			Objectpool->SPosx = player->shipPos->x;
-			Objectpool->SPosy = player->shipPos->y;
-			Objectpool->SHead = (float)player->getHeading();
-			
-			//BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
-			//BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
 		}
 	}
 
