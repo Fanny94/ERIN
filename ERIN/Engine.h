@@ -9,7 +9,7 @@
 #include "CustomImport.h"
 #include "ObjectPool.h"
 #include "Player.h"
-#include "GameObject.h"
+//#include "GameObject.h"
 
 class Engine
 {
@@ -33,12 +33,19 @@ public:
 private:
 	bool running;
 
+	// test cooldown function
+	bool ready;
+	const float cooldown = 2.0f;
+	float currentTime;
+	void updateCooldown(float dt);
+	// test cooldown function #end
+
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	Mesh* mesh;
 	Camera* camera;
 	CustomImport* customImport;
-	ObjectPool* BulletObjectpool;
+	ObjectPool* Objectpool;
 
 	Bullet* inu;
 	Bullet** bullets;
@@ -48,11 +55,9 @@ private:
 	Wall* lower_wall;
 	Wall* right_wall;
 
-	// test input
 	Player* player;
-	Player pplay;
-	GameObject* gameObject;
-	GameObject** enemies;
+
+	TriangleVertex* triangle;
 };
 
 #endif // !ENGINE_H
