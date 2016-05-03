@@ -9,17 +9,37 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 	this->gameLogic = new GameLogic();
 
-	this->BulletObjectpool = new ObjectPool();
+	this->Objectpool = new ObjectPool();
 
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
 
-	this->enemies = new GameObject*[5];
+	/*this->enemies = new GameObject*[5];
 	this->enemies[0] = new GameObject(1, "enemy1", 5.0f, 0.0f, 0.1f, true);
 	this->enemies[1] = new GameObject(2, "enemy2", 0.0f, 5.0f, 0.1f, true);
 	this->enemies[2] = new GameObject(3, "enemy3", -5.0f, 0.0f, 0.1f, true);
-	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);
+	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);*/
 
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	/*this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);*/
+
+	this->triangle = new TriangleVertex[3];
+	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
+	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
+	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
 
 	// upper
 	this->upper_wall = new Wall();
@@ -27,7 +47,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->upper_wall->normal = Vector3(0, -1, 0);
 	// left
 	this->left_wall = new Wall();
-	this->left_wall->point = Vector3(-10, 0, 0);
+	this->left_wall->point = Vector3(-20, 0, 0);
 	this->left_wall->normal = Vector3(1, 0, 0);
 	// lower
 	this->lower_wall = new Wall();
@@ -35,7 +55,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->lower_wall->normal = Vector3(0, 1, 0);
 	// right
 	this->right_wall = new Wall();
-	this->right_wall->point = Vector3(10, 0, 0);
+	this->right_wall->point = Vector3(20, 0, 0);
 	this->right_wall->normal = Vector3(-1, 0, 0);
 
 
@@ -61,13 +81,14 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		graphics->CreateTriangle(enemies[0]->triangle);
+		graphics->CreateTriangle(this->triangle);
 
-		customImport->LoadCustomFormat("../BinaryData.bin");
+		customImport->LoadCustomFormat("../BinaryDataSphere2.dat");
 		customImport->NewMesh();
 
-		//customImport->LoadCustomFormat("../BinaryDataSphere.bin");
-		//customImport->NewMesh();
+		customImport->LoadCustomFormat("../BinaryDataCube.dat");
+		customImport->NewMesh();
+		customImport->NewMesh();
 
 		graphics->CreateConstantBuffer();
 
@@ -85,14 +106,15 @@ Engine::~Engine()
 	delete this->player;
 	//delete this->gameObject;
 
-	delete this->BulletObjectpool;
+	delete this->Objectpool;
 
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 4; i++)
 	{
 		delete enemies[i];
 	}
-	delete enemies;
+	delete enemies;*/
 
+	delete triangle;
 	delete this->upper_wall;
 	delete this->left_wall;
 	delete this->lower_wall;
@@ -101,21 +123,26 @@ Engine::~Engine()
 
 void Engine::processInput()
 {
-
-	player->input->update(); // test object, should be done for all objects
-
 	if (player->input->isConnected())
 	{
+		// Update controller states
+		player->input->update();
+		// Update player accelerating bool
 		player->playerInput();
 
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			this->BulletObjectpool->fire();
+			this->Objectpool->fire();
 			//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
-			this->running = false;
+			if (this->ready)
+			{
+				this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+				this->ready = false;
+			}
+			//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_B] == true)
 		{
@@ -178,32 +205,37 @@ void Engine::update(double deltaTimeMs)
 	double deltaTimeS; // millisecond
 	deltaTimeS = deltaTimeMs / 1000; // seconds
 
+	updateCooldown(deltaTimeS);
 	// Player Update
 	player->update(deltaTimeMs);
 	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
 	gameObject->update(deltaTimeMs);*/
 
-	//BUllet Updates
-	for (int i = 0; i < BulletObjectpool->getSize(); i++)
+	//Bullet Updates
+	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 	{
-		if (BulletObjectpool->bullets[i].getInUse())
+		if (Objectpool->bullets[i].getInUse())
 		{
-			BulletObjectpool->bullets[i].update(deltaTimeMs);
-			/*BulletObjectpool->bullets[i].state.alive.x = player->turretPos->x;
-			BulletObjectpool->bullets[i].state.alive.y = player->turretPos->y;
-			BulletObjectpool->bullets[i].bullet_heading = player->getHeading();*/
-			//BulletObjectpool->bullets[i].state.alive.z = player->shipPos->z;
+			Objectpool->bullets[i].update(deltaTimeMs);
+			/*BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
+			BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
+			BulletObjectpool->bullets[i].state.alive.z = player->shipPos->z;*/
 		}
 	}
 
 	// Enemies Updates
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < this->Objectpool->e_poolSize; i++)
 	{
-		enemies[i]->updateBehavior(*player->shipPos, enemies[i], enemies);
-		enemies[i]->update(deltaTimeMs);
+		if (Objectpool->enemies[i].getInUse())
+		{
+			Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
+			Objectpool->enemies[i].update(deltaTimeMs);
+		}
+		/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
+		Objectpool->enemies[i]->update(deltaTimeMs);*/
 	}
 
-	// Collision
+	// Collision Walls
 	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 	{
 		cout << "upper wall hit" << endl;
@@ -225,12 +257,14 @@ void Engine::update(double deltaTimeMs)
 		player->SetX(right_wall->point.x - 0.5f);
 	}
 
-	for (int i = 0; i < 4; i++)
+	// Collision Enemies
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
 	{
-		if (sphereToSphere(*player->sphere, *enemies[i]->sphere))
+		if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
 		{
 			cout << "sphere hit" << endl;
-			enemies[i]->reset();
+			Objectpool->enemies[i].reset();
+			Objectpool->enemies[i].setInUse(false);
 		}
 	}
 }
@@ -244,20 +278,19 @@ void Engine::render()
 	graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
-
-	//customImport->meshes.at(1).world = XMMatrixTranslation(4, 0, 0);
-	//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
-	for (int j = 0; j < 1; j++)
+	for (int j = 0; j < 3; j++)
 	{
+		if(j == 1)
+			customImport->meshes.at(j).world = XMMatrixTranslation(6, 2, 0);
+		if (j == 2)
+			customImport->meshes.at(j).world = XMMatrixTranslation(6, 0, 0);
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
 	}
 
 	//Bullet rendering
-	for (int i = 0; i < BulletObjectpool->getSize(); i++)
+	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 	{
-		
-		
-		if (BulletObjectpool->bullets[i].getInUse())
+		if (Objectpool->bullets[i].getInUse())
 		{
 			graphics->RendPlayer(*BulletObjectpool->bullets[i].bulletMatrix);
 
@@ -274,9 +307,13 @@ void Engine::render()
 	}
 
 	// Enemy rendering
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
 	{
-		graphics->RendPlayer(*enemies[i]->objectMatrix);
+		if (Objectpool->enemies[i].getInUse())
+		{
+
+			graphics->RendPlayer(*Objectpool->enemies[i].objectMatrix);
+		}
 	}
 
 	// Camera Update
@@ -290,7 +327,7 @@ bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)
 {
 	// Calculate the squared distance between the centers of both spheres
 	Vector3 vecDist(tSph2.m_vecCenter - tSph1.m_vecCenter);
-	double dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
+	float dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
 	float fDistSq(dotProduct);
 
 	// Calculate the squared sum of both radii
@@ -313,7 +350,7 @@ bool Engine::sphereToPlane(const TSphere& tSph, const Vector3& vecPoint, const V
 	Vector3 vecTemp(tSph.m_vecCenter - vecPoint);
 
 	// Calculate the distance: dot product of the new vector with the plane's normal
-	double dotProduct = vecTemp.x * vecNormal.x + vecTemp.y * vecNormal.y + vecTemp.z * vecNormal.z;
+	float dotProduct = vecTemp.x * vecNormal.x + vecTemp.y * vecNormal.y + vecTemp.z * vecNormal.z;
 	float fDist(dotProduct);
 
 	if (fDist > tSph.m_fRadius)
@@ -330,7 +367,7 @@ bool Engine::pointInSphere(const TSphere& tSph, const Vector3& vecPoint)
 {
 	// Calculate the squared distance from the point to the center of the sphere
 	Vector3 vecDist(tSph.m_vecCenter - vecPoint);
-	double dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
+	float dotProduct = vecDist.x * vecDist.x + vecDist.y * vecDist.y + vecDist.z * vecDist.z;
 	float fDistSq(dotProduct);
 
 	// Calculate if the squared distance between the sphere's center and the point
@@ -357,6 +394,19 @@ bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 
 	//If not, it will return false
 
+}
+
+void Engine::updateCooldown(float dt)
+{
+	if (this->cooldown <= this->currentTime)
+	{
+		this->currentTime = 0.0f;
+		this->ready = true;
+	}
+	else
+	{
+		this->currentTime += dt;
+	}
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)

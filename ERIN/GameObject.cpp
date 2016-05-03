@@ -4,6 +4,19 @@ GameObject::GameObject()
 	: name("noName"),
 	x(0.0f), y(0.0f), z(0.0f)
 {
+	this->triangle = new TriangleVertex[3];
+	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
+	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
+	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
+
+	this->objectMatrix = new Matrix();
+
+	this->behavior = new Behavior(Patrol);
+	this->pos = new Position{ this->x, this->y, this->z };
+
+	this->sphere = new TSphere();
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+	this->sphere->m_fRadius = 0.5f;
 }
 
 GameObject::GameObject(int objectID, string name, float x, float y, float z, bool doHaveBehavior)
@@ -13,21 +26,17 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->x = x;
 	this->y = y;
 	this->z = z;
+
+	// speed
 	float LO = 0.07f, HI = 0.15f, lO = 0.0006f, hI = 0.0009f;
-
 	float Random = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
-
-	this->maximumSpeed = Random; //Random;
-	this->currentSpeed = 0.0f;
-
-	this->speed = 0.0f;
+	this->maximumSpeed = Random;
 
 	float Ran = lO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (hI - lO)));
 	this->acceleration = Ran;
 
-	// test triangle in gameobject
+	// test triangle in gameobject ( should be a mesh number )
 	this->triangle = new TriangleVertex[3];
-
 	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
 	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
 	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
@@ -40,8 +49,6 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 		this->behavior = new Behavior(Patrol);
 	}
 	this->pos = new Position{ this->x, this->y, this->z };
-
-	//GetEnemyPos();
 
 	this->sphere = new TSphere();
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
@@ -61,7 +68,7 @@ GameObject::~GameObject()
 	}
 }
 
-void GameObject::updateBehavior(Position player, GameObject* myself, GameObject** allEnemies)
+void GameObject::updateBehavior(Position player, GameObject* myself, GameObject* allEnemies)
 {
 	if (this->behavior)
 	{
@@ -71,21 +78,20 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 		// static number of enemies
 		for (int i = 0; i < 4; i++)
 		{
-			if (myself->getObjectID() != allEnemies[i]->getObjectID())
+			if (myself->getObjectID() != allEnemies[i].getObjectID())
 			{
 				// test lines to see values quick
 				int me = myself->getObjectID();
-				int other = allEnemies[i]->getObjectID();
+				int other = allEnemies[i].getObjectID();
 
 				// cohesion calculations
-				this->behavior->cohesion(*myself->pos, *allEnemies[i]->pos);
+				this->behavior->cohesion(*myself->pos, *allEnemies[i].pos);
 
-				//Separation calculations
-				this->behavior->separation(*myself->pos, *allEnemies[i]->pos);
+				// separation calculations
+				this->behavior->separation(*myself->pos, *allEnemies[i].pos);
 			}
 		}
 		//this->behavior->alignment();
-		//
 
 		float radians = XMConvertToRadians((float)heading);
 		this->directionX = (float)sin(radians);
@@ -148,7 +154,6 @@ void GameObject::reset()
 	this->y = 0.0f;
 	this->z = 0.0f;
 
-	this->currentSpeed = 0.0f;
 	this->speed = 0.0f;
 
 	delete this->objectMatrix;
