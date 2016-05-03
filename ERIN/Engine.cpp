@@ -269,16 +269,10 @@ void Engine::render()
 		if (Objectpool->bullets[i].getInUse())
 		{
 			graphics->RendPlayer(*Objectpool->bullets[i].bulletMatrix);
-
-			//Objectpool->bullets[i].bullet_heading = XMConvertToDegrees(atan2f(player->thumbRightX, player->thumbRightY));
 			
-			Objectpool->SHead = player->getHeading();
 			Objectpool->SPosx = player->shipPos->x;
 			Objectpool->SPosy = player->shipPos->y;
 			Objectpool->SHead = (float)player->getHeading();
-			
-			//BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
-			//BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
 		}
 	}
 

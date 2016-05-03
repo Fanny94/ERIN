@@ -17,22 +17,11 @@ public:
 	void iniBullet(float x, float y, float z, int lifeTime);
 	bool getInUse() { return this->inUse; };
 	void setNext(Bullet* Next) { state.Next = Next; };
-	
-	bool canFire = false;
-	int countdown = 60;
 
 	Position* bulletPos;
 	Matrix* bulletMatrix;
-	//bool inUse;
-	int lastFire = 300;
 	int timeLeft = 700; //How long a bullet will last
 	bool inUse;
-
-	float angleX;
-	float angleY;
-	float vectorlength;
-	float sumx;
-	float sumy;
 
 	union 
 	{
@@ -48,11 +37,8 @@ public:
 	double bullet_heading = 0;
 
 private:
-	double bullet_plannedHeading = 0;
 
-	float maxspd = 0.1f;
-	
+	float maxspd = 0.08f;
 	float damage; // if needed
-
 };
 #endif // !BULLET_H
