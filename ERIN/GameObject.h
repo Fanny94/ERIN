@@ -16,11 +16,19 @@ public:
 	GameObject(int objectID, string name, float x, float y, float z, bool doHaveBehavior);
 	~GameObject();
 
-	void updateBehavior(Position player, GameObject* myself, GameObject** allEnemies);
+	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
 	void reset();
 
+	void setObjectID(int objectID) { this->objectID = objectID; };
+	void setObjectName(string name) { this->name = name; };
+	void setObjectPosX(float x) { this->x = x; };
+	void setObjectPosY(float y) { this->x = y; };
+	void setObjectPosZ(float z) { this->x = z; };
+
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
+	void setAcceleration(float acceleration) { this->acceleration = acceleration; };
+
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };
 
@@ -41,14 +49,21 @@ public:
 	// collision
 	TSphere* sphere;
 
+	// objectpool handling
+	void setInUse(bool inUse) { this->inUse = inUse; };
+	bool getInUse() { return this->inUse; };
+	GameObject* next;
+	void setNext(GameObject* Next) { this->next = Next; };
+
 private:
 	int objectID;
 	string name;
 	float x, y, z;
 
+	bool inUse;
+
 	float maximumSpeed;
-	float currentSpeed;
-	float speed;
+	float speed = 0.0f;
 
 	bool accelerating;
 	float acceleration;
