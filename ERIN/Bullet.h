@@ -3,8 +3,6 @@
 
 #include "Linker.h"
 #include "Structs.h"
-#include <ctime>
-#include <time.h>
 
 class Bullet
 {
@@ -29,7 +27,13 @@ public:
 	int lastFire = 300;
 	int timeLeft = 700; //How long a bullet will last
 	bool inUse;
-	
+
+	float angleX;
+	float angleY;
+	float vectorlength;
+	float sumx;
+	float sumy;
+
 	union 
 	{
 		struct alive
@@ -41,17 +45,12 @@ public:
 		Bullet* Next;
 	} state;
 
+	double bullet_heading = 0;
 
 private:
-
-
-	double bullet_heading = 0;
 	double bullet_plannedHeading = 0;
 
-	
-	
-	
-	float maxspd = 0.02f;
+	float maxspd = 0.05f;
 	
 	float damage; // if needed
 

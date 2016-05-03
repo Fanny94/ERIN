@@ -1,5 +1,5 @@
 #include "Bullet.h"
-
+#define PI 3.14159265
 
 Bullet::Bullet()
 {
@@ -9,8 +9,6 @@ Bullet::Bullet()
 	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
 	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
 	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
-
-	//this->bulletPos = new Position{ this->state.alive.x, this->state.alive.y, this->state.alive.z };
 }
 
 
@@ -18,13 +16,10 @@ Bullet::~Bullet()
 {
 	delete this->bulletMatrix;
 	delete this->triangle;
-	//delete this->bulletPos;
 }
 
 void Bullet::update(double dT)
 {
-	//if (!inUse) return;
-	
 	timeLeft --;
 	lastFire --;
 
@@ -44,12 +39,12 @@ void Bullet::update(double dT)
 
 	state.alive.x = state.alive.x + state.alive.Velx;
 	state.alive.y = state.alive.y + state.alive.Vely;
-
+	
 	//bullet matrix
 	*this->bulletMatrix = XMMatrixScaling(0.3f, 0.3f, 0.3f)
-		* XMMatrixRotationZ(XMConvertToRadians((float)-bullet_heading))
+		//* XMMatrixRotationZ(XMConvertToRadians((float)-bullet_heading))
 		* XMMatrixTranslation(this->state.alive.x, this->state.alive.y, this->state.alive.z);
-
+	
 
 }
 

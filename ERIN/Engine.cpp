@@ -189,9 +189,10 @@ void Engine::update(double deltaTimeMs)
 		if (BulletObjectpool->bullets[i].getInUse())
 		{
 			BulletObjectpool->bullets[i].update(deltaTimeMs);
-			/*BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
-			BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
-			BulletObjectpool->bullets[i].state.alive.z = player->shipPos->z;*/
+			/*BulletObjectpool->bullets[i].state.alive.x = player->turretPos->x;
+			BulletObjectpool->bullets[i].state.alive.y = player->turretPos->y;
+			BulletObjectpool->bullets[i].bullet_heading = player->getHeading();*/
+			//BulletObjectpool->bullets[i].state.alive.z = player->shipPos->z;
 		}
 	}
 
@@ -254,9 +255,21 @@ void Engine::render()
 	//Bullet rendering
 	for (int i = 0; i < BulletObjectpool->getSize(); i++)
 	{
+		
+		
 		if (BulletObjectpool->bullets[i].getInUse())
 		{
 			graphics->RendPlayer(*BulletObjectpool->bullets[i].bulletMatrix);
+
+			BulletObjectpool->bullets[i].bullet_heading = XMConvertToDegrees(atan2f(player->thumbRightX, player->thumbRightY));
+			
+			//BulletObjectpool->bullets[i].bullet_heading = player->getHeading();
+			BulletObjectpool->SPosx = player->shipPos->x;
+			BulletObjectpool->SPosy = player->shipPos->y;
+			BulletObjectpool->SHead = player->getHeading();
+			
+			//BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
+			//BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
 		}
 	}
 
