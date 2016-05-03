@@ -197,7 +197,7 @@ void Engine::render()
 	// Custom Importer
 	
 	//graphics->RenderCustom(customImport->meshes.at(0), customImport->meshes.at(0).world);
-	for (int j = 0; j < 1; j++)
+	for (int j = 0; j < 3; j++)
 	{
 		if(j == 1)
 			customImport->meshes.at(j).world = XMMatrixTranslation(6, 0, 0);
