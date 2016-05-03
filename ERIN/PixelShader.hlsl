@@ -22,7 +22,7 @@ struct VS_OUT
 
 float4 PS_main(VS_OUT input) : SV_Target
 {
-	float4 lightPosition = float4(0.0, 0.0, 10.0, 0.0);
+	float4 lightPosition = float4(0.0, 0.0, 5.0, 0.0);
 	float3 lightIntensity = float3(0.9, 0.9, 0.9);
 
 	float4 s = normalize(lightPosition - input.WPos);
