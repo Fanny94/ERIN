@@ -36,7 +36,7 @@ float4 PS_main(VS_OUT input) : SV_Target
 
 	float3 diffuseLight = diffuseColor * max(dot(s, input.Nor), 0.0f);
 
-	float3 ambientLight = ambientColor;
+	float3 ambientLight = {0.2, 0.2, 0.2};
 
 	float3 specularLight = specularColor * pow(max(dot(r, v), 0.0f), shininess);
 

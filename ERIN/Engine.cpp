@@ -63,7 +63,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(enemies[0]->triangle);
 
-		customImport->LoadCustomFormat("../BinaryDataShip.dat");
+		customImport->LoadCustomFormat("../BinaryDataSphere2.dat");
 		customImport->NewMesh();
 
 		customImport->LoadCustomFormat("../BinaryDataCube.dat");
