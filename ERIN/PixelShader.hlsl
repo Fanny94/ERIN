@@ -18,6 +18,7 @@ struct VS_OUT
 	float4 Nor: NORMAL;
 	float2 uv : UV;
 	float4 CamPos :POSITION1;
+
 };
 
 float4 PS_main(VS_OUT input) : SV_Target

@@ -9,7 +9,18 @@
 #include "CustomImport.h"
 #include "ObjectPool.h"
 #include "Player.h"
-//#include "GameObject.h"
+#include "GameObject.h"
+
+enum GameStateManager
+{
+	TitleScreen,
+	MainMenu,
+	GameRunning,
+	Pause,
+	GameOver,
+	HighScore,
+	HelpAndOptions
+};
 
 class Engine
 {
@@ -30,11 +41,21 @@ public:
 
 	bool getRunning() { return running; };
 
+	bool aButtonActive = false;
+	bool bButtonActive = false;
+
+	GameStateManager gameState;
+
+	// Pause
+	int pMenuOption = 0;
+	// Main Menu
+	int mainMenuOption = 0;
+
 private:
 	bool running;
 
 	// test cooldown function
-	bool ready;
+	bool ready = true;
 	const float cooldown = 1.0f;
 	double currentTime;
 	void updateCooldown(double dt);
@@ -46,6 +67,7 @@ private:
 	Camera* camera;
 	CustomImport* customImport;
 	ObjectPool* Objectpool;
+	GameObject* gameObject;
 
 	Bullet* bulletptr;
 	Bullet** bullets;

@@ -23,6 +23,8 @@ public:
 	void bulletupdateCooldown(double bdt);
 	void ResetBullet();
 
+	void handler();
+
 	// Enemies
 	void createEnemy(float x, float y, float z);
 	int getEnemyPoolSize() { return this->e_poolSize; };

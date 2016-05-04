@@ -59,18 +59,28 @@ void ObjectPool::ResetBullet()
 	}
 }
 
-void ObjectPool::fire(float x, float y, double heading)
+void ObjectPool::handler()
 {
-	for (int i = 0; i < this->b_poolSize; i++)
+	for (int i = 0; i < b_poolSize; i++)
 	{
 		if (!bullets[i].getInUse())
 		{
-			bullets[i].iniBullet(x, y, 0.0f, fbull.timeLeft);
-			bullets[i].bullet_heading = heading;
-			bullets[i].setInUse(true);
-			return;
+			bullets[i].setNext(firstAvailable);
+			firstAvailable = &bullets[i];
 		}
 	}
+}
+
+void ObjectPool::fire(float x, float y, double heading)
+{
+	Bullet* newBullet = firstAvailable;
+	firstAvailable = newBullet->getNext();
+	
+	newBullet->iniBullet(x, y, 0.0f, fbull.timeLeft);
+	newBullet->bullet_heading = heading;
+	newBullet->setInUse(true);
+	handler();
+	return;
 }
 
 

@@ -121,6 +121,11 @@ void Camera::UpdateCamera()
 	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
 }
 
+void Camera::ResetCamera()
+{
+	camPosition = Vector4(0.0f, 0.5f, -18.0f, 1.0f);
+}
+
 void Camera::cameraMoveLeft()
 {
 	moveLeftRight -= speed;

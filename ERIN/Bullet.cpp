@@ -17,10 +17,10 @@ Bullet::~Bullet()
 	delete this->triangle;
 }
 
-void Bullet::update(double dT)
+void Bullet::update()
 {
 	timeLeft--;
-	
+
 	if (timeLeft <= 0)
 	{
 		inUse = false;

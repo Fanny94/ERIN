@@ -45,10 +45,11 @@
     <ClCompile Include="CustomImport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectPool.cpp">
+    <ClCompile Include="Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="ObjectPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

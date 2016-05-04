@@ -17,7 +17,15 @@ public:
 
 	void SetViewport();
 	void Render();
-	void RendPlayer(Matrix transform);
+
+	void TitleScreenRender();
+	void MainMenuRender();
+	void PauseRender();
+	void GameOverRender();
+	void HighScoreRender();
+	void HelpAndOptionsRender();
+
+	void RendBullets(Matrix transform);
 
 	void CustomVertexBuffer(Mesh mesh);
 	void RenderCustom(Mesh mesh, Matrix transform, int cvb);
@@ -78,7 +86,7 @@ public:
 	};
 
 	CustomFormat* CFPtr;
-	
+
 	struct VertexCustom
 	{
 		float pos[3];

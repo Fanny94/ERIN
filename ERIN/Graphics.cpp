@@ -66,7 +66,49 @@ void Graphics::Render()
 	gDeviceContext->IASetInputLayout(gVertexLayout);
 }
 
-void Graphics::RendPlayer(Matrix transform)
+void Graphics::TitleScreenRender()
+{
+	float clearColor[] = { 0, 1, 0, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::MainMenuRender()
+{
+	float clearColor[] = { 1, 0, 0, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::PauseRender()
+{
+	float clearColor[] = { 0, 0, 1, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::GameOverRender()
+{
+	float clearColor[] = { 0, 0, 0, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::HighScoreRender()
+{
+	float clearColor[] = { 1, 0, 1, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::HelpAndOptionsRender()
+{
+	float clearColor[] = { 0, 1, 1, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::RendBullets(Matrix transform)
 {
 	UINT32 vertexSize = sizeof(float) * 6;
 	UINT32 offset = 0;
@@ -146,14 +188,16 @@ void Graphics::CustomUpdateBuffer(Matrix transform)
 	D3D11_MAPPED_SUBRESOURCE mapped;
 	Matrix projection;
 	Matrix worldViewProj;
+	Matrix world;
 
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
 
 	worldViewProj = transform * camera->camView * projection;
 
 	worldViewProj = worldViewProj.Transpose();
 
-	transform = transform.Transpose();
+	world = world.Transpose();
 
 	hr = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
 	if (FAILED(hr))
@@ -163,7 +207,7 @@ void Graphics::CustomUpdateBuffer(Matrix transform)
 
 	MatrixPtr2 = (MATRICES*)mapped.pData;
 	MatrixPtr2->worldViewProj = worldViewProj;
-	MatrixPtr2->world = transform;
+	MatrixPtr2->world = world;
 	MatrixPtr2->camPos = camera->camPosition;
 
 	gDeviceContext->Unmap(gConstantBuffer, 0);

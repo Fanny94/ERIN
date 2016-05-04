@@ -10,6 +10,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->gameLogic = new GameLogic();
 
 	this->Objectpool = new ObjectPool();
+	this->gameObject = new GameObject();
 
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
@@ -87,6 +88,7 @@ Engine::~Engine()
 	//delete this->gameObject;
 
 	delete this->Objectpool;
+	delete this->gameObject;
 
 	/*for (int i = 0; i < 4; i++)
 	{
@@ -103,12 +105,286 @@ Engine::~Engine()
 
 void Engine::processInput()
 {
+	player->input->update();
+
 	if (player->input->isConnected())
 	{
 		// Update controller states
 		player->input->update();
 		// Update player accelerating bool
 		player->playerInput();
+
+		switch (gameState)
+		{
+		case TitleScreen:
+			if (this->player->input->State._buttons[GamePad_Button_START] == true)
+			{
+				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				gameState = MainMenu;
+			}
+			break;
+
+		case MainMenu:
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+			{
+				if (mainMenuOption == 1)
+				{
+					mainMenuOption = 0;
+					cout << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				}
+				else if (mainMenuOption == 3)
+				{
+					mainMenuOption = 2;
+					cout << "Main Menu Option " << mainMenuOption << " (Help & Options)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+			{
+				if (mainMenuOption == 0)
+				{
+					mainMenuOption = 1;
+					cout << "Main Menu Option " << mainMenuOption << " (High Score)" << endl;
+				}
+				else if (mainMenuOption == 2)
+				{
+					mainMenuOption = 3;
+					cout << "Main Menu Option " << mainMenuOption << " (Quit)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+			{
+				if (mainMenuOption == 2)
+				{
+					mainMenuOption = 0;
+					cout << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				}
+				else if (mainMenuOption == 3)
+				{
+					mainMenuOption = 1;
+					cout << "Main Menu Option " << mainMenuOption << " (High Score)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+			{
+				if (mainMenuOption == 0)
+				{
+					mainMenuOption = 2;
+					cout << "Main Menu Option " << mainMenuOption << " (Help & Options)" << endl;
+				}
+				else if (mainMenuOption == 1)
+				{
+					mainMenuOption = 3;
+					cout << "Main Menu Option " << mainMenuOption << " (Quit)" << endl;
+				}
+			}
+
+			// If accept
+			if (aButtonActive == false)
+			{
+				if (this->player->input->State._buttons[GamePad_Button_A] == true)
+				{
+					if (mainMenuOption == 0)
+					{
+						cout << "Game Running" << endl;
+						this->ready = true;
+						gameState = GameRunning;
+					}
+					else if (mainMenuOption == 1)
+					{
+						cout << "High Score" << endl;
+						mainMenuOption = 0;
+						gameState = HighScore;
+					}
+					else if (mainMenuOption == 2)
+					{
+						cout << "Help & Options" << endl;
+						mainMenuOption = 0;
+						gameState = HelpAndOptions;
+					}
+					else if (mainMenuOption == 3)
+						this->running = false;
+				}
+			}
+
+			if (this->player->input->State._buttons[GamePad_Button_A] == false)
+				aButtonActive = false;
+			break;
+		case GameRunning:
+
+			//Fire Bullets
+			if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
+			{
+				if (Objectpool->getCooldown() == true)
+				{
+					this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+					Objectpool->setCooldown(false);
+				}
+			}
+
+			//spawn enemies
+			//if (this->player->input->State._buttons[GamePad_Button_X] == true)
+			//{
+				if (this->ready)
+				{
+					for (int i = 0; i < 5; i++)
+					{
+						cout << "enemy created" << endl;
+						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+						this->ready = false;
+					}
+				}
+				//this->running = false;
+			//}
+
+			if (this->player->input->State._buttons[GamePad_Button_START] == true)
+			{
+				cout << "Game Paused" << endl << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+				gameState = Pause;
+			}
+
+			// Dpad camera movement
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+			{
+				if (gameState == GameRunning)
+					this->camera->cameraMoveLeft();
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+			{
+				if (gameState == GameRunning)
+					this->camera->cameraMoveRight();
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+			{
+				if (gameState == GameRunning)
+					this->camera->cameraMoveUp();
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+			{
+				if (gameState == GameRunning)
+					this->camera->cameraMoveDown();
+			}
+			break;
+
+		case Pause:
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+			{
+				if (pMenuOption == 1)
+				{
+					pMenuOption = 0;
+					cout << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+				}
+				else if (pMenuOption == 3)
+				{
+					pMenuOption = 2;
+					cout << "Pause Menu Option " << pMenuOption << " (Help & Options)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+			{
+				if (pMenuOption == 0)
+				{
+					pMenuOption = 1;
+					cout << "Pause Menu Option " << pMenuOption << " (Restart)" << endl;
+				}
+				else if (pMenuOption == 2)
+				{
+					pMenuOption = 3;
+					cout << "Pause Menu Option " << pMenuOption << " (Main Menu)" << endl;
+					gameObject->reset();
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+			{
+				if (pMenuOption == 2)
+				{
+					pMenuOption = 0;
+					cout << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+				}
+				else if (pMenuOption == 3)
+				{
+					pMenuOption = 1;
+					cout << "Pause Menu Option " << pMenuOption << " (Restart)" << endl;
+				}
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+			{
+				if (pMenuOption == 0)
+				{
+					pMenuOption = 2;
+					cout << "Pause Menu Option " << pMenuOption << " (Help & Options)" << endl;
+				}
+				else if (pMenuOption == 1)
+				{
+					pMenuOption = 3;
+					cout << "Pause Menu Option " << pMenuOption << " (Main Menu)" << endl;
+					gameObject->reset();
+				}
+			}
+
+			// If accept
+			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
+			{
+				if (pMenuOption == 0)
+				{
+					cout << "Game Running" << endl;
+					gameState = GameRunning;
+				}
+				else if (pMenuOption == 1)
+				{
+					cout << "Restart" << endl;
+
+					pMenuOption = 0;
+					gameObject->reset();
+					player->PlayerReset();
+					camera->ResetCamera();
+
+					for (int i = 0; i < 5; i++)
+					{
+						
+						Objectpool->enemies[i].setInUse(false);
+
+						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+						this->ready = false;
+					}
+
+					gameState = GameRunning;
+				}
+				else if (pMenuOption == 2)
+				{
+					cout << "Help & Options" << endl;
+					gameState = HelpAndOptions;
+				}
+				else if (pMenuOption == 3)
+				{
+					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+					pMenuOption = 0;
+					player->PlayerReset();
+
+					for (int i = 0; i < 5; i++)
+					{
+						Objectpool->enemies[i].setInUse(false);
+					}
+
+					gameState = MainMenu;
+					aButtonActive = true;
+				}
+			}
+			break;
+		case HighScore:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				gameState = MainMenu;
+			}
+			break;
+		case HelpAndOptions:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				gameState = MainMenu;
+			}
+			break;
+		}
 
 		// fire
 		if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
@@ -123,6 +399,7 @@ void Engine::processInput()
 		{
 			this->running = false;
 		}
+		/*
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
 			if (this->ready)
@@ -135,57 +412,48 @@ void Engine::processInput()
 		}
 		if (this->player->input->State._buttons[GamePad_Button_B] == true)
 		{
-			this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_A] == true)
 		{
-			this->running = false;
 		}
 
 		if (this->player->input->State._buttons[GamePad_Button_START] == true)
 		{
-			this->running = false;
-		}
+		}*/
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
+			cout << "Shutting down game!" << endl;
 			this->running = false;
 		}
 
-		if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
+		// BUMPERS & TRIGGERS
+		/*if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
 		{
-			//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
 		{
-			//this->running = false;
 		}
 
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
 		{
-			this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
 		{
-			this->running = false;
-		}
+		}*/
 
-		// Dpad camera movement
-		if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+		// DPAD
+		/*if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 		{
-			this->camera->cameraMoveLeft();
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
 		{
-			this->camera->cameraMoveRight();
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
 		{
-			this->camera->cameraMoveUp();
 		}
 		if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
 		{
-			this->camera->cameraMoveDown();
-		}
+		}*/
 	}
 }
 
@@ -194,91 +462,127 @@ void Engine::update(double deltaTimeMs)
 	double deltaTimeS; // millisecond
 	deltaTimeS = deltaTimeMs / 1000; // seconds
 
-	Objectpool->bulletupdateCooldown(deltaTimeS);
-	updateCooldown(deltaTimeS);
-	// Player Update
-	player->update(deltaTimeMs);
-	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
-	gameObject->update(deltaTimeMs);*/
-
-	//Bullet Updates
-	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
+	switch (gameState)
 	{
-		if (Objectpool->bullets[i].getInUse())
+	case GameRunning:
+		Objectpool->bulletupdateCooldown(deltaTimeS);
+		updateCooldown(deltaTimeS);
+		// Player Update
+		player->update(deltaTimeMs);
+		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
+		gameObject->update(deltaTimeMs);*/
+
+		//Bullet Updates
+		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 		{
-			Objectpool->bullets[i].update(deltaTimeMs);
+			Objectpool->bullets[i].update();
 		}
-	}
 
-	// Enemies Updates
-	for (int i = 0; i < this->Objectpool->e_poolSize; i++)
-	{
-		if (Objectpool->enemies[i].getInUse())
+		// Enemies Updates
+		for (int i = 0; i < this->Objectpool->e_poolSize; i++)
 		{
-			Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
-			Objectpool->enemies[i].update(deltaTimeMs);
-		}
-		/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
-		Objectpool->enemies[i]->update(deltaTimeMs);*/
-	}
-
-	// Collision Walls
-	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
-	{
-		cout << "upper wall hit" << endl;
-		player->setY(upper_wall->point.y - 0.5f);
-	}
-	if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
-	{
-		cout << "left wall hit" << endl;
-		player->setX(left_wall->point.x + 0.5f);
-	}
-	if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
-	{
-		cout << "lower wall hit" << endl;
-		player->setY(lower_wall->point.y + 0.5f);
-	}
-	if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
-	{
-		cout << "right wall hit" << endl;
-		player->setX(right_wall->point.x - 0.5f);
-	}
-
-	//Collision Bullets
-	for (int t = 0; t < Objectpool->e_poolSize; t++)
-	{
-		if (Objectpool->enemies[t].getInUse())
-		{
-			for (int i = 0; i < Objectpool->b_poolSize; i++)
+			if (Objectpool->enemies[i].getInUse())
 			{
-				float x = Objectpool->bullets[i].state.alive.x;
-				float y = Objectpool->bullets[i].state.alive.y;
-				if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
-				{
-					Objectpool->enemies[t].reset();
-					Objectpool->enemies[t].setInUse(false);
-					Objectpool->bullets[i].setInUse(false);
-				}
+				Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
+				Objectpool->enemies[i].update(deltaTimeMs);
+			}
+			/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
+			Objectpool->enemies[i]->update(deltaTimeMs);*/
+		}
 
+		// Collision Walls
+		if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
+		{
+			cout << "upper wall hit" << endl;
+				player->SetY(upper_wall->point.y - 0.5f);
+		}
+		if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
+		{
+			cout << "left wall hit" << endl;
+				player->SetX(left_wall->point.x + 0.5f);
+		}
+		if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
+		{
+			cout << "lower wall hit" << endl;
+				player->SetY(lower_wall->point.y + 0.5f);
+		}
+		if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
+		{
+			cout << "right wall hit" << endl;
+				player->SetX(right_wall->point.x - 0.5f);
+		}
+
+		//Collision Bullets
+		for (int t = 0; t < Objectpool->e_poolSize; t++)
+		{
+			if (Objectpool->enemies[t].getInUse())
+			{
+				for (int i = 0; i < Objectpool->b_poolSize; i++)
+				{
+					float x = Objectpool->bullets[i].state.alive.x;
+					float y = Objectpool->bullets[i].state.alive.y;
+					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
+					{
+						gameObject->enemyCount -= 1;
+						Objectpool->enemies[t].setInUse(false);
+						Objectpool->bullets[i].setInUse(false);
+					}
+
+				}
 			}
 		}
-	}
 
-	// Collision Enemies
-	for (int i = 0; i < Objectpool->e_poolSize; i++)
-	{
-		if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
+		// Collision Enemies
+		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
-			cout << "sphere hit" << endl;
-			//Objectpool->enemies[i].reset();
-			//Objectpool->enemies[i].setInUse(false);
+			if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
+			{
+				cout << "sphere hit" << endl;
+				//Objectpool->enemies[i].reset();
+				//Objectpool->enemies[i].setInUse(false);
+			}
 		}
+
+		if (gameObject->enemyCount == 0)
+		{
+			cout << "Reset Game" << endl;
+			gameObject->reset();
+			player->PlayerReset();
+			this->ready = true;
+		}
+
+		/*if (player->playerHP == 0)
+		{
+			cout << "Game Over" << endl;
+
+			player->PlayerReset();
+			gameObject->reset();
+
+			for (int i = 0; i < 5; i++)
+			{
+				Objectpool->enemies[i].setInUse(false);
+			}
+
+			gameState = GameOver;
+		}*/
+
+		break;
+	case TitleScreen:
+		break;
+	case MainMenu:
+		break;
+	case Pause:
+		break;
 	}
 }
 
 void Engine::render()
 {
 	//graphics->UpdateConstantBuffer();
+
+	switch (gameState)
+	{
+	case GameRunning:
 
 	graphics->Render();
 	//graphics->RendPlayer(*player->shipMatrix);
@@ -299,7 +603,7 @@ void Engine::render()
 	{
 		if (Objectpool->bullets[i].getInUse())
 		{
-			graphics->RendPlayer(*Objectpool->bullets[i].bulletMatrix);
+			graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
 		}
 	}
 
@@ -309,12 +613,35 @@ void Engine::render()
 		if (Objectpool->enemies[i].getInUse())
 		{
 
-			graphics->RendPlayer(*Objectpool->enemies[i].objectMatrix);
+			graphics->RendBullets(*Objectpool->enemies[i].objectMatrix);
 		}
 	}
 
 	// Camera Update
 	camera->InitCamera();
+
+		break;
+	case TitleScreen:
+		//TitleScreen->render();			// Example of how to render the title screen
+		graphics->TitleScreenRender();
+		break;
+	case MainMenu:
+		//MainMenu->render();				// Example of how to render the main menu
+		graphics->MainMenuRender();
+		break;
+	case Pause:
+		//graphics->PauseRender();
+		break;
+	case GameOver:
+		//graphics->GameOverRender();
+		break;
+	case HighScore:
+		graphics->HighScoreRender();
+		break;
+	case HelpAndOptions:
+		graphics->HelpAndOptionsRender();
+		break;
+	}
 
 	// Switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(1, 0);
@@ -398,7 +725,7 @@ void Engine::updateCooldown(double dt)
 	if (this->cooldown <= this->currentTime)
 	{
 		this->currentTime = 0.0f;
-		this->ready = true;
+		//this->ready = true;
 	}
 	else
 	{
