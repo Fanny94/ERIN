@@ -201,9 +201,6 @@ void Engine::processInput()
 					}
 					else if (mainMenuOption == 3)
 						this->running = false;
-
-
-
 				}
 			}
 
@@ -359,6 +356,7 @@ void Engine::processInput()
 				{
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
+					player->PlayerReset();
 
 					for (int i = 0; i < 5; i++)
 					{
