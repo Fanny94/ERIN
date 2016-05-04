@@ -32,6 +32,8 @@ public:
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
 	void setAcceleration(float acceleration) { this->acceleration = acceleration; };
 
+	int enemyCount = 5;
+
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };
 

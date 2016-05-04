@@ -9,7 +9,7 @@
 #include "CustomImport.h"
 #include "ObjectPool.h"
 #include "Player.h"
-//#include "GameObject.h"
+#include "GameObject.h"
 
 enum GameStateManager
 {
@@ -55,7 +55,7 @@ private:
 	bool running;
 
 	// test cooldown function
-	bool ready;
+	bool ready = true;
 	const float cooldown = 1.0f;
 	double currentTime;
 	void updateCooldown(double dt);
@@ -67,6 +67,7 @@ private:
 	Camera* camera;
 	CustomImport* customImport;
 	ObjectPool* Objectpool;
+	GameObject* gameObject;
 
 	Bullet* bulletptr;
 	Bullet** bullets;

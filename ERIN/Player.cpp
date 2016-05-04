@@ -152,7 +152,7 @@ void Player::update(double dt)
 
 void Player::PlayerReset()
 {
-	this->SetX(0);
+	this->SetX(3);
 	this->SetY(0);
 	this->SetZ(0);
 

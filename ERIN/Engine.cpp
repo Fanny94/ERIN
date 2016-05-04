@@ -10,6 +10,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->gameLogic = new GameLogic();
 
 	this->Objectpool = new ObjectPool();
+	this->gameObject = new GameObject();
 
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
@@ -85,6 +86,7 @@ Engine::~Engine()
 	//delete this->gameObject;
 
 	delete this->Objectpool;
+	delete this->gameObject;
 
 	/*for (int i = 0; i < 4; i++)
 	{
@@ -182,6 +184,7 @@ void Engine::processInput()
 					if (mainMenuOption == 0)
 					{
 						cout << "Game Running" << endl;
+						this->ready = true;
 						gameState = GameRunning;
 					}
 					else if (mainMenuOption == 1)
@@ -220,16 +223,19 @@ void Engine::processInput()
 			}
 
 			//spawn enemies
-			if (this->player->input->State._buttons[GamePad_Button_X] == true)
-			{
+			//if (this->player->input->State._buttons[GamePad_Button_X] == true)
+			//{
 				if (this->ready)
 				{
-					cout << "enemy created" << endl;
-					this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
-					this->ready = false;
+					for (int i = 0; i < 5; i++)
+					{
+						cout << "enemy created" << endl;
+						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+						this->ready = false;
+					}
 				}
 				//this->running = false;
-			}
+			//}
 
 			if (this->player->input->State._buttons[GamePad_Button_START] == true)
 			{
@@ -285,6 +291,7 @@ void Engine::processInput()
 				{
 					pMenuOption = 3;
 					cout << "Pause Menu Option " << pMenuOption << " (Main Menu)" << endl;
+					gameObject->reset();
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
@@ -311,6 +318,7 @@ void Engine::processInput()
 				{
 					pMenuOption = 3;
 					cout << "Pause Menu Option " << pMenuOption << " (Main Menu)" << endl;
+					gameObject->reset();
 				}
 			}
 
@@ -324,12 +332,23 @@ void Engine::processInput()
 				}
 				else if (pMenuOption == 1)
 				{
-					/*cout << "Restart" << endl;
-					pMenuOption = 0;
-					player->PlayerReset();
+					cout << "Restart" << endl;
 
+					pMenuOption = 0;
+					gameObject->reset();
+					player->PlayerReset();
 					camera->ResetCamera();
-					gameState = GameRunning;*/
+
+					for (int i = 0; i < 5; i++)
+					{
+						
+						Objectpool->enemies[i].setInUse(false);
+
+						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+						this->ready = false;
+					}
+
+					gameState = GameRunning;
 				}
 				else if (pMenuOption == 2)
 				{
@@ -340,6 +359,12 @@ void Engine::processInput()
 				{
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
+
+					for (int i = 0; i < 5; i++)
+					{
+						Objectpool->enemies[i].setInUse(false);
+					}
+
 					gameState = MainMenu;
 					aButtonActive = true;
 				}
@@ -440,89 +465,97 @@ void Engine::update(double deltaTimeMs)
 	switch (gameState)
 	{
 	case GameRunning:
-	Objectpool->bulletupdateCooldown(deltaTimeS);
-	updateCooldown(deltaTimeS);
-	// Player Update
-	player->update(deltaTimeMs);
-	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
-	gameObject->update(deltaTimeMs);*/
+		Objectpool->bulletupdateCooldown(deltaTimeS);
+		updateCooldown(deltaTimeS);
+		// Player Update
+		player->update(deltaTimeMs);
+		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
+		gameObject->update(deltaTimeMs);*/
 
-	//Bullet Updates
-	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
-	{
-		if (Objectpool->bullets[i].getInUse())
+		//Bullet Updates
+		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 		{
-			Objectpool->bullets[i].update(deltaTimeMs);
-		}
-	}
-
-	// Enemies Updates
-	for (int i = 0; i < this->Objectpool->e_poolSize; i++)
-	{
-		if (Objectpool->enemies[i].getInUse())
-		{
-			Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
-			Objectpool->enemies[i].update(deltaTimeMs);
-		}
-		/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
-		Objectpool->enemies[i]->update(deltaTimeMs);*/
-	}
-
-	// Collision Walls
-	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
-	{
-		cout << "upper wall hit" << endl;
-			player->SetY(upper_wall->point.y - 0.5f);
-	}
-	if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
-	{
-		cout << "left wall hit" << endl;
-			player->SetX(left_wall->point.x + 0.5f);
-	}
-	if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
-	{
-		cout << "lower wall hit" << endl;
-			player->SetY(lower_wall->point.y + 0.5f);
-	}
-	if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
-	{
-		cout << "right wall hit" << endl;
-			player->SetX(right_wall->point.x - 0.5f);
-	}
-
-	//Collision Bullets
-	for (int t = 0; t < Objectpool->e_poolSize; t++)
-	{
-		if (Objectpool->enemies[t].getInUse())
-		{
-			for (int i = 0; i < Objectpool->b_poolSize; i++)
+			if (Objectpool->bullets[i].getInUse())
 			{
-				float x = Objectpool->bullets[i].state.alive.x;
-				float y = Objectpool->bullets[i].state.alive.y;
-				if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
-				{
-					Objectpool->enemies[t].reset();
-					Objectpool->enemies[t].setInUse(false);
-					Objectpool->bullets[i].setInUse(false);
-				}
-
+				Objectpool->bullets[i].update(deltaTimeMs);
 			}
 		}
-	}
 
-	// Collision Enemies
-	for (int i = 0; i < Objectpool->e_poolSize; i++)
-	{
-		if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
+		// Enemies Updates
+		for (int i = 0; i < this->Objectpool->e_poolSize; i++)
 		{
-			cout << "sphere hit" << endl;
-			//Objectpool->enemies[i].reset();
-			//Objectpool->enemies[i].setInUse(false);
+			if (Objectpool->enemies[i].getInUse())
+			{
+				Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
+				Objectpool->enemies[i].update(deltaTimeMs);
+			}
+			/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
+			Objectpool->enemies[i]->update(deltaTimeMs);*/
 		}
+
+		// Collision Walls
+		if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
+		{
+			cout << "upper wall hit" << endl;
+				player->SetY(upper_wall->point.y - 0.5f);
 		}
+		if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
+		{
+			cout << "left wall hit" << endl;
+				player->SetX(left_wall->point.x + 0.5f);
+		}
+		if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
+		{
+			cout << "lower wall hit" << endl;
+				player->SetY(lower_wall->point.y + 0.5f);
+		}
+		if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
+		{
+			cout << "right wall hit" << endl;
+				player->SetX(right_wall->point.x - 0.5f);
+		}
+
+		//Collision Bullets
+		for (int t = 0; t < Objectpool->e_poolSize; t++)
+		{
+			if (Objectpool->enemies[t].getInUse())
+			{
+				for (int i = 0; i < Objectpool->b_poolSize; i++)
+				{
+					float x = Objectpool->bullets[i].state.alive.x;
+					float y = Objectpool->bullets[i].state.alive.y;
+					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
+					{
+						gameObject->enemyCount -= 1;
+						Objectpool->enemies[t].setInUse(false);
+						Objectpool->bullets[i].setInUse(false);
+					}
+
+				}
+			}
+		}
+
+		// Collision Enemies
+		for (int i = 0; i < Objectpool->e_poolSize; i++)
+		{
+			if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
+			{
+				cout << "sphere hit" << endl;
+				//Objectpool->enemies[i].reset();
+				//Objectpool->enemies[i].setInUse(false);
+			}
+		}
+
+		if (gameObject->enemyCount == 0)
+		{
+			cout << "Reset Game" << endl;
+			gameObject->reset();
+			player->PlayerReset();
+			this->ready = true;
+		}
+
 		break;
 	case TitleScreen:
-		graphics->TitleScreenRender();
 		break;
 	case MainMenu:
 		break;
@@ -677,7 +710,7 @@ void Engine::updateCooldown(double dt)
 	if (this->cooldown <= this->currentTime)
 	{
 		this->currentTime = 0.0f;
-		this->ready = true;
+		//this->ready = true;
 	}
 	else
 	{
