@@ -335,6 +335,7 @@ void Engine::processInput()
 
 					pMenuOption = 0;
 					gameObject->reset();
+					Objectpool->ResetBullet();
 					player->PlayerReset();
 					camera->ResetCamera();
 
@@ -548,6 +549,7 @@ void Engine::update(double deltaTimeMs)
 			cout << "Reset Game" << endl;
 			gameObject->reset();
 			player->PlayerReset();
+			Objectpool->ResetBullet();
 			this->ready = true;
 		}
 
