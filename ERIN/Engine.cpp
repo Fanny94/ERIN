@@ -281,16 +281,16 @@ void Engine::render()
 	//graphics->UpdateConstantBuffer();
 
 	graphics->Render();
-	graphics->RendPlayer(*player->shipMatrix);
-	graphics->RendPlayer(*player->turretMatrix);
+	//graphics->RendPlayer(*player->shipMatrix);
+	//graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
 	for (int j = 0; j < 2; j++)
 	{
 		if(j == 0)
-			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(0.25, 0.25, 0.25) * XMMatrixRotationZ(-1.57) * XMMatrixRotationY(1.57);
+			customImport->meshes.at(j).world = *player->shipMatrix;
 		if (j == 1)
-			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(0.25, 0.25, 0.25) * XMMatrixRotationZ(-1.57) * XMMatrixRotationY(1.57);
+			customImport->meshes.at(j).world = *player->turretMatrix;
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
 
