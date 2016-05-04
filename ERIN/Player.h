@@ -46,6 +46,8 @@ public:
 	void turretComputeTurn(double deltaTime);
 	void turnTo(double newHeading);
 
+	double getHeading() { return turrent_heading; };
+
 	double getVx();
 	double getVy();
 	double getTVx();
@@ -53,6 +55,10 @@ public:
 
 	// collision
 	TSphere* sphere;
+
+	//test
+	float thumbRightX;
+	float thumbRightY;
 
 private:
 
@@ -69,8 +75,7 @@ private:
 
 	float thumbLeftX;
 	float thumbLeftY;
-	float thumbRightX;
-	float thumbRightY;
+	
 
 	float velocityX;
 	float velocityY;

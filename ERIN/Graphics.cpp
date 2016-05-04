@@ -2,10 +2,7 @@
 
 //http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
 
-Graphics::Graphics()
-{
-
-}
+Graphics::Graphics() {}
 
 Graphics::~Graphics()
 {
@@ -100,7 +97,6 @@ void Graphics::HelpAndOptionsRender()
 
 void Graphics::RendPlayer(Matrix transform)
 {
-
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 
@@ -115,7 +111,6 @@ void Graphics::RendPlayer(Matrix transform)
 
 	gDeviceContext->Draw(3, 0);
 }
-
 
 void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 {
@@ -145,7 +140,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 	CFPtr = (CustomFormat*)mappedCF.pData;
 	gDeviceContext->Unmap(customFormatBuffer, 0);
 
-	for (int j = 0; j < mesh.material.size(); j++)
+	for (size_t j = 0; j < mesh.material.size(); j++)
 	{
 		CFPtr->diffuseColor[0] = mesh.material.at(j).diffuseColor[0];
 		CFPtr->diffuseColor[1] = mesh.material.at(j).diffuseColor[1];
@@ -159,7 +154,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 		CFPtr->shininess = mesh.material.at(j).shininess;
 	}
 
-	for (int i = 0; i < mesh.MeshCount; i++)
+	for (size_t i = 0; i < mesh.MeshCount; i++)
 	{
 		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
 		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -296,8 +291,8 @@ void Graphics::CreateShaders()
 void Graphics::CreateDepthBuffer()
 {
 	D3D11_TEXTURE2D_DESC desc;
-	desc.Width = WIDTH;
-	desc.Height = HEIGHT;
+	desc.Width = (int)WIDTH;
+	desc.Height = (int)HEIGHT;
 	desc.MipLevels = 1;
 	desc.ArraySize = 1;
 	desc.Format = DXGI_FORMAT_D32_FLOAT;

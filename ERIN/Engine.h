@@ -9,7 +9,7 @@
 #include "CustomImport.h"
 #include "ObjectPool.h"
 #include "Player.h"
-#include "GameObject.h"
+//#include "GameObject.h"
 
 #include <iostream>
 
@@ -38,6 +38,8 @@ public:
 	void render();
 
 	bool sphereToSphere(const TSphere& tSph1, const TSphere& tSph2);
+	bool sphereToPlane(const TSphere& tSph, const Vector3& vecPoint, const Vector3& vecNormal);
+	bool pointInSphere(const TSphere& tSph, const Vector3& vecPoint);
 
 	HWND InitWindow(HINSTANCE hInstance);
 	HWND wndHandle;
@@ -57,20 +59,31 @@ public:
 private:
 	bool running;
 
+	// test cooldown function
+	bool ready;
+	const float cooldown = 1.0f;
+	double currentTime;
+	void updateCooldown(double dt);
+	// test cooldown function #end
+
 	Graphics* graphics;
 	GameLogic* gameLogic;
 	Mesh* mesh;
 	Camera* camera;
 	CustomImport* customImport;
-	ObjectPool* BulletObjectpool;
+	ObjectPool* Objectpool;
 
 	Bullet* inu;
 	Bullet** bullets;
 
-	// test input
+	Wall* upper_wall;
+	Wall* left_wall;
+	Wall* lower_wall;
+	Wall* right_wall;
+
 	Player* player;
-	GameObject* gameObject;
-	GameObject** enemies;
+
+	TriangleVertex* triangle;
 };
 
 #endif // !ENGINE_H

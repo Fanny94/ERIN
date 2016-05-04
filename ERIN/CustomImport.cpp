@@ -2,11 +2,11 @@
 
 struct Vertex
 {
-	float pos[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float nor[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float uv[2] = { 0.0000000000, 0.0000000000};
-	float tan[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
-	float bitan[3] = { 0.0000000000, 0.0000000000, 0.0000000000 };
+	float pos[3];
+	float nor[3];
+	float uv[2];
+	float tan[3];
+	float bitan[3];
 };
 
 struct MeshStruct
@@ -41,9 +41,6 @@ unsigned int MaterialCount = 0;
 vector<Material> material;
 Material materialTemp;
 
-float dump;
-
-
 CustomImport::CustomImport() {}
 
 CustomImport::~CustomImport() {}
@@ -62,7 +59,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 	//fileIn.read((char*)&MorphAnimationCount, sizeof(unsigned int));
 	//fileIn.read((char*)&CustomAttributesCount, sizeof(unsigned int));
 
-	for (int i = 0; i < MeshCount; i++)
+	for (size_t i = 0; i < MeshCount; i++)
 	{
 		fileIn.read((char*)&meshTemp.VertexCount, sizeof(unsigned int));
 		fileIn.read((char*)&meshTemp.MaterialID, sizeof(unsigned int));
@@ -74,19 +71,24 @@ void CustomImport::LoadCustomFormat(string filePath)
 		fileIn.read((char*)&meshTemp.Rotation, sizeof(float) * 3);
 		fileIn.read((char*)&meshTemp.Scale, sizeof(float) * 3);
 
-		for (int j = 0; j < meshTemp.VertexCount; j++)
+		for (size_t j = 0; j < meshTemp.VertexCount; j++)
 		{
 			fileIn.read((char*)&meshTemp.vertexTemp.pos, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.nor, sizeof(float) * 3);
+			meshTemp.vertexTemp.nor[0] = 0;
+			meshTemp.vertexTemp.nor[1] = 0;
+			meshTemp.vertexTemp.nor[2] = 1;
+
 			fileIn.read((char*)&meshTemp.vertexTemp.uv, sizeof(float) * 2);
 			fileIn.read((char*)&meshTemp.vertexTemp.tan, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.bitan, sizeof(float) * 3);
 			meshTemp.vertex.push_back(meshTemp.vertexTemp);
 		}
 		meshS.push_back(meshTemp);
+		meshTemp.vertex.clear();
 	}
 
-	for (int i = 0; i < MaterialCount; i++)
+	for (size_t i = 0; i < MaterialCount; i++)
 	{
 		fileIn.read((char*)&materialTemp.diffuseColor, sizeof(float) * 3);
 		fileIn.read((char*)&materialTemp.specularColor, sizeof(float) * 3);
@@ -230,7 +232,7 @@ void CustomImport::NewMesh()
 
 	int count = meshS.size() - newMesh.MeshCount;
 
-	for (int i = count; i < meshS.size(); i++)
+	for (size_t i = count; i < meshS.size(); i++)
 	{
 		newMesh.meshTemp.VertexCount = meshS.at(i).VertexCount;
 		newMesh.meshTemp.MaterialID = meshS.at(i).MaterialID;
@@ -250,7 +252,7 @@ void CustomImport::NewMesh()
 
 		newMesh.world = XMMatrixTranslation(newMesh.meshTemp.Translation[0], newMesh.meshTemp.Translation[1], newMesh.meshTemp.Translation[2]);
 
-		for (int l = 0; l < newMesh.meshTemp.VertexCount; l++)
+		for (size_t l = 0; l < newMesh.meshTemp.VertexCount; l++)
 		{
 			for (int m = 0; m < 3; m++)
 			{
@@ -261,6 +263,7 @@ void CustomImport::NewMesh()
 				else if (m == 2)
 					newMesh.meshTemp.vertexTemp.pos[0] = meshS.at(i).vertex.at(l).pos[m];
 
+				//newMesh.meshTemp.vertexTemp.pos[m] = meshS.at(i).vertex.at(l).pos[m];
 				newMesh.meshTemp.vertexTemp.nor[m] = meshS.at(i).vertex.at(l).nor[m];
 				newMesh.meshTemp.vertexTemp.tan[m] = meshS.at(i).vertex.at(l).tan[m];
 				newMesh.meshTemp.vertexTemp.bitan[m] = meshS.at(i).vertex.at(l).bitan[m];
@@ -275,7 +278,7 @@ void CustomImport::NewMesh()
 	}
 	int mcount = material.size() - newMesh.MaterialCount;
 
-	for (int i = mcount; i < material.size(); i++)
+	for (size_t i = mcount; i < material.size(); i++)
 	{
 		for (int j = 0; j < 3; j++)
 		{
