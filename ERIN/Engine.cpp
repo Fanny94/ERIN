@@ -61,12 +61,12 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(this->triangle);
 
-		customImport->LoadCustomFormat("../BinaryDataSphere2.dat");
+		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 
-		customImport->LoadCustomFormat("../BinaryDataCube.dat");
+		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
-		customImport->NewMesh();
+		//customImport->NewMesh();
 
 		graphics->CreateConstantBuffer();
 
@@ -88,7 +88,7 @@ Engine::~Engine()
 
 	/*for (int i = 0; i < 4; i++)
 	{
-	delete enemies[i];
+		delete enemies[i];
 	}
 	delete enemies;*/
 
@@ -377,13 +377,13 @@ void Engine::processInput()
 		/*
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
-		if (this->ready)
-		{
-		cout << "enemy created" << endl;
-		this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
-		this->ready = false;
-		}
-		//this->running = false;
+			if (this->ready)
+			{
+				cout << "enemy created" << endl;
+				this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+				this->ready = false;
+			}
+			//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_B] == true)
 		{
@@ -440,85 +440,85 @@ void Engine::update(double deltaTimeMs)
 	switch (gameState)
 	{
 	case GameRunning:
-		Objectpool->bulletupdateCooldown(deltaTimeS);
-		updateCooldown(deltaTimeS);
-		// Player Update
-		player->update(deltaTimeMs);
-		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
-		gameObject->update(deltaTimeMs);*/
+	Objectpool->bulletupdateCooldown(deltaTimeS);
+	updateCooldown(deltaTimeS);
+	// Player Update
+	player->update(deltaTimeMs);
+	/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
+	gameObject->update(deltaTimeMs);*/
 
-		//Bullet Updates
-		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
+	//Bullet Updates
+	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
+	{
+		if (Objectpool->bullets[i].getInUse())
 		{
-			if (Objectpool->bullets[i].getInUse())
-			{
-				Objectpool->bullets[i].update(deltaTimeMs);
-			}
+			Objectpool->bullets[i].update(deltaTimeMs);
 		}
+	}
 
-		// Enemies Updates
-		for (int i = 0; i < this->Objectpool->e_poolSize; i++)
+	// Enemies Updates
+	for (int i = 0; i < this->Objectpool->e_poolSize; i++)
+	{
+		if (Objectpool->enemies[i].getInUse())
 		{
-			if (Objectpool->enemies[i].getInUse())
-			{
-				Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
-				Objectpool->enemies[i].update(deltaTimeMs);
-			}
-			/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
-			Objectpool->enemies[i]->update(deltaTimeMs);*/
+			Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
+			Objectpool->enemies[i].update(deltaTimeMs);
 		}
+		/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
+		Objectpool->enemies[i]->update(deltaTimeMs);*/
+	}
 
-		// Collision Walls
-		if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
-		{
-			cout << "upper wall hit" << endl;
+	// Collision Walls
+	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
+	{
+		cout << "upper wall hit" << endl;
 			player->SetY(upper_wall->point.y - 0.5f);
-		}
-		if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
-		{
-			cout << "left wall hit" << endl;
+	}
+	if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
+	{
+		cout << "left wall hit" << endl;
 			player->SetX(left_wall->point.x + 0.5f);
-		}
-		if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
-		{
-			cout << "lower wall hit" << endl;
+	}
+	if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
+	{
+		cout << "lower wall hit" << endl;
 			player->SetY(lower_wall->point.y + 0.5f);
-		}
-		if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
-		{
-			cout << "right wall hit" << endl;
+	}
+	if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
+	{
+		cout << "right wall hit" << endl;
 			player->SetX(right_wall->point.x - 0.5f);
-		}
+	}
 
-		//Collision Bullets
-		for (int t = 0; t < Objectpool->e_poolSize; t++)
+	//Collision Bullets
+	for (int t = 0; t < Objectpool->e_poolSize; t++)
+	{
+		if (Objectpool->enemies[t].getInUse())
 		{
-			if (Objectpool->enemies[t].getInUse())
+			for (int i = 0; i < Objectpool->b_poolSize; i++)
 			{
-				for (int i = 0; i < Objectpool->b_poolSize; i++)
+				float x = Objectpool->bullets[i].state.alive.x;
+				float y = Objectpool->bullets[i].state.alive.y;
+				if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 				{
-					float x = Objectpool->bullets[i].state.alive.x;
-					float y = Objectpool->bullets[i].state.alive.y;
-					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
-					{
-						Objectpool->enemies[t].reset();
-						Objectpool->enemies[t].setInUse(false);
-						Objectpool->bullets[i].setInUse(false);
-					}
-
+					Objectpool->enemies[t].reset();
+					Objectpool->enemies[t].setInUse(false);
+					Objectpool->bullets[i].setInUse(false);
 				}
+
 			}
 		}
+	}
 
-		// Collision Enemies
-		for (int i = 0; i < Objectpool->e_poolSize; i++)
+	// Collision Enemies
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
+	{
+		if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
 		{
-			if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
-			{
-				cout << "sphere hit" << endl;
-				//Objectpool->enemies[i].reset();
-				//Objectpool->enemies[i].setInUse(false);
-			}
+			cout << "sphere hit" << endl;
+			//Objectpool->enemies[i].reset();
+			//Objectpool->enemies[i].setInUse(false);
+		}
 		}
 		break;
 	case TitleScreen:
@@ -539,41 +539,41 @@ void Engine::render()
 	{
 	case GameRunning:
 
-		graphics->Render();
-		graphics->RendPlayer(*player->shipMatrix);
-		graphics->RendPlayer(*player->turretMatrix);
+	graphics->Render();
+	graphics->RendPlayer(*player->shipMatrix);
+	graphics->RendPlayer(*player->turretMatrix);
 
-		// Custom Importer
-		for (int j = 0; j < 3; j++)
+	// Custom Importer
+	for (int j = 0; j < 2; j++)
+	{
+		if(j == 0)
+			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(0.25, 0.25, 0.25) * XMMatrixRotationZ(-1.57) * XMMatrixRotationY(1.57);
+		if (j == 1)
+			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(0.25, 0.25, 0.25) * XMMatrixRotationZ(-1.57) * XMMatrixRotationY(1.57);
+		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
+	}
+
+	//Bullet rendering
+	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
+	{
+		if (Objectpool->bullets[i].getInUse())
 		{
-			if (j == 1)
-				customImport->meshes.at(j).world = XMMatrixTranslation(6, 2, 0);
-			if (j == 2)
-				customImport->meshes.at(j).world = XMMatrixTranslation(6, 0, 0);
-			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
+			graphics->RendPlayer(*Objectpool->bullets[i].bulletMatrix);
 		}
+	}
 
-		//Bullet rendering
-		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
+	// Enemy rendering
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
+	{
+		if (Objectpool->enemies[i].getInUse())
 		{
-			if (Objectpool->bullets[i].getInUse())
-			{
-				graphics->RendPlayer(*Objectpool->bullets[i].bulletMatrix);
-			}
+
+			graphics->RendPlayer(*Objectpool->enemies[i].objectMatrix);
 		}
+	}
 
-		// Enemy rendering
-		for (int i = 0; i < Objectpool->e_poolSize; i++)
-		{
-			if (Objectpool->enemies[i].getInUse())
-			{
-
-				graphics->RendPlayer(*Objectpool->enemies[i].objectMatrix);
-			}
-		}
-
-		// Camera Update
-		camera->InitCamera();
+	// Camera Update
+	camera->InitCamera();
 
 		break;
 	case TitleScreen:

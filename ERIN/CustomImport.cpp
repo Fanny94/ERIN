@@ -75,10 +75,6 @@ void CustomImport::LoadCustomFormat(string filePath)
 		{
 			fileIn.read((char*)&meshTemp.vertexTemp.pos, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.nor, sizeof(float) * 3);
-			meshTemp.vertexTemp.nor[0] = 0;
-			meshTemp.vertexTemp.nor[1] = 0;
-			meshTemp.vertexTemp.nor[2] = 1;
-
 			fileIn.read((char*)&meshTemp.vertexTemp.uv, sizeof(float) * 2);
 			fileIn.read((char*)&meshTemp.vertexTemp.tan, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.bitan, sizeof(float) * 3);
