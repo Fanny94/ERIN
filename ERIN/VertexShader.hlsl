@@ -9,7 +9,7 @@ struct VS_OUT
 {
 	float4 Pos : SV_POSITION;
 	float4 WPos : POSITION;
-	float3 Nor: NORMAL;
+	float4 Nor: NORMAL;
 	float2 uv : UV;
 	float4 CamPos :POSITION1;
 };
@@ -29,7 +29,7 @@ VS_OUT VS_main(VS_IN input)
 
 	output.Pos = mul(float4(input.Pos, 1), worldViewProj);
 	output.WPos = mul(float4(input.Pos, 1), world);
-	output.Nor = mul(input.Nor, world);
+	output.Nor = mul(float4(input.Nor, 0), world);
 	output.uv = input.uv;
 	output.CamPos = mul(float4(input.Pos, 1), camPos);
 

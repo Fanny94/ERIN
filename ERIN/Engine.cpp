@@ -14,28 +14,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
 
-	/*this->enemies = new GameObject*[5];
-	this->enemies[0] = new GameObject(1, "enemy1", 5.0f, 0.0f, 0.1f, true);
-	this->enemies[1] = new GameObject(2, "enemy2", 0.0f, 5.0f, 0.1f, true);
-	this->enemies[2] = new GameObject(3, "enemy3", -5.0f, 0.0f, 0.1f, true);
-	this->enemies[3] = new GameObject(4, "enemy4", 0.0f, -5.0f, 0.1f, true);*/
-
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	/*this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
-	this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);*/
-
 	this->triangle = new TriangleVertex[3];
 	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
 	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
@@ -130,16 +108,25 @@ void Engine::processInput()
 		// Update player accelerating bool
 		player->playerInput();
 
+		// fire
+		if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
+		{
+			if (Objectpool->getCooldown()==true)
+			{
+				this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+				Objectpool->setCooldown(false);
+			}
+		}
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			this->Objectpool->fire();
-			//this->running = false;
+			this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
 			if (this->ready)
 			{
-				this->Objectpool->createEnemy(0.0f, 0.0f, 0.0f);
+				cout << "enemy created" << endl;
+				this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
 				this->ready = false;
 			}
 			//this->running = false;
@@ -164,11 +151,11 @@ void Engine::processInput()
 
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
 		{
-			this->running = false;
+			//this->running = false;
 		}
 		if (this->player->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
 		{
-			this->running = false;
+			//this->running = false;
 		}
 
 		if (this->player->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
@@ -205,6 +192,7 @@ void Engine::update(double deltaTimeMs)
 	double deltaTimeS; // millisecond
 	deltaTimeS = deltaTimeMs / 1000; // seconds
 
+	Objectpool->bulletupdateCooldown(deltaTimeS);
 	updateCooldown(deltaTimeS);
 	// Player Update
 	player->update(deltaTimeMs);
@@ -217,9 +205,6 @@ void Engine::update(double deltaTimeMs)
 		if (Objectpool->bullets[i].getInUse())
 		{
 			Objectpool->bullets[i].update(deltaTimeMs);
-			/*BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
-			BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
-			BulletObjectpool->bullets[i].state.alive.z = player->shipPos->z;*/
 		}
 	}
 
@@ -239,22 +224,42 @@ void Engine::update(double deltaTimeMs)
 	if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 	{
 		cout << "upper wall hit" << endl;
-		player->SetY(upper_wall->point.y - 0.5f);
+		player->setY(upper_wall->point.y - 0.5f);
 	}
 	if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
 	{
 		cout << "left wall hit" << endl;
-		player->SetX(left_wall->point.x + 0.5f);
+		player->setX(left_wall->point.x + 0.5f);
 	}
 	if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
 	{
 		cout << "lower wall hit" << endl;
-		player->SetY(lower_wall->point.y + 0.5f);
+		player->setY(lower_wall->point.y + 0.5f);
 	}
 	if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
 	{
 		cout << "right wall hit" << endl;
-		player->SetX(right_wall->point.x - 0.5f);
+		player->setX(right_wall->point.x - 0.5f);
+	}
+
+	//Collision Bullets
+	for (int t = 0; t < Objectpool->e_poolSize; t++)
+	{
+		if (Objectpool->enemies[t].getInUse())
+		{
+			for (int i = 0; i < Objectpool->b_poolSize; i++)
+			{
+				float x = Objectpool->bullets[i].state.alive.x;
+				float y = Objectpool->bullets[i].state.alive.y;
+				if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
+				{
+					Objectpool->enemies[t].reset();
+					Objectpool->enemies[t].setInUse(false);
+					Objectpool->bullets[i].setInUse(false);
+				}
+
+			}
+		}
 	}
 
 	// Collision Enemies
@@ -263,8 +268,8 @@ void Engine::update(double deltaTimeMs)
 		if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
 		{
 			cout << "sphere hit" << endl;
-			Objectpool->enemies[i].reset();
-			Objectpool->enemies[i].setInUse(false);
+			//Objectpool->enemies[i].reset();
+			//Objectpool->enemies[i].setInUse(false);
 		}
 	}
 }
@@ -293,16 +298,6 @@ void Engine::render()
 		if (Objectpool->bullets[i].getInUse())
 		{
 			graphics->RendPlayer(*Objectpool->bullets[i].bulletMatrix);
-
-			Objectpool->bullets[i].bullet_heading = XMConvertToDegrees(atan2f(player->thumbRightX, player->thumbRightY));
-			
-			//BulletObjectpool->bullets[i].bullet_heading = player->getHeading();
-			Objectpool->SPosx = player->shipPos->x;
-			Objectpool->SPosy = player->shipPos->y;
-			Objectpool->SHead = (float)player->getHeading();
-			
-			//BulletObjectpool->bullets[i].state.alive.x = player->shipPos->x;
-			//BulletObjectpool->bullets[i].state.alive.y = player->shipPos->y;
 		}
 	}
 

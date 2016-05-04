@@ -36,7 +36,7 @@ private:
 	bool bulletComingTowardsMe;
 
 	double heading;
-	float aggroRadius = 1000.0f;
+	float aggroRadius = 100.0f;
 
 	// flock AI
 	Position Po;

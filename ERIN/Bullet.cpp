@@ -1,5 +1,4 @@
 #include "Bullet.h"
-#define PI 3.14159265
 
 Bullet::Bullet()
 {
@@ -20,9 +19,6 @@ Bullet::~Bullet()
 
 void Bullet::update(double dT)
 {
-	timeLeft --;
-	lastFire --;
-
 
 	if (timeLeft <= 0)
 	{
@@ -33,19 +29,20 @@ void Bullet::update(double dT)
 		timeLeft = 0;
 	}
 
+	float radians = XMConvertToRadians((float)bullet_heading);
+	float directionX = (float)sin(radians);
+	float directionY = (float)cos(radians);
 
-	state.alive.Velx += (maxspd-state.alive.Velx);
-	state.alive.Vely += (maxspd-state.alive.Vely);
+	state.alive.Velx += ((directionX * this->maxspd) - state.alive.Velx) * abs(1.0f);
+	state.alive.Vely += ((directionY * this->maxspd) - state.alive.Vely) * abs(1.0f);
 
 	state.alive.x = state.alive.x + state.alive.Velx;
 	state.alive.y = state.alive.y + state.alive.Vely;
-	
+
 	//bullet matrix
 	*this->bulletMatrix = XMMatrixScaling(0.3f, 0.3f, 0.3f)
-		//* XMMatrixRotationZ(XMConvertToRadians((float)-bullet_heading))
+		* XMMatrixRotationZ(XMConvertToRadians((float)-bullet_heading))
 		* XMMatrixTranslation(this->state.alive.x, this->state.alive.y, this->state.alive.z);
-	
-
 }
 
 void Bullet::iniBullet(float X, float Y, float Z, int lifeTime)

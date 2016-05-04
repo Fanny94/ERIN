@@ -15,7 +15,7 @@ struct VS_OUT
 {
 	float4 Pos : SV_POSITION;
 	float4 WPos : POSITION;
-	float3 Nor: NORMAL;
+	float4 Nor: NORMAL;
 	float2 uv : UV;
 	float4 CamPos :POSITION1;
 };
@@ -27,7 +27,7 @@ float4 PS_main(VS_OUT input) : SV_Target
 
 	float4 s = normalize(lightPosition - input.WPos);
 	float4 v = normalize(input.CamPos - input.WPos);
-	float3 r = reflect(-s, input.Nor);
+	float4 r = reflect(-s, input.Nor);
 
 	/*if (hasTexture == true)
 		diffuse = ObjTexture.Sample(ObjSamplerState, input.uv).xyz;*/
