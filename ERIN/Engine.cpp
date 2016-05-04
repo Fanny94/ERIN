@@ -206,7 +206,7 @@ void Engine::update(double deltaTimeMs)
 	{
 		if (Objectpool->bullets[i].getInUse())
 		{
-			Objectpool->bullets[i].update(deltaTimeMs);
+			Objectpool->bullets[i].update();
 		}
 	}
 

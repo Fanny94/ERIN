@@ -14,7 +14,7 @@ public:
 	
 	Bullet* getNext() const { return state.Next; };
 	
-	void update(double deltaTime);
+	void update();
 	void iniBullet(float x, float y, float z, int lifeTime);
 	
 	bool getInUse() { return this->inUse; };
