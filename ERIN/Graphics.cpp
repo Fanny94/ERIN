@@ -24,7 +24,8 @@ Graphics::~Graphics()
 	customFormatBuffer->Release();
 	this->customFormatBuffer = nullptr;
 
-	this->customVertBuff = nullptr;
+	/*customVertBuff->Release();
+	this->customVertBuff = nullptr;*/
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -58,6 +59,9 @@ void Graphics::Render()
 	float clearColor[] = { 1, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
+	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 }
 
 void Graphics::TitleScreenRender()
@@ -104,9 +108,6 @@ void Graphics::HelpAndOptionsRender()
 
 void Graphics::RendPlayer(Matrix transform)
 {
-	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
-
 	UINT32 vertexSize = sizeof(float) * 6;
 	UINT32 offset = 0;
 
@@ -119,10 +120,8 @@ void Graphics::RendPlayer(Matrix transform)
 	gDeviceContext->Draw(3, 0);
 }
 
-void Graphics::RenderCustom(Mesh mesh, Matrix transform)
+void Graphics::CustomVertexBuffer(Mesh mesh)
 {
-	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 	//Create Vertex Buffer
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
@@ -137,18 +136,23 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
 	vertexBufferData.pSysMem = &mesh.mesh.at(0).vertex[0];
 
-	hr = gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &customVertBuff);
+	hr = gDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &customVertBuffTemp);
+	customVertBuff.push_back(customVertBuffTemp);
+}
 
+void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
+{
 	UINT32 meshVertexSize = sizeof(VertexCustom);
 	UINT32 offset = 0;
 
 	D3D11_MAPPED_SUBRESOURCE mappedCF;
 	hr = gDeviceContext->Map(customFormatBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedCF);
 	CFPtr = (CustomFormat*)mappedCF.pData;
-	gDeviceContext->Unmap(customFormatBuffer, 0);
-
+	
 	for (size_t j = 0; j < mesh.material.size(); j++)
 	{
+		//memcpy(CFPtr, &mesh.material.at(j), sizeof(CustomFormat));
+		// use memcpy to copy directly from material into buffer.
 		CFPtr->diffuseColor[0] = mesh.material.at(j).diffuseColor[0];
 		CFPtr->diffuseColor[1] = mesh.material.at(j).diffuseColor[1];
 		CFPtr->diffuseColor[2] = mesh.material.at(j).diffuseColor[2];
@@ -161,9 +165,11 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 		CFPtr->shininess = mesh.material.at(j).shininess;
 	}
 
+	gDeviceContext->Unmap(customFormatBuffer, 0);
+
 	for (size_t i = 0; i < mesh.MeshCount; i++)
 	{
-		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff, &meshVertexSize, &offset);
+		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff.at(cvb), &meshVertexSize, &offset);
 		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		CustomUpdateBuffer(transform);
@@ -172,7 +178,8 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform)
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
-	customVertBuff->Release();
+	// REMOVE and allocate per mesh, and never release when the game finishes
+	//customVertBuff->Release();
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)

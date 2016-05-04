@@ -27,7 +27,8 @@ public:
 
 	void RendPlayer(Matrix transform);
 
-	void RenderCustom(Mesh mesh, Matrix transform);
+	void CustomVertexBuffer(Mesh mesh);
+	void RenderCustom(Mesh mesh, Matrix transform, int cvb);
 	void CustomUpdateBuffer(Matrix transform);
 
 	void CreateShaders();
@@ -118,7 +119,8 @@ private:
 
 	ID3D11Buffer* gConstantBuffer = nullptr;
 
-	ID3D11Buffer* customVertBuff = nullptr;
+	vector<ID3D11Buffer*> customVertBuff;
+	ID3D11Buffer* customVertBuffTemp;
 	HRESULT hr;
 };
 

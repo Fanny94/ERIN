@@ -52,5 +52,6 @@ public:
 	vector<Material> material;
 	Material materialTemp;
 	Matrix world;
+	//ID3D11Buffer* customVertBuff;
 };
 #endif // !MESH_H

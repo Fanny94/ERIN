@@ -64,9 +64,11 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(1));
 		//customImport->NewMesh();
 
 		graphics->CreateConstantBuffer();
@@ -387,7 +389,7 @@ void Engine::processInput()
 		// fire
 		if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
 		{
-			if (Objectpool->getCooldown() == true)
+			if (Objectpool->getCooldown())
 			{
 				this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
 				Objectpool->setCooldown(false);
@@ -586,17 +588,17 @@ void Engine::render()
 	case GameRunning:
 
 	graphics->Render();
-	graphics->RendPlayer(*player->shipMatrix);
-	graphics->RendPlayer(*player->turretMatrix);
+	//graphics->RendPlayer(*player->shipMatrix);
+	//graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
 	for (int j = 0; j < 2; j++)
 	{
 		if(j == 0)
-			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(0.25, 0.25, 0.25) * XMMatrixRotationZ(-1.57) * XMMatrixRotationY(1.57);
+			customImport->meshes.at(j).world = *player->shipMatrix;
 		if (j == 1)
-			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(0.25, 0.25, 0.25) * XMMatrixRotationZ(-1.57) * XMMatrixRotationY(1.57);
-		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
+			customImport->meshes.at(j).world = *player->turretMatrix;
+		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
 
 	//Bullet rendering
