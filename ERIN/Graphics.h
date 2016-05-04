@@ -16,19 +16,18 @@ public:
 	~Graphics();
 
 	void SetViewport();
-
 	void Render();
+
 	void TitleScreenRender();
 	void MainMenuRender();
 	void PauseRender();
 	void HighScoreRender();
 	void HelpAndOptionsRender();
+
 	void RendPlayer(Matrix transform);
 
 	void RenderCustom(Mesh mesh, Matrix transform);
 	void CustomUpdateBuffer(Matrix transform);
-
-	void RenderCustom(Mesh mesh);
 
 	void CreateShaders();
 	void CreateDepthBuffer();

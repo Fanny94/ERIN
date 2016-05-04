@@ -19,7 +19,7 @@ public:
 	bool inUse;
 	void Reset();
 
-	void updateBehavior(Position player, GameObject* myself, GameObject** allEnemies);
+	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
 	void reset();
 
@@ -62,8 +62,6 @@ private:
 	int objectID;
 	string name;
 	float x, y, z;
-
-	bool inUse;
 
 	float maximumSpeed;
 	float speed = 0.0f;

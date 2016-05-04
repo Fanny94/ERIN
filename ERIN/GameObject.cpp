@@ -80,7 +80,7 @@ void GameObject::Reset()
 	//this->objectMatrix = new Matrix();	// Causes menory leaks
 }
 
-void GameObject::updateBehavior(Position player, GameObject* myself, GameObject** allEnemies)
+void GameObject::updateBehavior(Position player, GameObject* myself, GameObject* allEnemies)
 {
 	if (this->behavior)
 	{

@@ -11,8 +11,6 @@
 #include "Player.h"
 //#include "GameObject.h"
 
-#include <iostream>
-
 enum GameStateManager
 {
 	TitleScreen,
@@ -24,8 +22,6 @@ enum GameStateManager
 	HelpAndOptions
 };
 
-using namespace std;
-
 class Engine
 {
 public:
@@ -34,7 +30,6 @@ public:
 
 	void processInput();
 	void update(double deltaTimeMs);
-	void PlayerReset();
 	void render();
 
 	bool sphereToSphere(const TSphere& tSph1, const TSphere& tSph2);
@@ -45,11 +40,11 @@ public:
 	HWND wndHandle;
 
 	bool getRunning() { return running; };
+
 	bool aButtonActive = false;
 	bool bButtonActive = false;
 
 	GameStateManager gameState;
-	//CurrLevelManager currLevel = Level1;
 
 	// Pause
 	int pMenuOption = 0;
