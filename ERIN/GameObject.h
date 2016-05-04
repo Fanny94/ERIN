@@ -16,6 +16,9 @@ public:
 	GameObject(int objectID, string name, float x, float y, float z, bool doHaveBehavior);
 	~GameObject();
 
+	bool inUse;
+	void Reset();
+
 	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
 	void reset();
@@ -28,6 +31,8 @@ public:
 
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
 	void setAcceleration(float acceleration) { this->acceleration = acceleration; };
+
+	int enemyCount = 5;
 
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };
@@ -59,8 +64,6 @@ private:
 	int objectID;
 	string name;
 	float x, y, z;
-
-	bool inUse;
 
 	float maximumSpeed;
 	float speed = 0.0f;

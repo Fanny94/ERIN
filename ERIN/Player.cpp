@@ -149,6 +149,17 @@ void Player::update(double dt)
 		* XMMatrixRotationZ(XMConvertToRadians((float)-heading))
 		* XMMatrixTranslation(this->x, this->y, this->z);
 }
+
+void Player::PlayerReset()
+{
+	this->SetX(3);
+	this->SetY(0);
+	this->SetZ(0);
+
+	this->heading = 0;
+	this->plannedHeading = 0;
+}
+
 void Player::computeTurn(double dt)
 {
 	double dh = plannedHeading - heading;

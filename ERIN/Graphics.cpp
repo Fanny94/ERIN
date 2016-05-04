@@ -66,6 +66,48 @@ void Graphics::Render()
 	gDeviceContext->IASetInputLayout(gVertexLayout);
 }
 
+void Graphics::TitleScreenRender()
+{
+	float clearColor[] = { 0, 1, 0, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::MainMenuRender()
+{
+	float clearColor[] = { 1, 0, 0, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::PauseRender()
+{
+	float clearColor[] = { 0, 0, 1, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::GameOverRender()
+{
+	float clearColor[] = { 0, 0, 0, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::HighScoreRender()
+{
+	float clearColor[] = { 1, 0, 1, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
+void Graphics::HelpAndOptionsRender()
+{
+	float clearColor[] = { 0, 1, 1, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
 void Graphics::RendBullets(Matrix transform)
 {
 	UINT32 vertexSize = sizeof(float) * 6;
