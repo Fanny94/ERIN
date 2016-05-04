@@ -43,6 +43,5 @@ public:
 private:
 	bool inUse;
 	float maxspd = 0.08f;
-	float damage; // if needed
 };
 #endif // !BULLET_H
