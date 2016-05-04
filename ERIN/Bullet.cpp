@@ -19,7 +19,8 @@ Bullet::~Bullet()
 
 void Bullet::update(double dT)
 {
-
+	timeLeft--;
+	
 	if (timeLeft <= 0)
 	{
 		inUse = false;
