@@ -21,7 +21,8 @@ public:
 	bool getCooldown() { return this->bReady; };
 	void setCooldown(bool bReady) { this->bReady = bReady; };
 	void bulletupdateCooldown(double bdt);
-	
+	void ResetBullet();
+
 	// Enemies
 	void createEnemy(float x, float y, float z);
 	int getEnemyPoolSize() { return this->e_poolSize; };

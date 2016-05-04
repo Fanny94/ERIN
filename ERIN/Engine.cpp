@@ -111,7 +111,7 @@ void Engine::processInput()
 		// fire
 		if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
 		{
-			if (Objectpool->getCooldown()==true)
+			if (Objectpool->getCooldown())
 			{
 				this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
 				Objectpool->setCooldown(false);

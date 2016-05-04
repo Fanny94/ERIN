@@ -40,6 +40,25 @@ ObjectPool::~ObjectPool()
 {
 }
 
+void ObjectPool::ResetBullet()
+{
+	for (int i = 0; i < this->b_poolSize; i++)
+	{
+		if (bullets[i].getInUse())
+		{
+			this->bullets[i].state.alive.x = 0.0f;
+			this->bullets[i].state.alive.y = 0.0f;
+			this->bullets[i].state.alive.z = 0.0f;
+
+			this->bullets[i].timeLeft = 0;
+			//this->speed = 0.0f;
+
+			delete this->fbull.bulletMatrix;
+			this->fbull.bulletMatrix = new Matrix();
+		}
+	}
+}
+
 void ObjectPool::fire(float x, float y, double heading)
 {
 	for (int i = 0; i < this->b_poolSize; i++)
