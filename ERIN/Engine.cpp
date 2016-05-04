@@ -63,9 +63,11 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(1));
 		//customImport->NewMesh();
 
 		graphics->CreateConstantBuffer();
@@ -289,7 +291,7 @@ void Engine::render()
 			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(0.25, 0.25, 0.25) * XMMatrixRotationZ(-1.57) * XMMatrixRotationY(1.57);
 		if (j == 1)
 			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(0.25, 0.25, 0.25) * XMMatrixRotationZ(-1.57) * XMMatrixRotationY(1.57);
-		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world);
+		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
 
 	//Bullet rendering
