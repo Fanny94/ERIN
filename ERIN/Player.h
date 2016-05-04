@@ -24,9 +24,9 @@ public:
 	void SetZ(float z) { this->z = z; };
 
 	string GetName() { return this->name; };
-	float GetX() { return this->x; };
-	float GetY() { return this->y; };
-	float GetZ() { return this->z; };
+	float getX() { return this->x; };
+	float getY() { return this->y; };
+	float getZ() { return this->z; };
 
 	Input* input;
 

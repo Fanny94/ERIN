@@ -73,7 +73,7 @@ private:
 	CustomImport* customImport;
 	ObjectPool* Objectpool;
 
-	Bullet* inu;
+	Bullet* bulletptr;
 	Bullet** bullets;
 
 	Wall* upper_wall;
