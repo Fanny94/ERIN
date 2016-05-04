@@ -73,11 +73,6 @@ void ObjectPool::handler()
 
 void ObjectPool::fire(float x, float y, double heading)
 {
-	/*for (int i = 0; i < this->b_poolSize; i++)
-	{
-		if (!bullets[i].getInUse())
-		{*/
-			
 	Bullet* newBullet = firstAvailable;
 	firstAvailable = newBullet->getNext();
 	
@@ -86,13 +81,6 @@ void ObjectPool::fire(float x, float y, double heading)
 	newBullet->setInUse(true);
 	handler();
 	return;
-
-			/*bullets[i].iniBullet(x, y, 0.0f, fbull.timeLeft);
-			bullets[i].bullet_heading = heading;
-			bullets[i].setInUse(true);
-			return;
-		}
-	}*/
 }
 
 
