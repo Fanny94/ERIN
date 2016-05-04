@@ -62,16 +62,18 @@ void Graphics::Render()
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+
+	gDeviceContext->IASetInputLayout(gVertexLayout);
 }
 
-void Graphics::RendPlayer(Matrix transform)
+void Graphics::RendBullets(Matrix transform)
 {
 	UINT32 vertexSize = sizeof(float) * 6;
 	UINT32 offset = 0;
 
 	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	gDeviceContext->IASetInputLayout(gVertexLayout);
+	
 
 	CustomUpdateBuffer(transform);
 
@@ -145,14 +147,16 @@ void Graphics::CustomUpdateBuffer(Matrix transform)
 	D3D11_MAPPED_SUBRESOURCE mapped;
 	Matrix projection;
 	Matrix worldViewProj;
+	Matrix world;
 
+	world = XMMatrixRotationZ(XMConvertToRadians(0)) * XMMatrixTranslation(0, 0, 0);
 	projection = XMMatrixPerspectiveFovLH(float(3.1415 * 0.45), float(WIDTH / HEIGHT), float(0.5), float(50));
 
 	worldViewProj = transform * camera->camView * projection;
 
 	worldViewProj = worldViewProj.Transpose();
 
-	transform = transform.Transpose();
+	world = world.Transpose();
 
 	hr = gDeviceContext->Map(gConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
 	if (FAILED(hr))
@@ -162,7 +166,7 @@ void Graphics::CustomUpdateBuffer(Matrix transform)
 
 	MatrixPtr2 = (MATRICES*)mapped.pData;
 	MatrixPtr2->worldViewProj = worldViewProj;
-	MatrixPtr2->world = transform;
+	MatrixPtr2->world = world;
 	MatrixPtr2->camPos = camera->camPosition;
 
 	gDeviceContext->Unmap(gConstantBuffer, 0);

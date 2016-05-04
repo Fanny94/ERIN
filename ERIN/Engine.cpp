@@ -299,7 +299,7 @@ void Engine::render()
 	{
 		if (Objectpool->bullets[i].getInUse())
 		{
-			graphics->RendPlayer(*Objectpool->bullets[i].bulletMatrix);
+			graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
 		}
 	}
 
@@ -309,7 +309,7 @@ void Engine::render()
 		if (Objectpool->enemies[i].getInUse())
 		{
 
-			graphics->RendPlayer(*Objectpool->enemies[i].objectMatrix);
+			graphics->RendBullets(*Objectpool->enemies[i].objectMatrix);
 		}
 	}
 

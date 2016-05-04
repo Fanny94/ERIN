@@ -17,7 +17,7 @@ public:
 
 	void SetViewport();
 	void Render();
-	void RendPlayer(Matrix transform);
+	void RendBullets(Matrix transform);
 
 	void CustomVertexBuffer(Mesh mesh);
 	void RenderCustom(Mesh mesh, Matrix transform, int cvb);
