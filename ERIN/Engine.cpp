@@ -475,10 +475,7 @@ void Engine::update(double deltaTimeMs)
 		//Bullet Updates
 		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 		{
-			if (Objectpool->bullets[i].getInUse())
-			{
-				Objectpool->bullets[i].update(deltaTimeMs);
-			}
+			Objectpool->bullets[i].update();
 		}
 
 		// Enemies Updates
@@ -606,7 +603,7 @@ void Engine::render()
 	{
 		if (Objectpool->bullets[i].getInUse())
 		{
-			graphics->RendPlayer(*Objectpool->bullets[i].bulletMatrix);
+			graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
 		}
 	}
 
@@ -616,7 +613,7 @@ void Engine::render()
 		if (Objectpool->enemies[i].getInUse())
 		{
 
-			graphics->RendPlayer(*Objectpool->enemies[i].objectMatrix);
+			graphics->RendBullets(*Objectpool->enemies[i].objectMatrix);
 		}
 	}
 
