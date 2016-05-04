@@ -62,6 +62,8 @@ void Graphics::Render()
 
 	gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+
+	gDeviceContext->IASetInputLayout(gVertexLayout);
 }
 
 void Graphics::RendPlayer(Matrix transform)
@@ -71,7 +73,6 @@ void Graphics::RendPlayer(Matrix transform)
 
 	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	gDeviceContext->IASetInputLayout(gVertexLayout);
 
 	CustomUpdateBuffer(transform);
 
