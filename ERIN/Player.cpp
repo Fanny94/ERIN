@@ -140,9 +140,9 @@ void Player::update(double dt)
 
 	// turret matrix
 	*this->turretMatrix =
-		XMMatrixScaling(0.5f, 0.5f, 5.0f)
+		XMMatrixScaling(1.0f, 1.0f, 1.0f)
 		* XMMatrixRotationZ(XMConvertToRadians((float)-turrent_heading))
-		* XMMatrixTranslation(this->x + 1.0f, this->y, this->z);
+		* XMMatrixTranslation(this->x, this->y, this->z);
 
 	// ship matrix
 	*this->shipMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f)
