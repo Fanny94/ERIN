@@ -21,6 +21,7 @@ public:
 	void TitleScreenRender();
 	void MainMenuRender();
 	void PauseRender();
+	void GameOverRender();
 	void HighScoreRender();
 	void HelpAndOptionsRender();
 

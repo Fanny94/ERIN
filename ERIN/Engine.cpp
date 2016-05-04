@@ -552,6 +552,21 @@ void Engine::update(double deltaTimeMs)
 			this->ready = true;
 		}
 
+		/*if (player->playerHP == 0)
+		{
+			cout << "Game Over" << endl;
+
+			player->PlayerReset();
+			gameObject->reset();
+
+			for (int i = 0; i < 5; i++)
+			{
+				Objectpool->enemies[i].setInUse(false);
+			}
+
+			gameState = GameOver;
+		}*/
+
 		break;
 	case TitleScreen:
 		break;
@@ -617,6 +632,9 @@ void Engine::render()
 		break;
 	case Pause:
 		//graphics->PauseRender();
+		break;
+	case GameOver:
+		//graphics->GameOverRender();
 		break;
 	case HighScore:
 		graphics->HighScoreRender();

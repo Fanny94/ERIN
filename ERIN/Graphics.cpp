@@ -81,6 +81,13 @@ void Graphics::PauseRender()
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
+void Graphics::GameOverRender()
+{
+	float clearColor[] = { 0, 0, 0, 1 };
+	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+}
+
 void Graphics::HighScoreRender()
 {
 	float clearColor[] = { 1, 0, 1, 1 };
