@@ -27,8 +27,8 @@ Graphics::~Graphics()
 	customVertBuffTemp->Release();
 	this->customVertBuffTemp = nullptr;
 
-	textureView->Release();
-	this->textureView = nullptr;
+	/*textureView->Release();
+	this->textureView = nullptr;*/
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -179,12 +179,10 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
-		gDeviceContext->PSSetShaderResources(0, 1, &textureView);
+		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
-	// REMOVE and allocate per mesh, and never release when the game finishes
-	//customVertBuff->Release();
 }
 
 void Graphics::CreateTexture(Mesh mesh)

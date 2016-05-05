@@ -41,7 +41,7 @@ void Bullet::update()
 	state.alive.y = state.alive.y + state.alive.Vely;
 
 	//bullet matrix
-	*this->bulletMatrix = XMMatrixScaling(0.3f, 0.3f, 0.3f)
+	*this->bulletMatrix = XMMatrixScaling(0.1f, 0.1f, 0.1f)
 		* XMMatrixRotationZ(XMConvertToRadians((float)-bullet_heading))
 		* XMMatrixTranslation(this->state.alive.x, this->state.alive.y, this->state.alive.z);
 }

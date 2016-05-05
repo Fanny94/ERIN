@@ -60,17 +60,13 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-
 		graphics->CreateTriangle(this->triangle);
 
-		customImport->LoadCustomFormat("../BinaryDataCube.dat");
+		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 
-		graphics->CreateTexture(customImport->meshes.at(0));
-		//customImport->LoadCustomFormat("../BinaryDataTurret.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(1));
+		//graphics->CreateTexture(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
@@ -80,8 +76,13 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
 
+		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(3));
 
-		//customImport->NewMesh();
+		customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(4));
 
 		graphics->CreateConstantBuffer();
 
@@ -592,32 +593,31 @@ void Engine::update(double deltaTimeMs)
 
 void Engine::render()
 {
-	//graphics->UpdateConstantBuffer();
-
 	switch (gameState)
 	{
 	case GameRunning:
 
 	graphics->Render();
-	//graphics->RendPlayer(*player->shipMatrix);
-	//graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
-	for (int j = 0; j < 1; j++)
+	for (int j = 0; j < 2; j++)
 	{
 		if(j == 0)
 			customImport->meshes.at(j).world = *player->shipMatrix;
-		//if (j == 1)
-		//	customImport->meshes.at(j).world = *player->turretMatrix;
+		if (j == 1)
+			customImport->meshes.at(j).world = *player->turretMatrix;
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
+	customImport->meshes.at(4).world = XMMatrixTranslation(0, 0, 0);
+	graphics->RenderCustom(customImport->meshes.at(4), customImport->meshes.at(4).world, 4);
 
 	//Bullet rendering
 	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 	{
 		if (Objectpool->bullets[i].getInUse())
 		{
-			graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
+			//graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
+			graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
 		}
 	}
 
@@ -626,7 +626,6 @@ void Engine::render()
 	{
 		if (Objectpool->enemies[i].getInUse())
 		{
-			//graphics->RendBullets(*Objectpool->enemies[i].objectMatrix);
 			graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2);
 		}
 	}
