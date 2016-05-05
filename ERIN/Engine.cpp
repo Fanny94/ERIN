@@ -471,35 +471,6 @@ void Engine::processInput()
 			cout << "Shutting down game!" << endl;
 			this->running = false;
 		}
-
-		// BUMPERS & TRIGGERS
-		/*if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
-		{
-		}
-
-		if (this->player->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
-		{
-		}*/
-
-		// DPAD
-		/*if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
-		{
-		}*/
 	}
 }
 
@@ -637,7 +608,7 @@ void Engine::render()
 	graphics->Render();
 
 	// Custom Importer
-	for (int j = 0; j < 3; j++)
+	for (int j = 0; j < 2; j++)
 	{
 		if(j == 0)
 			customImport->meshes.at(j).world = *player->shipMatrix;
