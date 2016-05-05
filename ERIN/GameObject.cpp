@@ -100,7 +100,7 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 				int other = allEnemies[i].getObjectID();
 
 				// cohesion calculations
-				//this->behavior->cohesion(*myself->pos, *allEnemies[i].pos);
+				this->behavior->cohesion(*myself->pos, *allEnemies[i].pos);
 
 				// separation calculations
 				this->behavior->separation(*myself->pos, *allEnemies[i].pos);
