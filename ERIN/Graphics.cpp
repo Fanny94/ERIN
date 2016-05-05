@@ -189,39 +189,18 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 void Graphics::CreateTexture(Mesh mesh)
 {
-	wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
-	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, out, nullptr, &textureView, 0);
+	const size_t size = strlen(mesh.material.at(0).diffuseMap) + 1;
+	std::wstring wc(size, '#' );
+	mbstowcs(&wc[0], mesh.material.at(0).diffuseMap, size);
+
+	const wchar_t* file = wc.data();
+	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
+	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, file, nullptr, &textureView, 0);
 	if (FAILED(hr))
 	{
 		//error
 	}
 
-	/*D3D11_TEXTURE2D_DESC TextureDesc;
-	ZeroMemory(&TextureDesc, sizeof(TextureDesc));
-	TextureDesc.Width = BTH_IMAGE_WIDTH;
-	TextureDesc.Height = BTH_IMAGE_HEIGHT;
-	TextureDesc.MipLevels = TextureDesc.ArraySize = 1;
-	TextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	TextureDesc.SampleDesc.Count = 1;
-	TextureDesc.SampleDesc.Quality = 0;
-	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
-	TextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	TextureDesc.CPUAccessFlags = 0;
-	TextureDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA data;
-	ZeroMemory(&data, sizeof(data));
-	data.pSysMem = (void*)mesh.material.at(0).diffuseMap;
-	data.SysMemPitch = BTH_IMAGE_WIDTH * 4 * sizeof(char);
-	gDevice->CreateTexture2D(&TextureDesc, &data, &texture);
-
-	D3D11_SHADER_RESOURCE_VIEW_DESC resViewDesc;
-	ZeroMemory(&resViewDesc, sizeof(resViewDesc));
-	resViewDesc.Format = TextureDesc.Format;
-	resViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	resViewDesc.Texture2D.MipLevels = TextureDesc.MipLevels;
-	resViewDesc.Texture2D.MostDetailedMip = 0;
-	gDevice->CreateShaderResourceView(texture, &resViewDesc, &textureView);*/
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)
