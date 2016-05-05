@@ -187,17 +187,29 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 void Graphics::CreateTexture(Mesh mesh)
 {
-	size_t size = 256;
-	std::wstring wc(size, '#' );
-	mbstowcs(&wc[0], mesh.material.at(0).diffuseMap, size);
+	//char* p[256] = { mesh.material.at(0).diffuseMap };
+	char p[256];
+	for (int i = 0; i < 256; i++)
+	{
+		p[i] = mesh.material.at(0).diffuseMap[i];
+	}
+	
+	wchar_t* pwcsName;
+	
+	int inChars = MultiByteToWideChar(CP_ACP, 0, p, -1, NULL, 0);
 
-	const wchar_t* file = wc.data();
+	pwcsName = new wchar_t[256];
+	MultiByteToWideChar(CP_ACP, 0, p, -1, (LPWSTR)pwcsName, inChars);
+	
 	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
-	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, file, nullptr, &textureView, 0);
+	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, pwcsName, nullptr, &textureView, 0);
 	if (FAILED(hr))
 	{
 		//error
 	}
+
+	delete[] pwcsName;
+
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)
