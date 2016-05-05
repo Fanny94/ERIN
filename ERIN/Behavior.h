@@ -20,6 +20,9 @@ public:
 
 	void ObstacleAvoidance(Position myself);
 
+	float VelX;
+	float VelY;
+	
 	// flock AI
 	void cohesion(Position myself, Position ally);
 	void alignment();

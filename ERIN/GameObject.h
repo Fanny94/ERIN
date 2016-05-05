@@ -25,6 +25,9 @@ public:
 	void update(double deltaTimeMs);
 	void reset();
 
+	float getVelocityX() { return this->velocityX; };
+	float getVelocityY() { return this->velocityY; };
+
 	void setObjectID(int objectID) { this->objectID = objectID; };
 	void setObjectName(string name) { this->name = name; };
 	void setObjectPosX(float x) { this->x = x; };

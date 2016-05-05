@@ -53,6 +53,9 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->sphere = new TSphere();
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 	this->sphere->m_fRadius = 0.5f;
+
+	this->behavior->VelX = getVelocityX();
+	this->behavior->VelY = getVelocityY();
 }
 
 GameObject::~GameObject()
@@ -97,7 +100,7 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 				int other = allEnemies[i].getObjectID();
 
 				// cohesion calculations
-				this->behavior->cohesion(*myself->pos, *allEnemies[i].pos);
+				//this->behavior->cohesion(*myself->pos, *allEnemies[i].pos);
 
 				// separation calculations
 				this->behavior->separation(*myself->pos, *allEnemies[i].pos);
