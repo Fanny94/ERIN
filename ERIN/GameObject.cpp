@@ -167,6 +167,9 @@ void GameObject::reset()
 	this->y = 0.0f;
 	this->z = 0.0f;
 
+	this->heading = 0;
+	this->plannedHeading = 0;
+
 	this->speed = 0.0f;
 
 	delete this->objectMatrix;
@@ -212,4 +215,3 @@ double GameObject::getVy()
 {
 	return r_speed * asin(heading * M_PI / 180);
 }
-

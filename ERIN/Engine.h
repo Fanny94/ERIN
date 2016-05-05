@@ -45,12 +45,16 @@ public:
 	bool aButtonActive = false;
 	bool bButtonActive = false;
 
+	bool floorClear = false;
+
 	GameStateManager gameState;
 
 	// Pause
 	int pMenuOption = 0;
 	// Main Menu
 	int mainMenuOption = 0;
+
+	TSphere* Esphere;
 
 private:
 	bool running;
