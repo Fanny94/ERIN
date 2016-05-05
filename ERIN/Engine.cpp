@@ -481,6 +481,7 @@ void Engine::update(double deltaTimeMs)
 		Objectpool->bulletupdateCooldown(deltaTimeS);
 		updateCooldown(deltaTimeS);
 		// Player Update
+		player->hpCooldown(deltaTimeS);
 		player->update(deltaTimeMs);
 		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
 		gameObject->update(deltaTimeMs);*/
@@ -550,9 +551,9 @@ void Engine::update(double deltaTimeMs)
 		{
 			if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
 			{
+				cout << "sphere hit" << endl;
 				if (player->getHpCooldown())
 				{
-					cout << "sphere hit" << endl;
 					player->HP -= 1;
 					//Objectpool->enemies[i].reset();
 					//Objectpool->enemies[i].setInUse(false);
@@ -615,6 +616,11 @@ void Engine::render()
 		if (j == 1)
 			customImport->meshes.at(j).world = *player->turretMatrix;
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
+	}
+
+	if (player->HP > 0)
+	{
+		RendHUD();
 	}
 
 	//Bullet rendering
