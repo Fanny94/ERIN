@@ -60,11 +60,14 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
+
 		graphics->CreateTriangle(this->triangle);
 
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
+
+		//graphics->CreateTexture(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
@@ -73,6 +76,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
+
 
 		//customImport->NewMesh();
 

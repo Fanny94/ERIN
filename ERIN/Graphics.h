@@ -40,6 +40,8 @@ public:
 
 	void UpdateConstantBuffer();
 
+	void CreateTexture(Mesh mesh);
+
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
 
@@ -121,6 +123,8 @@ private:
 
 	vector<ID3D11Buffer*> customVertBuff;
 	ID3D11Buffer* customVertBuffTemp;
+ 
+	ID3D11ShaderResourceView* textureView;
 	HRESULT hr;
 };
 
