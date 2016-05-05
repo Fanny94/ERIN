@@ -80,9 +80,29 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(3));
 
-		customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDHP1.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(4));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(5));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP5.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(6));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP4.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(7));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP3.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(8));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP2.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(9));
 
 		graphics->CreateConstantBuffer();
 
@@ -482,6 +502,7 @@ void Engine::update(double deltaTimeMs)
 		Objectpool->bulletupdateCooldown(deltaTimeS);
 		updateCooldown(deltaTimeS);
 		// Player Update
+		player->hpCooldown(deltaTimeS);
 		player->update(deltaTimeMs);
 		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
 		gameObject->update(deltaTimeMs);*/
@@ -552,8 +573,13 @@ void Engine::update(double deltaTimeMs)
 			if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
 			{
 				cout << "sphere hit" << endl;
-				//Objectpool->enemies[i].reset();
-				//Objectpool->enemies[i].setInUse(false);
+				if (player->getHpCooldown())
+				{
+					player->HP -= 1;
+					//Objectpool->enemies[i].reset();
+					//Objectpool->enemies[i].setInUse(false);
+					player->setHpCooldown(false);
+				}
 			}
 		}
 
@@ -608,8 +634,11 @@ void Engine::render()
 			customImport->meshes.at(j).world = *player->turretMatrix;
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
-	customImport->meshes.at(4).world = XMMatrixTranslation(0, 0, 0);
-	graphics->RenderCustom(customImport->meshes.at(4), customImport->meshes.at(4).world, 4);
+
+	if (player->HP > 0)
+	{
+		RendHUD();
+	}
 
 	//Bullet rendering
 	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
@@ -658,6 +687,42 @@ void Engine::render()
 
 	// Switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(1, 0);
+}
+
+void Engine::RendHUD()
+{
+	int i = 4;
+	
+	if (player->HP >= 1)
+	{
+		customImport->meshes.at(i).world = XMMatrixTranslation(0, 0, 0);
+		graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i).world, i + 0);
+
+		if (player->HP >= 2)
+		{
+			graphics->RenderCustom(customImport->meshes.at(i + 1), customImport->meshes.at(i).world, i + 1);
+
+			if (player->HP >= 3)
+			{
+				graphics->RenderCustom(customImport->meshes.at(i + 2), customImport->meshes.at(i).world, i + 2);
+
+				if (player->HP >= 4)
+				{
+					graphics->RenderCustom(customImport->meshes.at(i + 3), customImport->meshes.at(i).world, i + 3);
+
+					if (player->HP >= 5)
+					{
+						graphics->RenderCustom(customImport->meshes.at(i + 4), customImport->meshes.at(i).world, i + 4);
+
+						if (player->HP >= 6)
+						{
+							graphics->RenderCustom(customImport->meshes.at(i + 5), customImport->meshes.at(i).world, i + 5);
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)
