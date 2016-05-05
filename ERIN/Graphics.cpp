@@ -27,8 +27,8 @@ Graphics::~Graphics()
 	customVertBuffTemp->Release();
 	this->customVertBuffTemp = nullptr;
 
-	textureView->Release();
-	this->textureView = nullptr;
+	//textureView->Release();
+	//this->textureView = nullptr;
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -179,12 +179,10 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
-		gDeviceContext->PSSetShaderResources(0, 1, &textureView);
+		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
-	// REMOVE and allocate per mesh, and never release when the game finishes
-	//customVertBuff->Release();
 }
 
 void Graphics::CreateTexture(Mesh mesh)
@@ -195,33 +193,6 @@ void Graphics::CreateTexture(Mesh mesh)
 	{
 		//error
 	}
-
-	/*D3D11_TEXTURE2D_DESC TextureDesc;
-	ZeroMemory(&TextureDesc, sizeof(TextureDesc));
-	TextureDesc.Width = BTH_IMAGE_WIDTH;
-	TextureDesc.Height = BTH_IMAGE_HEIGHT;
-	TextureDesc.MipLevels = TextureDesc.ArraySize = 1;
-	TextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	TextureDesc.SampleDesc.Count = 1;
-	TextureDesc.SampleDesc.Quality = 0;
-	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
-	TextureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	TextureDesc.CPUAccessFlags = 0;
-	TextureDesc.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA data;
-	ZeroMemory(&data, sizeof(data));
-	data.pSysMem = (void*)mesh.material.at(0).diffuseMap;
-	data.SysMemPitch = BTH_IMAGE_WIDTH * 4 * sizeof(char);
-	gDevice->CreateTexture2D(&TextureDesc, &data, &texture);
-
-	D3D11_SHADER_RESOURCE_VIEW_DESC resViewDesc;
-	ZeroMemory(&resViewDesc, sizeof(resViewDesc));
-	resViewDesc.Format = TextureDesc.Format;
-	resViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	resViewDesc.Texture2D.MipLevels = TextureDesc.MipLevels;
-	resViewDesc.Texture2D.MostDetailedMip = 0;
-	gDevice->CreateShaderResourceView(texture, &resViewDesc, &textureView);*/
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)

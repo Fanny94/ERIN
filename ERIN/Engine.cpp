@@ -63,14 +63,11 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateTriangle(this->triangle);
 
-		customImport->LoadCustomFormat("../BinaryDataCube.dat");
+		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 
-		graphics->CreateTexture(customImport->meshes.at(0));
-		//customImport->LoadCustomFormat("../BinaryDataTurret.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(1));
+		//graphics->CreateTexture(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();

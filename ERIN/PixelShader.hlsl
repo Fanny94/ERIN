@@ -35,13 +35,13 @@ float4 PS_main(VS_OUT input) : SV_Target
 
 	input.Nor = normalize(input.Nor);
 
-	float3 diffuseLight = diffuseMap* diffuseColor * max(dot(s, input.Nor), 0.0f);
+	float3 diffuseLight = /*diffuseMap **/ diffuseColor * max(dot(s, input.Nor), 0.0f);
 
 	float3 ambientLight = {0.2, 0.2, 0.2};
 
 	float3 specularLight = specularColor * pow(max(dot(r, v), 0.0f), shininess);
 
-	float4 color = float4((lightIntensity * ( ambientLight + diffuseLight + specularLight)), 1.0f);
+	float4 color = float4((lightIntensity * ( ambientLight + diffuseLight/* + specularLight*/)), 1.0f);
 
 	return color;
 };

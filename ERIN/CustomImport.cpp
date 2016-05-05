@@ -286,6 +286,10 @@ void CustomImport::NewMesh()
 		newMesh.materialTemp.transparency = material.at(i).transparency;
 		newMesh.materialTemp.shininess = material.at(i).shininess;
 		newMesh.materialTemp.reflection = material.at(i).reflection;
+		for (int k = 0; k < 256; k++)
+		{
+			newMesh.materialTemp.diffuseMap[k] = material.at(i).diffuseMap[k];
+		}
 		newMesh.material.push_back(newMesh.materialTemp);
 	}
 	meshes.push_back(newMesh);
