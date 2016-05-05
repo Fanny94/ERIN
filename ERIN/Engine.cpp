@@ -77,9 +77,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
 
-
-		//customImport->NewMesh();
-
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -589,15 +586,11 @@ void Engine::update(double deltaTimeMs)
 
 void Engine::render()
 {
-	//graphics->UpdateConstantBuffer();
-
 	switch (gameState)
 	{
 	case GameRunning:
 
 	graphics->Render();
-	//graphics->RendPlayer(*player->shipMatrix);
-	//graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
 	for (int j = 0; j < 2; j++)
@@ -623,7 +616,6 @@ void Engine::render()
 	{
 		if (Objectpool->enemies[i].getInUse())
 		{
-			//graphics->RendBullets(*Objectpool->enemies[i].objectMatrix);
 			graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2);
 		}
 	}
