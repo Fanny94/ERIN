@@ -187,8 +187,13 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 void Graphics::CreateTexture(Mesh mesh)
 {
-	wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
-	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, out, nullptr, &textureView, 0);
+	const size_t size = strlen(mesh.material.at(0).diffuseMap) + 1;
+	std::wstring wc(size, '#' );
+	mbstowcs(&wc[0], mesh.material.at(0).diffuseMap, size);
+
+	const wchar_t* file = wc.data();
+	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
+	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, file, nullptr, &textureView, 0);
 	if (FAILED(hr))
 	{
 		//error
