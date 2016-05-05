@@ -44,6 +44,8 @@ public:
 	bool aButtonActive = false;
 	bool bButtonActive = false;
 
+	bool floorClear = false;
+
 	GameStateManager gameState;
 
 	// Pause

@@ -71,6 +71,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CustomVertexBuffer(customImport->meshes.at(1));
 		//customImport->NewMesh();
 
+		customImport->LoadCustomFormat("../BinaryDataCube.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(2));
+
 		graphics->CreateConstantBuffer();
 
 		ShowWindow(wndHandle, nCommandShow);
@@ -334,6 +338,7 @@ void Engine::processInput()
 					cout << "Restart" << endl;
 
 					pMenuOption = 0;
+					floorClear = false;
 					gameObject->reset();
 					player->PlayerReset();
 					camera->ResetCamera();
@@ -359,6 +364,7 @@ void Engine::processInput()
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
 					player->PlayerReset();
+					floorClear = false;
 
 					for (int i = 0; i < 5; i++)
 					{
@@ -546,9 +552,10 @@ void Engine::update(double deltaTimeMs)
 		if (gameObject->enemyCount == 0)
 		{
 			cout << "Reset Game" << endl;
+			floorClear = true;
 			gameObject->reset();
-			player->PlayerReset();
-			this->ready = true;
+			//player->PlayerReset();
+			//this->ready = true;
 		}
 
 		/*if (player->playerHP == 0)
@@ -589,13 +596,22 @@ void Engine::render()
 	//graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
-	for (int j = 0; j < 2; j++)
+	for (int j = 0; j < 3; j++)
 	{
 		if(j == 0)
 			customImport->meshes.at(j).world = *player->shipMatrix;
 		if (j == 1)
 			customImport->meshes.at(j).world = *player->turretMatrix;
-		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
+		if (j == 2)
+		{
+			cout << "Render Elevater Cube" << endl;
+			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0);
+		}
+
+		if (j < 2)
+			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
+		if(j == 2 && floorClear == true)
+			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
 
 	//Bullet rendering
