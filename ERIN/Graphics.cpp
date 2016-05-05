@@ -175,26 +175,20 @@ void Graphics::CreateTexture(Mesh mesh)
 {
 	//char* p[256] = { mesh.material.at(0).diffuseMap };
 	char p[256];
+	wchar_t* pwcsName;
+
 	for (int i = 0; i < 256; i++)
 	{
 		p[i] = mesh.material.at(0).diffuseMap[i];
-	}
-	
-	wchar_t* pwcsName;
-	
-	int inChars = MultiByteToWideChar(CP_ACP, 0, p, -1, NULL, 0);
 
-	pwcsName = new wchar_t[256];
-	MultiByteToWideChar(CP_ACP, 0, p, -1, (LPWSTR)pwcsName, inChars);
-	
+	}
+
 	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
-	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, pwcsName, nullptr, &textureView, 0);
+	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, (wchar_t*)p, nullptr, &textureView, 0);
 	if (FAILED(hr))
 	{
 		//error
 	}
-
-	delete[] pwcsName;
 
 }
 
