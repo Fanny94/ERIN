@@ -60,7 +60,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-
 		graphics->CreateTriangle(this->triangle);
 
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
@@ -76,6 +75,14 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
+
+		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(3));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(4));
 
 		graphics->CreateConstantBuffer();
 
@@ -601,13 +608,16 @@ void Engine::render()
 			customImport->meshes.at(j).world = *player->turretMatrix;
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
+	customImport->meshes.at(4).world = XMMatrixTranslation(0, 0, 0);
+	graphics->RenderCustom(customImport->meshes.at(4), customImport->meshes.at(4).world, 4);
 
 	//Bullet rendering
 	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 	{
 		if (Objectpool->bullets[i].getInUse())
 		{
-			graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
+			//graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
+			graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
 		}
 	}
 
