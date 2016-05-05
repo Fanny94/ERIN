@@ -43,6 +43,7 @@ public:
 		float transparency;
 		float shininess;
 		float reflection;
+		char diffuseMap[256];
 	};
 
 	unsigned int MeshCount;
@@ -52,6 +53,5 @@ public:
 	vector<Material> material;
 	Material materialTemp;
 	Matrix world;
-	//ID3D11Buffer* customVertBuff;
 };
 #endif // !MESH_H

@@ -24,8 +24,8 @@ Graphics::~Graphics()
 	customFormatBuffer->Release();
 	this->customFormatBuffer = nullptr;
 
-	/*customVertBuff->Release();
-	this->customVertBuff = nullptr;*/
+	customVertBuffTemp->Release();
+	this->customVertBuffTemp = nullptr;
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
