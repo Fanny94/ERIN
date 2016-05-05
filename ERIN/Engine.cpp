@@ -602,6 +602,11 @@ void Engine::update(double deltaTimeMs)
 
 		break;
 	case TitleScreen:
+		if (printTitle == true)
+		{
+			cout << "Title Screen | Press Start to Continue" << endl;
+			printTitle = false;
+		}
 		break;
 	case MainMenu:
 		break;
@@ -641,12 +646,13 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 			Esphere->m_vecCenter = Vector3(0, 0, 0);
 			Esphere->m_fRadius = 0.5f;
-			cout << "Render Elevater Cube" << endl;
+			cout << "Render Elevator Cube" << endl;
 			if (Esphere && sphereToSphere(*player->sphere, *Esphere))
 			{
 				Objectpool->ResetBullet();
 				gameObject->reset();
 				player->PlayerReset();
+				camera->ResetCamera();
 				floorClear = false;
 				player->HP = 6;
 
