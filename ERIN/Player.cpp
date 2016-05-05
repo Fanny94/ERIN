@@ -21,12 +21,6 @@ Player::Player(string name, float x, float y, float z)
 
 	this->input = new Input(GamePadIndex_One);
 
-	this->triangle = new TriangleVertex[3];
-
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
-
 	//this->objectMatrix = new Matrix();
 	this->shipMatrix = new Matrix();
 	this->turretMatrix = new Matrix();
@@ -43,8 +37,6 @@ Player::Player(string name, float x, float y, float z)
 Player::~Player()
 {
 	delete this->input;
-	delete this->triangle;
-	//delete this->objectMatrix;
 	delete this->shipMatrix;
 	delete this->turretMatrix;
 	delete this->shipPos;

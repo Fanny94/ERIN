@@ -39,7 +39,6 @@ public:
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };
 
-	TriangleVertex* triangle;
 	Matrix* objectMatrix;
 	Behavior* behavior;
 	Position* pos;

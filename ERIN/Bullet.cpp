@@ -3,18 +3,12 @@
 Bullet::Bullet()
 {
 	this->bulletMatrix = new Matrix();
-	this->triangle = new TriangleVertex[3];
-
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
 }
 
 
 Bullet::~Bullet()
 {
 	delete this->bulletMatrix;
-	delete this->triangle;
 }
 
 void Bullet::update()
