@@ -90,7 +90,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		customImport->LoadCustomFormat("../BinaryDataCube.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(2));
+		graphics->CustomVertexBuffer(customImport->meshes.at(3));
 
 		graphics->CreateConstantBuffer();
 
@@ -623,20 +623,20 @@ void Engine::render()
 	//graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
-	for (int j = 0; j < 3; j++)
+	for (int j = 0; j < 4; j++)
 	{
 		if(j == 0)
 			customImport->meshes.at(j).world = *player->shipMatrix;
 		if (j == 1)
 			customImport->meshes.at(j).world = *player->turretMatrix;
-		if (j == 2 && floorClear == true)
+		if (j == 3 && floorClear == true)
 		{
 			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0);
 		}
 
 		if (j < 2)
 			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
-		if (j == 2 && floorClear == true)
+		if (j == 3 && floorClear == true)
 		{
 			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 			Esphere->m_vecCenter = Vector3(0, 0, 0);
@@ -648,6 +648,7 @@ void Engine::render()
 				gameObject->reset();
 				player->PlayerReset();
 				floorClear = false;
+				player->HP = 6;
 
 				for (int i = 0; i < 5; i++)
 				{

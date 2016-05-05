@@ -156,6 +156,8 @@ void Player::PlayerReset()
 	this->SetY(0);
 	this->SetZ(0);
 
+	this->HP = 6;
+
 	this->heading = 0;
 	this->plannedHeading = 0;
 }
