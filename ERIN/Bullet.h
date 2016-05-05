@@ -9,8 +9,6 @@ class Bullet
 public:
 	Bullet();
 	~Bullet();
-
-	TriangleVertex* triangle;
 	
 	Bullet* getNext() const { return state.Next; };
 	
@@ -42,6 +40,6 @@ public:
 
 private:
 	bool inUse;
-	float maxspd = 0.08f;
+	float maxspd = 0.2f;
 };
 #endif // !BULLET_H

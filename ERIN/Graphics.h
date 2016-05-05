@@ -25,8 +25,6 @@ public:
 	void HighScoreRender();
 	void HelpAndOptionsRender();
 
-	void RendBullets(Matrix transform);
-
 	void CustomVertexBuffer(Mesh mesh);
 	void RenderCustom(Mesh mesh, Matrix transform, int cvb);
 	void CustomUpdateBuffer(Matrix transform);
@@ -34,8 +32,6 @@ public:
 	void CreateShaders();
 	void CreateDepthBuffer();
 
-	void CreateTriangle(TriangleVertex* triangleVertices);
-	void CreateTriangle();
 	void CreateConstantBuffer();
 
 	void UpdateConstantBuffer();

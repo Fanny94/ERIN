@@ -19,7 +19,6 @@ public:
 	void hpCooldown(double hpdt);
 	bool getHpCooldown() { return this->hpReady; };
 	void setHpCooldown(bool hpReady) { this->hpReady = hpReady; };
-	//
 
 	void playerInput();
 	void update(double deltaTime);
@@ -40,9 +39,6 @@ public:
 	Input* input;
 
 	// turret magic
-	TriangleVertex* triangle; // is replaced by ship (TriangleVertex)
-	TriangleVertex* ship;
-	TriangleVertex* turret;
 	Matrix* objectMatrix; // is replaced by shipMatrix
 	Matrix* shipMatrix;
 	Matrix* turretMatrix;

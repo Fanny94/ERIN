@@ -85,8 +85,6 @@ private:
 	Wall* right_wall;
 
 	Player* player;
-
-	TriangleVertex* triangle;
 };
 
 #endif // !ENGINE_H
