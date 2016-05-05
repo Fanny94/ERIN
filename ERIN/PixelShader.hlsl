@@ -35,7 +35,7 @@ float4 PS_main(VS_OUT input) : SV_Target
 
 	input.Nor = normalize(input.Nor);
 
-	float3 diffuseLight = /*diffuseMap **/ diffuseColor * max(dot(s, input.Nor), 0.0f);
+	float3 diffuseLight = diffuseMap * diffuseColor * max(dot(s, input.Nor), 0.0f);
 
 	float3 ambientLight = {0.2, 0.2, 0.2};
 

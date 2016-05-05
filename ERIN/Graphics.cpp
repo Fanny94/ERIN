@@ -27,8 +27,8 @@ Graphics::~Graphics()
 	customVertBuffTemp->Release();
 	this->customVertBuffTemp = nullptr;
 
-	/*textureView->Release();
-	this->textureView = nullptr;*/
+	textureView->Release();
+	this->textureView = nullptr;
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -179,7 +179,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
-		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
+		gDeviceContext->PSSetShaderResources(0, 1, &textureView);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
@@ -187,14 +187,18 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 void Graphics::CreateTexture(Mesh mesh)
 {
-
 	//char* p[256] = { mesh.material.at(0).diffuseMap };
-	char* p = mesh.material.at(0).diffuseMap;
+	char p[256];
+	for (int i = 0; i < 256; i++)
+	{
+		p[i] = mesh.material.at(0).diffuseMap[i];
+	}
+	
 	wchar_t* pwcsName;
 	
 	int inChars = MultiByteToWideChar(CP_ACP, 0, p, -1, NULL, 0);
 
-	pwcsName = new wchar_t[inChars];
+	pwcsName = new wchar_t[256];
 	MultiByteToWideChar(CP_ACP, 0, p, -1, (LPWSTR)pwcsName, inChars);
 	
 	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
