@@ -27,8 +27,8 @@ Graphics::~Graphics()
 	customVertBuffTemp->Release();
 	this->customVertBuffTemp = nullptr;
 
-	//textureView->Release();
-	//this->textureView = nullptr;
+	/*textureView->Release();
+	this->textureView = nullptr;*/
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -187,7 +187,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 void Graphics::CreateTexture(Mesh mesh)
 {
-	const size_t size = strlen(mesh.material.at(0).diffuseMap) + 1;
+	size_t size = 256;
 	std::wstring wc(size, '#' );
 	mbstowcs(&wc[0], mesh.material.at(0).diffuseMap, size);
 

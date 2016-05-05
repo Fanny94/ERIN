@@ -600,12 +600,12 @@ void Engine::render()
 	//graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
-	for (int j = 0; j < 1; j++)
+	for (int j = 0; j < 2; j++)
 	{
 		if(j == 0)
 			customImport->meshes.at(j).world = *player->shipMatrix;
-		//if (j == 1)
-		//	customImport->meshes.at(j).world = *player->turretMatrix;
+		if (j == 1)
+			customImport->meshes.at(j).world = *player->turretMatrix;
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
 
