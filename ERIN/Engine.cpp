@@ -385,6 +385,7 @@ void Engine::processInput()
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
 					player->PlayerReset();
+					gameObject->reset();
 					Objectpool->ResetBullet();
 					floorClear = false;
 
