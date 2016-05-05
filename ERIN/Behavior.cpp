@@ -76,7 +76,7 @@ void Behavior::cohesion(Position myself, Position ally)
 		if (!myself)
 		{
 			force += Vector2(1, 2);
-			CenterOfMass += thisEnemy;
+			CenterOfMass += myself;
 			Neighbors++
 		}
 	}
@@ -128,4 +128,15 @@ void Behavior::separation(Position myself, Position ally)
 	vector<float> Diff(DistanceX, DistanceY);
 	Counter++;
 	}*/
+}
+
+void Behavior::ObstacleAvoidance(Position myself)
+{
+	/*ahead = myself + velocity; //*MAX_SE_AHEAD; add this if we need to limit how far the enemy sees obstacles
+	ahead2 = position + velocity; //*MAX_SE_AHEAD * 0.5; this is just ahead cut in half*/
+
+
+
+
+
 }

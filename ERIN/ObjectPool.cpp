@@ -84,7 +84,6 @@ void ObjectPool::fire(float x, float y, double heading)
 	return;
 }
 
-
 void ObjectPool::bulletupdateCooldown(double bdt)
 {
 	if (this->bcooldown <= this->bcurrentTime)

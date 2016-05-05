@@ -24,8 +24,11 @@ Graphics::~Graphics()
 	customFormatBuffer->Release();
 	this->customFormatBuffer = nullptr;
 
-	/*customVertBuff->Release();
-	this->customVertBuff = nullptr;*/
+	customVertBuffTemp->Release();
+	this->customVertBuffTemp = nullptr;
+
+	/*textureView->Release();
+	this->textureView = nullptr;*/
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -115,7 +118,6 @@ void Graphics::RendBullets(Matrix transform)
 
 	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	
 
 	CustomUpdateBuffer(transform);
 
@@ -177,11 +179,25 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
+		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
-	// REMOVE and allocate per mesh, and never release when the game finishes
-	//customVertBuff->Release();
+}
+
+void Graphics::CreateTexture(Mesh mesh)
+{
+	size_t size = 256;
+	std::wstring wc(size, '#' );
+	mbstowcs(&wc[0], mesh.material.at(0).diffuseMap, size);
+
+	const wchar_t* file = wc.data();
+	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
+	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, file, nullptr, &textureView, 0);
+	if (FAILED(hr))
+	{
+		//error
+	}
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)
@@ -426,3 +442,4 @@ void Graphics::UpdateConstantBuffer()
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 }
+
