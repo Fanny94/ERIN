@@ -395,6 +395,7 @@ void Engine::processInput()
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
 					player->PlayerReset();
+					gameObject->reset();
 					Objectpool->ResetBullet();
 					floorClear = false;
 
@@ -583,6 +584,11 @@ void Engine::update(double deltaTimeMs)
 
 		break;
 	case TitleScreen:
+		if (printTitle == true)
+		{
+			cout << "Title Screen | Press Start to Continue" << endl;
+			printTitle = false;
+		}
 		break;
 	case MainMenu:
 		break;
@@ -620,7 +626,7 @@ void Engine::render()
 		{
 			Objectpool->ResetBullet();
 			gameObject->reset();
-			player->PlayerReset();
+			player->NewFloorReset();
 			floorClear = false;
 
 			for (int i = 0; i < 5; i++)
