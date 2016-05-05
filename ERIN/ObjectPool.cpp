@@ -59,6 +59,7 @@ void ObjectPool::ResetBullet()
 	}
 }
 
+
 void ObjectPool::handler()
 {
 	for (int i = 0; i < b_poolSize; i++)

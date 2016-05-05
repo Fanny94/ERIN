@@ -53,6 +53,8 @@ public:
 	// Main Menu
 	int mainMenuOption = 0;
 
+	TSphere* Esphere;
+
 private:
 	bool running;
 

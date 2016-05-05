@@ -9,6 +9,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 	this->gameLogic = new GameLogic();
 
+	Esphere = new TSphere();
+
 	this->Objectpool = new ObjectPool();
 	this->gameObject = new GameObject();
 
@@ -87,6 +89,8 @@ Engine::~Engine()
 	delete this->camera;
 	delete this->customImport;
 	delete this->gameLogic;
+
+	delete this->Esphere;
 
 	delete this->player;
 	//delete this->gameObject;
@@ -341,6 +345,7 @@ void Engine::processInput()
 					floorClear = false;
 					gameObject->reset();
 					player->PlayerReset();
+					Objectpool->ResetBullet();
 					camera->ResetCamera();
 
 					for (int i = 0; i < 5; i++)
@@ -364,6 +369,7 @@ void Engine::processInput()
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
 					player->PlayerReset();
+					Objectpool->ResetBullet();
 					floorClear = false;
 
 					for (int i = 0; i < 5; i++)
@@ -554,8 +560,6 @@ void Engine::update(double deltaTimeMs)
 			cout << "Reset Game" << endl;
 			floorClear = true;
 			gameObject->reset();
-			//player->PlayerReset();
-			//this->ready = true;
 		}
 
 		/*if (player->playerHP == 0)
@@ -602,16 +606,36 @@ void Engine::render()
 			customImport->meshes.at(j).world = *player->shipMatrix;
 		if (j == 1)
 			customImport->meshes.at(j).world = *player->turretMatrix;
-		if (j == 2)
+		if (j == 2 && floorClear == true)
 		{
-			cout << "Render Elevater Cube" << endl;
 			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0);
 		}
 
 		if (j < 2)
 			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
-		if(j == 2 && floorClear == true)
+		if (j == 2 && floorClear == true)
+		{
 			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
+			Esphere->m_vecCenter = Vector3(0, 0, 0);
+			Esphere->m_fRadius = 0.5f;
+			cout << "Render Elevater Cube" << endl;
+			if (Esphere && sphereToSphere(*player->sphere, *Esphere))
+			{
+				Objectpool->ResetBullet();
+				gameObject->reset();
+				player->PlayerReset();
+				floorClear = false;
+
+				for (int i = 0; i < 5; i++)
+				{
+
+					Objectpool->enemies[i].setInUse(false);
+
+					this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+					this->ready = false;
+				}
+			}
+		}
 	}
 
 	//Bullet rendering
