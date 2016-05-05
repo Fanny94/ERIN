@@ -582,9 +582,7 @@ void Engine::update(double deltaTimeMs)
 			cout << "Reset Game" << endl;
 			floorClear = true;
 			gameObject->reset();
-			player->PlayerReset();
 			Objectpool->ResetBullet();
-			this->ready = true;
 		}
 
 		/*if (player->playerHP == 0)
