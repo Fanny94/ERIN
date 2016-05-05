@@ -108,7 +108,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		customImport->LoadCustomFormat("../BinaryDataCube.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(2));
+		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 
 		graphics->CreateConstantBuffer();
 
@@ -643,34 +643,30 @@ void Engine::render()
 			customImport->meshes.at(j).world = *player->shipMatrix;
 		if (j == 1)
 			customImport->meshes.at(j).world = *player->turretMatrix;
-		if (j == 2 && floorClear == true)
-		{
-			customImport->meshes.at(j).world = XMMatrixTranslation(0, 0, 0);
-		}
+		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
+	}
 
-		if (j < 2)
-			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
-		if (j == 2 && floorClear == true)
+	if (floorClear == true)
+	{
+		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
+		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
+		Esphere->m_vecCenter = Vector3(0, 0, 0);
+		Esphere->m_fRadius = 0.5f;
+		cout << "Render Elevater Cube" << endl;
+		if (Esphere && sphereToSphere(*player->sphere, *Esphere))
 		{
-			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
-			Esphere->m_vecCenter = Vector3(0, 0, 0);
-			Esphere->m_fRadius = 0.5f;
-			cout << "Render Elevater Cube" << endl;
-			if (Esphere && sphereToSphere(*player->sphere, *Esphere))
+			Objectpool->ResetBullet();
+			gameObject->reset();
+			player->PlayerReset();
+			floorClear = false;
+
+			for (int i = 0; i < 5; i++)
 			{
-				Objectpool->ResetBullet();
-				gameObject->reset();
-				player->PlayerReset();
-				floorClear = false;
 
-				for (int i = 0; i < 5; i++)
-				{
+				Objectpool->enemies[i].setInUse(false);
 
-					Objectpool->enemies[i].setInUse(false);
-
-					this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
-					this->ready = false;
-				}
+				this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+				this->ready = false;
 			}
 		}
 	}
