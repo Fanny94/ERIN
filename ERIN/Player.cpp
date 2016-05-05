@@ -150,6 +150,8 @@ void Player::PlayerReset()
 
 	this->heading = 0;
 	this->plannedHeading = 0;
+
+	this->HP = 6;
 }
 
 void Player::computeTurn(double dt)
