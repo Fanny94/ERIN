@@ -9,8 +9,6 @@ class Bullet
 public:
 	Bullet();
 	~Bullet();
-
-	TriangleVertex* triangle;
 	
 	Bullet* getNext() const { return state.Next; };
 	

@@ -17,11 +17,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
 
-	this->triangle = new TriangleVertex[3];
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
-
 	// upper
 	this->upper_wall = new Wall();
 	this->upper_wall->point = Vector3(0, 10, 0);
@@ -135,7 +130,6 @@ Engine::~Engine()
 	}
 	delete enemies;*/
 
-	delete triangle;
 	delete this->upper_wall;
 	delete this->left_wall;
 	delete this->lower_wall;

@@ -4,11 +4,6 @@ GameObject::GameObject()
 	: name("noName"),
 	x(0.0f), y(0.0f), z(0.0f)
 {
-	this->triangle = new TriangleVertex[3];
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
-
 	this->objectMatrix = new Matrix();
 
 	this->behavior = new Behavior(Patrol);
@@ -35,12 +30,6 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	float Ran = lO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (hI - lO)));
 	this->acceleration = Ran;
 
-	// test triangle in gameobject ( should be a mesh number )
-	this->triangle = new TriangleVertex[3];
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
-
 	this->objectMatrix = new Matrix();
 
 	// behavoir
@@ -60,7 +49,6 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 
 GameObject::~GameObject()
 {
-	delete this->triangle;
 	delete this->objectMatrix;
 	delete this->pos;
 	delete this->sphere;
