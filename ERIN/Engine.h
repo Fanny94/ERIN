@@ -47,6 +47,8 @@ public:
 
 	bool floorClear = false;
 
+	bool printTitle = true;
+
 	GameStateManager gameState;
 
 	// Pause
