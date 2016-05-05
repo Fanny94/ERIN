@@ -283,6 +283,10 @@ void CustomImport::NewMesh()
 			newMesh.materialTemp.specularColor[j] = material.at(i).specularColor[j];
 			newMesh.materialTemp.ambientColor[j] = material.at(i).ambientColor[j];
 		}
+		for (int k = 0; k < 256; k++)
+		{
+			newMesh.materialTemp.diffuseMap[k] = material.at(i).diffuseMap[k];
+		}
 		newMesh.materialTemp.transparency = material.at(i).transparency;
 		newMesh.materialTemp.shininess = material.at(i).shininess;
 		newMesh.materialTemp.reflection = material.at(i).reflection;
