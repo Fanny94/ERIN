@@ -74,6 +74,13 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
 
+		for (int i = 3; i < 9; i++)
+		{
+			customImport->LoadCustomFormat("../BinaryDataCube.dat");
+			customImport->NewMesh();
+			graphics->CustomVertexBuffer(customImport->meshes.at(i));
+		}
+
 		//customImport->NewMesh();
 
 		graphics->CreateConstantBuffer();
@@ -543,9 +550,14 @@ void Engine::update(double deltaTimeMs)
 		{
 			if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
 			{
-				cout << "sphere hit" << endl;
-				//Objectpool->enemies[i].reset();
-				//Objectpool->enemies[i].setInUse(false);
+				if (player->getHpCooldown())
+				{
+					cout << "sphere hit" << endl;
+					player->HP -= 1;
+					//Objectpool->enemies[i].reset();
+					//Objectpool->enemies[i].setInUse(false);
+					player->setHpCooldown(false);
+				}
 			}
 		}
 
@@ -652,6 +664,46 @@ void Engine::render()
 
 	// Switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(1, 0);
+}
+
+void Engine::RendHUD()
+{
+	int i = 3;
+	customImport->meshes.at(i + 0).world = XMMatrixTranslation(0.7, 1.5, 0);
+	customImport->meshes.at(i + 1).world = XMMatrixTranslation(1.7, 0, 0);
+	customImport->meshes.at(i + 2).world = XMMatrixTranslation(0.7, -1.5, 0);
+	customImport->meshes.at(i + 3).world = XMMatrixTranslation(-0.7, -1.5, 0);
+	customImport->meshes.at(i + 4).world = XMMatrixTranslation(-1.7, 0, 0);
+	customImport->meshes.at(i + 5).world = XMMatrixTranslation(-0.7, 1.5, 0);
+	if (player->HP >= 1)
+	{
+		graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i + 0).world, i + 0);
+
+		if (player->HP >= 2)
+		{
+			graphics->RenderCustom(customImport->meshes.at(i + 1), customImport->meshes.at(i + 1).world, i + 1);
+
+			if (player->HP >= 3)
+			{
+				graphics->RenderCustom(customImport->meshes.at(i + 2), customImport->meshes.at(i + 2).world, i + 2);
+
+				if (player->HP >= 4)
+				{
+					graphics->RenderCustom(customImport->meshes.at(i + 3), customImport->meshes.at(i + 3).world, i + 3);
+
+					if (player->HP >= 5)
+					{
+						graphics->RenderCustom(customImport->meshes.at(i + 4), customImport->meshes.at(i + 4).world, i + 4);
+
+						if (player->HP >= 6)
+						{
+							graphics->RenderCustom(customImport->meshes.at(i + 5), customImport->meshes.at(i + 5).world, i + 5);
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)
