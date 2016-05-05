@@ -60,15 +60,17 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
+
 		graphics->CreateTriangle(this->triangle);
 
-		customImport->LoadCustomFormat("../BinaryDataShip.dat");
+		customImport->LoadCustomFormat("../BinaryDataCube.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 
-		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
-		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(1));
+		graphics->CreateTexture(customImport->meshes.at(0));
+		//customImport->LoadCustomFormat("../BinaryDataTurret.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(1));
 		//customImport->NewMesh();
 
 		graphics->CreateConstantBuffer();
@@ -591,12 +593,12 @@ void Engine::render()
 	//graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
-	for (int j = 0; j < 2; j++)
+	for (int j = 0; j < 1; j++)
 	{
 		if(j == 0)
 			customImport->meshes.at(j).world = *player->shipMatrix;
-		if (j == 1)
-			customImport->meshes.at(j).world = *player->turretMatrix;
+		//if (j == 1)
+		//	customImport->meshes.at(j).world = *player->turretMatrix;
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
 
