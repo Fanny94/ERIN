@@ -651,10 +651,9 @@ void Engine::render()
 			{
 				Objectpool->ResetBullet();
 				gameObject->reset();
-				player->PlayerReset();
+				player->NewFloorReset();
 				camera->ResetCamera();
 				floorClear = false;
-				player->HP = 6;
 
 				for (int i = 0; i < 5; i++)
 				{

@@ -162,6 +162,16 @@ void Player::PlayerReset()
 	this->plannedHeading = 0;
 }
 
+void Player::NewFloorReset()
+{
+	this->SetX(3);
+	this->SetY(0);
+	this->SetZ(0);
+
+	this->heading = 0;
+	this->plannedHeading = 0;
+}
+
 void Player::computeTurn(double dt)
 {
 	double dh = plannedHeading - heading;
