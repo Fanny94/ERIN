@@ -338,7 +338,6 @@ void Graphics::CreateDepthBuffer()
 	gDevice->CreateTexture2D(&desc, 0, &gDepthView);
 
 	gDevice->CreateDepthStencilView(gDepthView, 0, &gDepthStencilView);
-
 }
 
 void Graphics::CreateConstantBuffer()
