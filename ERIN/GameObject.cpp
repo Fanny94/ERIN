@@ -42,6 +42,9 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->sphere = new TSphere();
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 	this->sphere->m_fRadius = 0.5f;
+
+	this->behavior->VelX = getVelocityX();
+	this->behavior->VelY = getVelocityY();
 }
 
 GameObject::~GameObject()
