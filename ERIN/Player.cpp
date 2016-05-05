@@ -217,3 +217,16 @@ double Player::getTVy()
 {
 	return tr_speed * asin(heading * M_PI / 180);
 }
+
+void Player::hpCooldown(double hpdt)
+{
+	if (hpcooldown <= hpcurrentTime)
+	{
+		hpcurrentTime = 0.0f;
+		hpReady = true;
+	}
+	else
+	{
+		hpcurrentTime += hpdt;
+	}
+}
