@@ -24,8 +24,8 @@ Graphics::~Graphics()
 	customFormatBuffer->Release();
 	this->customFormatBuffer = nullptr;
 
-	/*customVertBuff->Release();
-	this->customVertBuff = nullptr;*/
+	customVertBuffTemp->Release();
+	this->customVertBuffTemp = nullptr;
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -115,7 +115,6 @@ void Graphics::RendBullets(Matrix transform)
 
 	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
 	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	
 
 	CustomUpdateBuffer(transform);
 

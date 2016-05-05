@@ -32,6 +32,7 @@ struct Material
 	float transparency;
 	float shininess;
 	float reflection;
+	char diffuseMap[256];
 };
 
 unsigned int MeshCount = 0;
@@ -92,8 +93,8 @@ void CustomImport::LoadCustomFormat(string filePath)
 		fileIn.read((char*)&materialTemp.transparency, sizeof(float));
 		fileIn.read((char*)&materialTemp.shininess, sizeof(float));
 		fileIn.read((char*)&materialTemp.reflection, sizeof(float));
-		/*fileIn.read((char*)&DiffuseMap, sizeof(char) * 256);
-		fileIn.read((char*)&NormalMap, sizeof(char) * 256);
+		fileIn.read((char*)&materialTemp.diffuseMap, sizeof(char) * 256);
+		/*fileIn.read((char*)&NormalMap, sizeof(char) * 256);
 		fileIn.read((char*)&SpecularMap, sizeof(char) * 256);*/
 		material.push_back(materialTemp);
 	}

@@ -69,6 +69,11 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(1));
+
+		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(2));
+
 		//customImport->NewMesh();
 
 		graphics->CreateConstantBuffer();
@@ -614,8 +619,8 @@ void Engine::render()
 	{
 		if (Objectpool->enemies[i].getInUse())
 		{
-
-			graphics->RendBullets(*Objectpool->enemies[i].objectMatrix);
+			//graphics->RendBullets(*Objectpool->enemies[i].objectMatrix);
+			graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2);
 		}
 	}
 
