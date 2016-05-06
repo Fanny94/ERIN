@@ -1,7 +1,5 @@
 #include "Graphics.h"
 
-//http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
-
 Graphics::Graphics() {}
 
 Graphics::~Graphics()
@@ -16,7 +14,7 @@ Graphics::~Graphics()
 	gPixelShader->Release();
 
 	//textureView->Release();
-	this->textureView = nullptr;
+	//this->textureView = nullptr;
 
 	//texture->Release();
 	//this->texture = nullptr;
@@ -166,7 +164,9 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
-		/*gDeviceContext->PSSetShaderResources(0, 1, &textureView);*/
+
+		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
+
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
 }

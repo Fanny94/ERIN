@@ -51,6 +51,10 @@ public:
 
 	GameStateManager gameState;
 
+	float Rx, Ry;
+	bool block = false;
+	void Elevatorfunc();
+
 	// Pause
 	int pMenuOption = 0;
 	// Main Menu
