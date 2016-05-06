@@ -564,8 +564,8 @@ void Engine::update(double deltaTimeMs)
 				if (player->getHpCooldown())
 				{
 					player->HP -= 1;
-					//Objectpool->enemies[i].reset();
-					//Objectpool->enemies[i].setInUse(false);
+					gameObject->enemyCount -= 1;
+					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
 				}
 			}
@@ -669,6 +669,7 @@ void Engine::render()
 
 		if (floorClear == true)
 		{
+			
 			customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
 			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
 			Esphere->m_vecCenter = Vector3(0, 0, 0);
@@ -680,7 +681,6 @@ void Engine::render()
 				gameObject->reset();
 				player->NewFloorReset();
 				floorClear = false;
-
 				for (int i = 0; i < 5; i++)
 				{
 					Objectpool->enemies[i].setInUse(false);
@@ -689,6 +689,11 @@ void Engine::render()
 					this->ready = false;
 				}
 			}
+			//Moved everything from here to its own function
+			
+			
+			
+			//Elevatorfunc();
 		}
 
 		if (player->HP > 0)
@@ -909,4 +914,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	//call the default handler function if w do not handle the message here 
 	return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+void Engine::Elevatorfunc()
+{
+		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
+		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
+		Esphere->m_vecCenter = Vector3(0, 0, 0);
+		Esphere->m_fRadius = 0.5f;
+		cout << "Render Elevater Cube" << endl;
+		if (Esphere && sphereToSphere(*player->sphere, *Esphere))
+		{
+			Objectpool->ResetBullet();
+			gameObject->reset();
+			player->NewFloorReset();
+			floorClear = false;
+			for (int i = 0; i < 5; i++)
+			{
+				Objectpool->enemies[i].setInUse(false);
+
+				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+				this->ready = false;
+			}
+		}
 }
