@@ -41,6 +41,24 @@ void Behavior::update(Position player, Position myself)
 	}*/
 }
 
+void Behavior::updateSpecial(Position player, Position myself)
+{
+	float distanceX = abs(player.x - myself.x);
+	float distanceY = abs(player.y - myself.y);
+
+	if (distanceX < this->avoidRadius && distanceY < this->avoidRadius)
+	{
+		this->targetInRange = true;
+		this->behavior = Follow;
+		Vector2 vec{ player.x + myself.x, player.y + myself.y };
+		this->heading = XMConvertToDegrees(atan2f(vec.x, vec.y));
+	}
+	else
+	{
+		this->targetInRange = false;
+		this->behavior = Patrol;
+	}
+}
 
 void Behavior::cohesion(Position myself, Position ally)
 {

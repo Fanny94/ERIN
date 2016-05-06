@@ -18,6 +18,16 @@ public:
 	bool inUse;
 	void Reset();
 
+	//Special Enemy
+	void updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies);
+	void SpecialReset();
+	void SpecialupdateCooldown(double sdt);
+	//coldown for bullets
+	bool sReady = true;
+	const float scooldown = 0.8f;
+	double scurrentTime;
+	//coldown for bullets
+
 	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
 	void reset();
@@ -34,7 +44,7 @@ public:
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
 	void setAcceleration(float acceleration) { this->acceleration = acceleration; };
 
-	int enemyCount = 5;
+	int enemyCount = 7;
 
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };
