@@ -1,7 +1,5 @@
 #include "Graphics.h"
 
-//http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
-
 Graphics::Graphics() {}
 
 Graphics::~Graphics()
