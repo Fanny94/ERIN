@@ -385,7 +385,7 @@ void Engine::processInput()
 					{
 						Objectpool->enemies[i].setInUse(false);
 
-						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 						this->ready = false;
 					}
 
@@ -451,27 +451,6 @@ void Engine::processInput()
 		{
 			this->running = false;
 		}
-		/*
-		if (this->player->input->State._buttons[GamePad_Button_X] == true)
-		{
-			if (this->ready)
-			{
-				cout << "enemy created" << endl;
-				this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
-				this->ready = false;
-			}
-			//this->running = false;
-		}
-		if (this->player->input->State._buttons[GamePad_Button_B] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_A] == true)
-		{
-		}
-
-		if (this->player->input->State._buttons[GamePad_Button_START] == true)
-		{
-		}*/
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
 			cout << "Shutting down game!" << endl;
@@ -669,7 +648,6 @@ void Engine::render()
 
 		if (floorClear == true)
 		{
-			
 			customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
 			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
 			Esphere->m_vecCenter = Vector3(0, 0, 0);
@@ -689,11 +667,6 @@ void Engine::render()
 					this->ready = false;
 				}
 			}
-			//Moved everything from here to its own function
-			
-			
-			
-			//Elevatorfunc();
 		}
 
 		if (player->HP > 0)
@@ -914,27 +887,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	//call the default handler function if w do not handle the message here 
 	return DefWindowProc(hWnd, message, wParam, lParam);
-}
-
-void Engine::Elevatorfunc()
-{
-		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
-		Esphere->m_vecCenter = Vector3(0, 0, 0);
-		Esphere->m_fRadius = 0.5f;
-		cout << "Render Elevater Cube" << endl;
-		if (Esphere && sphereToSphere(*player->sphere, *Esphere))
-		{
-			Objectpool->ResetBullet();
-			gameObject->reset();
-			player->NewFloorReset();
-			floorClear = false;
-			for (int i = 0; i < 5; i++)
-			{
-				Objectpool->enemies[i].setInUse(false);
-
-				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-				this->ready = false;
-			}
-		}
 }
