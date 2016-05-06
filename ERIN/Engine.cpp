@@ -473,12 +473,11 @@ void Engine::update(double deltaTimeMs)
 	switch (gameState)
 	{
 	case GameRunning:
-	{
 		Objectpool->bulletupdateCooldown(deltaTimeS);
 		updateCooldown(deltaTimeS);
 		gameObject->SpecialupdateCooldown(deltaTimeS);
 		Objectpool->spawnTimer(deltaTimeS);
-		Player Update;
+		//Player Update;
 		player->hpCooldown(deltaTimeS);
 		player->update(deltaTimeMs);
 		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
@@ -518,10 +517,10 @@ void Engine::update(double deltaTimeMs)
 
 			}
 		}
-			/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
-			Objectpool->enemies[i]->update(deltaTimeMs);*/
+		/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
+		Objectpool->enemies[i]->update(deltaTimeMs);*/
 
-			// Collision Walls
+		// Collision Walls
 		if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 		{
 			cout << "upper wall hit" << endl;
@@ -583,12 +582,6 @@ void Engine::update(double deltaTimeMs)
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
-					/*if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
-					{
-						gameObject->enemyCount -= 1;
-						Objectpool->Senemies[t].setInUse(false);
-						Objectpool->bullets[i].setInUse(false);
-					}*/
 				}
 			}
 		}
@@ -695,16 +688,6 @@ void Engine::render()
 				this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
 				this->gameObject->sReady = false;
 			}
-		}
-
-		// Custom Importer
-		for (int j = 0; j < 2; j++)
-		{
-			if (j == 0)
-				customImport->meshes.at(j).world = *player->shipMatrix;
-			if (j == 1)
-				customImport->meshes.at(j).world = *player->turretMatrix;
-			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 		}
 
 		for (int w = 11; w < 15; w++)
@@ -900,6 +883,29 @@ bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 		tBox1.m_vecMin.z < tBox2.m_vecMax.z);
 
 	//If not, it will return false
+}
+
+void Engine::Elevatorfunc()
+{
+	customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
+	graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
+	Esphere->m_vecCenter = Vector3(0, 0, 0);
+	Esphere->m_fRadius = 0.5f;
+	cout << "Render Elevater Cube" << endl;
+	if (Esphere && sphereToSphere(*player->sphere, *Esphere))
+	{
+		Objectpool->ResetBullet();
+		gameObject->reset();
+		player->NewFloorReset();
+		floorClear = false;
+		for (int i = 0; i < 5; i++)
+		{
+			Objectpool->enemies[i].setInUse(false);
+
+			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+			this->ready = false;
+		}
+	}
 }
 
 void Engine::updateCooldown(double dt)
