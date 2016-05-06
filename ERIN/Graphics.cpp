@@ -141,8 +141,6 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 	
 	for (size_t j = 0; j < mesh.material.size(); j++)
 	{
-		//memcpy(CFPtr, &mesh.material.at(j), sizeof(CustomFormat));
-		// use memcpy to copy directly from material into buffer.
 		CFPtr->diffuseColor[0] = mesh.material.at(j).diffuseColor[0];
 		CFPtr->diffuseColor[1] = mesh.material.at(j).diffuseColor[1];
 		CFPtr->diffuseColor[2] = mesh.material.at(j).diffuseColor[2];
@@ -175,27 +173,20 @@ void Graphics::CreateTexture(Mesh mesh)
 {
 	//char* p[256] = { mesh.material.at(0).diffuseMap };
 	char p[256];
+	wchar_t* pwcsName;
+
 	for (int i = 0; i < 256; i++)
 	{
 		p[i] = mesh.material.at(0).diffuseMap[i];
-	}
-	
-	wchar_t* pwcsName;
-	
-	int inChars = MultiByteToWideChar(CP_ACP, 0, p, -1, NULL, 0);
 
-	pwcsName = new wchar_t[256];
-	MultiByteToWideChar(CP_ACP, 0, p, -1, (LPWSTR)pwcsName, inChars);
-	
+	}
+
 	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
-	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, pwcsName, nullptr, &textureView, 0);
+	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, (wchar_t*)p, nullptr, &textureView, 0);
 	if (FAILED(hr))
 	{
 		//error
 	}
-
-	delete[] pwcsName;
-
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)
@@ -401,4 +392,3 @@ void Graphics::UpdateConstantBuffer()
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 }
-

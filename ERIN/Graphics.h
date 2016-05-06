@@ -65,7 +65,6 @@ public:
 	};
 
 	Matrix viewProj;
-	TriangleVertex* triangleVertices;
 
 	MATRICES* MatrixPtr;
 	MATRICES* MatrixPtr2;

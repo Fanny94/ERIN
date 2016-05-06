@@ -22,17 +22,12 @@ public:
 	// Menu handling?, what option is the player selecting
 	// Velocity info?, how fast is the player/enemy going
 
-	
-
-
 	GameLogic();
 	~GameLogic();
 
 	//bool AABBtoAABB(vector<AABBBox*> box1, vector<AABBBox*> box2);
 
 private:
-
-
 };
 
 #endif // !GAMELOGIC_H

@@ -48,6 +48,5 @@ private:
 	GameObject* first;
 	GameObject fenemy;
 	GameObject** ptrEnemy;
-
 };
 #endif

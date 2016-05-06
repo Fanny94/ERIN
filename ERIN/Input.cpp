@@ -1,7 +1,5 @@
 #include "Input.h"
 
-
-
 Input::Input(GamePadIndex player)
 {
 	playerIndex = player;
@@ -11,12 +9,10 @@ Input::Input(GamePadIndex player)
 	deadzoneY = 0.02f;
 }
 
-
 Input::~Input()
 {
 	if (isConnected()) vibrate(0.0f, 0.0f);
 }
-
 
 bool Input::isConnected()
 {
