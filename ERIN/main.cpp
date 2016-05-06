@@ -61,7 +61,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 
 			engine->render();
 		}
-
 	}
 
 	fclose(stdout);

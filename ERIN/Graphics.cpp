@@ -26,8 +26,8 @@ Graphics::~Graphics()
 	customVertBuffTemp->Release();
 	this->customVertBuffTemp = nullptr;
 
-	/*textureView->Release();
-	this->textureView = nullptr;*/
+	textureView->Release();
+	this->textureView = nullptr;
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -141,8 +141,6 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 	
 	for (size_t j = 0; j < mesh.material.size(); j++)
 	{
-		//memcpy(CFPtr, &mesh.material.at(j), sizeof(CustomFormat));
-		// use memcpy to copy directly from material into buffer.
 		CFPtr->diffuseColor[0] = mesh.material.at(j).diffuseColor[0];
 		CFPtr->diffuseColor[1] = mesh.material.at(j).diffuseColor[1];
 		CFPtr->diffuseColor[2] = mesh.material.at(j).diffuseColor[2];
@@ -165,7 +163,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
-		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
+		gDeviceContext->PSSetShaderResources(0, 1, &textureView);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
@@ -189,7 +187,6 @@ void Graphics::CreateTexture(Mesh mesh)
 	{
 		//error
 	}
-
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)
@@ -395,4 +392,3 @@ void Graphics::UpdateConstantBuffer()
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 }
-

@@ -34,7 +34,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->right_wall->point = Vector3(20, 0, 0);
 	this->right_wall->normal = Vector3(-1, 0, 0);
 
-
 	//create window
 	wndHandle = InitWindow(hInstance);
 
@@ -57,11 +56,11 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		customImport->LoadCustomFormat("../BinaryDataShip.dat");
+		customImport->LoadCustomFormat("../BinaryDataCubeT.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 
-		//graphics->CreateTexture(customImport->meshes.at(0));
+		graphics->CreateTexture(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
@@ -376,7 +375,6 @@ void Engine::processInput()
 
 					for (int i = 0; i < 5; i++)
 					{
-						
 						Objectpool->enemies[i].setInUse(false);
 
 						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
@@ -538,7 +536,6 @@ void Engine::update(double deltaTimeMs)
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
-
 				}
 			}
 		}
@@ -631,7 +628,6 @@ void Engine::render()
 
 			for (int i = 0; i < 5; i++)
 			{
-
 				Objectpool->enemies[i].setInUse(false);
 
 				this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
@@ -650,7 +646,6 @@ void Engine::render()
 	{
 		if (Objectpool->bullets[i].getInUse())
 		{
-			//graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
 			graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
 		}
 	}
@@ -790,7 +785,6 @@ bool Engine::pointInSphere(const TSphere& tSph, const Vector3& vecPoint)
 
 bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 {
-
 	//Check if Box1's max is greater than Box2's min and Box1's min is less than Box2's max
 	return(tBox1.m_vecMax.x > tBox2.m_vecMin.x &&
 		tBox1.m_vecMin.x < tBox2.m_vecMax.x &&
@@ -800,7 +794,6 @@ bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 		tBox1.m_vecMin.z < tBox2.m_vecMax.z);
 
 	//If not, it will return false
-
 }
 
 void Engine::updateCooldown(double dt)

@@ -94,7 +94,6 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 				this->behavior->separation(*myself->pos, *allEnemies[i].pos);
 			}
 		}
-	
 		//this->behavior->alignment();
 
 		float radians = XMConvertToRadians((float)heading);
@@ -191,7 +190,6 @@ void GameObject::computeTurn(double dt)
 			dir = -1;
 		heading += turnRate * dt * dir;
 	}
-
 }
 
 void GameObject::turnTo(double newHeading)
