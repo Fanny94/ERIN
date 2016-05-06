@@ -1,9 +1,7 @@
 #include "Camera.h"
 #include "Input.h"
 
-Camera::Camera()
-{
-}
+Camera::Camera() {}
 
 Camera::~Camera()
 {

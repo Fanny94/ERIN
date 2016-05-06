@@ -8,12 +8,6 @@ struct Position
 	float yPos[1];
 };
 
-struct TriangleVertex
-{
-	float x, y, z;
-	float r, g, b;
-};
-
 struct TSphere
 {
 	Vector3		m_vecCenter;

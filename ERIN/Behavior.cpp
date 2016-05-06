@@ -1,12 +1,9 @@
 #include "Behavior.h"
 
-
-
 Behavior::Behavior(BehaviorState state)
 {
 	this->behavior = Patrol;
 }
-
 
 Behavior::~Behavior()
 {
@@ -16,9 +13,6 @@ void Behavior::update(Position player, Position myself)
 {
 	float distanceX = abs(player.x - myself.x);
 	float distanceY = abs(player.y - myself.y);
-
-
-
 
 	if (distanceX < this->aggroRadius && distanceY < this->aggroRadius)
 	{
@@ -32,7 +26,6 @@ void Behavior::update(Position player, Position myself)
 		this->targetInRange = false;
 		this->behavior = Patrol;
 	}
-
 
 	/*float EnemyDistanceX = abs(thisEnemy.x - otherEnemy.x);
 	float EnemyDistanceY = abs(thisEnemy.y - otherEnemy.y);
@@ -81,7 +74,6 @@ void Behavior::alignment()
 
 void Behavior::separation(Position myself, Position ally)
 {
-
 	//Calculates the distance between 2 enemies
 	float EnemyDistanceX = abs(myself.x - ally.x);
 	float EnemyDistanceY = abs(myself.y - ally.y);

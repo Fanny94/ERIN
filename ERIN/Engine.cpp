@@ -36,7 +36,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->right_wall->point = Vector3(20, 0, 0);
 	this->right_wall->normal = Vector3(-1, 0, 0);
 
-
 	//create window
 	wndHandle = InitWindow(hInstance);
 
@@ -104,6 +103,22 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataCube.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(10));
+
+		customImport->LoadCustomFormat("../BinaryDataWall1.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(11));
+
+		customImport->LoadCustomFormat("../BinaryDataWall2.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(12));
+
+		customImport->LoadCustomFormat("../BinaryDataWall1.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(13));
+
+		customImport->LoadCustomFormat("../BinaryDataWall2.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(14));
 
 		graphics->CreateConstantBuffer();
 
@@ -368,7 +383,6 @@ void Engine::processInput()
 
 					for (int i = 0; i < 5; i++)
 					{
-
 						Objectpool->enemies[i].setInUse(false);
 
 						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
@@ -530,7 +544,6 @@ void Engine::update(double deltaTimeMs)
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
-
 				}
 			}
 		}
@@ -559,7 +572,7 @@ void Engine::update(double deltaTimeMs)
 			Objectpool->ResetBullet();
 		}
 
-		/*if (player->playerHP == 0)
+		/*if (player->HP == 0)
 		{
 			cout << "Game Over" << endl;
 
@@ -597,6 +610,43 @@ void Engine::render()
 
 		graphics->Render();
 
+	// Custom Importer
+	for (int j = 0; j < 2; j++)
+	{
+		if(j == 0)
+			customImport->meshes.at(j).world = *player->shipMatrix;
+		if (j == 1)
+			customImport->meshes.at(j).world = *player->turretMatrix;
+		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
+	}
+
+	for (int w = 11; w < 15; w++)
+	{
+		if (w == 11)
+			customImport->meshes.at(w).world = XMMatrixTranslation(22, 0, 0);
+		if (w == 12)
+			customImport->meshes.at(w).world = XMMatrixTranslation(0, 12, 0);
+		if (w == 13)
+			customImport->meshes.at(w).world = XMMatrixTranslation(-22, 0, 0);
+		if (w == 14)
+			customImport->meshes.at(w).world = XMMatrixTranslation(0, -12, 0);
+		graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
+	}
+	
+
+	if (floorClear == true)
+	{
+		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
+		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
+		Esphere->m_vecCenter = Vector3(0, 0, 0);
+		Esphere->m_fRadius = 0.5f;
+		cout << "Render Elevater Cube" << endl;
+		if (Esphere && sphereToSphere(*player->sphere, *Esphere))
+		{
+			Objectpool->ResetBullet();
+			gameObject->reset();
+			player->NewFloorReset();
+			floorClear = false;
 		//Rx = rand() % MapsMaximumXvalueWithoutHittingTheWall + MapsMinimumXvalueWithoutHittingTheWall; //might have to make them floats
 		//Ry = rand() % MapsMaximumYvalueWithoutHittingTheWall + MapsMinimumYvalueWithoutHittingTheWall; //might have to make them floats
 
@@ -638,10 +688,9 @@ void Engine::render()
 				player->NewFloorReset();
 				floorClear = false;
 
-				for (int i = 0; i < 5; i++)
-				{
-
-					Objectpool->enemies[i].setInUse(false);
+			for (int i = 0; i < 5; i++)
+			{
+				Objectpool->enemies[i].setInUse(false);
 
 					this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 					this->ready = false;
@@ -654,15 +703,14 @@ void Engine::render()
 			RendHUD();
 		}
 
-		//Bullet rendering
-		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
+	//Bullet rendering
+	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
+	{
+		if (Objectpool->bullets[i].getInUse())
 		{
-			if (Objectpool->bullets[i].getInUse())
-			{
-				//graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
-				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
-			}
+			graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
 		}
+	}
 
 		// Enemy rendering
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
@@ -799,7 +847,6 @@ bool Engine::pointInSphere(const TSphere& tSph, const Vector3& vecPoint)
 
 bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 {
-
 	//Check if Box1's max is greater than Box2's min and Box1's min is less than Box2's max
 	return(tBox1.m_vecMax.x > tBox2.m_vecMin.x &&
 		tBox1.m_vecMin.x < tBox2.m_vecMax.x &&
@@ -809,7 +856,6 @@ bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 		tBox1.m_vecMin.z < tBox2.m_vecMax.z);
 
 	//If not, it will return false
-
 }
 
 void Engine::updateCooldown(double dt)
