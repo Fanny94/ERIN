@@ -100,7 +100,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(9));
 
-		customImport->LoadCustomFormat("../BinaryDataCube.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDBase.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 
@@ -385,7 +385,7 @@ void Engine::processInput()
 					{
 						Objectpool->enemies[i].setInUse(false);
 
-						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 						this->ready = false;
 					}
 
@@ -429,6 +429,13 @@ void Engine::processInput()
 				gameState = MainMenu;
 			}
 			break;
+		case GameOver:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				gameState = MainMenu;
+			}
+			break;
 		}
 
 		// fire
@@ -444,27 +451,6 @@ void Engine::processInput()
 		{
 			this->running = false;
 		}
-		/*
-		if (this->player->input->State._buttons[GamePad_Button_X] == true)
-		{
-			if (this->ready)
-			{
-				cout << "enemy created" << endl;
-				this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
-				this->ready = false;
-			}
-			//this->running = false;
-		}
-		if (this->player->input->State._buttons[GamePad_Button_B] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_A] == true)
-		{
-		}
-
-		if (this->player->input->State._buttons[GamePad_Button_START] == true)
-		{
-		}*/
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
 			cout << "Shutting down game!" << endl;
@@ -572,7 +558,7 @@ void Engine::update(double deltaTimeMs)
 			Objectpool->ResetBullet();
 		}
 
-		/*if (player->HP == 0)
+		if (player->HP == 0)
 		{
 			cout << "Game Over" << endl;
 
@@ -585,7 +571,7 @@ void Engine::update(double deltaTimeMs)
 			}
 
 			gameState = GameOver;
-		}*/
+		}
 
 		break;
 	case TitleScreen:
@@ -650,7 +636,6 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
 		}
 
-
 		// Custom Importer
 		for (int j = 0; j < 2; j++)
 		{
@@ -663,12 +648,11 @@ void Engine::render()
 
 		if (floorClear == true)
 		{
-			
 			customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
 			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
 			Esphere->m_vecCenter = Vector3(0, 0, 0);
-			Esphere->m_fRadius = 0.5f;
-			cout << "Render Elevater Cube" << endl;
+			Esphere->m_fRadius = 1.5f;
+
 			if (Esphere && sphereToSphere(*player->sphere, *Esphere))
 			{
 				Objectpool->ResetBullet();
@@ -683,11 +667,6 @@ void Engine::render()
 					this->ready = false;
 				}
 			}
-			//Moved everything from here to its own function
-			
-			
-			
-			//Elevatorfunc();
 		}
 
 		if (player->HP > 0)
@@ -729,7 +708,7 @@ void Engine::render()
 		//graphics->PauseRender();
 		break;
 	case GameOver:
-		//graphics->GameOverRender();
+		graphics->GameOverRender();
 		break;
 	case HighScore:
 		graphics->HighScoreRender();
@@ -908,27 +887,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	//call the default handler function if w do not handle the message here 
 	return DefWindowProc(hWnd, message, wParam, lParam);
-}
-
-void Engine::Elevatorfunc()
-{
-		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
-		Esphere->m_vecCenter = Vector3(0, 0, 0);
-		Esphere->m_fRadius = 0.5f;
-		cout << "Render Elevater Cube" << endl;
-		if (Esphere && sphereToSphere(*player->sphere, *Esphere))
-		{
-			Objectpool->ResetBullet();
-			gameObject->reset();
-			player->NewFloorReset();
-			floorClear = false;
-			for (int i = 0; i < 5; i++)
-			{
-				Objectpool->enemies[i].setInUse(false);
-
-				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-				this->ready = false;
-			}
-		}
 }
