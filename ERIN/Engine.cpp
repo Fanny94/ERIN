@@ -21,19 +21,19 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 	// upper
 	this->upper_wall = new Wall();
-	this->upper_wall->point = Vector3(0, 10, 0);
+	this->upper_wall->point = Vector3(0, 11, 0);
 	this->upper_wall->normal = Vector3(0, -1, 0);
 	// left
 	this->left_wall = new Wall();
-	this->left_wall->point = Vector3(-20, 0, 0);
+	this->left_wall->point = Vector3(-21, 0, 0);
 	this->left_wall->normal = Vector3(1, 0, 0);
 	// lower
 	this->lower_wall = new Wall();
-	this->lower_wall->point = Vector3(0, -10, 0);
+	this->lower_wall->point = Vector3(0, -11, 0);
 	this->lower_wall->normal = Vector3(0, 1, 0);
 	// right
 	this->right_wall = new Wall();
-	this->right_wall->point = Vector3(20, 0, 0);
+	this->right_wall->point = Vector3(21, 0, 0);
 	this->right_wall->normal = Vector3(-1, 0, 0);
 
 	//create window
@@ -610,43 +610,6 @@ void Engine::render()
 
 		graphics->Render();
 
-	// Custom Importer
-	for (int j = 0; j < 2; j++)
-	{
-		if(j == 0)
-			customImport->meshes.at(j).world = *player->shipMatrix;
-		if (j == 1)
-			customImport->meshes.at(j).world = *player->turretMatrix;
-		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
-	}
-
-	for (int w = 11; w < 15; w++)
-	{
-		if (w == 11)
-			customImport->meshes.at(w).world = XMMatrixTranslation(22, 0, 0);
-		if (w == 12)
-			customImport->meshes.at(w).world = XMMatrixTranslation(0, 12, 0);
-		if (w == 13)
-			customImport->meshes.at(w).world = XMMatrixTranslation(-22, 0, 0);
-		if (w == 14)
-			customImport->meshes.at(w).world = XMMatrixTranslation(0, -12, 0);
-		graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
-	}
-	
-
-	if (floorClear == true)
-	{
-		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
-		Esphere->m_vecCenter = Vector3(0, 0, 0);
-		Esphere->m_fRadius = 0.5f;
-		cout << "Render Elevater Cube" << endl;
-		if (Esphere && sphereToSphere(*player->sphere, *Esphere))
-		{
-			Objectpool->ResetBullet();
-			gameObject->reset();
-			player->NewFloorReset();
-			floorClear = false;
 		//Rx = rand() % MapsMaximumXvalueWithoutHittingTheWall + MapsMinimumXvalueWithoutHittingTheWall; //might have to make them floats
 		//Ry = rand() % MapsMaximumYvalueWithoutHittingTheWall + MapsMinimumYvalueWithoutHittingTheWall; //might have to make them floats
 
@@ -674,6 +637,30 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 		}
 
+		for (int w = 11; w < 15; w++)
+		{
+			if (w == 11)
+				customImport->meshes.at(w).world = XMMatrixTranslation(22, 0, 0);
+			if (w == 12)
+				customImport->meshes.at(w).world = XMMatrixTranslation(0, 12, 0);
+			if (w == 13)
+				customImport->meshes.at(w).world = XMMatrixTranslation(-22, 0, 0);
+			if (w == 14)
+				customImport->meshes.at(w).world = XMMatrixTranslation(0, -12, 0);
+			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
+		}
+
+
+		// Custom Importer
+		for (int j = 0; j < 2; j++)
+		{
+			if (j == 0)
+				customImport->meshes.at(j).world = *player->shipMatrix;
+			if (j == 1)
+				customImport->meshes.at(j).world = *player->turretMatrix;
+			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
+		}
+
 		if (floorClear == true)
 		{
 			customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
@@ -688,9 +675,9 @@ void Engine::render()
 				player->NewFloorReset();
 				floorClear = false;
 
-			for (int i = 0; i < 5; i++)
-			{
-				Objectpool->enemies[i].setInUse(false);
+				for (int i = 0; i < 5; i++)
+				{
+					Objectpool->enemies[i].setInUse(false);
 
 					this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 					this->ready = false;
@@ -703,14 +690,14 @@ void Engine::render()
 			RendHUD();
 		}
 
-	//Bullet rendering
-	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
-	{
-		if (Objectpool->bullets[i].getInUse())
+		//Bullet rendering
+		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 		{
-			graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
+			if (Objectpool->bullets[i].getInUse())
+			{
+				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
+			}
 		}
-	}
 
 		// Enemy rendering
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
