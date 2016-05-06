@@ -100,7 +100,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(9));
 
-		customImport->LoadCustomFormat("../BinaryDataCube.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDBase.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 
@@ -650,7 +650,6 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
 		}
 
-
 		// Custom Importer
 		for (int j = 0; j < 2; j++)
 		{
@@ -666,7 +665,7 @@ void Engine::render()
 			customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
 			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
 			Esphere->m_vecCenter = Vector3(0, 0, 0);
-			Esphere->m_fRadius = 0.5f;
+			Esphere->m_fRadius = 1.0f;
 			cout << "Render Elevater Cube" << endl;
 			if (Esphere && sphereToSphere(*player->sphere, *Esphere))
 			{
