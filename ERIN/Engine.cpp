@@ -14,24 +14,26 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->Objectpool = new ObjectPool();
 	this->gameObject = new GameObject();
 
+	//srand(static_cast <unsigned> (time(0)));
+
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
 
 	// upper
 	this->upper_wall = new Wall();
-	this->upper_wall->point = Vector3(0, 10, 0);
+	this->upper_wall->point = Vector3(0, 11, 0);
 	this->upper_wall->normal = Vector3(0, -1, 0);
 	// left
 	this->left_wall = new Wall();
-	this->left_wall->point = Vector3(-20, 0, 0);
+	this->left_wall->point = Vector3(-21, 0, 0);
 	this->left_wall->normal = Vector3(1, 0, 0);
 	// lower
 	this->lower_wall = new Wall();
-	this->lower_wall->point = Vector3(0, -10, 0);
+	this->lower_wall->point = Vector3(0, -11, 0);
 	this->lower_wall->normal = Vector3(0, 1, 0);
 	// right
 	this->right_wall = new Wall();
-	this->right_wall->point = Vector3(20, 0, 0);
+	this->right_wall->point = Vector3(21, 0, 0);
 	this->right_wall->normal = Vector3(-1, 0, 0);
 
 	//create window
@@ -269,20 +271,10 @@ void Engine::processInput()
 				}
 			}
 
-			//spawn enemies
-			//if (this->player->input->State._buttons[GamePad_Button_X] == true)
-			//{
-				if (this->ready)
-				{
-					for (int i = 0; i < 5; i++)
-					{
-						cout << "enemy created" << endl;
-						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
-						this->ready = false;
-					}
-				}
-				//this->running = false;
-			//}
+			if (this->player->input->State._buttons[GamePad_Button_X] == true)
+			{
+
+			}
 
 			if (this->player->input->State._buttons[GamePad_Button_START] == true)
 			{
@@ -519,22 +511,22 @@ void Engine::update(double deltaTimeMs)
 		if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 		{
 			cout << "upper wall hit" << endl;
-				player->SetY(upper_wall->point.y - 0.5f);
+			player->SetY(upper_wall->point.y - 0.5f);
 		}
 		if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
 		{
 			cout << "left wall hit" << endl;
-				player->SetX(left_wall->point.x + 0.5f);
+			player->SetX(left_wall->point.x + 0.5f);
 		}
 		if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
 		{
 			cout << "lower wall hit" << endl;
-				player->SetY(lower_wall->point.y + 0.5f);
+			player->SetY(lower_wall->point.y + 0.5f);
 		}
 		if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
 		{
 			cout << "right wall hit" << endl;
-				player->SetX(right_wall->point.x - 0.5f);
+			player->SetX(right_wall->point.x - 0.5f);
 		}
 
 		//Collision Bullets
@@ -616,81 +608,108 @@ void Engine::render()
 	{
 	case GameRunning:
 
-	graphics->Render();
+		graphics->Render();
 
-	// Custom Importer
-	for (int j = 0; j < 2; j++)
-	{
-		if(j == 0)
-			customImport->meshes.at(j).world = *player->shipMatrix;
-		if (j == 1)
-			customImport->meshes.at(j).world = *player->turretMatrix;
-		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
-	}
+		//Rx = rand() % MapsMaximumXvalueWithoutHittingTheWall + MapsMinimumXvalueWithoutHittingTheWall; //might have to make them floats
+		//Ry = rand() % MapsMaximumYvalueWithoutHittingTheWall + MapsMinimumYvalueWithoutHittingTheWall; //might have to make them floats
 
-	for (int w = 11; w < 15; w++)
-	{
-		if (w == 11)
-			customImport->meshes.at(w).world = XMMatrixTranslation(22, 0, 0);
-		if (w == 12)
-			customImport->meshes.at(w).world = XMMatrixTranslation(0, 12, 0);
-		if (w == 13)
-			customImport->meshes.at(w).world = XMMatrixTranslation(-22, 0, 0);
-		if (w == 14)
-			customImport->meshes.at(w).world = XMMatrixTranslation(0, -12, 0);
-		graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
-	}
-	
+		Rx = -20 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (20 - (-20))));
+		Ry = -10 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (10 - (-10))));
 
-	if (floorClear == true)
-	{
-		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
-		Esphere->m_vecCenter = Vector3(0, 0, 0);
-		Esphere->m_fRadius = 0.5f;
-		cout << "Render Elevater Cube" << endl;
-		if (Esphere && sphereToSphere(*player->sphere, *Esphere))
+		//spawn enemies
+		if (this->ready)
 		{
-			Objectpool->ResetBullet();
-			gameObject->reset();
-			player->NewFloorReset();
-			floorClear = false;
-
 			for (int i = 0; i < 5; i++)
 			{
-				Objectpool->enemies[i].setInUse(false);
-
-				this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+				cout << "enemy created" << endl;
+				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 				this->ready = false;
 			}
 		}
-	}
 
-	if (player->HP > 0)
-	{
-		RendHUD();
-	}
-
-	//Bullet rendering
-	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
-	{
-		if (Objectpool->bullets[i].getInUse())
+		// Custom Importer
+		for (int j = 0; j < 2; j++)
 		{
-			graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
+			if (j == 0)
+				customImport->meshes.at(j).world = *player->shipMatrix;
+			if (j == 1)
+				customImport->meshes.at(j).world = *player->turretMatrix;
+			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 		}
-	}
 
-	// Enemy rendering
-	for (int i = 0; i < Objectpool->e_poolSize; i++)
-	{
-		if (Objectpool->enemies[i].getInUse())
+		for (int w = 11; w < 15; w++)
 		{
-			graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2);
+			if (w == 11)
+				customImport->meshes.at(w).world = XMMatrixTranslation(22, 0, 0);
+			if (w == 12)
+				customImport->meshes.at(w).world = XMMatrixTranslation(0, 12, 0);
+			if (w == 13)
+				customImport->meshes.at(w).world = XMMatrixTranslation(-22, 0, 0);
+			if (w == 14)
+				customImport->meshes.at(w).world = XMMatrixTranslation(0, -12, 0);
+			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
 		}
-	}
 
-	// Camera Update
-	camera->InitCamera();
+
+		// Custom Importer
+		for (int j = 0; j < 2; j++)
+		{
+			if (j == 0)
+				customImport->meshes.at(j).world = *player->shipMatrix;
+			if (j == 1)
+				customImport->meshes.at(j).world = *player->turretMatrix;
+			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
+		}
+
+		if (floorClear == true)
+		{
+			customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
+			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
+			Esphere->m_vecCenter = Vector3(0, 0, 0);
+			Esphere->m_fRadius = 0.5f;
+			cout << "Render Elevater Cube" << endl;
+			if (Esphere && sphereToSphere(*player->sphere, *Esphere))
+			{
+				Objectpool->ResetBullet();
+				gameObject->reset();
+				player->NewFloorReset();
+				floorClear = false;
+
+				for (int i = 0; i < 5; i++)
+				{
+					Objectpool->enemies[i].setInUse(false);
+
+					this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+					this->ready = false;
+				}
+			}
+		}
+
+		if (player->HP > 0)
+		{
+			RendHUD();
+		}
+
+		//Bullet rendering
+		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
+		{
+			if (Objectpool->bullets[i].getInUse())
+			{
+				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
+			}
+		}
+
+		// Enemy rendering
+		for (int i = 0; i < Objectpool->e_poolSize; i++)
+		{
+			if (Objectpool->enemies[i].getInUse())
+			{
+				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2);
+			}
+		}
+
+		// Camera Update
+		camera->InitCamera();
 
 		break;
 	case TitleScreen:
@@ -722,7 +741,7 @@ void Engine::render()
 void Engine::RendHUD()
 {
 	int i = 4;
-	
+
 	if (player->HP >= 1)
 	{
 		customImport->meshes.at(i).world = XMMatrixTranslation(0, 0, 0);
