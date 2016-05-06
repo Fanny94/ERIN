@@ -56,11 +56,11 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		customImport->LoadCustomFormat("../BinaryDataCubeT.dat");
+		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 
-		graphics->CreateTexture(customImport->meshes.at(0));
+		//graphics->CreateTexture(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
@@ -101,6 +101,22 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataCube.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(10));
+
+		customImport->LoadCustomFormat("../BinaryDataWall1.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(11));
+
+		customImport->LoadCustomFormat("../BinaryDataWall2.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(12));
+
+		customImport->LoadCustomFormat("../BinaryDataWall1.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(13));
+
+		customImport->LoadCustomFormat("../BinaryDataWall2.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(14));
 
 		graphics->CreateConstantBuffer();
 
@@ -564,7 +580,7 @@ void Engine::update(double deltaTimeMs)
 			Objectpool->ResetBullet();
 		}
 
-		/*if (player->playerHP == 0)
+		/*if (player->HP == 0)
 		{
 			cout << "Game Over" << endl;
 
@@ -611,6 +627,20 @@ void Engine::render()
 			customImport->meshes.at(j).world = *player->turretMatrix;
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
+
+	for (int w = 11; w < 15; w++)
+	{
+		if (w == 11)
+			customImport->meshes.at(w).world = XMMatrixTranslation(22, 0, 0);
+		if (w == 12)
+			customImport->meshes.at(w).world = XMMatrixTranslation(0, 12, 0);
+		if (w == 13)
+			customImport->meshes.at(w).world = XMMatrixTranslation(-22, 0, 0);
+		if (w == 14)
+			customImport->meshes.at(w).world = XMMatrixTranslation(0, -12, 0);
+		graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
+	}
+	
 
 	if (floorClear == true)
 	{
