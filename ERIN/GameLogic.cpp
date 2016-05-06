@@ -2,7 +2,7 @@
 
 GameLogic::GameLogic()
 {
-	cout << "created gameLogic";
+	cout << "Created gameLogic" << endl;
 }
 
 GameLogic::~GameLogic()

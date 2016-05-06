@@ -21,12 +21,6 @@ Player::Player(string name, float x, float y, float z)
 
 	this->input = new Input(GamePadIndex_One);
 
-	this->triangle = new TriangleVertex[3];
-
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
-
 	//this->objectMatrix = new Matrix();
 	this->shipMatrix = new Matrix();
 	this->turretMatrix = new Matrix();
@@ -43,8 +37,6 @@ Player::Player(string name, float x, float y, float z)
 Player::~Player()
 {
 	delete this->input;
-	delete this->triangle;
-	//delete this->objectMatrix;
 	delete this->shipMatrix;
 	delete this->turretMatrix;
 	delete this->shipPos;
@@ -156,6 +148,18 @@ void Player::PlayerReset()
 	this->SetY(0);
 	this->SetZ(0);
 
+	this->HP = 6;
+
+	this->heading = 0;
+	this->plannedHeading = 0;
+}
+
+void Player::NewFloorReset()
+{
+	this->SetX(3);
+	this->SetY(0);
+	this->SetZ(0);
+
 	this->heading = 0;
 	this->plannedHeading = 0;
 }
@@ -216,4 +220,17 @@ double Player::getTVx()
 double Player::getTVy()
 {
 	return tr_speed * asin(heading * M_PI / 180);
+}
+
+void Player::hpCooldown(double hpdt)
+{
+	if (hpcooldown <= hpcurrentTime)
+	{
+		hpcurrentTime = 0.0f;
+		hpReady = true;
+	}
+	else
+	{
+		hpcurrentTime += hpdt;
+	}
 }

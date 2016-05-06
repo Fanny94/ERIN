@@ -51,44 +51,28 @@ void Behavior::update(Position player, Position myself)
 
 void Behavior::cohesion(Position myself, Position ally)
 {
-	/*float calc1 = myself.x + ally.x;
-	float calc2 = myself.y + ally.y;
-	int N = 5;
+	float CohesionX = 0, CohesionY = 0;
+	float CohesionCount = 0;
+	float cohesion = 0.09f;
+
 	
-	float EnemyDistanceX = abs(myself.x - ally.x);
-	float EnemyDistanceY = abs(myself.y - ally.y);
-	if (EnemyDistanceX > 5.0f && EnemyDistanceY > 5.0f)
+	float enemyDist = sqrt(pow((ally.y - myself.x), 2) + pow((ally.y - myself.x), 2));
+	if ((enemyDist < 2))
 	{
-		Vector2 forceVec = Vector2(calc1 / (N - 1), calc2 / (N - 1));
-		Vector2 compVec = { ally.x, ally.y };
-
-		Vector2 finalVec = (forceVec - compVec) / 100;
-		this->heading = XMConvertToDegrees(atan2f(finalVec.x, finalVec.y));
-	}
-	vector<int> CenterOfMass;
-
-	int Neighbors;
-	double Average;
-
-	 //Loop through all enemies and check so that it is not checking itself as a someone else
-	for (myself)
-	{
-		if (!myself)
-		{
-			force += Vector2(1, 2);
-			CenterOfMass += thisEnemy;
-			Neighbors++
-		}
+		CohesionX += myself.x + heading;
+		CohesionY += myself.y + heading;
+		CohesionCount++;
 	}
 
-	//If there are Neighbors nearby
-	if (Neighbors > 0)
+	if (CohesionCount > 0)
 	{
-		// Calculate the average of CenterOfMass with Neighbors as parameter
-		Average;
-		ForceVec = CenterOfMass - otherEnemy;
-		ForceVec = ForceVec.Normalize;
-	}*/
+		CohesionX = (CohesionX / CohesionCount) - myself.x;
+		CohesionY = (CohesionY / CohesionCount) - myself.y;
+		CohesionX = (CohesionX / (sqrt(pow(CohesionX, 2) + pow(CohesionY, 2)))) * VelX;
+		CohesionY = (CohesionY / (sqrt(pow(CohesionX, 2) + pow(CohesionY, 2)))) * VelY;
+		heading += (CohesionX - heading) * cohesion;
+		heading += (CohesionY - heading) * cohesion;
+	}
 }
 
 void Behavior::alignment()
@@ -127,5 +111,33 @@ void Behavior::separation(Position myself, Position ally)
 	{
 	vector<float> Diff(DistanceX, DistanceY);
 	Counter++;
+	}*/
+}
+
+void Behavior::ObstacleAvoidance(Position myself)
+{
+	/*ahead = myself + velocity; //*MAX_SE_AHEAD; add this if we need to limit how far the enemy sees obstacles
+	ahead2 = position + velocity; //*MAX_SE_AHEAD * 0.5; this is just ahead cut in half*/
+
+	//Need a function that checks if the ahead instersects something that it can collide with
+
+	//avoidanceForce = ahead - obstacleCenter; //Calculates the force that needs to be applied to the ships direction to avoid the obstacle
+	//avoidanceForce = normalize(avoidanceForce) * MAXAVOIDANCEFORCE; //Here we are able to easily change the maximum force that can be applied to the ships direction
+
+		/*var mostThreatening : Obstacle = findMostThreateningObstacle();
+		var avoidance : Vector3D = new Vector3D(0, 0, 0);
+
+		if (mostThreatening != null) {
+			avoidance.x = ahead.x - mostThreatening.center.x;
+			avoidance.y = ahead.y - mostThreatening.center.y;
+
+			avoidance.normalize();
+			avoidance.scaleBy(MAX_AVOID_FORCE);
+		}
+		else {
+			avoidance.scaleBy(0); // nullify the avoidance force
+		}
+
+		return avoidance;
 	}*/
 }

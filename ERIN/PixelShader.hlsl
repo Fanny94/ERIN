@@ -1,5 +1,5 @@
-SamplerState ObjSamplerState;
-Texture2D ObjTexture: register(t0);
+SamplerState CustomSamplerState;
+Texture2D CustomTexture: register(t0);
 
 cbuffer CustomFormat
 {
@@ -33,21 +33,20 @@ float4 PS_main(VS_OUT input) : SV_Target
 	float4 v = normalize(input.CamPos - input.WPos);
 	float4 r = reflect(-s, input.Nor);
 
-	/*if (hasTexture == true)
-		diffuse = ObjTexture.Sample(ObjSamplerState, input.uv).xyz;*/
+
+	float3 diffuseMap = CustomTexture.Sample(CustomSamplerState, input.uv).xyz;
 
 	input.Nor = normalize(input.Nor);
 
-
-	float3 diffuseLight = diffuseColor * max(dot(s, input.Nor), 0.0f);
-
+	float3 diffuseLight = /*diffuseMap **/ diffuseColor * max(dot(s, input.Nor), 0.0f);
 	float3 diffuse = diffuseColor * max(dot(t, input.Nor), 0.0f);
 
 	float3 ambientLight = {0.2, 0.2, 0.2};
 
 	float3 specularLight = specularColor * pow(max(dot(r, v), 0.0f), shininess);
 
-	float4 color = float4((lightIntensity * ( ambientLight + diffuseLight + diffuse + specularLight)), 1.0f);
+	float4 color = float4((lightIntensity * ( ambientLight + diffuseLight + diffuse/* + specularLight*/)), 1.0f);
+
 
 	return color;
 };

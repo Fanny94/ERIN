@@ -4,11 +4,6 @@ GameObject::GameObject()
 	: name("noName"),
 	x(0.0f), y(0.0f), z(0.0f)
 {
-	this->triangle = new TriangleVertex[3];
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
-
 	this->objectMatrix = new Matrix();
 
 	this->behavior = new Behavior(Patrol);
@@ -35,12 +30,6 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	float Ran = lO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (hI - lO)));
 	this->acceleration = Ran;
 
-	// test triangle in gameobject ( should be a mesh number )
-	this->triangle = new TriangleVertex[3];
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
-
 	this->objectMatrix = new Matrix();
 
 	// behavoir
@@ -53,11 +42,13 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->sphere = new TSphere();
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 	this->sphere->m_fRadius = 0.5f;
+
+	this->behavior->VelX = getVelocityX();
+	this->behavior->VelY = getVelocityY();
 }
 
 GameObject::~GameObject()
 {
-	delete this->triangle;
 	delete this->objectMatrix;
 	delete this->pos;
 	delete this->sphere;
@@ -167,6 +158,9 @@ void GameObject::reset()
 	this->y = 0.0f;
 	this->z = 0.0f;
 
+	this->heading = 0;
+	this->plannedHeading = 0;
+
 	this->speed = 0.0f;
 
 	delete this->objectMatrix;
@@ -212,4 +206,3 @@ double GameObject::getVy()
 {
 	return r_speed * asin(heading * M_PI / 180);
 }
-

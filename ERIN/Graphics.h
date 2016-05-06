@@ -25,8 +25,6 @@ public:
 	void HighScoreRender();
 	void HelpAndOptionsRender();
 
-	void RendBullets(Matrix transform);
-
 	void CustomVertexBuffer(Mesh mesh);
 	void RenderCustom(Mesh mesh, Matrix transform, int cvb);
 	void CustomUpdateBuffer(Matrix transform);
@@ -34,11 +32,11 @@ public:
 	void CreateShaders();
 	void CreateDepthBuffer();
 
-	void CreateTriangle(TriangleVertex* triangleVertices);
-	void CreateTriangle();
 	void CreateConstantBuffer();
 
 	void UpdateConstantBuffer();
+
+	void CreateTexture(Mesh mesh);
 
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
@@ -121,6 +119,8 @@ private:
 
 	vector<ID3D11Buffer*> customVertBuff;
 	ID3D11Buffer* customVertBuffTemp;
+ 
+	ID3D11ShaderResourceView* textureView;
 	HRESULT hr;
 };
 

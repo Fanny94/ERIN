@@ -18,6 +18,11 @@ public:
 
 	void update(Position player, Position myself);
 
+	void ObstacleAvoidance(Position myself);
+
+	float VelX;
+	float VelY;
+	
 	// flock AI
 	void cohesion(Position myself, Position ally);
 	void alignment();

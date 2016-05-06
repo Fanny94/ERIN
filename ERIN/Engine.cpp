@@ -9,16 +9,13 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->graphics = new Graphics();
 	this->gameLogic = new GameLogic();
 
+	Esphere = new TSphere();
+
 	this->Objectpool = new ObjectPool();
 	this->gameObject = new GameObject();
 
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
-
-	this->triangle = new TriangleVertex[3];
-	this->triangle[0] = { 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, };
-	this->triangle[1] = { 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, };
-	this->triangle[2] = { -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f };
 
 	// upper
 	this->upper_wall = new Wall();
@@ -60,16 +57,51 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		graphics->CreateTriangle(this->triangle);
-
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 
+		//graphics->CreateTexture(customImport->meshes.at(0));
+
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(1));
-		//customImport->NewMesh();
+
+		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(2));
+
+		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(3));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP1.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(4));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(5));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP5.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(6));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP4.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(7));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP3.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(8));
+
+		customImport->LoadCustomFormat("../BinaryDataHUDHP2.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(9));
+
+		customImport->LoadCustomFormat("../BinaryDataCube.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 
 		graphics->CreateConstantBuffer();
 
@@ -84,6 +116,8 @@ Engine::~Engine()
 	delete this->customImport;
 	delete this->gameLogic;
 
+	delete this->Esphere;
+
 	delete this->player;
 	//delete this->gameObject;
 
@@ -96,7 +130,6 @@ Engine::~Engine()
 	}
 	delete enemies;*/
 
-	delete triangle;
 	delete this->upper_wall;
 	delete this->left_wall;
 	delete this->lower_wall;
@@ -334,9 +367,11 @@ void Engine::processInput()
 					cout << "Restart" << endl;
 
 					pMenuOption = 0;
+					floorClear = false;
 					gameObject->reset();
 					Objectpool->ResetBullet();
 					player->PlayerReset();
+					Objectpool->ResetBullet();
 					camera->ResetCamera();
 
 					for (int i = 0; i < 5; i++)
@@ -360,6 +395,9 @@ void Engine::processInput()
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
 					player->PlayerReset();
+					gameObject->reset();
+					Objectpool->ResetBullet();
+					floorClear = false;
 
 					for (int i = 0; i < 5; i++)
 					{
@@ -426,35 +464,6 @@ void Engine::processInput()
 			cout << "Shutting down game!" << endl;
 			this->running = false;
 		}
-
-		// BUMPERS & TRIGGERS
-		/*if (this->player->input->State._buttons[GamePad_Button_LEFT_THUMB] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_RIGHT_THUMB] == true)
-		{
-		}
-
-		if (this->player->input->State._buttons[GamePad_Button_LEFT_SHOULDER] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
-		{
-		}*/
-
-		// DPAD
-		/*if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
-		{
-		}
-		if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
-		{
-		}*/
 	}
 }
 
@@ -469,6 +478,7 @@ void Engine::update(double deltaTimeMs)
 		Objectpool->bulletupdateCooldown(deltaTimeS);
 		updateCooldown(deltaTimeS);
 		// Player Update
+		player->hpCooldown(deltaTimeS);
 		player->update(deltaTimeMs);
 		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
 		gameObject->update(deltaTimeMs);*/
@@ -539,18 +549,22 @@ void Engine::update(double deltaTimeMs)
 			if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
 			{
 				cout << "sphere hit" << endl;
-				//Objectpool->enemies[i].reset();
-				//Objectpool->enemies[i].setInUse(false);
+				if (player->getHpCooldown())
+				{
+					player->HP -= 1;
+					//Objectpool->enemies[i].reset();
+					//Objectpool->enemies[i].setInUse(false);
+					player->setHpCooldown(false);
+				}
 			}
 		}
 
 		if (gameObject->enemyCount == 0)
 		{
 			cout << "Reset Game" << endl;
+			floorClear = true;
 			gameObject->reset();
-			player->PlayerReset();
 			Objectpool->ResetBullet();
-			this->ready = true;
 		}
 
 		/*if (player->playerHP == 0)
@@ -570,6 +584,11 @@ void Engine::update(double deltaTimeMs)
 
 		break;
 	case TitleScreen:
+		if (printTitle == true)
+		{
+			cout << "Title Screen | Press Start to Continue" << endl;
+			printTitle = false;
+		}
 		break;
 	case MainMenu:
 		break;
@@ -580,15 +599,11 @@ void Engine::update(double deltaTimeMs)
 
 void Engine::render()
 {
-	//graphics->UpdateConstantBuffer();
-
 	switch (gameState)
 	{
 	case GameRunning:
 
 	graphics->Render();
-	//graphics->RendPlayer(*player->shipMatrix);
-	//graphics->RendPlayer(*player->turretMatrix);
 
 	// Custom Importer
 	for (int j = 0; j < 2; j++)
@@ -600,12 +615,43 @@ void Engine::render()
 		graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
 	}
 
+	if (floorClear == true)
+	{
+		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
+		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
+		Esphere->m_vecCenter = Vector3(0, 0, 0);
+		Esphere->m_fRadius = 0.5f;
+		cout << "Render Elevater Cube" << endl;
+		if (Esphere && sphereToSphere(*player->sphere, *Esphere))
+		{
+			Objectpool->ResetBullet();
+			gameObject->reset();
+			player->NewFloorReset();
+			floorClear = false;
+
+			for (int i = 0; i < 5; i++)
+			{
+
+				Objectpool->enemies[i].setInUse(false);
+
+				this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
+				this->ready = false;
+			}
+		}
+	}
+
+	if (player->HP > 0)
+	{
+		RendHUD();
+	}
+
 	//Bullet rendering
 	for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 	{
 		if (Objectpool->bullets[i].getInUse())
 		{
-			graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
+			//graphics->RendBullets(*Objectpool->bullets[i].bulletMatrix);
+			graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
 		}
 	}
 
@@ -614,8 +660,7 @@ void Engine::render()
 	{
 		if (Objectpool->enemies[i].getInUse())
 		{
-
-			graphics->RendBullets(*Objectpool->enemies[i].objectMatrix);
+			graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2);
 		}
 	}
 
@@ -647,6 +692,42 @@ void Engine::render()
 
 	// Switch front- and back-buffer
 	graphics->get_gSwapChain()->Present(1, 0);
+}
+
+void Engine::RendHUD()
+{
+	int i = 4;
+	
+	if (player->HP >= 1)
+	{
+		customImport->meshes.at(i).world = XMMatrixTranslation(0, 0, 0);
+		graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i).world, i + 0);
+
+		if (player->HP >= 2)
+		{
+			graphics->RenderCustom(customImport->meshes.at(i + 1), customImport->meshes.at(i).world, i + 1);
+
+			if (player->HP >= 3)
+			{
+				graphics->RenderCustom(customImport->meshes.at(i + 2), customImport->meshes.at(i).world, i + 2);
+
+				if (player->HP >= 4)
+				{
+					graphics->RenderCustom(customImport->meshes.at(i + 3), customImport->meshes.at(i).world, i + 3);
+
+					if (player->HP >= 5)
+					{
+						graphics->RenderCustom(customImport->meshes.at(i + 4), customImport->meshes.at(i).world, i + 4);
+
+						if (player->HP >= 6)
+						{
+							graphics->RenderCustom(customImport->meshes.at(i + 5), customImport->meshes.at(i).world, i + 5);
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 bool Engine::sphereToSphere(const TSphere& tSph1, const TSphere& tSph2)

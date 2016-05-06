@@ -13,7 +13,6 @@ Graphics::~Graphics()
 
 	gVertexLayout->Release();
 	gVertexShader->Release();
-	gVertexBuffer->Release();
 	gPixelShader->Release();
 
 	gDepthView->Release();
@@ -24,8 +23,11 @@ Graphics::~Graphics()
 	customFormatBuffer->Release();
 	this->customFormatBuffer = nullptr;
 
-	/*customVertBuff->Release();
-	this->customVertBuff = nullptr;*/
+	customVertBuffTemp->Release();
+	this->customVertBuffTemp = nullptr;
+
+	/*textureView->Release();
+	this->textureView = nullptr;*/
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -108,20 +110,6 @@ void Graphics::HelpAndOptionsRender()
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
-void Graphics::RendBullets(Matrix transform)
-{
-	UINT32 vertexSize = sizeof(float) * 6;
-	UINT32 offset = 0;
-
-	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
-	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	
-
-	CustomUpdateBuffer(transform);
-
-	gDeviceContext->Draw(3, 0);
-}
-
 void Graphics::CustomVertexBuffer(Mesh mesh)
 {
 	//Create Vertex Buffer
@@ -177,11 +165,37 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
+		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
-	// REMOVE and allocate per mesh, and never release when the game finishes
-	//customVertBuff->Release();
+}
+
+void Graphics::CreateTexture(Mesh mesh)
+{
+	//char* p[256] = { mesh.material.at(0).diffuseMap };
+	char p[256];
+	for (int i = 0; i < 256; i++)
+	{
+		p[i] = mesh.material.at(0).diffuseMap[i];
+	}
+	
+	wchar_t* pwcsName;
+	
+	int inChars = MultiByteToWideChar(CP_ACP, 0, p, -1, NULL, 0);
+
+	pwcsName = new wchar_t[256];
+	MultiByteToWideChar(CP_ACP, 0, p, -1, (LPWSTR)pwcsName, inChars);
+	
+	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
+	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, pwcsName, nullptr, &textureView, 0);
+	if (FAILED(hr))
+	{
+		//error
+	}
+
+	delete[] pwcsName;
+
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)
@@ -324,45 +338,6 @@ void Graphics::CreateDepthBuffer()
 	gDevice->CreateTexture2D(&desc, 0, &gDepthView);
 
 	gDevice->CreateDepthStencilView(gDepthView, 0, &gDepthStencilView);
-
-}
-
-void Graphics::CreateTriangle(TriangleVertex* triangleVertices)
-{
-	D3D11_BUFFER_DESC bufferDesc;
-	memset(&bufferDesc, 0, sizeof(bufferDesc));
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(float) * 18;
-
-	D3D11_SUBRESOURCE_DATA data;
-	data.pSysMem = triangleVertices;
-	gDevice->CreateBuffer(&bufferDesc, &data, &gVertexBuffer);
-}
-
-void Graphics::CreateTriangle()
-{
-	TriangleVertex triangleVertices[3] =
-	{
-		0.0f, 0.5f, 0.0f,	//v0 pos
-		1.0f, 0.0f, 0.0f,	//v0 color
-
-		0.5f, -0.5f, 0.0f,	//v1
-		0.0f, 1.0f, 0.0f,	//v1 color
-
-		-0.5f, -0.5f, 0.0f, //v2
-		0.0f, 0.0f, 1.0f	//v2 color
-	};
-
-	D3D11_BUFFER_DESC bufferDesc;
-	memset(&bufferDesc, 0, sizeof(bufferDesc));
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(triangleVertices);
-
-	D3D11_SUBRESOURCE_DATA data;
-	data.pSysMem = triangleVertices;
-	gDevice->CreateBuffer(&bufferDesc, &data, &gVertexBuffer);
 }
 
 void Graphics::CreateConstantBuffer()
@@ -426,3 +401,4 @@ void Graphics::UpdateConstantBuffer()
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 }
+

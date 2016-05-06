@@ -59,6 +59,7 @@ void ObjectPool::ResetBullet()
 	}
 }
 
+
 void ObjectPool::handler()
 {
 	for (int i = 0; i < b_poolSize; i++)
@@ -82,7 +83,6 @@ void ObjectPool::fire(float x, float y, double heading)
 	handler();
 	return;
 }
-
 
 void ObjectPool::bulletupdateCooldown(double bdt)
 {

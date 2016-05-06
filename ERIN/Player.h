@@ -14,10 +14,18 @@ public:
 	Player(string name, float x, float y, float z);
 	~Player();
 
+	//player health
+	int HP = 6;
+	void hpCooldown(double hpdt);
+	bool getHpCooldown() { return this->hpReady; };
+	void setHpCooldown(bool hpReady) { this->hpReady = hpReady; };
+
 	void playerInput();
 	void update(double deltaTime);
 
 	void PlayerReset();
+
+	void NewFloorReset();
 
 	void SetX(float x) { this->x = x; };
 	void SetY(float y) { this->y = y; };
@@ -31,9 +39,6 @@ public:
 	Input* input;
 
 	// turret magic
-	TriangleVertex* triangle; // is replaced by ship (TriangleVertex)
-	TriangleVertex* ship;
-	TriangleVertex* turret;
 	Matrix* objectMatrix; // is replaced by shipMatrix
 	Matrix* shipMatrix;
 	Matrix* turretMatrix;
@@ -95,5 +100,11 @@ private:
 	double turrent_heading = 0;
 	double turret_plannedHeading = 0;
 	double turret_turnRate = 1.0; // deg /s	
+
+	//cooldown for damage
+	bool hpReady;
+	const float hpcooldown = 4.0f;
+	double hpcurrentTime;
+	//cooldown for damage
 };
 #endif // !PLAYER_H

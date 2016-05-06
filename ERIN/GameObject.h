@@ -19,9 +19,14 @@ public:
 	bool inUse;
 	void Reset();
 
+	void Createsphere();
+
 	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
 	void reset();
+
+	float getVelocityX() { return this->velocityX; };
+	float getVelocityY() { return this->velocityY; };
 
 	void setObjectID(int objectID) { this->objectID = objectID; };
 	void setObjectName(string name) { this->name = name; };
@@ -37,7 +42,6 @@ public:
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };
 
-	TriangleVertex* triangle;
 	Matrix* objectMatrix;
 	Behavior* behavior;
 	Position* pos;

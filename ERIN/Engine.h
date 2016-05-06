@@ -31,6 +31,7 @@ public:
 	void processInput();
 	void update(double deltaTimeMs);
 	void render();
+	void RendHUD();
 
 	bool sphereToSphere(const TSphere& tSph1, const TSphere& tSph2);
 	bool sphereToPlane(const TSphere& tSph, const Vector3& vecPoint, const Vector3& vecNormal);
@@ -44,12 +45,18 @@ public:
 	bool aButtonActive = false;
 	bool bButtonActive = false;
 
+	bool floorClear = false;
+
+	bool printTitle = true;
+
 	GameStateManager gameState;
 
 	// Pause
 	int pMenuOption = 0;
 	// Main Menu
 	int mainMenuOption = 0;
+
+	TSphere* Esphere;
 
 private:
 	bool running;
@@ -78,8 +85,6 @@ private:
 	Wall* right_wall;
 
 	Player* player;
-
-	TriangleVertex* triangle;
 };
 
 #endif // !ENGINE_H
