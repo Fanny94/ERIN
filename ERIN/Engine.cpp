@@ -237,6 +237,7 @@ void Engine::processInput()
 					{
 						cout << "Game Running" << endl;
 						this->ready = true;
+						Objectpool->ResetBullet();
 						gameState = GameRunning;
 					}
 					else if (mainMenuOption == 1)
@@ -376,7 +377,6 @@ void Engine::processInput()
 					pMenuOption = 0;
 					floorClear = false;
 					gameObject->reset();
-					Objectpool->ResetBullet();
 					player->PlayerReset();
 					Objectpool->ResetBullet();
 					camera->ResetCamera();
