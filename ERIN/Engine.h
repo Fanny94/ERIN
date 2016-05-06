@@ -51,6 +51,8 @@ public:
 
 	GameStateManager gameState;
 
+	float Rx, Ry;
+
 	// Pause
 	int pMenuOption = 0;
 	// Main Menu
