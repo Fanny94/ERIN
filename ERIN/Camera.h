@@ -50,6 +50,7 @@ public:
 	double GetFrameTime();
 	void InitCamera();
 	void UpdateCamera();
+	void UpdateGameCamera(Matrix transform);
 	void ResetCamera();
 
 	// Xbox Dpad

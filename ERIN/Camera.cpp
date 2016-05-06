@@ -119,6 +119,13 @@ void Camera::UpdateCamera()
 	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
 }
 
+void Camera::UpdateGameCamera(Matrix transform)
+{
+	//The Game camera that is going to follow the player and allways showing the elevator 
+
+
+}
+
 void Camera::ResetCamera()
 {
 	camPosition = Vector4(0.0f, 0.5f, -18.0f, 1.0f);
