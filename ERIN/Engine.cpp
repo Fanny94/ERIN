@@ -665,8 +665,8 @@ void Engine::render()
 			customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
 			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
 			Esphere->m_vecCenter = Vector3(0, 0, 0);
-			Esphere->m_fRadius = 1.0f;
-			cout << "Render Elevater Cube" << endl;
+			Esphere->m_fRadius = 1.5f;
+
 			if (Esphere && sphereToSphere(*player->sphere, *Esphere))
 			{
 				Objectpool->ResetBullet();
