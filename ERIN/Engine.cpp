@@ -429,6 +429,13 @@ void Engine::processInput()
 				gameState = MainMenu;
 			}
 			break;
+		case GameOver:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+				gameState = MainMenu;
+			}
+			break;
 		}
 
 		// fire
@@ -572,7 +579,7 @@ void Engine::update(double deltaTimeMs)
 			Objectpool->ResetBullet();
 		}
 
-		/*if (player->HP == 0)
+		if (player->HP == 0)
 		{
 			cout << "Game Over" << endl;
 
@@ -585,7 +592,7 @@ void Engine::update(double deltaTimeMs)
 			}
 
 			gameState = GameOver;
-		}*/
+		}
 
 		break;
 	case TitleScreen:
@@ -723,7 +730,7 @@ void Engine::render()
 		//graphics->PauseRender();
 		break;
 	case GameOver:
-		//graphics->GameOverRender();
+		graphics->GameOverRender();
 		break;
 	case HighScore:
 		graphics->HighScoreRender();
