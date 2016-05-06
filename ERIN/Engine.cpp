@@ -56,11 +56,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		customImport->LoadCustomFormat("../BinaryDataCubeT.dat");
+		customImport->LoadCustomFormat("../BinaryDataTextureCube.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
-
-		graphics->CreateTexture(customImport->meshes.at(0));
+		//(graphics->CreateTexture(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
@@ -103,7 +102,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 
 		graphics->CreateConstantBuffer();
-
 		ShowWindow(wndHandle, nCommandShow);
 	}
 }
