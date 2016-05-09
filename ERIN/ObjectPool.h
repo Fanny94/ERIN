@@ -13,7 +13,7 @@ public:
 	// Bullets
 	void fire(float x, float y, double heading);
 	int getBulletPoolSize() { return this->b_poolSize; };
-	static const int b_poolSize = 100;
+	static const int b_poolSize = 50;
 	Bullet bullets[b_poolSize];
 	float SPosx;
 	float SPosy;
@@ -45,7 +45,7 @@ public:
 private:
 	//coldown for bullets
 	bool bReady = true;
-	const float bcooldown = 0.2f;
+	const float bcooldown = 0.4f;
 	double bcurrentTime;
 	//coldown for bullets
 
