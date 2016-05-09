@@ -13,6 +13,12 @@ Graphics::~Graphics()
 	gVertexShader->Release();
 	gPixelShader->Release();
 
+	//textureView->Release();
+	//this->textureView = nullptr;
+
+	//texture->Release();
+	//this->texture = nullptr;
+
 	gDepthView->Release();
 	gDepthStencilView->Release();
 
@@ -23,9 +29,6 @@ Graphics::~Graphics()
 
 	customVertBuffTemp->Release();
 	this->customVertBuffTemp = nullptr;
-
-	/*textureView->Release();
-	this->textureView = nullptr;*/
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -70,7 +73,7 @@ void Graphics::TitleScreenRender()
 {
 	float clearColor[] = { 0, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
-	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
 }
 
 void Graphics::MainMenuRender()
@@ -152,7 +155,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 	}
 
 	gDeviceContext->Unmap(customFormatBuffer, 0);
-
+	
 	for (size_t i = 0; i < mesh.MeshCount; i++)
 	{
 		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff.at(cvb), &meshVertexSize, &offset);
@@ -161,6 +164,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
+
 		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
@@ -169,9 +173,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 void Graphics::CreateTexture(Mesh mesh)
 {
-	//char* p[256] = { mesh.material.at(0).diffuseMap };
 	char p[256];
-	wchar_t* pwcsName;
 
 	for (int i = 0; i < 256; i++)
 	{
@@ -179,12 +181,41 @@ void Graphics::CreateTexture(Mesh mesh)
 
 	}
 
-	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
-	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, (wchar_t*)p, nullptr, &textureView, 0);
+	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, (const wchar_t*)p, NULL, &textureView, 0);
+
 	if (FAILED(hr))
 	{
 		//error
 	}
+
+	//D3D11_TEXTURE2D_DESC textureDesc;
+	//ZeroMemory(&textureDesc, sizeof(textureDesc));
+	//textureDesc.Width = 256;
+	//textureDesc.Height = 256;
+	//textureDesc.MipLevels = textureDesc.ArraySize= 1;
+	//textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	//textureDesc.SampleDesc.Count = 1;
+	//textureDesc.SampleDesc.Quality = 0;
+	//textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	//textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	//textureDesc.CPUAccessFlags = 0;
+	//textureDesc.MiscFlags = 0;
+
+	//D3D11_SUBRESOURCE_DATA data;
+	//ZeroMemory(&data, sizeof(data));
+	//data.pSysMem = (void*)p;
+	//data.SysMemPitch = 4;
+	//gDevice->CreateTexture2D(&textureDesc, &data, &texture);
+
+	//D3D11_SHADER_RESOURCE_VIEW_DESC resViewDesc;
+	//ZeroMemory(&resViewDesc, sizeof(resViewDesc));
+	//resViewDesc.Format = textureDesc.Format;
+	//resViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	//resViewDesc.Texture2D.MipLevels = textureDesc.MipLevels;
+	//resViewDesc.Texture2D.MostDetailedMip = 0;
+
+	//gDevice->CreateShaderResourceView(texture, &resViewDesc, &textureView);
+
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)

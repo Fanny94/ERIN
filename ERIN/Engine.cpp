@@ -58,11 +58,13 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		customImport->LoadCustomFormat("../BinaryDataShip.dat");
+		customImport->LoadCustomFormat("../BinaryDataCubeT.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
-
-		//graphics->CreateTexture(customImport->meshes.at(0));
+		graphics->CreateTexture(customImport->meshes.at(0));
+		/*customImport->LoadCustomFormat("../BinaryDataShip.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(0));*/
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
@@ -121,7 +123,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CustomVertexBuffer(customImport->meshes.at(14));
 
 		graphics->CreateConstantBuffer();
-
 		ShowWindow(wndHandle, nCommandShow);
 	}
 }
@@ -237,6 +238,7 @@ void Engine::processInput()
 					{
 						cout << "Game Running" << endl;
 						this->ready = true;
+						Objectpool->ResetBullet();
 						gameState = GameRunning;
 					}
 					else if (mainMenuOption == 1)
@@ -377,7 +379,6 @@ void Engine::processInput()
 					pMenuOption = 0;
 					floorClear = false;
 					gameObject->reset();
-					Objectpool->ResetBullet();
 					player->PlayerReset();
 					Objectpool->ResetBullet();
 					camera->ResetCamera();

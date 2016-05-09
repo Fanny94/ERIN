@@ -118,9 +118,10 @@ private:
 
 	vector<ID3D11Buffer*> customVertBuff;
 	ID3D11Buffer* customVertBuffTemp;
- 
-	ID3D11ShaderResourceView* textureView;
 	HRESULT hr;
+	ID3D11ShaderResourceView* textureView = nullptr;
+	//ID3D11Texture2D* texture = nullptr;
+	
 };
 
 #endif // !GRAPHICS_H
