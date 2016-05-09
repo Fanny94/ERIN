@@ -894,6 +894,14 @@ void Engine::Elevatorfunc()
 			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 			this->ready = false;
 		}
+		for (int i = 0; i < Objectpool->Se_poolSize; i++)
+		{
+			Objectpool->Senemies[i].setInUse(false);
+
+			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+			this->gameObject->sReady = false;
+			this->Objectpool->setSpawnCooldown(false);
+		}
 	}
 	else
 	{
