@@ -19,8 +19,6 @@ public:
 	bool inUse;
 	void Reset();
 
-	void Createsphere();
-
 	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
 	void reset();

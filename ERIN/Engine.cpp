@@ -220,6 +220,7 @@ void Engine::processInput()
 					{
 						cout << "Game Running" << endl;
 						this->ready = true;
+						mainMenu = false;
 						gameState = GameRunning;
 					}
 					else if (mainMenuOption == 1)
@@ -398,6 +399,7 @@ void Engine::processInput()
 					gameObject->reset();
 					Objectpool->ResetBullet();
 					floorClear = false;
+					mainMenu = true;
 
 					for (int i = 0; i < 5; i++)
 					{
@@ -419,8 +421,17 @@ void Engine::processInput()
 		case HelpAndOptions:
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
 			{
-				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
-				gameState = MainMenu;
+				if (mainMenu == true)
+				{
+					cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+					gameState = MainMenu;
+				}
+				else
+				{
+					pMenuOption = 0;
+					cout << "Pause Menu" << endl << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+					gameState = Pause;
+				}
 			}
 			break;
 		}

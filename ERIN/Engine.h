@@ -45,6 +45,7 @@ public:
 	bool aButtonActive = false;
 	bool bButtonActive = false;
 
+	bool mainMenu = true;
 	bool floorClear = false;
 
 	bool printTitle = true;
