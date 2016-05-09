@@ -9,6 +9,9 @@ cbuffer CustomFormat
 	float paddingAC;
 	float3 specularColor;
 	float shininess;
+	float4 CamPos;
+	int textureBool;
+	float padding[3];
 };
 
 struct VS_OUT
@@ -17,36 +20,32 @@ struct VS_OUT
 	float4 WPos : POSITION;
 	float4 Nor: NORMAL;
 	float2 uv : UV;
-	float4 CamPos :POSITION1;
 
 };
 
 float4 PS_main(VS_OUT input) : SV_Target
 {
-	float4 lightPosition = float4(0.0, 0.0, -5.0, 0.0);
+	float3 diffuseLight;
+	float4 lightPosition = float4(-60.0, 0.0, -60.0, 0.0);
 	float3 lightIntensity = float3(0.9, 0.9, 0.9);
 
-	
-	float4 lightPos2 = float4(0.0, 0.0, 5.0, 0.0);
-
-	float4 t = normalize(lightPos2 - input.Pos);
 	float4 s = normalize(lightPosition - input.WPos);
-	float4 v = normalize(input.CamPos - input.WPos);
+	float4 v = normalize(CamPos - input.WPos);
 	float4 r = reflect(-s, input.Nor);
-
 
 	float3 diffuseMap = CustomTexture.Sample(CustomSamplerState, input.uv).xyz;
 
 	input.Nor = normalize(input.Nor);
-
-	float3 diffuseLight = /*diffuseMap **/ diffuseColor * max(dot(s, input.Nor), 0.0f);
-	float3 diffuse = diffuseColor * max(dot(t, input.Nor), 0.0f);
+	if(textureBool == true)
+		diffuseLight = diffuseMap * diffuseColor * max(dot(s, input.Nor), 0.0f);
+	else if(textureBool == false)
+		diffuseLight = diffuseColor * max(dot(s, input.Nor), 0.0f);
 
 	float3 ambientLight = {0.2, 0.2, 0.2};
 
 	float3 specularLight = specularColor * pow(max(dot(r, v), 0.0f), shininess);
 
-	float4 color = float4((lightIntensity * ( ambientLight + diffuseLight + diffuse/* + specularLight*/)), 1.0f);
+	float4 color = float4((lightIntensity * ( ambientLight + diffuseLight /* + specularLight*/)), 1.0f);
 
 
 	return color;
