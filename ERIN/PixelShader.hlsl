@@ -29,7 +29,7 @@ float4 PS_main(VS_OUT input) : SV_Target
 	
 	float4 lightPos2 = float4(0.0, 0.0, 5.0, 0.0);
 
-	float4 t = normalize(lightPos2 - input.WPos);
+	float4 t = normalize(lightPos2 - input.Pos);
 	float4 s = normalize(lightPosition - input.WPos);
 	float4 v = normalize(input.CamPos - input.WPos);
 	float4 r = reflect(-s, input.Nor);
