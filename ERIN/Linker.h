@@ -12,6 +12,7 @@
 #include <string>
 #include <DirectXMath.h>
 #include "SimpleMath.h"
+#include "WICTextureLoader.h"
 #include <tchar.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
