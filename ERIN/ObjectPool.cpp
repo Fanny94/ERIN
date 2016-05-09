@@ -34,6 +34,29 @@ ObjectPool::ObjectPool()
 	}
 
 	enemies[this->e_poolSize - 1].setNext(NULL);
+
+	// SpecialEnemies
+	first = &Senemies[0];
+
+	for (int i = 0; i < this->Se_poolSize; i++)
+	{
+		Senemies[i].setObjectID(100 + i);
+		Senemies[i].setObjectName("Senemy" + i);
+
+		Senemies[i].setInUse(false);
+
+		// speed
+		float LO = 0.07f, HI = 0.15f, lO = 0.0006f, hI = 0.0009f;
+		float Random = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
+		Senemies[i].setMaxSpeed(Random);
+
+		float Ran = lO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (hI - lO)));
+		Senemies[i].setAcceleration(Ran);
+
+		Senemies[i].setNext(&Senemies[i + 1]);
+	}
+
+	Senemies[this->Se_poolSize - 1].setNext(NULL);
 }
 
 ObjectPool::~ObjectPool()
@@ -109,5 +132,33 @@ void ObjectPool::createEnemy(float x, float y, float z)
 			enemies[i].setInUse(true);
 			return;
 		}
+	}
+}
+
+void ObjectPool::createSpecialEnemy(float x, float y, float z)
+{
+	for (int i = 0; i < this->Se_poolSize; i++)
+	{
+		if (!Senemies[i].getInUse())
+		{
+			Senemies[i].setObjectPosX(x);
+			Senemies[i].setObjectPosY(y);
+			Senemies[i].setObjectPosZ(z);
+			Senemies[i].setInUse(true);
+			return;
+		}
+	}
+}
+
+void ObjectPool::spawnTimer(double swdt)
+{
+	if (this->swcooldown <= this->swcurrentTime)
+	{
+		this->swcurrentTime = 0.0f;
+		this->swReady = true;
+	}
+	else
+	{
+		this->swcurrentTime += swdt;
 	}
 }

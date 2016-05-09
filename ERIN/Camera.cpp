@@ -12,7 +12,6 @@ Camera::~Camera()
 
 bool Camera::InitDirectInput(HINSTANCE hInstance)
 {
-
 	hr = DirectInput8Create(hInstance,
 									DIRECTINPUT_VERSION,
 									IID_IDirectInput8, (void**)&DirectInput,
@@ -119,6 +118,13 @@ void Camera::UpdateCamera()
 	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
 }
 
+void Camera::UpdateGameCamera(Matrix transform)
+{
+	//The Game camera that is going to follow the player and allways showing the elevator 
+
+
+}
+
 void Camera::ResetCamera()
 {
 	camPosition = Vector4(0.0f, 0.5f, -18.0f, 1.0f);
@@ -160,6 +166,12 @@ void Camera::cameraMoveUp(float factor)
 void Camera::cameraMoveDown(float factor)
 {
 	moveUpDown -= speed * -factor;
+}
+
+void Camera::cameraFollow(float x, float y)
+{
+	this->camPosition.x = x;
+	this->camPosition.y = y;
 }
 
 void Camera::StartTimer()

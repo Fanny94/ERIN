@@ -102,6 +102,7 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 	}
 }
 
+
 void GameObject::update(double dt)
 {
 	this->pos->x = this->x;
@@ -203,4 +204,71 @@ double GameObject::getVx()
 double GameObject::getVy()
 {
 	return r_speed * asin(heading * M_PI / 180);
+}
+
+
+//Special Enemy functions
+
+void GameObject::SpecialReset()
+{
+	this->x = 0.0f;
+	this->y = 0.0f;
+	this->z = 0.0f;
+
+	this->heading = 0;
+	this->plannedHeading = 0;
+
+	this->speed = 0.0f;
+
+	delete this->objectMatrix;
+	this->objectMatrix = new Matrix();
+
+	this->pos->x = this->x;
+	this->pos->y = this->y;
+	this->pos->z = this->z;
+
+	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
+	this->specialEnemyCount = 2;
+}
+
+
+void GameObject::updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies)
+{
+	if (this->behavior)
+	{
+		Position thisEnemy = { this->x, this->y, this->z };
+		this->behavior->updateSpecial(player, thisEnemy);
+
+		// static number of enemies
+		for (int i = 0; i < 2; i++)
+		{
+			if (myself->getObjectID() != allEnemies[i].getObjectID())
+			{
+				// test lines to see values quick
+				int me = myself->getObjectID();
+				int other = allEnemies[i].getObjectID();
+
+				// separation calculations
+				this->behavior->separation(*myself->pos, *allEnemies[i].pos);
+			}
+		}
+		//this->behavior->alignment();
+
+		float radians = XMConvertToRadians((float)heading);
+		this->directionX = (float)sin(radians);
+		this->directionY = (float)cos(radians);
+	}
+}
+
+void GameObject::SpecialupdateCooldown(double sdt)
+{
+	if (this->scooldown <= this->scurrentTime)
+	{
+		this->scurrentTime = 0.0f;
+		//this->sReady = true;
+	}
+	else
+	{
+		this->scurrentTime += sdt;
+	}
 }

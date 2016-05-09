@@ -22,22 +22,38 @@ public:
 	void setCooldown(bool bReady) { this->bReady = bReady; };
 	void bulletupdateCooldown(double bdt);
 	void ResetBullet();
-
+	Bullet fbull;
 	void handler();
+
+	// special Enemies
+	void createSpecialEnemy(float x, float y, float z);
+	int getSpecialEnemyPoolSize() { return this->Se_poolSize; };
+	static const int Se_poolSize = 2;
+	GameObject Senemies[Se_poolSize];
+	bool getSpawnCooldown() { return this->swReady; };
+	void setSpawnCooldown(bool swReady) { this->swReady = swReady; };
+	void spawnTimer(double swdt);
+
 
 	// Enemies
 	void createEnemy(float x, float y, float z);
 	int getEnemyPoolSize() { return this->e_poolSize; };
 	static const int e_poolSize = 5;
 	GameObject enemies[e_poolSize];
-	Bullet fbull;
+	
 
 private:
 	//coldown for bullets
-	bool bReady;
+	bool bReady = true;
 	const float bcooldown = 0.2f;
 	double bcurrentTime;
 	//coldown for bullets
+
+	//coldown for spawning
+	bool swReady = true;
+	const float swcooldown = 5.0f;
+	double swcurrentTime;
+	//coldown for spawning
 
 	// Bullets
 	int lifeTime;

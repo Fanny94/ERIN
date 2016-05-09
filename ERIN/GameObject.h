@@ -18,6 +18,17 @@ public:
 	bool inUse;
 	void Reset();
 
+	//Special Enemy
+	void updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies);
+	void SpecialReset();
+	void SpecialupdateCooldown(double sdt);
+	int specialEnemyCount = 2;
+	//coldown for bullets
+	bool sReady = true;
+	const float scooldown = 0.8f;
+	double scurrentTime;
+	//coldown for bullets
+
 	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
 	void reset();

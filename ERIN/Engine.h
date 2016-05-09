@@ -52,6 +52,7 @@ public:
 	GameStateManager gameState;
 
 	float Rx, Ry;
+	float savedRx, savedRy;
 	bool block = false;
 	void Elevatorfunc();
 
