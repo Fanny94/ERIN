@@ -21,19 +21,19 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 	// upper
 	this->upper_wall = new Wall();
-	this->upper_wall->point = Vector3(0, 11, 0);
+	this->upper_wall->point = Vector3(0, 20.5, 0);
 	this->upper_wall->normal = Vector3(0, -1, 0);
 	// left
 	this->left_wall = new Wall();
-	this->left_wall->point = Vector3(-21, 0, 0);
+	this->left_wall->point = Vector3(-42.5, 0, 0);
 	this->left_wall->normal = Vector3(1, 0, 0);
 	// lower
 	this->lower_wall = new Wall();
-	this->lower_wall->point = Vector3(0, -11, 0);
+	this->lower_wall->point = Vector3(0, -20.5, 0);
 	this->lower_wall->normal = Vector3(0, 1, 0);
 	// right
 	this->right_wall = new Wall();
-	this->right_wall->point = Vector3(21, 0, 0);
+	this->right_wall->point = Vector3(42.5, 0, 0);
 	this->right_wall->normal = Vector3(-1, 0, 0);
 
 	//create window
@@ -58,13 +58,13 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		customImport->LoadCustomFormat("../BinaryDataCubeT.dat");
+		/*customImport->LoadCustomFormat("../BinaryDataCubeT.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
-		graphics->CreateTexture(customImport->meshes.at(0));
-		/*customImport->LoadCustomFormat("../BinaryDataShip.dat");
+		graphics->CreateTexture(customImport->meshes.at(0));*/
+		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(0));*/
+		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
@@ -106,21 +106,13 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 
-		customImport->LoadCustomFormat("../BinaryDataWall1.dat");
+		customImport->LoadCustomFormat("../BinaryDataStage.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(11));
 
-		customImport->LoadCustomFormat("../BinaryDataWall2.dat");
+		customImport->LoadCustomFormat("../BinaryDataWalls.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(12));
-
-		customImport->LoadCustomFormat("../BinaryDataWall1.dat");
-		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(13));
-
-		customImport->LoadCustomFormat("../BinaryDataWall2.dat");
-		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(14));
 
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
@@ -695,16 +687,12 @@ void Engine::render()
 			}
 		}
 
-		for (int w = 11; w < 15; w++)
+		for (int w = 11; w < 13; w++)
 		{
 			if (w == 11)
-				customImport->meshes.at(w).world = XMMatrixTranslation(22, 0, 0);
+				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
 			if (w == 12)
-				customImport->meshes.at(w).world = XMMatrixTranslation(0, 12, 0);
-			if (w == 13)
-				customImport->meshes.at(w).world = XMMatrixTranslation(-22, 0, 0);
-			if (w == 14)
-				customImport->meshes.at(w).world = XMMatrixTranslation(0, -12, 0);
+				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
 			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
 		}
 
