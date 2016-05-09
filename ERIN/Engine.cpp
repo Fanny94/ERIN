@@ -748,7 +748,9 @@ void Engine::render()
 				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->Senemies[i].objectMatrix, 2);
 			}
 		}
+
 		// Camera Update
+		camera->cameraFollow(this->player->getX(), this->player->getY());
 		camera->InitCamera();
 
 		break;
@@ -887,24 +889,27 @@ bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 
 void Engine::Elevatorfunc()
 {
-	customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
-	graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
-	Esphere->m_vecCenter = Vector3(0, 0, 0);
-	Esphere->m_fRadius = 0.5f;
-	cout << "Render Elevater Cube" << endl;
-	if (Esphere && sphereToSphere(*player->sphere, *Esphere))
+	if (sphereToSphere(*player->sphere, *Esphere))
 	{
 		Objectpool->ResetBullet();
 		gameObject->reset();
 		player->NewFloorReset();
 		floorClear = false;
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
 			Objectpool->enemies[i].setInUse(false);
 
 			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 			this->ready = false;
 		}
+	}
+	else
+	{
+		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
+		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
+		Esphere->m_vecCenter = Vector3(0, 0, 0);
+		Esphere->m_fRadius = 0.5f;
+		cout << "Render Elevater Cube" << endl;
 	}
 }
 

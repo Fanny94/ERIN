@@ -12,7 +12,6 @@ Camera::~Camera()
 
 bool Camera::InitDirectInput(HINSTANCE hInstance)
 {
-
 	hr = DirectInput8Create(hInstance,
 									DIRECTINPUT_VERSION,
 									IID_IDirectInput8, (void**)&DirectInput,
@@ -167,6 +166,12 @@ void Camera::cameraMoveUp(float factor)
 void Camera::cameraMoveDown(float factor)
 {
 	moveUpDown -= speed * -factor;
+}
+
+void Camera::cameraFollow(float x, float y)
+{
+	this->camPosition.x = x;
+	this->camPosition.y = y;
 }
 
 void Camera::StartTimer()
