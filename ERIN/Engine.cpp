@@ -471,50 +471,15 @@ void Engine::update(double deltaTimeMs)
 		updateCooldown(deltaTimeS);
 		gameObject->SpecialupdateCooldown(deltaTimeS);
 		Objectpool->spawnTimer(deltaTimeS);
-		//Player Update;
+
+		/* *********** Player Update *********** */
 		player->hpCooldown(deltaTimeS);
 		player->update(deltaTimeMs);
-		/*gameObject->updateBehavior(*player->pos, gameObject, enemies);
-		gameObject->update(deltaTimeMs);*/
 
-		//Bullet Updates
-		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
-		{
-			Objectpool->bullets[i].update();
-		}
+		camera->UpdateGameCamera(this->player->getX(), this->player->getY(), deltaTimeS);
+		//camera->cameraFollow(this->player->getX(), this->player->getY());
 
-		// Enemies Updates
-		for (int i = 0; i < this->Objectpool->e_poolSize; i++)
-		{
-			if (Objectpool->enemies[i].getInUse())
-			{
-				Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
-				Objectpool->enemies[i].update(deltaTimeMs);
-			}
-			/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
-			Objectpool->enemies[i]->update(deltaTimeMs);*/
-		}
-
-		//special enemy update
-		for (int i = 0; i < this->Objectpool->Se_poolSize; i++)
-		{
-			if (Objectpool->Senemies[i].getInUse())
-			{
-				Objectpool->Senemies[i].updateSpecialBehavior(*player->shipPos, &Objectpool->Senemies[i], Objectpool->Senemies);
-				Objectpool->Senemies[i].update(deltaTimeMs);
-				if (Objectpool->getSpawnCooldown())
-				{
-					Objectpool->createEnemy(savedRx, savedRy, 0);
-					//gameObject->enemyCount + 1;
-					Objectpool->setSpawnCooldown(false);
-				}
-
-			}
-		}
-		/*this->Objectpool->enemies[i]->updateBehavior(*player->shipPos, this->Objectpool->enemies[i], this->Objectpool->enemies);
-		Objectpool->enemies[i]->update(deltaTimeMs);*/
-
-		// Collision Walls
+		// Player Collision Walls
 		if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 		{
 			cout << "upper wall hit" << endl;
@@ -536,65 +501,13 @@ void Engine::update(double deltaTimeMs)
 			player->SetX(right_wall->point.x - 0.5f);
 		}
 
-
-		// Collision enemies and walls
-		for (int i = 0; i < Objectpool->Se_poolSize; i++)
+		/* *********** Enemies Updates *********** */
+		for (int i = 0; i < this->Objectpool->e_poolSize; i++)
 		{
-			if (sphereToPlane(*Objectpool->Senemies[i].sphere, upper_wall->point, upper_wall->normal))
+			if (Objectpool->enemies[i].getInUse())
 			{
-				Objectpool->Senemies[i].setObjectPosY(upper_wall->point.y - 1.5f);
-			}
-			if (sphereToPlane(*Objectpool->Senemies[i].sphere, left_wall->point, left_wall->normal))
-			{
-				Objectpool->Senemies[i].setObjectPosX(left_wall->point.x + 1.5f);
-			}
-			if (sphereToPlane(*Objectpool->Senemies[i].sphere, lower_wall->point, lower_wall->normal))
-			{
-				Objectpool->Senemies[i].setObjectPosY(lower_wall->point.y + 1.5f);
-			}
-			if (sphereToPlane(*Objectpool->Senemies[i].sphere, right_wall->point, right_wall->normal))
-			{
-				Objectpool->Senemies[i].setObjectPosX(right_wall->point.x - 1.5f);
-			}
-		}
-		// Collision special enemies and walls
-
-
-
-		//Collision Bullets
-		for (int t = 0; t < Objectpool->e_poolSize; t++)
-		{
-			if (Objectpool->enemies[t].getInUse())
-			{
-				for (int i = 0; i < Objectpool->b_poolSize; i++)
-				{
-					float x = Objectpool->bullets[i].state.alive.x;
-					float y = Objectpool->bullets[i].state.alive.y;
-					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
-					{
-						gameObject->enemyCount -= 1;
-						Objectpool->enemies[t].setInUse(false);
-						Objectpool->bullets[i].setInUse(false);
-					}
-				}
-			}
-		}
-		//Collision Bullets with special enemies
-		for (int t = 0; t < Objectpool->Se_poolSize; t++)
-		{
-			if (Objectpool->Senemies[t].getInUse())
-			{
-				for (int i = 0; i < Objectpool->b_poolSize; i++)
-				{
-					float x = Objectpool->bullets[i].state.alive.x;
-					float y = Objectpool->bullets[i].state.alive.y;
-					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
-					{
-						gameObject->specialEnemyCount -= 1;
-						Objectpool->Senemies[t].setInUse(false);
-						Objectpool->bullets[i].setInUse(false);
-					}
-				}
+				Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
+				Objectpool->enemies[i].update(deltaTimeMs);
 			}
 		}
 
@@ -614,6 +527,93 @@ void Engine::update(double deltaTimeMs)
 			}
 		}
 
+		// Collision enemies and walls
+
+		// Special enemy update
+		for (int i = 0; i < this->Objectpool->Se_poolSize; i++)
+		{
+			if (Objectpool->Senemies[i].getInUse())
+			{
+				Objectpool->Senemies[i].updateSpecialBehavior(*player->shipPos, &Objectpool->Senemies[i], Objectpool->Senemies);
+				Objectpool->Senemies[i].update(deltaTimeMs);
+				if (Objectpool->getSpawnCooldown())
+				{
+					Objectpool->createEnemy(savedRx, savedRy, 0);
+					//gameObject->enemyCount + 1;
+					Objectpool->setSpawnCooldown(false);
+				}
+
+			}
+		}
+
+		// Collision special enemies and walls
+		for (int i = 0; i < Objectpool->Se_poolSize; i++)
+		{
+			if (Objectpool->Senemies[i].getInUse())
+			{
+				if (sphereToPlane(*Objectpool->Senemies[i].sphere, upper_wall->point, upper_wall->normal))
+				{
+					Objectpool->Senemies[i].setObjectPosY(upper_wall->point.y - 0.5f);
+				}
+				if (sphereToPlane(*Objectpool->Senemies[i].sphere, left_wall->point, left_wall->normal))
+				{
+					Objectpool->Senemies[i].setObjectPosX(left_wall->point.x + 0.5f);
+				}
+				if (sphereToPlane(*Objectpool->Senemies[i].sphere, lower_wall->point, lower_wall->normal))
+				{
+					Objectpool->Senemies[i].setObjectPosY(lower_wall->point.y + 0.5f);
+				}
+				if (sphereToPlane(*Objectpool->Senemies[i].sphere, right_wall->point, right_wall->normal))
+				{
+					Objectpool->Senemies[i].setObjectPosX(right_wall->point.x - 0.5f);
+				}
+			}
+		}
+
+		/* *********** Bullet Updates *********** */
+		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
+		{
+			Objectpool->bullets[i].update();
+		}
+	
+		// Collision Bullets
+		for (int t = 0; t < Objectpool->e_poolSize; t++)
+		{
+			if (Objectpool->enemies[t].getInUse())
+			{
+				for (int i = 0; i < Objectpool->b_poolSize; i++)
+				{
+					float x = Objectpool->bullets[i].state.alive.x;
+					float y = Objectpool->bullets[i].state.alive.y;
+					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
+					{
+						gameObject->enemyCount -= 1;
+						Objectpool->enemies[t].setInUse(false);
+						Objectpool->bullets[i].setInUse(false);
+					}
+				}
+			}
+		}
+		// Collision Bullets with special enemies
+		for (int t = 0; t < Objectpool->Se_poolSize; t++)
+		{
+			if (Objectpool->Senemies[t].getInUse())
+			{
+				for (int i = 0; i < Objectpool->b_poolSize; i++)
+				{
+					float x = Objectpool->bullets[i].state.alive.x;
+					float y = Objectpool->bullets[i].state.alive.y;
+					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
+					{
+						gameObject->specialEnemyCount -= 1;
+						Objectpool->Senemies[t].setInUse(false);
+						Objectpool->bullets[i].setInUse(false);
+					}
+				}
+			}
+		}
+
+		/* *********** HUD Logic *********** */
 		if (gameObject->enemyCount <= 0 && gameObject->specialEnemyCount <= 0)
 		{
 			cout << "Reset Game" << endl;
@@ -623,7 +623,7 @@ void Engine::update(double deltaTimeMs)
 			Objectpool->ResetBullet();
 		}
 
-		if (player->HP == 0)
+		if (player->HP <= 0)
 		{
 			cout << "Game Over" << endl;
 
@@ -743,7 +743,6 @@ void Engine::render()
 		}
 
 		// Camera Update
-		camera->cameraFollow(this->player->getX(), this->player->getY());
 		camera->InitCamera();
 
 		break;
@@ -894,6 +893,14 @@ void Engine::Elevatorfunc()
 
 			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 			this->ready = false;
+		}
+		for (int i = 0; i < Objectpool->Se_poolSize; i++)
+		{
+			Objectpool->Senemies[i].setInUse(false);
+
+			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+			this->gameObject->sReady = false;
+			this->Objectpool->setSpawnCooldown(false);
 		}
 	}
 	else

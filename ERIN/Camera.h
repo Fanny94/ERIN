@@ -50,7 +50,6 @@ public:
 	double GetFrameTime();
 	void InitCamera();
 	void UpdateCamera();
-	void UpdateGameCamera(Matrix transform);
 	void ResetCamera();
 
 	// Xbox Dpad
@@ -66,6 +65,10 @@ public:
 	void cameraMoveDown(float factor);
 
 	// Follow player function
+	float lerpDistanceX = 20.0f;
+	float lerpDistanceY = 10.0f;
+	float lerp = 0.6f;
+	void UpdateGameCamera(float x, float y, double dt);
 	void cameraFollow(float x, float y);
 
 	bool getInput() { return cameraInput; };
