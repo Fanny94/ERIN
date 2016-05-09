@@ -22,6 +22,7 @@ public:
 	void updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void SpecialReset();
 	void SpecialupdateCooldown(double sdt);
+	int specialEnemyCount = 2;
 	//coldown for bullets
 	bool sReady = true;
 	const float scooldown = 0.8f;
@@ -44,7 +45,7 @@ public:
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
 	void setAcceleration(float acceleration) { this->acceleration = acceleration; };
 
-	int enemyCount = 7;
+	int enemyCount = 5;
 
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };

@@ -273,7 +273,8 @@ void Engine::processInput()
 
 			if (this->player->input->State._buttons[GamePad_Button_X] == true)
 			{
-
+				gameObject->enemyCount = 0;
+				gameObject->specialEnemyCount = 0;
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_START] == true)
@@ -510,8 +511,8 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->Senemies[i].update(deltaTimeMs);
 				if (Objectpool->getSpawnCooldown())
 				{
-					Objectpool->createEnemy(Rx, Ry, 0);
-					gameObject->enemyCount + 1;
+					Objectpool->createEnemy(savedRx, savedRy, 0);
+					//gameObject->enemyCount + 1;
 					Objectpool->setSpawnCooldown(false);
 				}
 
@@ -596,7 +597,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
-						gameObject->enemyCount -= 1;
+						gameObject->specialEnemyCount -= 1;
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -620,11 +621,12 @@ void Engine::update(double deltaTimeMs)
 			}
 		}
 
-		if (gameObject->enemyCount == 0) //&& gameObject->specialEnemyCount == 0)
+		if (gameObject->enemyCount <= 0 && gameObject->specialEnemyCount <= 0)
 		{
 			cout << "Reset Game" << endl;
 			floorClear = true;
 			gameObject->reset();
+			gameObject->SpecialReset();
 			Objectpool->ResetBullet();
 		}
 
@@ -672,7 +674,7 @@ void Engine::render()
 		//spawn enemies
 		if (this->ready)
 		{
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i <Objectpool->e_poolSize; i++)
 			{
 				cout << "enemy created" << endl;
 				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
@@ -682,10 +684,12 @@ void Engine::render()
 		//spawn special enemies
 		if (this->gameObject->sReady)
 		{
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < Objectpool->Se_poolSize; i++)
 			{
 				cout << "senemy created" << endl;
 				this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+				savedRx = Rx;
+				savedRy = Ry;
 				this->gameObject->sReady = false;
 			}
 		}

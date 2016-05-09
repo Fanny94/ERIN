@@ -34,6 +34,7 @@ public:
 	void setSpawnCooldown(bool swReady) { this->swReady = swReady; };
 	void spawnTimer(double swdt);
 
+
 	// Enemies
 	void createEnemy(float x, float y, float z);
 	int getEnemyPoolSize() { return this->e_poolSize; };
