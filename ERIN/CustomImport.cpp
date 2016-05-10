@@ -276,15 +276,31 @@ void CustomImport::NewMesh()
 
 	for (size_t i = mcount; i < material.size(); i++)
 	{
+		char temp[256];
+		for (int e = 0; e < 256; e++)
+			temp[e] = material.at(i).diffuseMap[e];
+
+		for (int p = 256; p > 0; p--)
+		{
+			if (temp[p] == '/')
+			{
+				material.at(i).diffuseMap[0] = '.';
+				material.at(i).diffuseMap[1] = '.';
+				int size = 256 - p;
+				p = p - 2;
+				for (int q = 2; q < size; q++)
+				{
+					material.at(i).diffuseMap[q] = temp[p + q];
+				}
+				break;
+			}
+		}
+
 		for (int j = 0; j < 3; j++)
 		{
 			newMesh.materialTemp.diffuseColor[j] = material.at(i).diffuseColor[j];
 			newMesh.materialTemp.specularColor[j] = material.at(i).specularColor[j];
 			newMesh.materialTemp.ambientColor[j] = material.at(i).ambientColor[j];
-		}
-		for (int k = 0; k < 256; k++)
-		{
-			newMesh.materialTemp.diffuseMap[k] = material.at(i).diffuseMap[k];
 		}
 		newMesh.materialTemp.transparency = material.at(i).transparency;
 		newMesh.materialTemp.shininess = material.at(i).shininess;
