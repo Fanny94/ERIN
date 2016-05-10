@@ -22,7 +22,7 @@ public:
 	
 	Position* bulletPos;
 	Matrix* bulletMatrix;
-	int timeLeft = 500; //How long a bullet will last
+	int timeLeft = 300; //How long a bullet will last
 	
 
 	union 
@@ -40,6 +40,6 @@ public:
 
 private:
 	bool inUse;
-	float maxspd = 0.2f;
+	float maxspd = 0.4f;
 };
 #endif // !BULLET_H

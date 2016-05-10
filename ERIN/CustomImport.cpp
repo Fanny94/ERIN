@@ -60,7 +60,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 	//fileIn.read((char*)&MorphAnimationCount, sizeof(unsigned int));
 	//fileIn.read((char*)&CustomAttributesCount, sizeof(unsigned int));
 
-	for (size_t i = 0; i < MeshCount; i++)
+	for (int i = 0; i < MeshCount; i++)
 	{
 		fileIn.read((char*)&meshTemp.VertexCount, sizeof(unsigned int));
 		fileIn.read((char*)&meshTemp.MaterialID, sizeof(unsigned int));
@@ -72,7 +72,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 		fileIn.read((char*)&meshTemp.Rotation, sizeof(float) * 3);
 		fileIn.read((char*)&meshTemp.Scale, sizeof(float) * 3);
 
-		for (size_t j = 0; j < meshTemp.VertexCount; j++)
+		for (int j = 0; j < meshTemp.VertexCount; j++)
 		{
 			fileIn.read((char*)&meshTemp.vertexTemp.pos, sizeof(float) * 3);
 			fileIn.read((char*)&meshTemp.vertexTemp.nor, sizeof(float) * 3);
@@ -85,7 +85,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 		meshTemp.vertex.clear();
 	}
 
-	for (size_t i = 0; i < MaterialCount; i++)
+	for (int i = 0; i < MaterialCount; i++)
 	{
 		fileIn.read((char*)&materialTemp.diffuseColor, sizeof(float) * 3);
 		fileIn.read((char*)&materialTemp.specularColor, sizeof(float) * 3);
@@ -229,7 +229,7 @@ void CustomImport::NewMesh()
 
 	int count = meshS.size() - newMesh.MeshCount;
 
-	for (size_t i = count; i < meshS.size(); i++)
+	for (int i = count; i < meshS.size(); i++)
 	{
 		newMesh.meshTemp.VertexCount = meshS.at(i).VertexCount;
 		newMesh.meshTemp.MaterialID = meshS.at(i).MaterialID;
@@ -249,7 +249,7 @@ void CustomImport::NewMesh()
 
 		newMesh.world = XMMatrixTranslation(newMesh.meshTemp.Translation[0], newMesh.meshTemp.Translation[1], newMesh.meshTemp.Translation[2]);
 
-		for (size_t l = 0; l < newMesh.meshTemp.VertexCount; l++)
+		for (int l = 0; l < newMesh.meshTemp.VertexCount; l++)
 		{
 			for (int m = 0; m < 3; m++)
 			{
@@ -266,7 +266,10 @@ void CustomImport::NewMesh()
 			}
 			for (int n = 0; n < 2; n++)
 			{
-				newMesh.meshTemp.vertexTemp.uv[n] = meshS.at(i).vertex.at(l).uv[n];
+				if (n == 0)
+					newMesh.meshTemp.vertexTemp.uv[1] = meshS.at(i).vertex.at(l).uv[n];
+				if (n == 1)
+					newMesh.meshTemp.vertexTemp.uv[0] = meshS.at(i).vertex.at(l).uv[n];
 			}
 			newMesh.meshTemp.vertex.push_back(newMesh.meshTemp.vertexTemp);
 		}
@@ -274,17 +277,33 @@ void CustomImport::NewMesh()
 	}
 	int mcount = material.size() - newMesh.MaterialCount;
 
-	for (size_t i = mcount; i < material.size(); i++)
+	for (int i = mcount; i < material.size(); i++)
 	{
+		char temp[256];
+		for (int e = 0; e < 256; e++)
+			temp[e] = material.at(i).diffuseMap[e];
+
+		for (int p = 256; p > 0; p--)
+		{
+			if (temp[p] == '/')
+			{
+				material.at(i).diffuseMap[0] = '.';
+				material.at(i).diffuseMap[1] = '.';
+				int size = 256 - p;
+				p = p - 2;
+				for (int q = 2; q < size; q++)
+				{
+					material.at(i).diffuseMap[q] = temp[p + q];
+				}
+				break;
+			}
+		}
+
 		for (int j = 0; j < 3; j++)
 		{
 			newMesh.materialTemp.diffuseColor[j] = material.at(i).diffuseColor[j];
 			newMesh.materialTemp.specularColor[j] = material.at(i).specularColor[j];
 			newMesh.materialTemp.ambientColor[j] = material.at(i).ambientColor[j];
-		}
-		for (int k = 0; k < 256; k++)
-		{
-			newMesh.materialTemp.diffuseMap[k] = material.at(i).diffuseMap[k];
 		}
 		newMesh.materialTemp.transparency = material.at(i).transparency;
 		newMesh.materialTemp.shininess = material.at(i).shininess;

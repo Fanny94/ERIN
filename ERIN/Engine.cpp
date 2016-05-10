@@ -58,18 +58,17 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		/*customImport->LoadCustomFormat("../BinaryDataTextureCube.dat");
-		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(0));
-		graphics->CreateTexture(customImport->meshes.at(0));
-		customImport->meshes.at(0).textureBool = true;*/
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
+		graphics->CreateTexture(customImport->meshes.at(0));
+		customImport->meshes.at(0).textureBool = true;
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(1));
+		graphics->CreateTexture(customImport->meshes.at(1));
+		customImport->meshes.at(1).textureBool = true;
 
 		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
 		customImport->NewMesh();
@@ -268,8 +267,8 @@ void Engine::processInput()
 
 			if (this->player->input->State._buttons[GamePad_Button_X] == true)
 			{
-				gameObject->enemyCount = 0;
-				gameObject->specialEnemyCount = 0;
+				enemyCount = 0;
+				specialEnemyCount = 0;
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_START] == true)
@@ -376,14 +375,19 @@ void Engine::processInput()
 					Objectpool->ResetBullet();
 					camera->ResetCamera();
 
-					for (int i = 0; i < 5; i++)
+					for (int i = 0; i < Objectpool->e_poolSize; i++)
 					{
 						Objectpool->enemies[i].setInUse(false);
+						
+						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+						this->ready = false;
+					}
+					for (int i = 0; i < Objectpool->Se_poolSize; i++)
+					{
 						Objectpool->Senemies[i].setInUse(false);
 
-						this->Objectpool->createSpecialEnemy(5.0f, 5.0f, 0.0f);
-						this->Objectpool->createEnemy(5.0f, 5.0f, 0.0f);
-						this->ready = false;
+						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+						this->gameObject->setSpecialCooldown(false);
 					}
 
 					gameState = GameRunning;
@@ -521,7 +525,7 @@ void Engine::update(double deltaTimeMs)
 				if (player->getHpCooldown())
 				{
 					player->HP -= 1;
-					gameObject->enemyCount -= 1;
+					enemyCount -= 1;
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
 				}
@@ -588,7 +592,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
-						gameObject->enemyCount -= 1;
+						enemyCount -= 1;
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -606,7 +610,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
-						gameObject->specialEnemyCount -= 1;
+						specialEnemyCount -= 1;
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -615,13 +619,13 @@ void Engine::update(double deltaTimeMs)
 		}
 
 		/* *********** HUD Logic *********** */
-		if (gameObject->enemyCount <= 0 && gameObject->specialEnemyCount <= 0)
+		if (enemyCount <= 0 && specialEnemyCount <= 0)
 		{
-			cout << "Reset Game" << endl;
+			//cout << "Reset Game" << endl;
 			floorClear = true;
-			gameObject->reset();
-			gameObject->SpecialReset();
-			Objectpool->ResetBullet();
+			//gameObject->reset();
+			//gameObject->SpecialReset();
+			//Objectpool->ResetBullet();
 		}
 
 		if (player->HP <= 0)
@@ -676,7 +680,7 @@ void Engine::render()
 			}
 		}
 		//spawn special enemies
-		if (this->gameObject->sReady)
+		if (this->gameObject->getSpecialCooldown())
 		{
 			for (int i = 0; i < Objectpool->Se_poolSize; i++)
 			{
@@ -684,7 +688,7 @@ void Engine::render()
 				this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
 				savedRx = Rx;
 				savedRy = Ry;
-				this->gameObject->sReady = false;
+				this->gameObject->setSpecialCooldown(false);
 			}
 		}
 
@@ -694,7 +698,7 @@ void Engine::render()
 				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
 			if (w == 12)
 				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
-			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
+			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w, -2);
 		}
 
 		// Custom Importer
@@ -704,7 +708,7 @@ void Engine::render()
 				customImport->meshes.at(j).world = *player->shipMatrix;
 			if (j == 1)
 				customImport->meshes.at(j).world = *player->turretMatrix;
-			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j);
+			graphics->RenderCustom(customImport->meshes.at(j), customImport->meshes.at(j).world, j, j);
 		}
 
 		if (floorClear == true)
@@ -722,7 +726,7 @@ void Engine::render()
 		{
 			if (Objectpool->bullets[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3);
+				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3, -2);
 			}
 		}
 
@@ -731,7 +735,7 @@ void Engine::render()
 		{
 			if (Objectpool->enemies[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2);
+				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2, -2);
 			}
 		}
 		//special enemy rendering
@@ -739,7 +743,7 @@ void Engine::render()
 		{
 			if (Objectpool->Senemies[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->Senemies[i].objectMatrix, 2);
+				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->Senemies[i].objectMatrix, 2, -2);
 			}
 		}
 
@@ -780,27 +784,27 @@ void Engine::RendHUD()
 	if (player->HP >= 1)
 	{
 		customImport->meshes.at(i).world = XMMatrixTranslation(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i).world, i + 0);
+		graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i).world, i + 0, -2);
 
 		if (player->HP >= 2)
 		{
-			graphics->RenderCustom(customImport->meshes.at(i + 1), customImport->meshes.at(i).world, i + 1);
+			graphics->RenderCustom(customImport->meshes.at(i + 1), customImport->meshes.at(i).world, i + 1, -2);
 
 			if (player->HP >= 3)
 			{
-				graphics->RenderCustom(customImport->meshes.at(i + 2), customImport->meshes.at(i).world, i + 2);
+				graphics->RenderCustom(customImport->meshes.at(i + 2), customImport->meshes.at(i).world, i + 2, -2);
 
 				if (player->HP >= 4)
 				{
-					graphics->RenderCustom(customImport->meshes.at(i + 3), customImport->meshes.at(i).world, i + 3);
+					graphics->RenderCustom(customImport->meshes.at(i + 3), customImport->meshes.at(i).world, i + 3, -2);
 
 					if (player->HP >= 5)
 					{
-						graphics->RenderCustom(customImport->meshes.at(i + 4), customImport->meshes.at(i).world, i + 4);
+						graphics->RenderCustom(customImport->meshes.at(i + 4), customImport->meshes.at(i).world, i + 4, -2);
 
 						if (player->HP >= 6)
 						{
-							graphics->RenderCustom(customImport->meshes.at(i + 5), customImport->meshes.at(i).world, i + 5);
+							graphics->RenderCustom(customImport->meshes.at(i + 5), customImport->meshes.at(i).world, i + 5, -2);
 						}
 					}
 				}
@@ -887,12 +891,12 @@ void Engine::Elevatorfunc()
 		Objectpool->ResetBullet();
 		gameObject->reset();
 		player->NewFloorReset();
-		floorClear = false;
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
 			Objectpool->enemies[i].setInUse(false);
 
 			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+			enemyCount = Objectpool->e_poolSize;
 			this->ready = false;
 		}
 		for (int i = 0; i < Objectpool->Se_poolSize; i++)
@@ -900,14 +904,16 @@ void Engine::Elevatorfunc()
 			Objectpool->Senemies[i].setInUse(false);
 
 			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-			this->gameObject->sReady = false;
+			specialEnemyCount = Objectpool->Se_poolSize;
+			this->gameObject->setSpecialCooldown(false);
 			this->Objectpool->setSpawnCooldown(false);
 		}
+		floorClear = false;
 	}
 	else
 	{
 		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10);
+		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10, -2);
 		Esphere->m_vecCenter = Vector3(0, 0, 0);
 		Esphere->m_fRadius = 0.5f;
 		cout << "Render Elevater Cube" << endl;

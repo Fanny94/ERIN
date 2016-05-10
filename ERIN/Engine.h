@@ -63,6 +63,10 @@ public:
 
 	TSphere* Esphere;
 
+	//Enemy counters
+	int specialEnemyCount = 2;
+	int enemyCount = 5;
+
 private:
 	bool running;
 
