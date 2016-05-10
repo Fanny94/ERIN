@@ -223,25 +223,6 @@ void CustomImport::LoadCustomFormat(string filePath)
 
 void CustomImport::NewMesh()
 {
-	char temp[256];
-	for (int e = 0; e < 256; e++)
-		temp[e] = material.at(0).diffuseMap[e];
-
-	for (int p = 256; p > 0; p--)
-	{
-		if (temp[p] == '/')
-		{
-			material.at(0).diffuseMap[0] = '.';
-			material.at(0).diffuseMap[1] = '.';
-			int size = 256 - p;
-			p = p - 2;
-			for (int q = 2; q < size; q++)
-			{
-				material.at(0).diffuseMap[q] = temp[p+q];
-			}
-		}
-	}
-
 	Mesh newMesh;
 	newMesh.MeshCount = MeshCount;
 	newMesh.MaterialCount = MaterialCount;
@@ -295,6 +276,26 @@ void CustomImport::NewMesh()
 
 	for (size_t i = mcount; i < material.size(); i++)
 	{
+		char temp[256];
+		for (int e = 0; e < 256; e++)
+			temp[e] = material.at(i).diffuseMap[e];
+
+		for (int p = 256; p > 0; p--)
+		{
+			if (temp[p] == '/')
+			{
+				material.at(i).diffuseMap[0] = '.';
+				material.at(i).diffuseMap[1] = '.';
+				int size = 256 - p;
+				p = p - 2;
+				for (int q = 2; q < size; q++)
+				{
+					material.at(i).diffuseMap[q] = temp[p + q];
+				}
+				break;
+			}
+		}
+
 		for (int j = 0; j < 3; j++)
 		{
 			newMesh.materialTemp.diffuseColor[j] = material.at(i).diffuseColor[j];
