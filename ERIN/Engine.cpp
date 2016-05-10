@@ -58,14 +58,9 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
+		//graphics->CreateTexture(customImport->meshes.at(0));
+		//customImport->meshes.at(0).textureBool = true;
 
-		/*customImport->LoadCustomFormat("../BinaryDataCubeT.dat");
-		/*customImport->LoadCustomFormat("../BinaryDataTextureCube.dat");
-		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(0));
-
-		graphics->CreateTexture(customImport->meshes.at(0));
-		customImport->meshes.at(0).textureBool = true;*/
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));

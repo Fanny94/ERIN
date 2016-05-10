@@ -31,6 +31,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 	// Go to proporties and write _CRT_SECURE_NO_WARNINGS in preprocessor definitions 
 	freopen("CONOUT$", "w", stdout);
 
+	CoInitializeEx(NULL, 0);
+
 	Engine* engine = new Engine(hInstance, hPrevInstance, lpCommandLine, nCommandShow);
 
 	const double MS_PER_UPDATE = 8;
