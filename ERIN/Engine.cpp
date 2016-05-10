@@ -692,27 +692,7 @@ void Engine::render()
 
 		//spawn enemies
 		
-		if (this->ready)
-		{
-			for (int i = 0; i <Objectpool->e_poolSize; i++)
-			{
-				cout << "enemy created" << endl;
-				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-				this->ready = false;
-			}
-		}
-		//spawn special enemies
-		if (this->gameObject->getSpecialCooldown())
-		{
-			for (int i = 0; i < Objectpool->Se_poolSize; i++)
-			{
-				cout << "senemy created" << endl;
-				this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-				savedRx = Rx;
-				savedRy = Ry;
-				this->gameObject->setSpecialCooldown(false);
-			}
-		}
+
 
 		for (int w = 11; w < 13; w++)
 		{
@@ -766,6 +746,28 @@ void Engine::render()
 			if (Objectpool->Senemies[i].getInUse())
 			{
 				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->Senemies[i].objectMatrix, 2, -2);
+			}
+		}
+
+		if (this->ready)
+		{
+			for (int i = 0; i <Objectpool->e_poolSize; i++)
+			{
+				cout << "enemy created" << endl;
+				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+				this->ready = false;
+			}
+		}
+		//spawn special enemies
+		if (this->gameObject->getSpecialCooldown())
+		{
+			for (int i = 0; i < Objectpool->Se_poolSize; i++)
+			{
+				cout << "senemy created" << endl;
+				this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+				savedRx = Rx;
+				savedRy = Ry;
+				this->gameObject->setSpecialCooldown(false);
 			}
 		}
 
@@ -913,12 +915,14 @@ void Engine::Elevatorfunc()
 		Objectpool->ResetBullet();
 		gameObject->reset();
 		player->NewFloorReset();
+		enemyCount = Objectpool->e_poolSize;
+		specialEnemyCount = Objectpool->Se_poolSize;
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
 			//Objectpool->enemies[i].setInUse(false);
 
 			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-			enemyCount = Objectpool->e_poolSize;
+			
 			this->ready = false;
 		}
 		for (int i = 0; i < Objectpool->Se_poolSize; i++)
@@ -926,7 +930,7 @@ void Engine::Elevatorfunc()
 			//Objectpool->Senemies[i].setInUse(false);
 
 			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-			specialEnemyCount = Objectpool->Se_poolSize;
+			
 			this->gameObject->setSpecialCooldown(false);
 			this->Objectpool->setSpawnCooldown(false);
 		}
