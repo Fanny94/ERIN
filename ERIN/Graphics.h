@@ -26,7 +26,7 @@ public:
 	void HelpAndOptionsRender();
 
 	void CustomVertexBuffer(Mesh mesh);
-	void RenderCustom(Mesh mesh, Matrix transform, int cvb);
+	void RenderCustom(Mesh mesh, Matrix transform, int cvb, int tv);
 	void CustomUpdateBuffer(Matrix transform);
 
 	void CreateShaders();
@@ -121,7 +121,8 @@ private:
 	vector<ID3D11Buffer*> customVertBuff;
 	ID3D11Buffer* customVertBuffTemp;
 	HRESULT hr;
-	ID3D11ShaderResourceView* textureView = nullptr;
+	vector<ID3D11ShaderResourceView*> textureView;
+	ID3D11ShaderResourceView* temptextureView = nullptr;
 	unsigned char* buffer;
 	
 };

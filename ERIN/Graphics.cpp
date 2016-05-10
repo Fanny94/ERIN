@@ -13,8 +13,8 @@ Graphics::~Graphics()
 	gVertexShader->Release();
 	gPixelShader->Release();
 
-	//textureView->Release();
-	//this->textureView = nullptr;
+	temptextureView->Release();
+	this->temptextureView = nullptr;
 
 	delete[] buffer;
 
@@ -130,7 +130,7 @@ void Graphics::CustomVertexBuffer(Mesh mesh)
 	customVertBuff.push_back(customVertBuffTemp);
 }
 
-void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
+void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb, int tv)
 {
 	UINT32 meshVertexSize = sizeof(VertexCustom);
 	UINT32 offset = 0;
@@ -166,7 +166,8 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
 
-		gDeviceContext->PSSetShaderResources(0, 1, &textureView);
+		if(tv > -1)
+			gDeviceContext->PSSetShaderResources(0, 1, &textureView.at(tv));
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
@@ -186,9 +187,9 @@ void Graphics::CreateTexture(Mesh mesh)
 		file.read(&buffer[0], length);
 		file.close();
 
-		HRESULT hr = CreateWICTextureFromMemory(gDevice, gDeviceContext, &buffer[0], (size_t)length, nullptr, &textureView, NULL);
+		HRESULT hr = CreateWICTextureFromMemory(gDevice, gDeviceContext, &buffer[0], (size_t)length, nullptr, &temptextureView, NULL);
+		textureView.push_back(temptextureView);
 	}
-
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)
