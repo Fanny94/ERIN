@@ -57,10 +57,14 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
+		//customImport->LoadCustomFormat("../BinaryDataShip.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(0));
+
+
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
-
 		//graphics->CreateTexture(customImport->meshes.at(0));
 
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
@@ -212,32 +216,29 @@ void Engine::processInput()
 			}
 
 			// If accept
-			if (aButtonActive == false)
+			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
 			{
-				if (this->player->input->State._buttons[GamePad_Button_A] == true)
+				if (mainMenuOption == 0)
 				{
-					if (mainMenuOption == 0)
-					{
-						cout << "Game Running" << endl;
-						this->ready = true;
-						mainMenu = false;
-						gameState = GameRunning;
-					}
-					else if (mainMenuOption == 1)
-					{
-						cout << "High Score" << endl;
-						mainMenuOption = 0;
-						gameState = HighScore;
-					}
-					else if (mainMenuOption == 2)
-					{
-						cout << "Help & Options" << endl;
-						mainMenuOption = 0;
-						gameState = HelpAndOptions;
-					}
-					else if (mainMenuOption == 3)
-						this->running = false;
+					cout << "Game Running" << endl;
+					this->ready = true;
+					mainMenu = false;
+					gameState = GameRunning;
 				}
+				else if (mainMenuOption == 1)
+				{
+					cout << "High Score" << endl;
+					mainMenuOption = 0;
+					gameState = HighScore;
+				}
+				else if (mainMenuOption == 2)
+				{
+					cout << "Help & Options" << endl;
+					mainMenuOption = 0;
+					gameState = HelpAndOptions;
+				}
+				else if (mainMenuOption == 3)
+					this->running = false;
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_A] == false)
@@ -279,23 +280,19 @@ void Engine::processInput()
 			// Dpad camera movement
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 			{
-				if (gameState == GameRunning)
-					this->camera->cameraMoveLeft();
+				this->camera->cameraMoveLeft();
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
 			{
-				if (gameState == GameRunning)
-					this->camera->cameraMoveRight();
+				this->camera->cameraMoveRight();
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
 			{
-				if (gameState == GameRunning)
-					this->camera->cameraMoveUp();
+				this->camera->cameraMoveUp();
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
 			{
-				if (gameState == GameRunning)
-					this->camera->cameraMoveDown();
+				this->camera->cameraMoveDown();
 			}
 			break;
 
@@ -372,7 +369,6 @@ void Engine::processInput()
 					gameObject->reset();
 					Objectpool->ResetBullet();
 					player->PlayerReset();
-					Objectpool->ResetBullet();
 					camera->ResetCamera();
 
 					for (int i = 0; i < 5; i++)
@@ -398,6 +394,7 @@ void Engine::processInput()
 					player->PlayerReset();
 					gameObject->reset();
 					Objectpool->ResetBullet();
+					camera->ResetCamera();
 					floorClear = false;
 					mainMenu = true;
 
@@ -449,6 +446,7 @@ void Engine::processInput()
 		{
 			this->running = false;
 		}
+
 		/*
 		if (this->player->input->State._buttons[GamePad_Button_X] == true)
 		{
