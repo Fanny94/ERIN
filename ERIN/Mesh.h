@@ -53,5 +53,6 @@ public:
 	vector<Material> material;
 	Material materialTemp;
 	Matrix world;
+	bool textureBool;
 };
 #endif // !MESH_H

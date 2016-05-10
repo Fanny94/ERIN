@@ -3,7 +3,7 @@
 #include "Linker.h"
 #include "Structs.h"
 #include "Camera.h"
-#include "WICTextureLoader.h"
+
 #include "Mesh.h"
 
 using namespace std;
@@ -61,7 +61,6 @@ public:
 		Matrix world;
 		Matrix view;
 		Matrix projection;
-		XMFLOAT4 camPos;
 	};
 
 	Matrix viewProj;
@@ -80,6 +79,9 @@ public:
 		float paddingAC;
 		float specularColor[3];
 		float shininess;
+		XMFLOAT4 camPos;
+		int textureBool;
+		float padding[3];
 	};
 
 	CustomFormat* CFPtr;
@@ -120,7 +122,7 @@ private:
 	ID3D11Buffer* customVertBuffTemp;
 	HRESULT hr;
 	ID3D11ShaderResourceView* textureView = nullptr;
-	//ID3D11Texture2D* texture = nullptr;
+	unsigned char* buffer;
 	
 };
 

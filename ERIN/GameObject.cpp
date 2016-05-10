@@ -159,8 +159,6 @@ void GameObject::reset()
 	this->pos->z = this->z;
 
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
-
-	this->enemyCount = 5;
 }
 
 void GameObject::computeTurn(double dt)
@@ -216,7 +214,6 @@ void GameObject::SpecialReset()
 	this->pos->z = this->z;
 
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
-	this->specialEnemyCount = 2;
 }
 
 

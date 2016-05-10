@@ -16,8 +16,7 @@ Graphics::~Graphics()
 	//textureView->Release();
 	//this->textureView = nullptr;
 
-	//texture->Release();
-	//this->texture = nullptr;
+	delete[] buffer;
 
 	gDepthView->Release();
 	gDepthStencilView->Release();
@@ -152,6 +151,8 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CFPtr->specularColor[1] = mesh.material.at(j).specularColor[1];
 		CFPtr->specularColor[2] = mesh.material.at(j).specularColor[2];
 		CFPtr->shininess = mesh.material.at(j).shininess;
+		CFPtr->camPos = camera->camPosition;
+		CFPtr->textureBool = mesh.textureBool;
 	}
 
 	gDeviceContext->Unmap(customFormatBuffer, 0);
@@ -165,7 +166,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
 
-		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
+		gDeviceContext->PSSetShaderResources(0, 1, &textureView);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
 	}
@@ -173,48 +174,20 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 void Graphics::CreateTexture(Mesh mesh)
 {
-	char p[256];
-
-	for (int i = 0; i < 256; i++)
+	basic_ifstream<unsigned char> file(mesh.material.at(0).diffuseMap, ios::binary);
+	
+	if (file.is_open())
 	{
-		p[i] = mesh.material.at(0).diffuseMap[i];
+		file.seekg(0, ios::end);
+		int length = file.tellg();
+		file.seekg(0, ios::beg);
 
+		buffer = new unsigned char[length];
+		file.read(&buffer[0], length);
+		file.close();
+
+		HRESULT hr = CreateWICTextureFromMemory(gDevice, gDeviceContext, &buffer[0], (size_t)length, nullptr, &textureView, NULL);
 	}
-
-	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, (const wchar_t*)p, NULL, &textureView, 0);
-
-	if (FAILED(hr))
-	{
-		//error
-	}
-
-	//D3D11_TEXTURE2D_DESC textureDesc;
-	//ZeroMemory(&textureDesc, sizeof(textureDesc));
-	//textureDesc.Width = 256;
-	//textureDesc.Height = 256;
-	//textureDesc.MipLevels = textureDesc.ArraySize= 1;
-	//textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	//textureDesc.SampleDesc.Count = 1;
-	//textureDesc.SampleDesc.Quality = 0;
-	//textureDesc.Usage = D3D11_USAGE_DEFAULT;
-	//textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	//textureDesc.CPUAccessFlags = 0;
-	//textureDesc.MiscFlags = 0;
-
-	//D3D11_SUBRESOURCE_DATA data;
-	//ZeroMemory(&data, sizeof(data));
-	//data.pSysMem = (void*)p;
-	//data.SysMemPitch = 4;
-	//gDevice->CreateTexture2D(&textureDesc, &data, &texture);
-
-	//D3D11_SHADER_RESOURCE_VIEW_DESC resViewDesc;
-	//ZeroMemory(&resViewDesc, sizeof(resViewDesc));
-	//resViewDesc.Format = textureDesc.Format;
-	//resViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	//resViewDesc.Texture2D.MipLevels = textureDesc.MipLevels;
-	//resViewDesc.Texture2D.MostDetailedMip = 0;
-
-	//gDevice->CreateShaderResourceView(texture, &resViewDesc, &textureView);
 
 }
 
@@ -243,7 +216,6 @@ void Graphics::CustomUpdateBuffer(Matrix transform)
 	MatrixPtr2 = (MATRICES*)mapped.pData;
 	MatrixPtr2->worldViewProj = worldViewProj;
 	MatrixPtr2->world = world;
-	MatrixPtr2->camPos = camera->camPosition;
 
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
@@ -415,7 +387,6 @@ void Graphics::UpdateConstantBuffer()
 	MatrixPtr = (MATRICES*)mapped.pData;
 	MatrixPtr->worldViewProj = worldViewProj;
 	MatrixPtr->world = world;
-	MatrixPtr->camPos = camera->camPosition;
 
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
