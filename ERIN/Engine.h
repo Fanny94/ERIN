@@ -61,6 +61,8 @@ public:
 	int pMenuOption = 0;
 	// Main Menu
 	int mainMenuOption = 0;
+	// Help & Options Menu
+	int haoMenuOption = 0;
 
 	TSphere* Esphere;
 

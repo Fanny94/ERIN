@@ -16,8 +16,6 @@ Graphics::~Graphics()
 	temptextureView->Release();
 	this->temptextureView = nullptr;
 
-	delete[] buffer;
-
 	gDepthView->Release();
 	gDepthStencilView->Release();
 
@@ -190,6 +188,8 @@ void Graphics::CreateTexture(Mesh mesh)
 
 		HRESULT hr = CreateWICTextureFromMemory(gDevice, gDeviceContext, &buffer[0], (size_t)length, nullptr, &temptextureView, NULL);
 		textureView.push_back(temptextureView);
+
+		delete[] buffer;
 	}
 }
 
