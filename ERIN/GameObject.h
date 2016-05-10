@@ -22,12 +22,9 @@ public:
 	void updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void SpecialReset();
 	void SpecialupdateCooldown(double sdt);
-	int specialEnemyCount = 2;
-	//coldown for bullets
-	bool sReady = true;
-	const float scooldown = 0.8f;
-	double scurrentTime;
-	//coldown for bullets
+	bool getSpecialCooldown() { return this->sReady; };
+	void setSpecialCooldown(bool sReady) { this->sReady = sReady; };
+
 
 	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
@@ -45,7 +42,7 @@ public:
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
 	void setAcceleration(float acceleration) { this->acceleration = acceleration; };
 
-	int enemyCount = 5;
+	
 
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };
@@ -96,6 +93,12 @@ private:
 	double heading = 0;
 	double plannedHeading = 0;
 	double turnRate = 0.1; // deg /s
+
+	//coldown for Special enemies
+	bool sReady = true;
+	const float scooldown = 0.8f;
+	double scurrentTime;
+	//coldown for special enemies
 };
 
 #endif // !GAMEOBJECT_H
