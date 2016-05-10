@@ -1,12 +1,9 @@
 #include "Behavior.h"
 
-
-
 Behavior::Behavior(BehaviorState state)
 {
 	this->behavior = Patrol;
 }
-
 
 Behavior::~Behavior()
 {
@@ -16,9 +13,6 @@ void Behavior::update(Position player, Position myself)
 {
 	float distanceX = abs(player.x - myself.x);
 	float distanceY = abs(player.y - myself.y);
-
-
-
 
 	if (distanceX < this->aggroRadius && distanceY < this->aggroRadius)
 	{
@@ -32,7 +26,6 @@ void Behavior::update(Position player, Position myself)
 		this->targetInRange = false;
 		this->behavior = Patrol;
 	}
-
 
 	/*float EnemyDistanceX = abs(thisEnemy.x - otherEnemy.x);
 	float EnemyDistanceY = abs(thisEnemy.y - otherEnemy.y);
@@ -48,6 +41,24 @@ void Behavior::update(Position player, Position myself)
 	}*/
 }
 
+void Behavior::updateSpecial(Position player, Position myself)
+{
+	float distanceX = abs(player.x - myself.x);
+	float distanceY = abs(player.y - myself.y);
+
+	if (distanceX < this->avoidRadius && distanceY < this->avoidRadius)
+	{
+		this->targetInRange = true;
+		this->behavior = Follow;
+		Vector2 vec{ player.x + myself.x, player.y + myself.y };
+		this->heading = XMConvertToDegrees(atan2f(vec.x, vec.y));
+	}
+	else
+	{
+		this->targetInRange = false;
+		this->behavior = Patrol;
+	}
+}
 
 void Behavior::cohesion(Position myself, Position ally)
 {
@@ -55,57 +66,24 @@ void Behavior::cohesion(Position myself, Position ally)
 	float CohesionCount = 0;
 	float cohesion = 0.09f;
 
-	CohesionX += myself.x + heading;
-	CohesionY += myself.y + heading;
+	
+	float enemyDist = sqrt(pow((ally.y - myself.x), 2) + pow((ally.y - myself.x), 2));
+	if ((enemyDist < 2))
+	{
+		CohesionX += myself.x + heading;
+		CohesionY += myself.y + heading;
+		CohesionCount++;
+	}
 
 	if (CohesionCount > 0)
 	{
-		CohesionX = (CohesionX / CohesionCount) - ally.x; //maybe replace with myslef.x
-		CohesionY = (CohesionY / CohesionCount) - ally.y; //maybe replace with myslef.y
+		CohesionX = (CohesionX / CohesionCount) - myself.x;
+		CohesionY = (CohesionY / CohesionCount) - myself.y;
 		CohesionX = (CohesionX / (sqrt(pow(CohesionX, 2) + pow(CohesionY, 2)))) * VelX;
 		CohesionY = (CohesionY / (sqrt(pow(CohesionX, 2) + pow(CohesionY, 2)))) * VelY;
-		heading += (CohesionX - getHeading()) * cohesion;
-		heading += (CohesionY - getHeading()) * cohesion;
+		heading += (CohesionX - heading) * cohesion;
+		heading += (CohesionY - heading) * cohesion;
 	}
-	
-	/*float calc1 = myself.x + ally.x;
-	float calc2 = myself.y + ally.y;
-	int N = 5;
-	
-	float EnemyDistanceX = abs(myself.x - ally.x);
-	float EnemyDistanceY = abs(myself.y - ally.y);
-	if (EnemyDistanceX > 5.0f && EnemyDistanceY > 5.0f)
-	{
-		Vector2 forceVec = Vector2(calc1 / (N - 1), calc2 / (N - 1));
-		Vector2 compVec = { ally.x, ally.y };
-
-		Vector2 finalVec = (forceVec - compVec) / 100;
-		this->heading = XMConvertToDegrees(atan2f(finalVec.x, finalVec.y));
-	}
-	vector<int> CenterOfMass;
-
-	int Neighbors;
-	double Average;
-
-	 //Loop through all enemies and check so that it is not checking itself as a someone else
-	for (myself)
-	{
-		if (!myself)
-		{
-			force += Vector2(1, 2);
-			CenterOfMass += myself;
-			Neighbors++
-		}
-	}
-
-	//If there are Neighbors nearby
-	if (Neighbors > 0)
-	{
-		// Calculate the average of CenterOfMass with Neighbors as parameter
-		Average;
-		ForceVec = CenterOfMass - otherEnemy;
-		ForceVec = ForceVec.Normalize;
-	}*/
 }
 
 void Behavior::alignment()
@@ -114,7 +92,6 @@ void Behavior::alignment()
 
 void Behavior::separation(Position myself, Position ally)
 {
-
 	//Calculates the distance between 2 enemies
 	float EnemyDistanceX = abs(myself.x - ally.x);
 	float EnemyDistanceY = abs(myself.y - ally.y);

@@ -260,7 +260,6 @@ void CustomImport::NewMesh()
 				else if (m == 2)
 					newMesh.meshTemp.vertexTemp.pos[0] = meshS.at(i).vertex.at(l).pos[m];
 
-				//newMesh.meshTemp.vertexTemp.pos[m] = meshS.at(i).vertex.at(l).pos[m];
 				newMesh.meshTemp.vertexTemp.nor[m] = meshS.at(i).vertex.at(l).nor[m];
 				newMesh.meshTemp.vertexTemp.tan[m] = meshS.at(i).vertex.at(l).tan[m];
 				newMesh.meshTemp.vertexTemp.bitan[m] = meshS.at(i).vertex.at(l).bitan[m];

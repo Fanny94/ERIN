@@ -4,7 +4,6 @@
 #include "Input.h"
 #include "Structs.h"
 #include "Behavior.h"
-
 #include <string>
 # define M_PI 3.14159265358979323846
 using namespace std;
@@ -17,7 +16,17 @@ public:
 	~GameObject();
 
 	bool inUse;
-	void Reset();
+
+	//Special Enemy
+	void updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies);
+	void SpecialReset();
+	void SpecialupdateCooldown(double sdt);
+	int specialEnemyCount = 2;
+	//coldown for bullets
+	bool sReady = true;
+	const float scooldown = 0.8f;
+	double scurrentTime;
+	//coldown for bullets
 
 	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);

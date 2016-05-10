@@ -2,7 +2,6 @@
 #define INPUT_H
 #include "Linker.h"
 
-
 typedef enum
 {
 	GamePadIndex_One = 0,

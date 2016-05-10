@@ -22,7 +22,7 @@ public:
 	
 	Position* bulletPos;
 	Matrix* bulletMatrix;
-	int timeLeft = 700; //How long a bullet will last
+	int timeLeft = 500; //How long a bullet will last
 	
 
 	union 

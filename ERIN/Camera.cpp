@@ -1,32 +1,29 @@
 #include "Camera.h"
 #include "Input.h"
 
-Camera::Camera()
-{
-}
+Camera::Camera() {}
 
 Camera::~Camera()
 {
-    DIKeyboard->Unacquire();
-    DIMouse->Unacquire();
+	DIKeyboard->Unacquire();
+	DIMouse->Unacquire();
 	DirectInput->Release();
 }
 
 bool Camera::InitDirectInput(HINSTANCE hInstance)
 {
-
 	hr = DirectInput8Create(hInstance,
-									DIRECTINPUT_VERSION,
-									IID_IDirectInput8, (void**)&DirectInput,
-									NULL);
+		DIRECTINPUT_VERSION,
+		IID_IDirectInput8, (void**)&DirectInput,
+		NULL);
 
 	hr = DirectInput->CreateDevice(GUID_SysKeyboard,
 		&DIKeyboard,
 		NULL);
 
 	hr = DirectInput->CreateDevice(GUID_SysMouse,
-									&DIMouse,
-									NULL);
+		&DIMouse,
+		NULL);
 
 	hr = DIKeyboard->SetDataFormat(&c_dfDIKeyboard);
 	hr = DIKeyboard->SetCooperativeLevel(wndH, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
@@ -40,7 +37,7 @@ bool Camera::InitDirectInput(HINSTANCE hInstance)
 void Camera::DetectInput(double time)
 {
 	speed = (float)(5.0f * time);
-	
+
 	DIMOUSESTATE mouseCurrState;
 
 	BYTE keyboardState[256];
@@ -101,7 +98,7 @@ void Camera::UpdateCamera()
 	camTarget = XMVector3TransformCoord(worldForward, camRotationMatrix);
 	camTarget = XMVector3Normalize(camTarget);
 
-	Matrix RotateYTempMatrix;                  
+	Matrix RotateYTempMatrix;
 	RotateYTempMatrix = XMMatrixRotationY(camYaw);
 
 	camRight = XMVector3TransformCoord(worldRight, RotateYTempMatrix);
@@ -119,6 +116,14 @@ void Camera::UpdateCamera()
 	camTarget = camPosition + camTarget;
 
 	camView = XMMatrixLookAtLH(camPosition, camTarget, camUp);
+}
+
+void Camera::UpdateGameCamera(float x, float y, double dt)
+{
+	// The Game camera that is going to follow the player and allways showing the elevator
+
+	camPosition.x += (x - camPosition.x) * lerp * dt;
+	camPosition.y += (y - camPosition.y) * lerp * dt;
 }
 
 void Camera::ResetCamera()
@@ -162,6 +167,12 @@ void Camera::cameraMoveUp(float factor)
 void Camera::cameraMoveDown(float factor)
 {
 	moveUpDown -= speed * -factor;
+}
+
+void Camera::cameraFollow(float x, float y)
+{
+	this->camPosition.x = x;
+	this->camPosition.y = y;
 }
 
 void Camera::StartTimer()

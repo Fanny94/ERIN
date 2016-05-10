@@ -1,7 +1,5 @@
 #include "Graphics.h"
 
-//http://www.miguelcasillas.com/?mcportfolio=collision-detection-c
-
 Graphics::Graphics() {}
 
 Graphics::~Graphics()
@@ -15,6 +13,12 @@ Graphics::~Graphics()
 	gVertexShader->Release();
 	gPixelShader->Release();
 
+	//textureView->Release();
+	//this->textureView = nullptr;
+
+	//texture->Release();
+	//this->texture = nullptr;
+
 	gDepthView->Release();
 	gDepthStencilView->Release();
 
@@ -25,9 +29,6 @@ Graphics::~Graphics()
 
 	customVertBuffTemp->Release();
 	this->customVertBuffTemp = nullptr;
-
-	/*textureView->Release();
-	this->textureView = nullptr;*/
 
 	this->gDevice = nullptr;
 	this->gDeviceContext = nullptr;
@@ -72,7 +73,7 @@ void Graphics::TitleScreenRender()
 {
 	float clearColor[] = { 0, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
-	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
 }
 
 void Graphics::MainMenuRender()
@@ -141,8 +142,6 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 	
 	for (size_t j = 0; j < mesh.material.size(); j++)
 	{
-		//memcpy(CFPtr, &mesh.material.at(j), sizeof(CustomFormat));
-		// use memcpy to copy directly from material into buffer.
 		CFPtr->diffuseColor[0] = mesh.material.at(j).diffuseColor[0];
 		CFPtr->diffuseColor[1] = mesh.material.at(j).diffuseColor[1];
 		CFPtr->diffuseColor[2] = mesh.material.at(j).diffuseColor[2];
@@ -156,7 +155,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 	}
 
 	gDeviceContext->Unmap(customFormatBuffer, 0);
-
+	
 	for (size_t i = 0; i < mesh.MeshCount; i++)
 	{
 		gDeviceContext->IASetVertexBuffers(0, 1, &customVertBuff.at(cvb), &meshVertexSize, &offset);
@@ -165,6 +164,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 		CustomUpdateBuffer(transform);
 
 		gDeviceContext->PSSetConstantBuffers(0, 1, &customFormatBuffer);
+
 		//gDeviceContext->PSSetShaderResources(0, 1, &textureView);
 
 		gDeviceContext->Draw(mesh.mesh.at(i).vertex.size(), 0);
@@ -173,28 +173,48 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb)
 
 void Graphics::CreateTexture(Mesh mesh)
 {
-	//char* p[256] = { mesh.material.at(0).diffuseMap };
 	char p[256];
+
 	for (int i = 0; i < 256; i++)
 	{
 		p[i] = mesh.material.at(0).diffuseMap[i];
-	}
-	
-	wchar_t* pwcsName;
-	
-	int inChars = MultiByteToWideChar(CP_ACP, 0, p, -1, NULL, 0);
 
-	pwcsName = new wchar_t[256];
-	MultiByteToWideChar(CP_ACP, 0, p, -1, (LPWSTR)pwcsName, inChars);
-	
-	//wchar_t* out = (wchar_t*)mesh.material.at(0).diffuseMap;
-	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, pwcsName, nullptr, &textureView, 0);
+	}
+
+	HRESULT hr = CreateWICTextureFromFile(gDevice, gDeviceContext, (const wchar_t*)p, NULL, &textureView, 0);
+
 	if (FAILED(hr))
 	{
 		//error
 	}
 
-	delete[] pwcsName;
+	//D3D11_TEXTURE2D_DESC textureDesc;
+	//ZeroMemory(&textureDesc, sizeof(textureDesc));
+	//textureDesc.Width = 256;
+	//textureDesc.Height = 256;
+	//textureDesc.MipLevels = textureDesc.ArraySize= 1;
+	//textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	//textureDesc.SampleDesc.Count = 1;
+	//textureDesc.SampleDesc.Quality = 0;
+	//textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	//textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	//textureDesc.CPUAccessFlags = 0;
+	//textureDesc.MiscFlags = 0;
+
+	//D3D11_SUBRESOURCE_DATA data;
+	//ZeroMemory(&data, sizeof(data));
+	//data.pSysMem = (void*)p;
+	//data.SysMemPitch = 4;
+	//gDevice->CreateTexture2D(&textureDesc, &data, &texture);
+
+	//D3D11_SHADER_RESOURCE_VIEW_DESC resViewDesc;
+	//ZeroMemory(&resViewDesc, sizeof(resViewDesc));
+	//resViewDesc.Format = textureDesc.Format;
+	//resViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	//resViewDesc.Texture2D.MipLevels = textureDesc.MipLevels;
+	//resViewDesc.Texture2D.MostDetailedMip = 0;
+
+	//gDevice->CreateShaderResourceView(texture, &resViewDesc, &textureView);
 
 }
 
@@ -401,4 +421,3 @@ void Graphics::UpdateConstantBuffer()
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 }
-

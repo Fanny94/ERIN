@@ -17,7 +17,7 @@ public:
 	Vector4 camRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 	Vector4 camTarget = XMVectorSet(0.0f, 0.0f, 1.0f, 1.0f);
 	Vector4 camUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	Vector4 camPosition = XMVectorSet(0.0f, 0.5f, -18.0f, 1.0f);
+	Vector4 camPosition = XMVectorSet(0.0f, 0.0f, -18.0f, 1.0f);
 
 	// Matrices
 	Matrix camRotationMatrix;
@@ -63,6 +63,13 @@ public:
 	void cameraMoveRight(float factor);
 	void cameraMoveUp(float factor);
 	void cameraMoveDown(float factor);
+
+	// Follow player function
+	float lerpDistanceX = 20.0f;
+	float lerpDistanceY = 10.0f;
+	float lerp = 0.6f;
+	void UpdateGameCamera(float x, float y, double dt);
+	void cameraFollow(float x, float y);
 
 	bool getInput() { return cameraInput; };
 	bool InitDirectInput(HINSTANCE hInstance);

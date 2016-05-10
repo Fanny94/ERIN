@@ -8,6 +8,7 @@ typedef enum
 	Patrol = 0,
 	Follow = 1,
 	Fire = 2,
+	Avoid = 3,
 }BehaviorState;
 
 class Behavior
@@ -17,6 +18,8 @@ public:
 	~Behavior();
 
 	void update(Position player, Position myself);
+
+	void updateSpecial(Position player, Position myself);
 
 	void ObstacleAvoidance(Position myself);
 
@@ -35,6 +38,8 @@ public:
 	double getHeading() { return this->heading; };
 	BehaviorState getBehavior() { return this->behavior; };
 
+
+
 private:
 	BehaviorState behavior;
 	bool targetInRange;
@@ -42,6 +47,7 @@ private:
 
 	double heading;
 	float aggroRadius = 100.0f;
+	float avoidRadius = 10.0f;
 
 	// flock AI
 	Position Po;

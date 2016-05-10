@@ -5,7 +5,6 @@ Bullet::Bullet()
 	this->bulletMatrix = new Matrix();
 }
 
-
 Bullet::~Bullet()
 {
 	delete this->bulletMatrix;
