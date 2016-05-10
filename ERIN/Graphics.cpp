@@ -13,8 +13,8 @@ Graphics::~Graphics()
 	gVertexShader->Release();
 	gPixelShader->Release();
 
-	//textureView->Release();
-	//this->textureView = nullptr;
+	textureView->Release();
+	this->textureView = nullptr;
 
 	delete[] buffer;
 
@@ -72,6 +72,7 @@ void Graphics::TitleScreenRender()
 {
 	float clearColor[] = { 0, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
+
 
 }
 
@@ -188,7 +189,6 @@ void Graphics::CreateTexture(Mesh mesh)
 
 		HRESULT hr = CreateWICTextureFromMemory(gDevice, gDeviceContext, &buffer[0], (size_t)length, nullptr, &textureView, NULL);
 	}
-
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)

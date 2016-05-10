@@ -58,9 +58,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		//graphics->CreateTexture(customImport->meshes.at(0));
-		//customImport->meshes.at(0).textureBool = true;
-
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
@@ -112,6 +109,190 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataWalls.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(12));
+
+		// Title Screen
+		customImport->LoadCustomFormat("../BinaryDataMenuQuad.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(13));
+
+		graphics->CreateTexture(customImport->meshes.at(13));
+		customImport->meshes.at(13).textureBool = true;
+
+
+		//// Main Menu
+		//// Option 1 - Play
+		//customImport->LoadCustomFormat("../Main1-Play.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(14));
+
+		//graphics->CreateTexture(customImport->meshes.at(14));
+		//customImport->meshes.at(14).textureBool = true;
+
+		//// Option 2 - Highscore
+		//customImport->LoadCustomFormat("../Main2-Highscore.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(15));
+
+		//graphics->CreateTexture(customImport->meshes.at(15));
+		//customImport->meshes.at(15).textureBool = true;
+
+		////Option 3 - Help & Options
+		//customImport->LoadCustomFormat("../Main3-Help&Options.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(16));
+
+		//graphics->CreateTexture(customImport->meshes.at(16));
+		//customImport->meshes.at(16).textureBool = true;
+
+		////Option 4 - Quit
+		//customImport->LoadCustomFormat("../Main4-Quit.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(17));
+
+		//graphics->CreateTexture(customImport->meshes.at(17));
+		//customImport->meshes.at(16).textureBool = true;
+
+		////Option 5 - Are You Sure?
+		//customImport->LoadCustomFormat("../Main5-Quit-AreYouSure.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(18));
+
+		//graphics->CreateTexture(customImport->meshes.at(18));
+		//customImport->meshes.at(16).textureBool = true;
+
+
+		//// Pause Menu
+		//// Option 1 - Continue
+		//customImport->LoadCustomFormat("../Pause1-Continue.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(19));
+
+		//graphics->CreateTexture(customImport->meshes.at(19));
+		//customImport->meshes.at(14).textureBool = true;
+
+		//// Option 2 - Restart
+		//customImport->LoadCustomFormat("../Pause2-Restart.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(20));
+
+		//graphics->CreateTexture(customImport->meshes.at(20));
+		//customImport->meshes.at(15).textureBool = true;
+
+		////Option 3 - Help & Options
+		//customImport->LoadCustomFormat("../Pause3-Help&Options.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(21));
+
+		//graphics->CreateTexture(customImport->meshes.at(21));
+		//customImport->meshes.at(16).textureBool = true;
+
+		////Option 4 - Main Menu
+		//customImport->LoadCustomFormat("../Pause4-MainMenu.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(22));
+
+		//graphics->CreateTexture(customImport->meshes.at(22));
+		//customImport->meshes.at(16).textureBool = true;
+
+		////Option 5 - Are You Sure?
+		//customImport->LoadCustomFormat("../Pause5-MainMenu-AreYouSure.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(23));
+
+		//graphics->CreateTexture(customImport->meshes.at(23));
+		//customImport->meshes.at(16).textureBool = true;
+
+
+		//// Options Menu
+		//// Option 1 - How To Play
+		//customImport->LoadCustomFormat("../Options1-HowToPlay.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(24));
+
+		//graphics->CreateTexture(customImport->meshes.at(24));
+		//customImport->meshes.at(14).textureBool = true;
+
+		//// Option 2 - Controls
+		//customImport->LoadCustomFormat("../Options2-Controls.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(25));
+
+		//graphics->CreateTexture(customImport->meshes.at(25));
+		//customImport->meshes.at(15).textureBool = true;
+
+		////Option 3 - Settings
+		//customImport->LoadCustomFormat("../Options3-Settings.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(26));
+
+		//graphics->CreateTexture(customImport->meshes.at(26));
+		//customImport->meshes.at(16).textureBool = true;
+
+		////Option 4 - Credits
+		//customImport->LoadCustomFormat("../Options4-Credits.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(27));
+
+		//graphics->CreateTexture(customImport->meshes.at(27));
+		//customImport->meshes.at(16).textureBool = true;
+
+
+		//// Results Menu
+		//// Option 1 - Play Again
+		//customImport->LoadCustomFormat("../Results1-PlayAgain.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(28));
+
+		//graphics->CreateTexture(customImport->meshes.at(28));
+		//customImport->meshes.at(14).textureBool = true;
+
+		//// Option 2 - Highscore
+		//customImport->LoadCustomFormat("../Results2-Highscore.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(29));
+
+		//graphics->CreateTexture(customImport->meshes.at(29));
+		//customImport->meshes.at(15).textureBool = true;
+
+		////Option 3 - Credits
+		//customImport->LoadCustomFormat("../Results3-Credits.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(30));
+
+		//graphics->CreateTexture(customImport->meshes.at(30));
+		//customImport->meshes.at(16).textureBool = true;
+
+		////Option 4 - Main Menu
+		//customImport->LoadCustomFormat("../Results4-MainMenu.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(31));
+
+		//graphics->CreateTexture(customImport->meshes.at(31));
+		//customImport->meshes.at(16).textureBool = true;
+
+		////Option 5 - Are You Sure?
+		//customImport->LoadCustomFormat("../Results5-MainMenu-AreYouSure.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(32));
+
+		//graphics->CreateTexture(customImport->meshes.at(32));
+		//customImport->meshes.at(16).textureBool = true;
+
+		////Controls
+		//customImport->LoadCustomFormat("../Controls.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(33));
+
+		//graphics->CreateTexture(customImport->meshes.at(33));
+		//customImport->meshes.at(16).textureBool = true;
+
+		////Credits
+		//customImport->LoadCustomFormat("../Credits.dat");
+		//customImport->NewMesh();
+		//graphics->CustomVertexBuffer(customImport->meshes.at(34));
+
+		//graphics->CreateTexture(customImport->meshes.at(34));
+		//customImport->meshes.at(16).textureBool = true;
 
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
@@ -560,7 +741,6 @@ void Engine::update(double deltaTimeMs)
 					//gameObject->enemyCount + 1;
 					Objectpool->setSpawnCooldown(false);
 				}
-
 			}
 		}
 
@@ -711,6 +891,7 @@ void Engine::render()
 				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
 			if (w == 12)
 				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
+			
 			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w);
 		}
 
@@ -765,24 +946,47 @@ void Engine::render()
 
 		break;
 	case TitleScreen:
-		//TitleScreen->render();			// Example of how to render the title screen
-		graphics->TitleScreenRender();
+		graphics->Render();
+
+		customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13);
+		
+		camera->InitCamera();
 		break;
 	case MainMenu:
-		//MainMenu->render();				// Example of how to render the main menu
-		graphics->MainMenuRender();
+		graphics->Render();
+
+
+
+		camera->InitCamera();
 		break;
 	case Pause:
-		//graphics->PauseRender();
+		graphics->Render();
+
+
+
+		camera->InitCamera();
 		break;
 	case GameOver:
-		graphics->GameOverRender();
+		graphics->Render();
+
+
+
+		camera->InitCamera();
 		break;
 	case HighScore:
-		graphics->HighScoreRender();
+		graphics->Render();
+
+
+
+		camera->InitCamera();
 		break;
 	case HelpAndOptions:
-		graphics->HelpAndOptionsRender();
+		graphics->Render();
+
+
+
+		camera->InitCamera();
 		break;
 	}
 
