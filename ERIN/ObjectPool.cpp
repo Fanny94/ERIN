@@ -122,32 +122,32 @@ void ObjectPool::bulletupdateCooldown(double bdt)
 
 void ObjectPool::createEnemy(float x, float y, float z)
 {
-		for (int i = 0; i < this->e_poolSize; i++)
+	for (int i = 0; i < this->e_poolSize; i++)
+	{
+		if (!enemies[i].getInUse())
 		{
-			if (!enemies[i].getInUse())
-			{
-				enemies[i].setObjectPosX(x);
-				enemies[i].setObjectPosY(y);
-				enemies[i].setObjectPosZ(z);
-				enemies[i].setInUse(true);
-				return;
-			}
+			enemies[i].setObjectPosX(x);
+			enemies[i].setObjectPosY(y);
+			enemies[i].setObjectPosZ(z);
+			enemies[i].setInUse(true);
+			return;
 		}
+	}
 }
 
 void ObjectPool::createSpecialEnemy(float x, float y, float z)
 {
-		for (int i = 0; i < this->Se_poolSize; i++)
+	for (int i = 0; i < this->Se_poolSize; i++)
+	{
+		if (!Senemies[i].getInUse())
 		{
-			if (!Senemies[i].getInUse())
-			{
-				Senemies[i].setObjectPosX(x);
-				Senemies[i].setObjectPosY(y);
-				Senemies[i].setObjectPosZ(z);
-				Senemies[i].setInUse(true);
-				return;
-			}
+			Senemies[i].setObjectPosX(x);
+			Senemies[i].setObjectPosY(y);
+			Senemies[i].setObjectPosZ(z);
+			Senemies[i].setInUse(true);
+			return;
 		}
+	}
 }
 
 void ObjectPool::spawnTimer(double swdt)

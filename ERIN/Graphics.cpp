@@ -70,7 +70,6 @@ void Graphics::TitleScreenRender()
 {
 	float clearColor[] = { 0, 1, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
-
 }
 
 void Graphics::MainMenuRender()
@@ -190,8 +189,6 @@ void Graphics::CreateTexture(Mesh mesh)
 
 		delete[] buffer;
 	}
-
-
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)

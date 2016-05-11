@@ -3,10 +3,8 @@
 #include "Linker.h"
 #include "Structs.h"
 #include "Camera.h"
-
 #include "Mesh.h"
 
-using namespace std;
 class Camera;
 
 class Graphics
@@ -124,7 +122,6 @@ private:
 	vector<ID3D11ShaderResourceView*> textureView;
 	ID3D11ShaderResourceView* temptextureView = nullptr;
 	unsigned char* buffer;
-	
 };
 
 #endif // !GRAPHICS_H

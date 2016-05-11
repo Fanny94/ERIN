@@ -73,6 +73,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
+		graphics->CreateTexture(customImport->meshes.at(2));
+		customImport->meshes.at(2).textureBool = true;
 
 		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
 		customImport->NewMesh();
@@ -690,10 +692,6 @@ void Engine::render()
 
 		graphics->Render();
 
-		//spawn enemies
-		
-
-
 		for (int w = 11; w < 13; w++)
 		{
 			if (w == 11)
@@ -737,7 +735,7 @@ void Engine::render()
 		{
 			if (Objectpool->enemies[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2, -2);
+				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2, 2);
 			}
 		}
 		//special enemy rendering
@@ -745,7 +743,7 @@ void Engine::render()
 		{
 			if (Objectpool->Senemies[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->Senemies[i].objectMatrix, 2, -2);
+				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->Senemies[i].objectMatrix, 2, 2);
 			}
 		}
 

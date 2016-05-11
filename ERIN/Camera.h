@@ -80,9 +80,6 @@ public:
 	DIMOUSESTATE mouseLastState;
 	LPDIRECTINPUT8 DirectInput;
 	bool cameraInput;
-
-private:
-
 };
 
 #endif

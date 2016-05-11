@@ -67,8 +67,6 @@ void GameObject::Reset()
 
 	this->speed = 0;
 	this->heading = 0;
-
-	//this->objectMatrix = new Matrix();	// Causes menory leaks
 }
 
 void GameObject::updateBehavior(Position player, GameObject* myself, GameObject* allEnemies)
@@ -101,7 +99,6 @@ void GameObject::updateBehavior(Position player, GameObject* myself, GameObject*
 		this->directionY = (float)cos(radians);
 	}
 }
-
 
 void GameObject::update(double dt)
 {
@@ -195,17 +192,16 @@ void GameObject::turnTo(double newHeading)
 {
 	plannedHeading = newHeading;
 }
+
 double GameObject::getVx()
 {
 	return r_speed * acos(heading * M_PI / 180);
 }
+
 double GameObject::getVy()
 {
 	return r_speed * asin(heading * M_PI / 180);
 }
-
-
-//Special Enemy functions
 
 void GameObject::SpecialReset()
 {
@@ -227,7 +223,6 @@ void GameObject::SpecialReset()
 
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 }
-
 
 void GameObject::updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies)
 {
@@ -263,7 +258,6 @@ void GameObject::SpecialupdateCooldown(double sdt)
 	if (this->scooldown <= this->scurrentTime)
 	{
 		this->scurrentTime = 0.0f;
-		//this->sReady = true;
 	}
 	else
 	{
