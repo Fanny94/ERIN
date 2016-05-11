@@ -76,45 +76,53 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(2));
 		customImport->meshes.at(2).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
+		customImport->LoadCustomFormat("../BinaryDataEnemySpawner.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(3));
+		/*graphics->CreateTexture(customImport->meshes.at(3));
+		customImport->meshes.at(3).textureBool = true;*/
 
-		customImport->LoadCustomFormat("../BinaryDataHUDHP1.dat");
+		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(4));
 
-		customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDHP1.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(5));
 
-		customImport->LoadCustomFormat("../BinaryDataHUDHP5.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(6));
 
-		customImport->LoadCustomFormat("../BinaryDataHUDHP4.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDHP5.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(7));
 
-		customImport->LoadCustomFormat("../BinaryDataHUDHP3.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDHP4.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(8));
 
-		customImport->LoadCustomFormat("../BinaryDataHUDHP2.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDHP3.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(9));
 
-		customImport->LoadCustomFormat("../BinaryDataHUDBase.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDHP2.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 
-		customImport->LoadCustomFormat("../BinaryDataStage.dat");
+		customImport->LoadCustomFormat("../BinaryDataHUDBase.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(11));
 
-		customImport->LoadCustomFormat("../BinaryDataWalls.dat");
+		customImport->LoadCustomFormat("../BinaryDataStage.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(12));
+		/*graphics->CreateTexture(customImport->meshes.at(11));
+		customImport->meshes.at(11).textureBool = true;*/
+
+		customImport->LoadCustomFormat("../BinaryDataWalls.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(13));
 
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
@@ -692,11 +700,11 @@ void Engine::render()
 
 		graphics->Render();
 
-		for (int w = 11; w < 13; w++)
+		for (int w = 12; w < 14; w++)
 		{
-			if (w == 11)
-				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
 			if (w == 12)
+				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
+			if (w == 13)
 				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
 			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w, -2);
 		}
@@ -726,7 +734,7 @@ void Engine::render()
 		{
 			if (Objectpool->bullets[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3, -2);
+				graphics->RenderCustom(customImport->meshes.at(4), *Objectpool->bullets[i].bulletMatrix, 4, -2);
 			}
 		}
 
@@ -743,7 +751,7 @@ void Engine::render()
 		{
 			if (Objectpool->Senemies[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->Senemies[i].objectMatrix, 2, 2);
+				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->Senemies[i].objectMatrix, 3, -2);
 			}
 		}
 
@@ -801,7 +809,7 @@ void Engine::render()
 
 void Engine::RendHUD()
 {
-	int i = 4;
+	int i = 5;
 
 	if (player->HP >= 1)
 	{
@@ -937,7 +945,7 @@ void Engine::Elevatorfunc()
 	else
 	{
 		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10, -2);
+		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(11).world, 11, -2);
 		Esphere->m_vecCenter = Vector3(0, 0, 0);
 		Esphere->m_fRadius = 0.5f;
 		cout << "Render Elevater Cube" << endl;
