@@ -19,7 +19,11 @@ enum GameStateManager
 	Pause,
 	GameOver,
 	HighScore,
-	HelpAndOptions
+	HelpAndOptions,
+	HowToPlay,
+	Controls,
+	Settings,
+	Credits
 };
 
 class Engine
@@ -63,6 +67,8 @@ public:
 	int mainMenuOption = 0;
 	// Help & Options Menu
 	int haoMenuOption = 0;
+	// Result Screen
+	int resMenuOption = 0;
 
 	TSphere* Esphere;
 
