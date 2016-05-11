@@ -1,6 +1,5 @@
 #ifndef OBJECTPOOL_H
 #define OBJECTPOOL_H
-
 #include "Bullet.h"
 #include "GameObject.h"
 
@@ -34,7 +33,6 @@ public:
 	void setSpawnCooldown(bool swReady) { this->swReady = swReady; };
 	void spawnTimer(double swdt);
 
-
 	// Enemies
 	void createEnemy(float x, float y, float z);
 	int getEnemyPoolSize() { return this->e_poolSize; };
@@ -47,7 +45,6 @@ public:
 	void updateWaveCooldown(double wdt);*/
 
 private:
-	
 	//coldown for waves
 	/*bool waveReady = true;
 	const float wavecooldown = 200.0f;
@@ -58,13 +55,11 @@ private:
 	bool bReady = true;
 	const float bcooldown = 0.4f;
 	double bcurrentTime;
-	//coldown for bullets
 
 	//coldown for spawning
 	bool swReady = true;
 	const float swcooldown = 5.0f;
 	double swcurrentTime;
-	//coldown for spawning
 
 	// Bullets
 	int lifeTime;

@@ -281,7 +281,19 @@ void CustomImport::NewMesh()
 	{
 		char temp[256];
 		for (int e = 0; e < 256; e++)
+		{
+			if (material.at(i).diffuseMap[e] == '\0')
+			{
+				temp[e] = '\0';
+				int snafu = 256 - e;
+				for (int w = 1; w < snafu; w++)
+				{
+					temp[e + w] = '0';
+				}
+				break;
+			}
 			temp[e] = material.at(i).diffuseMap[e];
+		}
 
 		for (int p = 256; p > 0; p--)
 		{

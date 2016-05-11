@@ -3,10 +3,8 @@
 #include "Linker.h"
 #include "Structs.h"
 #include "Camera.h"
-
 #include "Mesh.h"
 
-using namespace std;
 class Camera;
 
 class Graphics
@@ -98,7 +96,7 @@ public:
 	vector<DWORD> indices;
 
 private:
-	float WIDTH = 1080;
+	float WIDTH = 1280;
 	float HEIGHT = 720;
 
 	float camPosX;
@@ -124,7 +122,6 @@ private:
 	vector<ID3D11ShaderResourceView*> textureView;
 	ID3D11ShaderResourceView* temptextureView = nullptr;
 	unsigned char* buffer;
-	
 };
 
 #endif // !GRAPHICS_H

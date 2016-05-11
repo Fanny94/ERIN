@@ -66,7 +66,6 @@ void Behavior::cohesion(Position myself, Position ally)
 	float CohesionCount = 0;
 	float cohesion = 0.09f;
 
-
 	float enemyDist = sqrt(pow((ally.y - myself.x), 2) + pow((ally.y - myself.x), 2));
 	if ((enemyDist < 2))
 	{
@@ -108,7 +107,6 @@ void Behavior::separation(Position myself, Position ally)
 		//Converts the values to degrees so that it can affect the heading of the enemy
 		this->heading = XMConvertToDegrees(atan2f(vec.x, vec.y));
 	}
-
 
 	/*float AvoidWeight = 0.1f;
 	float NewAcc[3];

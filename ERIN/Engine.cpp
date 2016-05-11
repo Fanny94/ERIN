@@ -21,19 +21,19 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 	// upper
 	this->upper_wall = new Wall();
-	this->upper_wall->point = Vector3(0, 20.5, 0);
+	this->upper_wall->point = Vector3(0, 21, 0);
 	this->upper_wall->normal = Vector3(0, -1, 0);
 	// left
 	this->left_wall = new Wall();
-	this->left_wall->point = Vector3(-42.5, 0, 0);
+	this->left_wall->point = Vector3(-43, 0, 0);
 	this->left_wall->normal = Vector3(1, 0, 0);
 	// lower
 	this->lower_wall = new Wall();
-	this->lower_wall->point = Vector3(0, -20.5, 0);
+	this->lower_wall->point = Vector3(0, -21, 0);
 	this->lower_wall->normal = Vector3(0, 1, 0);
 	// right
 	this->right_wall = new Wall();
-	this->right_wall->point = Vector3(42.5, 0, 0);
+	this->right_wall->point = Vector3(43, 0, 0);
 	this->right_wall->normal = Vector3(-1, 0, 0);
 
 	//create window
@@ -74,46 +74,54 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
+		graphics->CreateTexture(customImport->meshes.at(2));
+		customImport->meshes.at(2).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataEnemySpawner.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(3));
+		/*graphics->CreateTexture(customImport->meshes.at(3));
+		customImport->meshes.at(3).textureBool = true;*/
 
 		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(3));
+		graphics->CustomVertexBuffer(customImport->meshes.at(4));
+		graphics->CreateTexture(customImport->meshes.at(4));
+		customImport->meshes.at(4).textureBool = true;
 
 		customImport->LoadCustomFormat("../BinaryDataHUDHP1.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(4));
+		graphics->CustomVertexBuffer(customImport->meshes.at(5));
 
 		customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(5));
+		graphics->CustomVertexBuffer(customImport->meshes.at(6));
 
 		customImport->LoadCustomFormat("../BinaryDataHUDHP5.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(6));
+		graphics->CustomVertexBuffer(customImport->meshes.at(7));
 
 		customImport->LoadCustomFormat("../BinaryDataHUDHP4.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(7));
+		graphics->CustomVertexBuffer(customImport->meshes.at(8));
 
 		customImport->LoadCustomFormat("../BinaryDataHUDHP3.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(8));
+		graphics->CustomVertexBuffer(customImport->meshes.at(9));
 
 		customImport->LoadCustomFormat("../BinaryDataHUDHP2.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(9));
+		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 
 		customImport->LoadCustomFormat("../BinaryDataHUDBase.dat");
 		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(10));
-
-		customImport->LoadCustomFormat("../BinaryDataStage.dat");
-		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(11));
 
-		customImport->LoadCustomFormat("../BinaryDataWalls.dat");
+		customImport->LoadCustomFormat("../BinaryDataStageJungle.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(12));
+		graphics->CreateTexture(customImport->meshes.at(12));
+		customImport->meshes.at(12).textureBool = true;
 
 		// Title Screen
 		customImport->LoadCustomFormat("../BinaryDataMenuQuad.dat");
@@ -863,7 +871,7 @@ void Engine::update(double deltaTimeMs)
 				cout << "sphere hit" << endl;
 				if (player->getHpCooldown())
 				{
-					//player->HP--;
+					player->HP--;
 					enemyCount--;
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
@@ -1027,18 +1035,11 @@ void Engine::render()
 
 		graphics->Render();
 
-		//spawn enemies
-		
-
-
-		for (int w = 11; w < 13; w++)
+		for (int w = 12; w < 13; w++)
 		{
-			if (w == 11)
-				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
 			if (w == 12)
-				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1);
-			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w, -2);
-
+				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w, 4);
 		}
 
 		// Custom Importer
@@ -1066,7 +1067,7 @@ void Engine::render()
 		{
 			if (Objectpool->bullets[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->bullets[i].bulletMatrix, 3, -2);
+				graphics->RenderCustom(customImport->meshes.at(4), *Objectpool->bullets[i].bulletMatrix, 4, 3);
 			}
 		}
 
@@ -1075,7 +1076,7 @@ void Engine::render()
 		{
 			if (Objectpool->enemies[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2, -2);
+				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2, 2);
 			}
 		}
 		//special enemy rendering
@@ -1083,7 +1084,7 @@ void Engine::render()
 		{
 			if (Objectpool->Senemies[i].getInUse())
 			{
-				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->Senemies[i].objectMatrix, 2, -2);
+				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->Senemies[i].objectMatrix, 3, -2);
 			}
 		}
 
@@ -1117,7 +1118,7 @@ void Engine::render()
 		graphics->Render();
 
 		customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 2);
+		graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 5);
 		
 		camera->InitCamera();
 		break;
@@ -1126,27 +1127,27 @@ void Engine::render()
 		if (mainMenuOption == 0) // Play
 		{
 			customImport->meshes.at(14).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(14), customImport->meshes.at(14).world, 14, 3);
+			graphics->RenderCustom(customImport->meshes.at(14), customImport->meshes.at(14).world, 14, 6);
 		}
 		else if (mainMenuOption == 1) // Highscore
 		{
 			customImport->meshes.at(15).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(15), customImport->meshes.at(15).world, 15, 4);
+			graphics->RenderCustom(customImport->meshes.at(15), customImport->meshes.at(15).world, 15, 7);
 		}
 		else if (mainMenuOption == 2) // Help & Options
 		{
 			customImport->meshes.at(16).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(16), customImport->meshes.at(16).world, 16, 5);
+			graphics->RenderCustom(customImport->meshes.at(16), customImport->meshes.at(16).world, 16, 8);
 		}
 		else if (mainMenuOption == 3) // Quit
 		{
 			customImport->meshes.at(17).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(17), customImport->meshes.at(17).world, 17, 6);
+			graphics->RenderCustom(customImport->meshes.at(17), customImport->meshes.at(17).world, 17, 9);
 		}
 		else if (mainMenuOption == 4) // Are You Sure?
 		{
 			customImport->meshes.at(18).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(18), customImport->meshes.at(18).world, 18, 7);
+			graphics->RenderCustom(customImport->meshes.at(18), customImport->meshes.at(18).world, 18, 10);
 		}
 
 		camera->InitCamera();
@@ -1156,27 +1157,27 @@ void Engine::render()
 		if (pMenuOption == 0) // Continue
 		{
 			customImport->meshes.at(19).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(19), customImport->meshes.at(19).world, 19, 8);
+			graphics->RenderCustom(customImport->meshes.at(19), customImport->meshes.at(19).world, 19, 11);
 		}
 		else if (pMenuOption == 1) // Restart
 		{
 			customImport->meshes.at(20).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(20), customImport->meshes.at(20).world, 20, 9);
+			graphics->RenderCustom(customImport->meshes.at(20), customImport->meshes.at(20).world, 20, 12);
 		}
 		else if (pMenuOption == 2) // Help & Options
 		{
 			customImport->meshes.at(21).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(21), customImport->meshes.at(21).world, 21, 10);
+			graphics->RenderCustom(customImport->meshes.at(21), customImport->meshes.at(21).world, 21, 13);
 		}
 		else if (pMenuOption == 3) // Main Menu
 		{
 			customImport->meshes.at(22).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(22), customImport->meshes.at(22).world, 22, 11);
+			graphics->RenderCustom(customImport->meshes.at(22), customImport->meshes.at(22).world, 22, 14);
 		}
 		else if (pMenuOption == 4) // Are You Sure?
 		{
 			customImport->meshes.at(23).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(23), customImport->meshes.at(23).world, 23, 12);
+			graphics->RenderCustom(customImport->meshes.at(23), customImport->meshes.at(23).world, 23, 15);
 		}
 
 		camera->InitCamera();
@@ -1187,22 +1188,22 @@ void Engine::render()
 		if (resMenuOption == 0)
 		{
 			customImport->meshes.at(28).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(28), customImport->meshes.at(28).world, 28, 17);
+			graphics->RenderCustom(customImport->meshes.at(28), customImport->meshes.at(28).world, 28, 20);
 		}
 		else if (resMenuOption == 1)
 		{
 			customImport->meshes.at(29).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(29), customImport->meshes.at(29).world, 29, 18);
+			graphics->RenderCustom(customImport->meshes.at(29), customImport->meshes.at(29).world, 29, 21);
 		}
 		else if (resMenuOption == 2)
 		{
 			customImport->meshes.at(30).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(30), customImport->meshes.at(30).world, 30, 19);
+			graphics->RenderCustom(customImport->meshes.at(30), customImport->meshes.at(30).world, 30, 22);
 		}
 		else if (resMenuOption == 3)
 		{
 			customImport->meshes.at(31).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 23, 20);
+			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 23);
 		}
 
 		camera->InitCamera();
@@ -1219,22 +1220,22 @@ void Engine::render()
 		if (haoMenuOption == 0) // How To Play
 		{
 			customImport->meshes.at(24).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(24), customImport->meshes.at(24).world, 24, 13);
+			graphics->RenderCustom(customImport->meshes.at(24), customImport->meshes.at(24).world, 24, 16);
 		}
 		else if (haoMenuOption == 1) // Controls
 		{
 			customImport->meshes.at(25).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(25), customImport->meshes.at(25).world, 25, 14);
+			graphics->RenderCustom(customImport->meshes.at(25), customImport->meshes.at(25).world, 25, 17);
 		}
 		else if (haoMenuOption == 2) // Settings
 		{
 			customImport->meshes.at(26).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(26), customImport->meshes.at(26).world, 26, 15);
+			graphics->RenderCustom(customImport->meshes.at(26), customImport->meshes.at(26).world, 26, 18);
 		}
 		else if (haoMenuOption == 3) // Credits
 		{
 			customImport->meshes.at(27).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(27), customImport->meshes.at(27).world, 27, 16);
+			graphics->RenderCustom(customImport->meshes.at(27), customImport->meshes.at(27).world, 27, 19);
 		}
 
 		camera->InitCamera();
@@ -1247,11 +1248,11 @@ void Engine::render()
 
 void Engine::RendHUD()
 {
-	int i = 4;
+	int i = 5;
 
 	if (player->HP >= 1)
 	{
-		customImport->meshes.at(i).world = XMMatrixTranslation(0, 0, 0);
+		customImport->meshes.at(i).world = XMMatrixTranslation(0, 0, 0) + XMMatrixScaling(2.5, 2.5, 1);
 		graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i).world, i + 0, -2);
 
 		if (player->HP >= 2)
@@ -1382,11 +1383,11 @@ void Engine::Elevatorfunc()
 	}
 	else
 	{
-		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10, -2);
+		customImport->meshes.at(11).world = XMMatrixTranslation(0, 0, 0) + XMMatrixScaling(2.5, 2.5, 1);
+		graphics->RenderCustom(customImport->meshes.at(11), customImport->meshes.at(11).world, 11, -2);
 		Esphere->m_vecCenter = Vector3(0, 0, 0);
 		Esphere->m_fRadius = 0.5f;
-		cout << "Render Elevater Cube" << endl;
+		//cout << "Render Elevater Cube" << endl;
 	}
 }
 
