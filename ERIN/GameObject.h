@@ -15,7 +15,6 @@ public:
 	~GameObject();
 
 	bool inUse;
-	void Reset();
 
 	//Special Enemy
 	void updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies);
