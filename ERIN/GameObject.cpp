@@ -59,16 +59,6 @@ GameObject::~GameObject()
 	}
 }
 
-void GameObject::Reset()
-{
-	this->x = 0;
-	this->y = 0;
-	this->z = 0;
-
-	this->speed = 0;
-	this->heading = 0;
-}
-
 void GameObject::updateBehavior(Position player, GameObject* myself, GameObject* allEnemies)
 {
 	if (this->behavior)
