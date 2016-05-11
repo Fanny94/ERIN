@@ -944,8 +944,8 @@ void Engine::Elevatorfunc()
 	}
 	else
 	{
-		customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(11).world, 11, -2);
+		customImport->meshes.at(11).world = XMMatrixTranslation(0, 0, 0);
+		graphics->RenderCustom(customImport->meshes.at(11), customImport->meshes.at(11).world, 11, -2);
 		Esphere->m_vecCenter = Vector3(0, 0, 0);
 		Esphere->m_fRadius = 0.5f;
 		cout << "Render Elevater Cube" << endl;
