@@ -39,6 +39,9 @@ Graphics::~Graphics()
 
 	this->gConstantBuffer = nullptr;
 	this->camera = nullptr;
+
+	pFontWrapper->Release();
+	pFW1Factory->Release();
 }
 
 void Graphics::SetViewport()
@@ -265,6 +268,7 @@ HRESULT Graphics::CreateDirect3DContext(HWND wndHandle)
 		gDeviceContext->OMSetRenderTargets(1, &gBackbufferRTV, gDepthStencilView);
 
 	}
+
 	return hr;
 }
 
@@ -392,4 +396,28 @@ void Graphics::UpdateConstantBuffer()
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+}
+
+void Graphics::CreateFontWrapper()
+{
+	fontResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	fontResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);
+}
+
+void Graphics::drawText()
+{
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		L"Stage 1",// String
+		60.0f,// Font size
+		0.0f,// X position
+		0.0f,// Y position
+		0xff0099ff,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+	);
+}
+
+void Graphics::swapChain()
+{
+	gSwapChain->Present(1,0);
 }

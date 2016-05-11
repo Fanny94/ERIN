@@ -58,6 +58,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
+		graphics->CreateFontWrapper();
+
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
@@ -335,8 +337,6 @@ Engine::~Engine()
 
 void Engine::processInput()
 {
-	player->input->update();
-
 	if (player->input->isConnected())
 	{
 		// Update controller states
@@ -346,6 +346,49 @@ void Engine::processInput()
 
 		switch (gameState)
 		{
+		case GameRunning:
+
+			// Fire Bullets
+			if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
+			{
+				if (Objectpool->getCooldown())
+				{
+					this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+					Objectpool->setCooldown(false);
+				}
+			}
+
+			/*if (this->player->input->State._buttons[GamePad_Button_X] == true)
+			{
+				enemyCount = 0;
+				specialEnemyCount = 0;
+			}*/
+
+			if (this->player->input->State._buttons[GamePad_Button_START] == true)
+			{
+				cout << "Game Paused" << endl << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+				gameState = Pause;
+			}
+
+			// Dpad camera movement
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
+			{
+				this->camera->cameraMoveLeft();
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
+			{
+				this->camera->cameraMoveRight();
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
+			{
+				this->camera->cameraMoveUp();
+			}
+			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
+			{
+				this->camera->cameraMoveDown();
+			}
+			break;
+
 		case TitleScreen:
 			if (this->player->input->State._buttons[GamePad_Button_START] == true)
 			{
@@ -437,48 +480,6 @@ void Engine::processInput()
 
 			if (this->player->input->State._buttons[GamePad_Button_A] == false)
 				aButtonActive = false;
-			break;
-		case GameRunning:
-
-			//Fire Bullets
-			if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
-			{
-				if (Objectpool->getCooldown())
-				{
-					this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
-					Objectpool->setCooldown(false);
-				}
-			}
-
-			if (this->player->input->State._buttons[GamePad_Button_X] == true)
-			{
-				enemyCount = 0;
-				specialEnemyCount = 0;
-			}
-
-			if (this->player->input->State._buttons[GamePad_Button_START] == true)
-			{
-				cout << "Game Paused" << endl << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
-				gameState = Pause;
-			}
-
-			// Dpad camera movement
-			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
-			{
-				this->camera->cameraMoveLeft();
-			}
-			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
-			{
-				this->camera->cameraMoveRight();
-			}
-			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
-			{
-				this->camera->cameraMoveUp();
-			}
-			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
-			{
-				this->camera->cameraMoveDown();
-			}
 			break;
 
 		case Pause:
@@ -772,15 +773,6 @@ void Engine::processInput()
 			break;
 		}
 
-		// fire
-		if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
-		{
-			if (Objectpool->getCooldown())
-			{
-				this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
-				Objectpool->setCooldown(false);
-			}
-		}
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
 			this->running = false;
@@ -1113,10 +1105,13 @@ void Engine::render()
 		// Camera Update
 		camera->InitCamera();
 
+		// Font
+		graphics->drawText();
+
 		break;
 	case TitleScreen:
 		graphics->Render();
-
+		
 		customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 		graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 5);
 		
@@ -1207,13 +1202,13 @@ void Engine::render()
 		}
 
 		camera->InitCamera();
+
 		break;
 	case HighScore:
+
 		graphics->Render();
-
-
-
 		camera->InitCamera();
+
 		break;
 	case HelpAndOptions:
 		graphics->Render();
@@ -1243,7 +1238,7 @@ void Engine::render()
 	}
 
 	// Switch front- and back-buffer
-	graphics->get_gSwapChain()->Present(1, 0);
+	graphics->swapChain();
 }
 
 void Engine::RendHUD()
