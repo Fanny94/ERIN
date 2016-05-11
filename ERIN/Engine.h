@@ -51,7 +51,8 @@ public:
 
 	GameStateManager gameState;
 
-	float Rx, Ry;
+	float Rx = -20 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (20 - (-20)))),
+		  Ry = -10 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (10 - (-10))));
 	float savedRx, savedRy;
 	bool block = false;
 	void Elevatorfunc();
