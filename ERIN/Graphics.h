@@ -96,7 +96,7 @@ public:
 	vector<DWORD> indices;
 
 private:
-	float WIDTH = 1080;
+	float WIDTH = 1280;
 	float HEIGHT = 720;
 
 	float camPosX;
