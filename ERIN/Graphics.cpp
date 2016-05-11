@@ -192,6 +192,8 @@ void Graphics::CreateTexture(Mesh mesh)
 
 		delete[] buffer;
 	}
+
+
 }
 
 void Graphics::CustomUpdateBuffer(Matrix transform)

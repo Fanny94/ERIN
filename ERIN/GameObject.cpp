@@ -235,6 +235,7 @@ void GameObject::updateSpecialBehavior(Position player, GameObject* myself, Game
 
 				// separation calculations
 				this->behavior->separation(*myself->pos, *allEnemies[i].pos);
+				this->behavior->CornerAvoidance(*myself->pos);
 			}
 		}
 		//this->behavior->alignment();

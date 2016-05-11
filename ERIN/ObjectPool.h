@@ -41,8 +41,19 @@ public:
 	static const int e_poolSize = 5;
 	GameObject enemies[e_poolSize];
 	
+	// Waves
+	/*bool getWaveCooldown() { return this->waveReady; };
+	void setWaveCooldown(bool waveReady) { this->waveReady = waveReady; };
+	void updateWaveCooldown(double wdt);*/
 
 private:
+	
+	//coldown for waves
+	/*bool waveReady = true;
+	const float wavecooldown = 200.0f;
+	double wavecurrentTime;*/
+	//coldown for waves
+	
 	//coldown for bullets
 	bool bReady = true;
 	const float bcooldown = 0.4f;

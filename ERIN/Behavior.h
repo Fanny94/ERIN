@@ -21,8 +21,6 @@ public:
 
 	void updateSpecial(Position player, Position myself);
 
-	void ObstacleAvoidance(Position myself);
-
 	float VelX;
 	float VelY;
 	
@@ -38,7 +36,7 @@ public:
 	double getHeading() { return this->heading; };
 	BehaviorState getBehavior() { return this->behavior; };
 
-
+	void CornerAvoidance(Position myself);
 
 private:
 	BehaviorState behavior;

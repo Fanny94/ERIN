@@ -814,6 +814,7 @@ void Engine::update(double deltaTimeMs)
 		updateCooldown(deltaTimeS);
 		gameObject->SpecialupdateCooldown(deltaTimeS);
 		Objectpool->spawnTimer(deltaTimeS);
+		//Objectpool->updateWaveCooldown(deltaTimeS);
 
 		/* *********** Player Update *********** */
 		player->hpCooldown(deltaTimeS);
@@ -862,8 +863,8 @@ void Engine::update(double deltaTimeMs)
 				cout << "sphere hit" << endl;
 				if (player->getHpCooldown())
 				{
-					player->HP -= 1;
-					enemyCount -= 1;
+					//player->HP--;
+					enemyCount--;
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
 				}
@@ -882,7 +883,7 @@ void Engine::update(double deltaTimeMs)
 				if (Objectpool->getSpawnCooldown())
 				{
 					Objectpool->createEnemy(savedRx, savedRy, 0);
-					//gameObject->enemyCount + 1;
+					//enemyCount ++;
 					Objectpool->setSpawnCooldown(false);
 				}
 			}
@@ -911,6 +912,29 @@ void Engine::update(double deltaTimeMs)
 				}
 			}
 		}
+		
+		/*for (int i = 0; i < Objectpool->e_poolSize; i++)
+		{
+			if (Objectpool->enemies[i].getInUse())
+			{
+				if (sphereToPlane(*Objectpool->enemies[i].sphere, upper_wall->point, upper_wall->normal))
+				{
+					Objectpool->enemies[i].setObjectPosY(upper_wall->point.y - 0.5f);
+				}
+				if (sphereToPlane(*Objectpool->enemies[i].sphere, left_wall->point, left_wall->normal))
+				{
+					Objectpool->enemies[i].setObjectPosX(left_wall->point.x + 0.5f);
+				}
+				if (sphereToPlane(*Objectpool->enemies[i].sphere, lower_wall->point, lower_wall->normal))
+				{
+					Objectpool->enemies[i].setObjectPosY(lower_wall->point.y + 0.5f);
+				}
+				if (sphereToPlane(*Objectpool->enemies[i].sphere, right_wall->point, right_wall->normal))
+				{
+					Objectpool->enemies[i].setObjectPosX(right_wall->point.x - 0.5f);
+				}
+			}
+		}*/
 
 		/* *********** Bullet Updates *********** */
 		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
@@ -929,7 +953,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
-						enemyCount -= 1;
+						enemyCount --;
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -947,7 +971,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
-						specialEnemyCount -= 1;
+						specialEnemyCount --;
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -972,7 +996,7 @@ void Engine::update(double deltaTimeMs)
 			player->PlayerReset();
 			gameObject->reset();
 
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < Objectpool->e_poolSize; i++)
 			{
 				Objectpool->enemies[i].setInUse(false);
 			}
@@ -1003,31 +1027,9 @@ void Engine::render()
 
 		graphics->Render();
 
-		Rx = -20 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (20 - (-20))));
-		Ry = -10 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (10 - (-10))));
-
 		//spawn enemies
-		if (this->ready)
-		{
-			for (int i = 0; i <Objectpool->e_poolSize; i++)
-			{
-				cout << "enemy created" << endl;
-				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-				this->ready = false;
-			}
-		}
-		//spawn special enemies
-		if (this->gameObject->getSpecialCooldown())
-		{
-			for (int i = 0; i < Objectpool->Se_poolSize; i++)
-			{
-				cout << "senemy created" << endl;
-				this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-				savedRx = Rx;
-				savedRy = Ry;
-				this->gameObject->setSpecialCooldown(false);
-			}
-		}
+		
+
 
 		for (int w = 11; w < 13; w++)
 		{
@@ -1082,6 +1084,28 @@ void Engine::render()
 			if (Objectpool->Senemies[i].getInUse())
 			{
 				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->Senemies[i].objectMatrix, 2, -2);
+			}
+		}
+
+		if (this->ready)
+		{
+			for (int i = 0; i <Objectpool->e_poolSize; i++)
+			{
+				cout << "enemy created" << endl;
+				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+				this->ready = false;
+			}
+		}
+		//spawn special enemies
+		if (this->gameObject->getSpecialCooldown())
+		{
+			for (int i = 0; i < Objectpool->Se_poolSize; i++)
+			{
+				cout << "senemy created" << endl;
+				this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+				savedRx = Rx;
+				savedRy = Ry;
+				this->gameObject->setSpecialCooldown(false);
 			}
 		}
 
@@ -1335,20 +1359,22 @@ void Engine::Elevatorfunc()
 		Objectpool->ResetBullet();
 		gameObject->reset();
 		player->NewFloorReset();
+		enemyCount = Objectpool->e_poolSize;
+		specialEnemyCount = Objectpool->Se_poolSize;
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
-			Objectpool->enemies[i].setInUse(false);
+			//Objectpool->enemies[i].setInUse(false);
 
 			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-			enemyCount = Objectpool->e_poolSize;
+			
 			this->ready = false;
 		}
 		for (int i = 0; i < Objectpool->Se_poolSize; i++)
 		{
-			Objectpool->Senemies[i].setInUse(false);
+			//Objectpool->Senemies[i].setInUse(false);
 
 			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-			specialEnemyCount = Objectpool->Se_poolSize;
+			
 			this->gameObject->setSpecialCooldown(false);
 			this->Objectpool->setSpawnCooldown(false);
 		}
