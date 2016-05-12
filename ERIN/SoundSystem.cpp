@@ -1,6 +1,5 @@
 #include "SoundSystem.h"
 
-
 bool Sound::on = true; //is sound on?
 bool Sound::possible = true; //is it possible to play sound?
 char * Sound::currentSound; //currently played sound
@@ -107,6 +106,28 @@ void Sound::UseitMenuSound()
 	load("C:/Users/cyka/Desktop/Sounds/In Game sounds/Expulsion-Music-Menu.wav");
 	play();
 }
+
+/*FSOUND_SAMPLE* handle;
+
+void Sound::playFire()
+{
+	// init FMOD sound system
+	FSOUND_Init(44100, 32, 0);
+
+	// load and play sample
+	handle = FSOUND_Sample_Load(0, "sample.mp3", 0, 0, 0);
+	FSOUND_PlaySound(0, handle);
+
+	// wait until the users hits a key to end the app
+	while (!_kbhit())
+	{
+	}
+
+	// clean up
+	FSOUND_Sample_Free(handle);
+	FSOUND_Close();
+}*/
+
 
 /*Sound::Sound()
 {

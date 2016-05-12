@@ -5,7 +5,7 @@
 #include "fmod.hpp"
 #include "fmod_errors.h" // Only if you want error checking
 #include "fmod.h" //FMOD Ex
-
+#include "fmod_common.h"
 class Sound {
 private:
 	static bool on; //is sound on?
@@ -44,6 +44,7 @@ public:
 
 	void UseitGameSound();
 	void UseitMenuSound();
+	void playFire();
 };
 
 /*
