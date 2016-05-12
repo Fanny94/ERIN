@@ -1038,27 +1038,22 @@ void Engine::render()
 		switch (floorState)
 		{
 		case Jungle:
-
 			customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
 			graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 5);
 			break;
 		case Arctic:
-
 			customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
 			graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 6);
 			break;
 		case Desert:
-
 			customImport->meshes.at(14).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
 			graphics->RenderCustom(customImport->meshes.at(14), customImport->meshes.at(14).world, 14, 7);
 			break;
 		case Tropical:
-
 			customImport->meshes.at(15).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
 			graphics->RenderCustom(customImport->meshes.at(15), customImport->meshes.at(15).world, 15, 8);
 			break;
 		case Volcanic:
-
 			customImport->meshes.at(16).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
 			graphics->RenderCustom(customImport->meshes.at(16), customImport->meshes.at(16).world, 16, 9);
 			break;
@@ -1257,8 +1252,6 @@ void Engine::render()
 		break;
 	case HighScore:
 		graphics->Render();
-
-
 
 		camera->InitCamera();
 		break;
