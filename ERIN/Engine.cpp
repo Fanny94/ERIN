@@ -64,7 +64,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(0));
 		customImport->meshes.at(0).textureBool = true;
 
-
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(1));
@@ -417,6 +416,7 @@ void Engine::processInput()
 					this->ready = true;
 					mainMenu = false;
 					gameState = GameRunning;
+					floorState = Jungle;
 				}
 				else if (mainMenuOption == 1)
 				{
@@ -990,11 +990,11 @@ void Engine::update(double deltaTimeMs)
 		/* *********** HUD Logic *********** */
 		if (enemyCount <= 0 && specialEnemyCount <= 0)
 		{
-			cout << "Reset Game" << endl;
+			//cout << "Reset Game" << endl;
 			floorClear = true;
-			gameObject->reset();
-			gameObject->SpecialReset();
-			Objectpool->ResetBullet();
+			//gameObject->reset();
+			//gameObject->SpecialReset();
+			//Objectpool->ResetBullet();
 		}
 
 		if (player->HP <= 0)
@@ -1035,33 +1035,33 @@ void Engine::render()
 
 		graphics->Render();
 
-		for (int w = 12; w < 17; w++)
+		switch (floorState)
 		{
-			if (w == 12)
-			{
-				customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-				graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w, 5);
-			}
-			if (w == 13)
-			{
-				/*customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-				graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w, 6);*/
-			}
-			if (w == 14)
-			{
-				/*customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-				graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w, 7);*/
-			}
-			if (w == 15)
-			{
-				/*customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-				graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w, 8);*/
-			}
-			if (w == 16)
-			{
-				/*customImport->meshes.at(w).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-				graphics->RenderCustom(customImport->meshes.at(w), customImport->meshes.at(w).world, w, 9);*/
-			}
+		case Jungle:
+
+			customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 5);
+			break;
+		case Arctic:
+
+			customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 6);
+			break;
+		case Desert:
+
+			customImport->meshes.at(14).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(14), customImport->meshes.at(14).world, 14, 7);
+			break;
+		case Tropical:
+
+			customImport->meshes.at(15).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(15), customImport->meshes.at(15).world, 15, 8);
+			break;
+		case Volcanic:
+
+			customImport->meshes.at(16).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(16), customImport->meshes.at(16).world, 16, 9);
+			break;
 		}
 
 		// Custom Importer
@@ -1401,6 +1401,16 @@ void Engine::Elevatorfunc()
 			this->Objectpool->setSpawnCooldown(false);
 		}
 		floorClear = false;
+		if (floorState == Jungle)
+			floorState = Arctic;
+		else if (floorState == Arctic)
+			floorState = Desert;
+		else if (floorState == Desert)
+			floorState = Tropical;
+		else if (floorState == Tropical)
+			floorState = Volcanic;
+		else if (floorState == Volcanic)
+			floorState = Jungle;
 	}
 	else
 	{

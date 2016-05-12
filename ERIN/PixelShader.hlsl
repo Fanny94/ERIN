@@ -41,16 +41,16 @@ float4 PS_main(VS_OUT input) : SV_Target
 	float diffuseCalc = max(dot(lightDir, input.Nor.xyz), 0.0f);
 
 	if(textureBool == true)
-		diffuseLight = diffuseMap /** diffuseColor * max(dot(lightDir, input.Nor), 0.0f)*/;
+		diffuseLight = diffuseMap * diffuseColor * max(dot(lightDir, input.Nor), 0.0f);
 	else if(textureBool == false)
-		diffuseLight = diffuseColor/* * max(dot(lightDir, input.Nor), 0.0f)*/;
+		diffuseLight = diffuseColor * max(dot(lightDir, input.Nor), 0.0f);
 
 	/*float3 specularLight = specularColor * pow(max(dot(r, v), 0.0f), shininess);*/
 	
-	float4 color = float4((lightIntensity * ( /*ambientLight +*/ diffuseColor/* + specularLight*/)), 1.0f);
+	float4 color = float4((lightIntensity * ( /*ambientLight +*/ diffuseLight/* + specularLight*/)), 1.0f);
 
-	return -input.Nor;
+	//return -input.Nor;
 
-	//return color;
+	return color;
 
 };
