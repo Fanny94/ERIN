@@ -55,7 +55,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 			double elapsed = current - previous;
 			previous = current;
 			lag += elapsed;
-
 			engine->processInput();
 
 			while (lag >= MS_PER_UPDATE)

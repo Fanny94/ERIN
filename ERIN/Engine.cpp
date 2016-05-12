@@ -13,6 +13,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 	this->Objectpool = new ObjectPool();
 	this->gameObject = new GameObject();
+	this->sound = new Sound();
 
 	//srand(static_cast <unsigned> (time(0)));
 
@@ -144,6 +145,8 @@ Engine::~Engine()
 	delete this->left_wall;
 	delete this->lower_wall;
 	delete this->right_wall;
+
+	delete this->sound;
 }
 
 void Engine::processInput()
@@ -156,7 +159,6 @@ void Engine::processInput()
 		player->input->update();
 		// Update player accelerating bool
 		player->playerInput();
-
 		switch (gameState)
 		{
 		case TitleScreen:
@@ -262,6 +264,7 @@ void Engine::processInput()
 				{
 					this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
 					Objectpool->setCooldown(false);
+
 				}
 			}
 
@@ -275,6 +278,7 @@ void Engine::processInput()
 			{
 				cout << "Game Paused" << endl << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
 				gameState = Pause;
+				sound->togglePause();
 			}
 
 			// Dpad camera movement
@@ -363,6 +367,7 @@ void Engine::processInput()
 				{
 					cout << "Game Running" << endl;
 					gameState = GameRunning;
+					sound->togglePause();
 				}
 				else if (pMenuOption == 1)
 				{
@@ -477,11 +482,16 @@ void Engine::update(double deltaTimeMs)
 		gameObject->SpecialupdateCooldown(deltaTimeS);
 		Objectpool->spawnTimer(deltaTimeS);
 		//Objectpool->updateWaveCooldown(deltaTimeS);
-
 		/* *********** Player Update *********** */
 		player->hpCooldown(deltaTimeS);
 		player->update(deltaTimeMs);
-
+		
+		//SOUND\\
+		//sound->UseInGameSong();
+		sound->UseitGameSound();
+		
+		//SOUND\\
+		
 		camera->UpdateGameCamera(this->player->getX(), this->player->getY(), deltaTimeS);
 		//camera->cameraFollow(this->player->getX(), this->player->getY());
 
@@ -617,6 +627,7 @@ void Engine::update(double deltaTimeMs)
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
 						enemyCount --;
+						//sound->UseitFireSound();
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -635,6 +646,7 @@ void Engine::update(double deltaTimeMs)
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
 						specialEnemyCount --;
+						//sound->UseitFireSound();
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
