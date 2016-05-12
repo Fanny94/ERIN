@@ -19,7 +19,11 @@ enum GameStateManager
 	Pause,
 	GameOver,
 	HighScore,
-	HelpAndOptions
+	HelpAndOptions,
+	HowToPlay,
+	Controls,
+	Settings,
+	Credits
 };
 
 class Engine
@@ -45,6 +49,7 @@ public:
 	bool aButtonActive = false;
 	bool bButtonActive = false;
 
+	bool mainMenu = true;
 	bool floorClear = false;
 
 	bool printTitle = true;
@@ -61,6 +66,10 @@ public:
 	int pMenuOption = 0;
 	// Main Menu
 	int mainMenuOption = 0;
+	// Help & Options Menu
+	int haoMenuOption = 0;
+	// Result Screen
+	int resMenuOption = 0;
 
 	TSphere* Esphere;
 

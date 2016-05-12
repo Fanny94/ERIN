@@ -5,7 +5,6 @@
 #include "Structs.h"
 
 # define M_PI 3.14159265358979323846
-using namespace std;
 
 class Player
 {
@@ -81,7 +80,6 @@ private:
 	float thumbLeftX;
 	float thumbLeftY;
 	
-
 	float velocityX;
 	float velocityY;
 
@@ -105,6 +103,5 @@ private:
 	bool hpReady;
 	const float hpcooldown = 4.0f;
 	double hpcurrentTime;
-	//cooldown for damage
 };
 #endif // !PLAYER_H

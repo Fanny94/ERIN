@@ -49,6 +49,8 @@ float4 PS_main(VS_OUT input) : SV_Target
 	
 	float4 color = float4((lightIntensity * ( /*ambientLight +*/ diffuseColor/* + specularLight*/)), 1.0f);
 
-
 	return -input.Nor;
+
+	//return color;
+
 };

@@ -6,7 +6,6 @@
 #include "Behavior.h"
 #include <string>
 # define M_PI 3.14159265358979323846
-using namespace std;
 
 class GameObject
 {
@@ -16,7 +15,6 @@ public:
 	~GameObject();
 
 	bool inUse;
-	void Reset();
 
 	//Special Enemy
 	void updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies);
@@ -24,7 +22,6 @@ public:
 	void SpecialupdateCooldown(double sdt);
 	bool getSpecialCooldown() { return this->sReady; };
 	void setSpecialCooldown(bool sReady) { this->sReady = sReady; };
-
 
 	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
@@ -41,8 +38,6 @@ public:
 
 	void setMaxSpeed(float maxspeed) { this->maximumSpeed = maxspeed; };
 	void setAcceleration(float acceleration) { this->acceleration = acceleration; };
-
-	
 
 	int getObjectID() { return this->objectID; };
 	string getName() { return this->name; };

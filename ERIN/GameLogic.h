@@ -2,7 +2,6 @@
 #define GAMELOGIC_H
 #include "Linker.h"
 #include "Structs.h"
-//#include "GameObject.h"
 
 class GameLogic
 {
@@ -24,10 +23,6 @@ public:
 
 	GameLogic();
 	~GameLogic();
-
-	//bool AABBtoAABB(vector<AABBBox*> box1, vector<AABBBox*> box2);
-
-private:
 };
 
 #endif // !GAMELOGIC_H
