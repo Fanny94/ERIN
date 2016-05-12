@@ -200,7 +200,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(22).textureBool = true;
 
 		// Option 5 - Are You Sure?
-		customImport->LoadCustomFormat("../BinaryDataPause5-MainMenu-AreYouSure.dat");
+		customImport->LoadCustomFormat("../BinaryDataPause5-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(23));
 
@@ -432,11 +432,25 @@ void Engine::processInput()
 					gameState = HelpAndOptions;
 				}
 				else if (mainMenuOption == 3)
+				{
+					cout << "Quit" << endl;
+					mainMenuOption = 4;
+					aButtonActive = true;
+				}
+				else if (mainMenuOption == 4)
 					this->running = false;
+			}
+
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				if (mainMenuOption == 4)
+					mainMenuOption = 3;
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_A] == false)
 				aButtonActive = false;
+			if (this->player->input->State._buttons[GamePad_Button_B] == false)
+				bButtonActive = false;
 			break;
 		case GameRunning:
 
@@ -580,6 +594,11 @@ void Engine::processInput()
 				}
 				else if (pMenuOption == 3)
 				{
+					aButtonActive = true;
+					pMenuOption = 4;
+				}
+				else if (pMenuOption == 4)
+				{
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
 					player->PlayerReset();
@@ -598,13 +617,21 @@ void Engine::processInput()
 						Objectpool->Senemies[i].setInUse(false);
 					}
 
-					gameState = MainMenu;
 					aButtonActive = true;
+					gameState = MainMenu;
 				}
-
-				if (this->player->input->State._buttons[GamePad_Button_A] == false)
-					aButtonActive = false;
 			}
+
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				if (pMenuOption == 4)
+					pMenuOption = 3;
+			}
+
+			if (this->player->input->State._buttons[GamePad_Button_A] == false)
+				aButtonActive = false;
+			if (this->player->input->State._buttons[GamePad_Button_B] == false)
+				bButtonActive = false;
 			break;
 		case HighScore:
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
@@ -698,12 +725,14 @@ void Engine::processInput()
 				{
 					cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					haoMenuOption = 0;
+					bButtonActive = true;
 					gameState = MainMenu;
 				}
 				else
 				{
 					pMenuOption = 0;
 					cout << "Pause Menu" << endl << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+					bButtonActive = true;
 					gameState = Pause;
 				}
 			}
@@ -767,12 +796,6 @@ void Engine::processInput()
 				}
 			}
 
-			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
-			{
-				gameState = MainMenu;
-				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
-			}
-
 			// If accept
 			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
 			{
@@ -812,6 +835,11 @@ void Engine::processInput()
 				}
 				else if (resMenuOption == 3)
 				{
+					aButtonActive = true;
+					resMenuOption = 4;
+				}
+				else if (resMenuOption == 4)
+				{
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
 					player->PlayerReset();
@@ -834,6 +862,17 @@ void Engine::processInput()
 					aButtonActive = true;
 				}
 			}
+
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				if (resMenuOption == 4)
+					resMenuOption = 3;
+			}
+
+			if (this->player->input->State._buttons[GamePad_Button_A] == false)
+				aButtonActive = false;
+			if (this->player->input->State._buttons[GamePad_Button_B] == false)
+				bButtonActive = false;
 			break;
 		case Controls:
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
@@ -1336,6 +1375,11 @@ void Engine::render()
 			customImport->meshes.at(31).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 20);
 		}
+		else if (resMenuOption == 4)
+		{
+			customImport->meshes.at(32).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(32), customImport->meshes.at(32).world, 32, 21);
+		}
 
 		camera->InitCamera();
 		break;
@@ -1358,7 +1402,7 @@ void Engine::render()
 		graphics->Render();
 
 		customImport->meshes.at(34).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(34), customImport->meshes.at(34).world, 34, 22);
+		graphics->RenderCustom(customImport->meshes.at(34), customImport->meshes.at(34).world, 34, 23);
 
 		camera->InitCamera();
 		break;
