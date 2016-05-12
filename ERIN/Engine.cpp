@@ -58,7 +58,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		graphics->CreateFontWrapper();
+		/*graphics->CreateFontWrapper();*/
 
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
@@ -1123,7 +1123,7 @@ void Engine::render()
 		camera->InitCamera();
 
 		// Font
-		graphics->drawText();
+		/*graphics->drawText();*/
 
 		break;
 	case TitleScreen:
