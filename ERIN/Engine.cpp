@@ -141,7 +141,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(15));
 		customImport->meshes.at(15).textureBool = true;
 
-		//Option 3 - Help & Options
+		// Option 3 - Help & Options
 		customImport->LoadCustomFormat("../BinaryDataMain3-Help&Options.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(16));
@@ -149,7 +149,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(16));
 		customImport->meshes.at(16).textureBool = true;
 
-		//Option 4 - Quit
+		// Option 4 - Quit
 		customImport->LoadCustomFormat("../BinaryDataMain4-Quit.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(17));
@@ -157,7 +157,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(17));
 		customImport->meshes.at(17).textureBool = true;
 
-		//Option 5 - Are You Sure?
+		// Option 5 - Are You Sure?
 		customImport->LoadCustomFormat("../BinaryDataMain5-Quit-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(18));
@@ -183,7 +183,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(20));
 		customImport->meshes.at(20).textureBool = true;
 
-		//Option 3 - Help & Options
+		// Option 3 - Help & Options
 		customImport->LoadCustomFormat("../BinaryDataPause3-Help&Options.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(21));
@@ -191,7 +191,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(21));
 		customImport->meshes.at(21).textureBool = true;
 
-		//Option 4 - Main Menu
+		// Option 4 - Main Menu
 		customImport->LoadCustomFormat("../BinaryDataPause4-MainMenu.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(22));
@@ -199,7 +199,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(22));
 		customImport->meshes.at(22).textureBool = true;
 
-		//Option 5 - Are You Sure?
+		// Option 5 - Are You Sure?
 		customImport->LoadCustomFormat("../BinaryDataPause5-MainMenu-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(23));
@@ -225,7 +225,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(25));
 		customImport->meshes.at(25).textureBool = true;
 
-		//Option 3 - Settings
+		// Option 3 - Settings
 		customImport->LoadCustomFormat("../BinaryDataOptions3-Settings.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(26));
@@ -233,7 +233,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(26));
 		customImport->meshes.at(26).textureBool = true;
 
-		//Option 4 - Credits
+		// Option 4 - Credits
 		customImport->LoadCustomFormat("../BinaryDataOptions4-Credits.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(27));
@@ -244,7 +244,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		// Results Menu
 		// Option 1 - Play Again
-		customImport->LoadCustomFormat("../BinaryDataResults1-PlayAgain.dat");
+		customImport->LoadCustomFormat("../BinaryDataResult1-PlayAgain.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(28));
 
@@ -252,51 +252,59 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(28).textureBool = true;
 
 		// Option 2 - Highscore
-		customImport->LoadCustomFormat("../BinaryDataResults2-Highscore.dat");
+		customImport->LoadCustomFormat("../BinaryDataResult2-Highscore.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(29));
 
 		graphics->CreateTexture(customImport->meshes.at(29));
 		customImport->meshes.at(29).textureBool = true;
 
-		//Option 3 - Credits
-		customImport->LoadCustomFormat("../BinaryDataResults3-Credits.dat");
+		// Option 3 - Credits
+		customImport->LoadCustomFormat("../BinaryDataResult3-Credits.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(30));
 
 		graphics->CreateTexture(customImport->meshes.at(30));
 		customImport->meshes.at(30).textureBool = true;
 
-		//Option 4 - Main Menu
-		customImport->LoadCustomFormat("../BinaryDataResults4-MainMenu.dat");
+		// Option 4 - Main Menu
+		customImport->LoadCustomFormat("../BinaryDataResult4-MainMenu.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(31));
 
 		graphics->CreateTexture(customImport->meshes.at(31));
 		customImport->meshes.at(31).textureBool = true;
 
-		//Option 5 - Are You Sure?
-		customImport->LoadCustomFormat("../BinaryDataResults5-MainMenu-AreYouSure.dat");
+		// Option 5 - Are You Sure?
+		customImport->LoadCustomFormat("../BinaryDataResult5-MainMenu-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(32));
 
 		graphics->CreateTexture(customImport->meshes.at(32));
 		customImport->meshes.at(32).textureBool = true;
 
-		//Controls
-		customImport->LoadCustomFormat("../BinaryDataControls.dat");
+		// Controls
+		customImport->LoadCustomFormat("../BinaryDataControlls.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(33));
 
 		graphics->CreateTexture(customImport->meshes.at(33));
 		customImport->meshes.at(33).textureBool = true;
 
-		//Credits
+		// Credits
 		customImport->LoadCustomFormat("../BinaryDataCredits.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(34));
 
 		graphics->CreateTexture(customImport->meshes.at(34));
+		customImport->meshes.at(34).textureBool = true;
+
+		// How to Play
+		customImport->LoadCustomFormat("../BinaryDataHowToPlay.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(35));
+
+		graphics->CreateTexture(customImport->meshes.at(35));
 		customImport->meshes.at(34).textureBool = true;
 
 		graphics->CreateConstantBuffer();
@@ -701,68 +709,161 @@ void Engine::processInput()
 
 			if (this->player->input->State._buttons[GamePad_Button_A] == false)
 				aButtonActive = false;
+			if (this->player->input->State._buttons[GamePad_Button_B] == false)
+				bButtonActive = false;
 			break;
 		case GameOver:
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 			{
 				if (resMenuOption == 1)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Play Again)" << endl;
 					resMenuOption = 0;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Play Again)" << endl;
 				}
 				else if (resMenuOption == 3)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Credits)" << endl;
 					resMenuOption = 2;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Credits)" << endl;
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
 			{
 				if (resMenuOption == 0)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (High Score)" << endl;
 					resMenuOption = 1;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (High Score)" << endl;
 				}
 				else if (resMenuOption == 2)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Main Menu)" << endl;
 					resMenuOption = 3;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Main Menu)" << endl;
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
 			{
 				if (resMenuOption == 2)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Play Again)" << endl;
 					resMenuOption = 0;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Play Again)" << endl;
 				}
 				else if (resMenuOption == 3)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (High Score)" << endl;
 					resMenuOption = 1;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (High Score)" << endl;
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
 			{
 				if (resMenuOption == 0)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Credits)" << endl;
 					resMenuOption = 2;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Credits)" << endl;
 				}
 				else if (resMenuOption == 1)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Main Menu)" << endl;
 					resMenuOption = 3;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Main Menu)" << endl;
 				}
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
 			{
-				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 				gameState = MainMenu;
+				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+			}
+
+			// If accept
+			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
+			{
+				if (resMenuOption == 0)
+				{
+					cout << "Play Again" << endl;
+					pMenuOption = 0;
+					floorClear = false;
+					gameObject->reset();
+					player->PlayerReset();
+					camera->ResetCamera();
+
+					for (int i = 0; i < Objectpool->e_poolSize; i++)
+					{
+						Objectpool->enemies[i].setInUse(false);
+
+						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+						this->ready = false;
+					}
+					for (int i = 0; i < Objectpool->Se_poolSize; i++)
+					{
+						Objectpool->Senemies[i].setInUse(false);
+
+						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+						this->gameObject->setSpecialCooldown(false);
+					}
+
+					gameState = GameRunning;
+				}
+				else if (resMenuOption == 1)
+				{
+					gameState = HighScore;
+				}
+				else if (resMenuOption == 2)
+				{
+					gameState = Credits;
+				}
+				else if (resMenuOption == 3)
+				{
+					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+					pMenuOption = 0;
+					player->PlayerReset();
+					gameObject->reset();
+					Objectpool->ResetBullet();
+					camera->ResetCamera();
+					floorClear = false;
+					mainMenu = true;
+
+					for (int i = 0; i < 5; i++)
+					{
+						Objectpool->enemies[i].setInUse(false);
+					}
+					for (int i = 0; i < 2; i++)
+					{
+						Objectpool->Senemies[i].setInUse(false);
+					}
+
+					gameState = MainMenu;
+					aButtonActive = true;
+				}
+			}
+			break;
+		case Controls:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				bButtonActive = true;
+				gameState = HelpAndOptions;
+			}
+			break;
+		case Credits:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				bButtonActive = true;
+				gameState = HelpAndOptions;
+			}
+			break;
+		case Settings:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				bButtonActive = true;
+				gameState = HelpAndOptions;
+			}
+			break;
+		case HowToPlay:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				bButtonActive = true;
+				gameState = HelpAndOptions;
 			}
 			break;
 		}
+
 
 		// fire
 		if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
@@ -863,7 +964,7 @@ void Engine::update(double deltaTimeMs)
 				cout << "sphere hit" << endl;
 				if (player->getHpCooldown())
 				{
-					//player->HP--;
+					player->HP--;
 					enemyCount--;
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
@@ -1013,8 +1114,16 @@ void Engine::update(double deltaTimeMs)
 		}
 		break;
 	case MainMenu:
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
 		break;
-	case Pause:
+	case Pause:												
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
+		break;
+	case GameOver:
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
 		break;
 	}
 }
@@ -1181,39 +1290,6 @@ void Engine::render()
 
 		camera->InitCamera();
 		break;
-	case GameOver:
-		graphics->Render();
-
-		if (resMenuOption == 0)
-		{
-			customImport->meshes.at(28).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(28), customImport->meshes.at(28).world, 28, 17);
-		}
-		else if (resMenuOption == 1)
-		{
-			customImport->meshes.at(29).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(29), customImport->meshes.at(29).world, 29, 18);
-		}
-		else if (resMenuOption == 2)
-		{
-			customImport->meshes.at(30).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(30), customImport->meshes.at(30).world, 30, 19);
-		}
-		else if (resMenuOption == 3)
-		{
-			customImport->meshes.at(31).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 23, 20);
-		}
-
-		camera->InitCamera();
-		break;
-	case HighScore:
-		graphics->Render();
-
-
-
-		camera->InitCamera();
-		break;
 	case HelpAndOptions:
 		graphics->Render();
 		if (haoMenuOption == 0) // How To Play
@@ -1236,6 +1312,70 @@ void Engine::render()
 			customImport->meshes.at(27).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(27), customImport->meshes.at(27).world, 27, 16);
 		}
+
+		camera->InitCamera();
+		break;
+	case GameOver:
+		graphics->Render();
+
+		if (resMenuOption == 0)
+		{
+			customImport->meshes.at(28).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(28), customImport->meshes.at(28).world, 28, 17);
+		}
+		else if (resMenuOption == 1)
+		{
+			customImport->meshes.at(29).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(29), customImport->meshes.at(29).world, 29, 18);
+		}
+		else if (resMenuOption == 2)
+		{
+			customImport->meshes.at(30).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(30), customImport->meshes.at(30).world, 30, 19);
+		}
+		else if (resMenuOption == 3)
+		{
+			customImport->meshes.at(31).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 20);
+		}
+
+		camera->InitCamera();
+		break;
+	case HighScore:
+		graphics->Render();
+
+
+
+		camera->InitCamera();
+		break;
+	case Controls:
+		graphics->Render();
+
+		customImport->meshes.at(33).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(33), customImport->meshes.at(33).world, 33, 22);
+
+		camera->InitCamera();
+		break;
+	case Credits:
+		graphics->Render();
+
+		customImport->meshes.at(30).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(30), customImport->meshes.at(30).world, 30, 23);
+
+		camera->InitCamera();
+		break;
+	case HowToPlay:
+		graphics->Render();
+
+		customImport->meshes.at(35).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 24);
+
+		camera->InitCamera();
+		break;
+	case Settings:
+		graphics->Render();
+
+
 
 		camera->InitCamera();
 		break;
