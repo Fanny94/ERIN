@@ -305,7 +305,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CustomVertexBuffer(customImport->meshes.at(35));
 
 		graphics->CreateTexture(customImport->meshes.at(35));
-		customImport->meshes.at(34).textureBool = true;
+		customImport->meshes.at(35).textureBool = true;
 
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
@@ -697,6 +697,7 @@ void Engine::processInput()
 				if (mainMenu == true)
 				{
 					cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+					haoMenuOption = 0;
 					gameState = MainMenu;
 				}
 				else
@@ -1137,9 +1138,6 @@ void Engine::render()
 		graphics->Render();
 
 		//spawn enemies
-		
-
-
 		for (int w = 11; w < 13; w++)
 		{
 			if (w == 11)
@@ -1359,8 +1357,8 @@ void Engine::render()
 	case Credits:
 		graphics->Render();
 
-		customImport->meshes.at(30).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(30), customImport->meshes.at(30).world, 30, 23);
+		customImport->meshes.at(34).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(34), customImport->meshes.at(34).world, 34, 22);
 
 		camera->InitCamera();
 		break;
