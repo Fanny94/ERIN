@@ -125,35 +125,35 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		//graphics->CustomVertexBuffer(customImport->meshes.at(11));
 
 		////Stages
-		//customImport->LoadCustomFormat("../BinaryDataStageJungle.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(12));
-		//graphics->CreateTexture(customImport->meshes.at(12));
-		//customImport->meshes.at(12).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataStageJungle.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(8));
+		graphics->CreateTexture(customImport->meshes.at(8));
+		customImport->meshes.at(8).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataStageArctic.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(13));
-		//graphics->CreateTexture(customImport->meshes.at(13));
-		//customImport->meshes.at(13).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataStageArctic.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(9));
+		graphics->CreateTexture(customImport->meshes.at(9));
+		customImport->meshes.at(9).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataStageDesert.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(14));
-		//graphics->CreateTexture(customImport->meshes.at(14));
-		//customImport->meshes.at(14).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataStageDesert.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(10));
+		graphics->CreateTexture(customImport->meshes.at(10));
+		customImport->meshes.at(10).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataStageTropical.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(15));
-		//graphics->CreateTexture(customImport->meshes.at(15));
-		//customImport->meshes.at(15).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataStageTropical.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(11));
+		graphics->CreateTexture(customImport->meshes.at(11));
+		customImport->meshes.at(11).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataStageVolcanic.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(16));
-		//graphics->CreateTexture(customImport->meshes.at(16));
-		//customImport->meshes.at(16).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataStageVolcanic.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(12));
+		graphics->CreateTexture(customImport->meshes.at(12));
+		customImport->meshes.at(12).textureBool = true;
 
 		//// Title Screen
 		//customImport->LoadCustomFormat("../BinaryDataMenuQuad.dat");
@@ -1196,24 +1196,24 @@ void Engine::render()
 		switch (floorState)
 		{
 		case Jungle:
-			/*customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 5);*/
+			customImport->meshes.at(8).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(8), customImport->meshes.at(8).world, 8, 8);
 			break;
 		case Arctic:
-			/*customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 6);*/
+			customImport->meshes.at(9).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(9), customImport->meshes.at(9).world, 9, 9);
 			break;
 		case Desert:
-			/*customImport->meshes.at(14).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(14), customImport->meshes.at(14).world, 14, 7);*/
+			customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10, 10);
 			break;
 		case Tropical:
-			/*customImport->meshes.at(15).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(15), customImport->meshes.at(15).world, 15, 8);*/
+			customImport->meshes.at(11).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(11), customImport->meshes.at(11).world, 11, 11);
 			break;
 		case Volcanic:
-			/*customImport->meshes.at(16).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(16), customImport->meshes.at(16).world, 16, 9);*/
+			customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 12);
 			break;
 		}
 
