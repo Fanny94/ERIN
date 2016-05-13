@@ -297,6 +297,67 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(34));
 		customImport->meshes.at(34).textureBool = true;
 
+		//Numbers
+		customImport->LoadCustomFormat("../BinaryDataNumber0.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(35));
+		graphics->CreateTexture(customImport->meshes.at(35));
+		customImport->meshes.at(35).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataNumber1.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(36));
+		graphics->CreateTexture(customImport->meshes.at(36));
+		customImport->meshes.at(36).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataNumber2.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(37));
+		graphics->CreateTexture(customImport->meshes.at(37));
+		customImport->meshes.at(37).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataNumber3.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(38));
+		graphics->CreateTexture(customImport->meshes.at(38));
+		customImport->meshes.at(38).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataNumber4.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(39));
+		graphics->CreateTexture(customImport->meshes.at(39));
+		customImport->meshes.at(39).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataNumber5.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(40));
+		graphics->CreateTexture(customImport->meshes.at(40));
+		customImport->meshes.at(40).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataNumber6.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(41));
+		graphics->CreateTexture(customImport->meshes.at(41));
+		customImport->meshes.at(41).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataNumber7.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(42));
+		graphics->CreateTexture(customImport->meshes.at(42));
+		customImport->meshes.at(42).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataNumber8.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(43));
+		graphics->CreateTexture(customImport->meshes.at(43));
+		customImport->meshes.at(43).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDataNumber9.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(44));
+		graphics->CreateTexture(customImport->meshes.at(44));
+		customImport->meshes.at(44).textureBool = true;
+
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
 	}
@@ -307,7 +368,6 @@ Engine::~Engine()
 	delete this->graphics;
 	delete this->camera;
 	delete this->customImport;
-	delete this->gameLogic;
 	delete this->Esphere;
 	delete this->player;
 	delete this->Objectpool;
@@ -1138,6 +1198,9 @@ void Engine::render()
 				this->gameObject->setSpecialCooldown(false);
 			}
 		}
+
+		customImport->meshes.at(35).world = XMMatrixRotationX(XMConvertToRadians(-90)) * XMMatrixTranslation(0, 0, -2);
+		graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
 
 		// Camera Update
 		camera->InitCamera();
