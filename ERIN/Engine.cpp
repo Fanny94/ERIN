@@ -637,7 +637,11 @@ void Engine::processInput()
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
 			{
 				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
-				gameState = MainMenu;
+				
+				if (resMenu == true)
+					gameState = GameOver;
+				else
+					gameState = MainMenu;
 			}
 			break;
 		case HelpAndOptions:
@@ -735,6 +739,7 @@ void Engine::processInput()
 					bButtonActive = true;
 					gameState = Pause;
 				}
+				haoMenuOption = 0;
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_A] == false)
@@ -802,8 +807,9 @@ void Engine::processInput()
 				if (resMenuOption == 0)
 				{
 					cout << "Play Again" << endl;
-					pMenuOption = 0;
+					resMenuOption = 0;
 					floorClear = false;
+					resMenu = false;
 					gameObject->reset();
 					player->PlayerReset();
 					camera->ResetCamera();
@@ -841,13 +847,14 @@ void Engine::processInput()
 				else if (resMenuOption == 4)
 				{
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
-					pMenuOption = 0;
+					resMenuOption = 0;
 					player->PlayerReset();
 					gameObject->reset();
 					Objectpool->ResetBullet();
 					camera->ResetCamera();
 					floorClear = false;
 					mainMenu = true;
+					resMenu = false;
 
 					for (int i = 0; i < 5; i++)
 					{
@@ -885,7 +892,10 @@ void Engine::processInput()
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
 			{
 				bButtonActive = true;
-				gameState = HelpAndOptions;
+				if (resMenu == true)
+					gameState = GameOver;
+				else
+					gameState = HelpAndOptions;
 			}
 			break;
 		case Settings:
@@ -1142,6 +1152,7 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->enemies[i].setInUse(false);
 			}
 
+			resMenu = true;
 			gameState = GameOver;
 		}
 
