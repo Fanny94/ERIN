@@ -368,7 +368,6 @@ Engine::~Engine()
 	delete this->graphics;
 	delete this->camera;
 	delete this->customImport;
-	delete this->gameLogic;
 	delete this->Esphere;
 	delete this->player;
 	delete this->Objectpool;
@@ -1199,6 +1198,9 @@ void Engine::render()
 				this->gameObject->setSpecialCooldown(false);
 			}
 		}
+
+		customImport->meshes.at(35).world = XMMatrixRotationX(XMConvertToRadians(-90)) * XMMatrixTranslation(0, 0, -2);
+		graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
 
 		// Camera Update
 		camera->InitCamera();
