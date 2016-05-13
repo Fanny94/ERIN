@@ -33,8 +33,10 @@ public:
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
 
-	void CreateFontWrapper();
+	bool IsFontInit();
+	bool CreateFontWrapper();
 	void drawText();
+
 	void swapChain();
 
 	ID3D11Device* get_gDevice() { return this->gDevice; }
@@ -122,6 +124,7 @@ private:
 
 	IFW1Factory *pFW1Factory;
 	IFW1FontWrapper *pFontWrapper;
+	bool fontinit = false;
 };
 
 #endif // !GRAPHICS_H

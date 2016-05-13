@@ -40,8 +40,11 @@ Graphics::~Graphics()
 	this->gConstantBuffer = nullptr;
 	this->camera = nullptr;
 
-	pFontWrapper->Release();
-	pFW1Factory->Release();
+	if (fontinit)
+	{
+		pFontWrapper->Release();
+		//pFW1Factory->Release();
+	}
 }
 
 void Graphics::SetViewport()
@@ -356,14 +359,35 @@ void Graphics::UpdateConstantBuffer()
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 }
 
-void Graphics::CreateFontWrapper()
+bool Graphics::IsFontInit()
 {
+	return fontinit;
+}
+
+bool Graphics::CreateFontWrapper()
+{
+	/*HRESULT hResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	hResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);*/
+
 	HRESULT hResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	if (FAILED(hResult)) {
+		return false;
+	}
+
 	hResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);
+	if (FAILED(hResult)) {
+		return false;
+	}
+
+	pFW1Factory->Release();
+	fontinit = true;
+	return fontinit;
 }
 
 void Graphics::drawText()
 {
+	if (!fontinit) return;
+
 	pFontWrapper->DrawString(
 		gDeviceContext,
 		L"Text",// String
