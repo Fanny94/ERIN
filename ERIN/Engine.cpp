@@ -370,6 +370,7 @@ void Engine::processInput()
 				if (Objectpool->getCooldown())
 				{
 					this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+					sound->UseitFire();
 					Objectpool->setCooldown(false);
 				}
 			}
@@ -1472,7 +1473,7 @@ void Engine::RendHUD()
 		customImport->meshes.at(i + 1).world = XMMatrixRotationZ(XMConvertToRadians(60)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(2.5, 2.5, 1);
 		customImport->meshes.at(i + 2).world = XMMatrixRotationZ(XMConvertToRadians(120)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(2.5, 2.5, 1);
 		graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i).world, i + 0, 5);
-
+		sound->UseitSevereDmg();
 		if (player->HP >= 2)
 		{
 			graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i + 1).world, i + 0, 5);

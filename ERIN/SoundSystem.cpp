@@ -4,7 +4,7 @@ char * Sound::currentSound; //currently played sound
 							//FMOD-specific stuff
 FMOD_RESULT Sound::result;
 FMOD_SYSTEM * Sound::fmodsystem;
-FMOD::Sound  *Msound, *Gsound, *sound1, *sound2, *sound3;
+FMOD::Sound  *Msound, *Gsound, *sound1, *sound2, *sound3, *sound4;
 
 void Sound::fmod()
 {
@@ -22,6 +22,8 @@ void Sound::fmod()
 	result = system->createSound("C:/Users/cyka/Documents/GitHub/ERIN/Sounds/In Game sounds/Expulsion-Sound-Game-Hit.wav", FMOD_DEFAULT, 0, &sound2);
 
 	result = system->createSound("C:/Users/cyka/Documents/GitHub/ERIN/Sounds/In Game sounds/Expulsion-Sound-Game-Engine.wav", FMOD_DEFAULT, 0, &sound3);
+
+	result = system->createSound("C:/Users/cyka/Desktop/196861__ionicsmusic__race-robot-severe-damage.wav", FMOD_DEFAULT, 0, &sound4);
 
 	result = system->createStream("C:/Users/cyka/Documents/GitHub/ERIN/Sounds/Music for the Game/Expulsion-Music-Game.wav", FMOD_LOOP_NORMAL | FMOD_2D, 0, &Gsound);
 
@@ -74,6 +76,10 @@ void Sound::UseitMenuSound()
 	result = system->playSound(Msound, 0, false, &channel);
 }
 
+void Sound::UseitSevereDmg()
+{
+	result = system->playSound(sound4, 0, false, &channel);
+}
 
 Sound::~Sound()
 {
