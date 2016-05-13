@@ -67,7 +67,7 @@ public:
 	// Follow player function
 	float lerpDistanceX = 20.0f;
 	float lerpDistanceY = 10.0f;
-	float lerp = 0.6f;
+	float lerp = 2.0f;
 	void UpdateGameCamera(float x, float y, double dt);
 	void cameraFollow(float x, float y);
 
@@ -80,9 +80,6 @@ public:
 	DIMOUSESTATE mouseLastState;
 	LPDIRECTINPUT8 DirectInput;
 	bool cameraInput;
-
-private:
-
 };
 
 #endif

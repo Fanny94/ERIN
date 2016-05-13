@@ -20,7 +20,20 @@ enum GameStateManager
 	Pause,
 	GameOver,
 	HighScore,
-	HelpAndOptions
+	HelpAndOptions,
+	HowToPlay,
+	Controls,
+	Settings,
+	Credits
+};
+
+enum FloorStateManager
+{
+	Arctic,
+	Desert,
+	Jungle,
+	Tropical,
+	Volcanic
 };
 
 class Engine
@@ -46,11 +59,14 @@ public:
 	bool aButtonActive = false;
 	bool bButtonActive = false;
 
+	bool mainMenu = true;
+	bool resMenu = false;
 	bool floorClear = false;
 
 	bool printTitle = true;
 
 	GameStateManager gameState;
+	FloorStateManager floorState;
 
 	float Rx = -20 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (20 - (-20)))),
 		  Ry = -10 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (10 - (-10))));
@@ -62,6 +78,10 @@ public:
 	int pMenuOption = 0;
 	// Main Menu
 	int mainMenuOption = 0;
+	// Help & Options Menu
+	int haoMenuOption = 0;
+	// Result Screen
+	int resMenuOption = 0;
 
 	TSphere* Esphere;
 

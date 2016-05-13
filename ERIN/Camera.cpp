@@ -122,8 +122,8 @@ void Camera::UpdateGameCamera(float x, float y, double dt)
 {
 	// The Game camera that is going to follow the player and allways showing the elevator
 
-	camPosition.x += (x - camPosition.x) * lerp * dt;
-	camPosition.y += (y - camPosition.y) * lerp * dt;
+	camPosition.x += ((x / 2) - camPosition.x) * lerp * dt;
+	camPosition.y += ((y / 2) - camPosition.y) * lerp * dt;
 }
 
 void Camera::ResetCamera()
