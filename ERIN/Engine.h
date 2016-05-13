@@ -3,7 +3,6 @@
 
 #include "Linker.h"
 #include "Graphics.h"
-#include "GameLogic.h"
 #include "Mesh.h"
 #include "Camera.h"
 #include "CustomImport.h"
@@ -100,7 +99,6 @@ private:
 	// test cooldown function #end
 
 	Graphics* graphics;
-	GameLogic* gameLogic;
 	Mesh* mesh;
 	Camera* camera;
 	CustomImport* customImport;

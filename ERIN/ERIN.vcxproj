@@ -130,7 +130,6 @@
     <ClInclude Include="CustomImport.h" />
     <ClInclude Include="DirectXHelpers.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="GameLogic.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Input.h" />
@@ -151,7 +150,6 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CustomImport.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Input.cpp" />
