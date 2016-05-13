@@ -1461,7 +1461,7 @@ void Engine::Elevatorfunc()
 	}
 	else
 	{
-		customImport->meshes.at(6).world = XMMatrixTranslation(0, 0, 0) + XMMatrixScaling(2.5, 2.5, 1);
+		customImport->meshes.at(6).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
 		graphics->RenderCustom(customImport->meshes.at(6), customImport->meshes.at(6).world, 6, 6);
 		Esphere->m_vecCenter = Vector3(0, 0, 0);
 		Esphere->m_fRadius = 0.5f;
