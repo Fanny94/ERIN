@@ -18,13 +18,6 @@ public:
 	void SetViewport();
 	void Render();
 
-	void TitleScreenRender();
-	void MainMenuRender();
-	void PauseRender();
-	void GameOverRender();
-	void HighScoreRender();
-	void HelpAndOptionsRender();
-
 	void CustomVertexBuffer(Mesh mesh);
 	void RenderCustom(Mesh mesh, Matrix transform, int cvb, int tv);
 	void CustomUpdateBuffer(Matrix transform);

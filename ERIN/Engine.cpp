@@ -222,7 +222,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(26).textureBool = true;
 
 		//Option 5 - Are You Sure?
-		customImport->LoadCustomFormat("../BinaryDataPause5-MainMenu-AreYouSure.dat");
+		customImport->LoadCustomFormat("../BinaryDataPause5-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(27));
 		graphics->CreateTexture(customImport->meshes.at(27));
@@ -244,6 +244,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(29).textureBool = true;
 
 		//Option 3 - Settings
+		customImport->LoadCustomFormat("../BinaryDataOptions3-Settings.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(30));
 		graphics->CreateTexture(customImport->meshes.at(30));
@@ -1163,14 +1164,17 @@ void Engine::update(double deltaTimeMs)
 	case MainMenu:
 		camera->camPosition.x = 0;
 		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 		break;
 	case Pause:												
 		camera->camPosition.x = 0;
 		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 		break;
 	case GameOver:
 		camera->camPosition.x = 0;
 		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 		break;
 	}
 }
@@ -1300,7 +1304,7 @@ void Engine::render()
 		else if (mainMenuOption == 1) // Highscore
 		{
 			customImport->meshes.at(19).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(19), customImport->meshes.at(15).world, 19, 12);
+			graphics->RenderCustom(customImport->meshes.at(19), customImport->meshes.at(19).world, 19, 12);
 		}
 		else if (mainMenuOption == 2) // Help & Options
 		{
@@ -1397,13 +1401,18 @@ void Engine::render()
 			customImport->meshes.at(35).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 28);
 		}
+		else if (resMenuOption == 4)
+		{
+			customImport->meshes.at(36).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 29);
+		}
 		camera->InitCamera();
 		break;
 	case Controls:
 		graphics->Render();
 
 		customImport->meshes.at(37).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 29);
+		graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 30);
 
 		camera->InitCamera();
 		break;
@@ -1411,7 +1420,7 @@ void Engine::render()
 		graphics->Render();
 
 		customImport->meshes.at(38).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(38), customImport->meshes.at(38).world, 38, 30);
+		graphics->RenderCustom(customImport->meshes.at(38), customImport->meshes.at(38).world, 38, 31);
 
 		camera->InitCamera();
 		break;
@@ -1419,7 +1428,7 @@ void Engine::render()
 		graphics->Render();
 
 		customImport->meshes.at(39).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(39), customImport->meshes.at(39).world, 39, 31);
+		graphics->RenderCustom(customImport->meshes.at(39), customImport->meshes.at(39).world, 39, 32);
 
 		camera->InitCamera();
 		break;
