@@ -4,6 +4,7 @@
 #include "Structs.h"
 #include "Camera.h"
 #include "Mesh.h"
+#include "FW1FontWrapper_1_1\FW1FontWrapper.h"
 
 using namespace std;
 class Camera;
@@ -25,7 +26,6 @@ public:
 	void CreateDepthBuffer();
 
 	void CreateConstantBuffer();
-
 	void UpdateConstantBuffer();
 
 	void CreateTexture(Mesh mesh);
@@ -33,6 +33,8 @@ public:
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
 
+	void CreateFontWrapper();
+	void drawText();
 	void swapChain();
 
 	ID3D11Device* get_gDevice() { return this->gDevice; }
@@ -117,6 +119,9 @@ private:
 	vector<ID3D11ShaderResourceView*> textureView;
 	ID3D11ShaderResourceView* temptextureView = nullptr;
 	unsigned char* buffer;
+
+	IFW1Factory *pFW1Factory;
+	IFW1FontWrapper *pFontWrapper;
 };
 
 #endif // !GRAPHICS_H

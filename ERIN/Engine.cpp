@@ -54,6 +54,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
+		graphics->CreateFontWrapper();
+
 		//Ship
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
@@ -1236,7 +1238,7 @@ void Engine::render()
 
 		customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 		graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 12);
-		
+		graphics->drawText();
 		camera->InitCamera();
 		break;
 	case MainMenu:
@@ -1390,6 +1392,7 @@ void Engine::render()
 		camera->InitCamera();
 		break;
 	}
+
 	// Switch front- and back-buffer
 	graphics->swapChain();
 }

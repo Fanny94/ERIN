@@ -39,6 +39,9 @@ Graphics::~Graphics()
 
 	this->gConstantBuffer = nullptr;
 	this->camera = nullptr;
+
+	pFontWrapper->Release();
+	pFW1Factory->Release();
 }
 
 void Graphics::SetViewport()
@@ -351,6 +354,25 @@ void Graphics::UpdateConstantBuffer()
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+}
+
+void Graphics::CreateFontWrapper()
+{
+	HRESULT hResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	hResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);
+}
+
+void Graphics::drawText()
+{
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		L"Text",// String
+		128.0f,// Font size
+		100.0f,// X position
+		50.0f,// Y position
+		0xff0099ff,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+		);
 }
 
 void Graphics::swapChain()
