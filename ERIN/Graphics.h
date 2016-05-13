@@ -4,7 +4,9 @@
 #include "Structs.h"
 #include "Camera.h"
 #include "Mesh.h"
+//#include "FW1FontWrapper_1_1\FW1FontWrapper.h"
 
+using namespace std;
 class Camera;
 
 class Graphics
@@ -15,13 +17,6 @@ public:
 
 	void SetViewport();
 	void Render();
-
-	void TitleScreenRender();
-	void MainMenuRender();
-	void PauseRender();
-	void GameOverRender();
-	void HighScoreRender();
-	void HelpAndOptionsRender();
 
 	void CustomVertexBuffer(Mesh mesh);
 	void RenderCustom(Mesh mesh, Matrix transform, int cvb, int tv);
@@ -34,10 +29,15 @@ public:
 
 	void UpdateConstantBuffer();
 
+	/*void CreateFontWrapper();
+	void drawText();*/
+
 	void CreateTexture(Mesh mesh);
 
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
+
+	void swapChain();
 
 	ID3D11Device* get_gDevice() { return this->gDevice; }
 	ID3D11DeviceContext* get_gDeviceContext() { return this->gDeviceContext; }
@@ -122,6 +122,10 @@ private:
 	vector<ID3D11ShaderResourceView*> textureView;
 	ID3D11ShaderResourceView* temptextureView = nullptr;
 	unsigned char* buffer;
+
+	/*IFW1Factory *pFW1Factory;
+	IFW1FontWrapper *pFontWrapper;*/
+	/*HRESULT fontResult;*/
 };
 
 #endif // !GRAPHICS_H

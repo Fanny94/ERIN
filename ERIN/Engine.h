@@ -26,6 +26,15 @@ enum GameStateManager
 	Credits
 };
 
+enum FloorStateManager
+{
+	Arctic,
+	Desert,
+	Jungle,
+	Tropical,
+	Volcanic
+};
+
 class Engine
 {
 public:
@@ -50,11 +59,13 @@ public:
 	bool bButtonActive = false;
 
 	bool mainMenu = true;
+	bool resMenu = false;
 	bool floorClear = false;
 
 	bool printTitle = true;
 
 	GameStateManager gameState;
+	FloorStateManager floorState;
 
 	float Rx = -20 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (20 - (-20)))),
 		  Ry = -10 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (10 - (-10))));
