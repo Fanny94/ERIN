@@ -1436,16 +1436,12 @@ void Engine::Elevatorfunc()
 		specialEnemyCount = Objectpool->Se_poolSize;
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
-			//Objectpool->enemies[i].setInUse(false);
-
 			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 			
 			this->ready = false;
 		}
 		for (int i = 0; i < Objectpool->Se_poolSize; i++)
 		{
-			//Objectpool->Senemies[i].setInUse(false);
-
 			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
 			
 			this->gameObject->setSpecialCooldown(false);
@@ -1466,10 +1462,9 @@ void Engine::Elevatorfunc()
 	else
 	{
 		customImport->meshes.at(6).world = XMMatrixTranslation(0, 0, 0) + XMMatrixScaling(2.5, 2.5, 1);
-		graphics->RenderCustom(customImport->meshes.at(6), customImport->meshes.at(6).world, 6, -6);
+		graphics->RenderCustom(customImport->meshes.at(6), customImport->meshes.at(6).world, 6, 6);
 		Esphere->m_vecCenter = Vector3(0, 0, 0);
 		Esphere->m_fRadius = 0.5f;
-		cout << "Render Elevater Cube" << endl;
 	}
 }
 
@@ -1478,7 +1473,6 @@ void Engine::updateCooldown(double dt)
 	if (this->cooldown <= this->currentTime)
 	{
 		this->currentTime = 0.0f;
-		//this->ready = true;
 	}
 	else
 	{
