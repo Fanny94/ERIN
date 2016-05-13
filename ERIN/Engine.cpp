@@ -55,20 +55,21 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateShaders();
 
-		/*graphics->CreateFontWrapper();*/
-
+		//Ship
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 		graphics->CreateTexture(customImport->meshes.at(0));
 		customImport->meshes.at(0).textureBool = true;
 
+		//Turret
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(1));
 		graphics->CreateTexture(customImport->meshes.at(1));
 		customImport->meshes.at(1).textureBool = true;
 
+		//Enemies
 		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
@@ -81,6 +82,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(3));
 		customImport->meshes.at(3).textureBool = true;
 
+		//Bullets
 		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(4));
@@ -872,22 +874,18 @@ void Engine::update(double deltaTimeMs)
 		// Player Collision Walls
 		if (sphereToPlane(*player->sphere, upper_wall->point, upper_wall->normal))
 		{
-			cout << "upper wall hit" << endl;
 			player->SetY(upper_wall->point.y - 0.5f);
 		}
 		if (sphereToPlane(*player->sphere, left_wall->point, left_wall->normal))
 		{
-			cout << "left wall hit" << endl;
 			player->SetX(left_wall->point.x + 0.5f);
 		}
 		if (sphereToPlane(*player->sphere, lower_wall->point, lower_wall->normal))
 		{
-			cout << "lower wall hit" << endl;
 			player->SetY(lower_wall->point.y + 0.5f);
 		}
 		if (sphereToPlane(*player->sphere, right_wall->point, right_wall->normal))
 		{
-			cout << "right wall hit" << endl;
 			player->SetX(right_wall->point.x - 0.5f);
 		}
 
@@ -906,7 +904,6 @@ void Engine::update(double deltaTimeMs)
 		{
 			if (Objectpool->enemies[i].getInUse() && sphereToSphere(*player->sphere, *Objectpool->enemies[i].sphere))
 			{
-				cout << "sphere hit" << endl;
 				if (player->getHpCooldown())
 				{
 					player->HP--;
@@ -1127,7 +1124,6 @@ void Engine::render()
 		{
 			for (int i = 0; i <Objectpool->e_poolSize; i++)
 			{
-				cout << "enemy created" << endl;
 				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 				this->ready = false;
 			}
@@ -1137,7 +1133,6 @@ void Engine::render()
 		{
 			for (int i = 0; i < Objectpool->Se_poolSize; i++)
 			{
-				cout << "senemy created" << endl;
 				this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
 				savedRx = Rx;
 				savedRy = Ry;
@@ -1147,9 +1142,6 @@ void Engine::render()
 
 		// Camera Update
 		camera->InitCamera();
-
-		// Font
-		/*graphics->drawText();*/
 
 		break;
 	case TitleScreen:
