@@ -6,6 +6,7 @@
 #include "Mesh.h"
 //#include "FW1FontWrapper_1_1\FW1FontWrapper.h"
 
+using namespace std;
 class Camera;
 
 class Graphics
@@ -32,10 +33,12 @@ public:
 	void CreateDepthBuffer();
 
 	void CreateConstantBuffer();
+
 	void UpdateConstantBuffer();
 
 	/*void CreateFontWrapper();
 	void drawText();*/
+
 	void CreateTexture(Mesh mesh);
 
 	float get_gWidth() { return this->WIDTH; }
@@ -129,7 +132,7 @@ private:
 
 	/*IFW1Factory *pFW1Factory;
 	IFW1FontWrapper *pFontWrapper;*/
-	HRESULT fontResult;
+	/*HRESULT fontResult;*/
 };
 
 #endif // !GRAPHICS_H

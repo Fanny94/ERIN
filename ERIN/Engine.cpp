@@ -244,7 +244,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(29).textureBool = true;
 
 		//Option 3 - Settings
-		customImport->LoadCustomFormat("../BinaryDataOptions3-Settings.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(30));
 		graphics->CreateTexture(customImport->meshes.at(30));
@@ -294,7 +293,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(36).textureBool = true;
 
 		//Controls
-		customImport->LoadCustomFormat("../BinaryDataControls.dat");
+		customImport->LoadCustomFormat("../BinaryDataControlls.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(37));
 		graphics->CreateTexture(customImport->meshes.at(37));
@@ -306,6 +305,13 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CustomVertexBuffer(customImport->meshes.at(38));
 		graphics->CreateTexture(customImport->meshes.at(38));
 		customImport->meshes.at(38).textureBool = true;
+
+		// How to Play
+		customImport->LoadCustomFormat("../BinaryDataHowToPlay.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(39));
+		graphics->CreateTexture(customImport->meshes.at(39));
+		customImport->meshes.at(39).textureBool = true;
 
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
@@ -474,11 +480,25 @@ void Engine::processInput()
 					gameState = HelpAndOptions;
 				}
 				else if (mainMenuOption == 3)
+				{
+					cout << "Quit" << endl;
+					mainMenuOption = 4;
+					aButtonActive = true;
+				}
+				else if (mainMenuOption == 4)
 					this->running = false;
+			}
+
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				if (mainMenuOption == 4)
+					mainMenuOption = 3;
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_A] == false)
 				aButtonActive = false;
+			if (this->player->input->State._buttons[GamePad_Button_B] == false)
+				bButtonActive = false;
 			break;
 
 		case Pause:
@@ -580,6 +600,11 @@ void Engine::processInput()
 				}
 				else if (pMenuOption == 3)
 				{
+					aButtonActive = true;
+					pMenuOption = 4;
+				}
+				else if (pMenuOption == 4)
+				{
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
 					player->PlayerReset();
@@ -598,19 +623,31 @@ void Engine::processInput()
 						Objectpool->Senemies[i].setInUse(false);
 					}
 
-					gameState = MainMenu;
 					aButtonActive = true;
+					gameState = MainMenu;
 				}
-
-				if (this->player->input->State._buttons[GamePad_Button_A] == false)
-					aButtonActive = false;
 			}
+
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				if (pMenuOption == 4)
+					pMenuOption = 3;
+			}
+
+			if (this->player->input->State._buttons[GamePad_Button_A] == false)
+				aButtonActive = false;
+			if (this->player->input->State._buttons[GamePad_Button_B] == false)
+				bButtonActive = false;
 			break;
 		case HighScore:
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
 			{
 				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
-				gameState = MainMenu;
+				
+				if (resMenu == true)
+					gameState = GameOver;
+				else
+					gameState = MainMenu;
 			}
 			break;
 		case HelpAndOptions:
@@ -697,77 +734,188 @@ void Engine::processInput()
 				if (mainMenu == true)
 				{
 					cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+					haoMenuOption = 0;
+					bButtonActive = true;
 					gameState = MainMenu;
 				}
 				else
 				{
 					pMenuOption = 0;
 					cout << "Pause Menu" << endl << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
+					bButtonActive = true;
 					gameState = Pause;
 				}
+				haoMenuOption = 0;
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_A] == false)
 				aButtonActive = false;
+			if (this->player->input->State._buttons[GamePad_Button_B] == false)
+				bButtonActive = false;
 			break;
 		case GameOver:
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
 			{
 				if (resMenuOption == 1)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Play Again)" << endl;
 					resMenuOption = 0;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Play Again)" << endl;
 				}
 				else if (resMenuOption == 3)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Credits)" << endl;
 					resMenuOption = 2;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Credits)" << endl;
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_RIGHT] == true)
 			{
 				if (resMenuOption == 0)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (High Score)" << endl;
 					resMenuOption = 1;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (High Score)" << endl;
 				}
 				else if (resMenuOption == 2)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Main Menu)" << endl;
 					resMenuOption = 3;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Main Menu)" << endl;
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
 			{
 				if (resMenuOption == 2)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Play Again)" << endl;
 					resMenuOption = 0;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Play Again)" << endl;
 				}
 				else if (resMenuOption == 3)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (High Score)" << endl;
 					resMenuOption = 1;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (High Score)" << endl;
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_DOWN] == true)
 			{
 				if (resMenuOption == 0)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Credits)" << endl;
 					resMenuOption = 2;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Credits)" << endl;
 				}
 				else if (resMenuOption == 1)
 				{
-					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Main Menu)" << endl;
 					resMenuOption = 3;
+					cout << "Result Menu" << endl << "Result Menu Option " << resMenuOption << " (Main Menu)" << endl;
+				}
+			}
+
+			// If accept
+			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
+			{
+				if (resMenuOption == 0)
+				{
+					cout << "Play Again" << endl;
+					resMenuOption = 0;
+					floorClear = false;
+					resMenu = false;
+					gameObject->reset();
+					player->PlayerReset();
+					camera->ResetCamera();
+
+					for (int i = 0; i < Objectpool->e_poolSize; i++)
+					{
+						Objectpool->enemies[i].setInUse(false);
+
+						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+						this->ready = false;
+					}
+					for (int i = 0; i < Objectpool->Se_poolSize; i++)
+					{
+						Objectpool->Senemies[i].setInUse(false);
+
+						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+						this->gameObject->setSpecialCooldown(false);
+					}
+
+					gameState = GameRunning;
+				}
+				else if (resMenuOption == 1)
+				{
+					gameState = HighScore;
+				}
+				else if (resMenuOption == 2)
+				{
+					gameState = Credits;
+				}
+				else if (resMenuOption == 3)
+				{
+					aButtonActive = true;
+					resMenuOption = 4;
+				}
+				else if (resMenuOption == 4)
+				{
+					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
+					resMenuOption = 0;
+					player->PlayerReset();
+					gameObject->reset();
+					Objectpool->ResetBullet();
+					camera->ResetCamera();
+					floorClear = false;
+					mainMenu = true;
+					resMenu = false;
+
+					for (int i = 0; i < 5; i++)
+					{
+						Objectpool->enemies[i].setInUse(false);
+					}
+					for (int i = 0; i < 2; i++)
+					{
+						Objectpool->Senemies[i].setInUse(false);
+					}
+
+					gameState = MainMenu;
+					aButtonActive = true;
 				}
 			}
 
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
 			{
-				cout << "Main Menu" << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
-				gameState = MainMenu;
+				if (resMenuOption == 4)
+					resMenuOption = 3;
+			}
+
+			if (this->player->input->State._buttons[GamePad_Button_A] == false)
+				aButtonActive = false;
+			if (this->player->input->State._buttons[GamePad_Button_B] == false)
+				bButtonActive = false;
+			break;
+		case Controls:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				bButtonActive = true;
+				gameState = HelpAndOptions;
+			}
+			break;
+		case Credits:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				bButtonActive = true;
+				if (resMenu == true)
+					gameState = GameOver;
+				else
+					gameState = HelpAndOptions;
+			}
+			break;
+		case Settings:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				bButtonActive = true;
+				gameState = HelpAndOptions;
+			}
+			break;
+		case HowToPlay:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
+			{
+				bButtonActive = true;
+				gameState = HelpAndOptions;
 			}
 			break;
 		}
@@ -1000,6 +1148,7 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->enemies[i].setInUse(false);
 			}
 
+			resMenu = true;
 			gameState = GameOver;
 		}
 
@@ -1012,8 +1161,16 @@ void Engine::update(double deltaTimeMs)
 		}
 		break;
 	case MainMenu:
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
 		break;
-	case Pause:
+	case Pause:												
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
+		break;
+	case GameOver:
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
 		break;
 	}
 }
@@ -1217,11 +1374,9 @@ void Engine::render()
 		}
 
 		camera->InitCamera();
-
 		break;
 	case GameOver:
 		graphics->Render();
-
 		if (resMenuOption == 0)
 		{
 			customImport->meshes.at(32).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
@@ -1242,6 +1397,34 @@ void Engine::render()
 			customImport->meshes.at(35).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 28);
 		}
+		camera->InitCamera();
+		break;
+	case Controls:
+		graphics->Render();
+
+		customImport->meshes.at(37).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 29);
+
+		camera->InitCamera();
+		break;
+	case Credits:
+		graphics->Render();
+
+		customImport->meshes.at(38).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(38), customImport->meshes.at(38).world, 38, 30);
+
+		camera->InitCamera();
+		break;
+	case HowToPlay:
+		graphics->Render();
+
+		customImport->meshes.at(39).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(39), customImport->meshes.at(39).world, 39, 31);
+
+		camera->InitCamera();
+		break;
+	case Settings:
+		graphics->Render();
 
 		camera->InitCamera();
 		break;
