@@ -14,7 +14,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->Objectpool = new ObjectPool();
 	this->gameObject = new GameObject();
 	this->sound = new Sound();
-
 	//srand(static_cast <unsigned> (time(0)));
 
 	this->customImport = new CustomImport();
@@ -117,6 +116,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
+
+		//Sound
+		sound->fmod();
+		sound->UseitGameSound();
 	}
 }
 
@@ -257,12 +260,23 @@ void Engine::processInput()
 			break;
 		case GameRunning:
 
+			//sound for engine, does not work
+			/*if (player->getAcceleration())
+			{
+				sound->UseitEngineSound();
+			}
+			else
+			{
+				sound->setPlaying(false);
+			}*/
+
 			//Fire Bullets
 			if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
 			{
 				if (Objectpool->getCooldown())
 				{
 					this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+					sound->UseitFire();
 					Objectpool->setCooldown(false);
 
 				}
@@ -278,7 +292,7 @@ void Engine::processInput()
 			{
 				cout << "Game Paused" << endl << "Pause Menu Option " << pMenuOption << " (Resume)" << endl;
 				gameState = Pause;
-				sound->togglePause();
+				//sound->togglePause();
 			}
 
 			// Dpad camera movement
@@ -367,7 +381,7 @@ void Engine::processInput()
 				{
 					cout << "Game Running" << endl;
 					gameState = GameRunning;
-					sound->togglePause();
+					//sound->togglePause();
 				}
 				else if (pMenuOption == 1)
 				{
@@ -447,16 +461,6 @@ void Engine::processInput()
 			}
 			break;
 		}
-
-		// fire
-		if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
-		{
-			if (Objectpool->getCooldown())
-			{
-				this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
-				Objectpool->setCooldown(false);
-			}
-		}
 		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
 			this->running = false;
@@ -485,12 +489,7 @@ void Engine::update(double deltaTimeMs)
 		/* *********** Player Update *********** */
 		player->hpCooldown(deltaTimeS);
 		player->update(deltaTimeMs);
-		
-		//SOUND\\
-		//sound->UseInGameSong();
-		sound->UseitGameSound();
-		
-		//SOUND\\
+	
 		
 		camera->UpdateGameCamera(this->player->getX(), this->player->getY(), deltaTimeS);
 		//camera->cameraFollow(this->player->getX(), this->player->getY());
@@ -627,7 +626,7 @@ void Engine::update(double deltaTimeMs)
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
 						enemyCount --;
-						//sound->UseitFireSound();
+						sound->UseitHit();
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -646,7 +645,7 @@ void Engine::update(double deltaTimeMs)
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
 						specialEnemyCount --;
-						//sound->UseitFireSound();
+						sound->UseitHit();
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -699,7 +698,6 @@ void Engine::render()
 	switch (gameState)
 	{
 	case GameRunning:
-
 		graphics->Render();
 
 		//spawn enemies
