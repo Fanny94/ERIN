@@ -53,6 +53,8 @@ public:
 
 	double getHeading() { return turrent_heading; };
 
+	bool getAcceleration() { return accelerating; };
+
 	double getVx();
 	double getVy();
 	double getTVx();
