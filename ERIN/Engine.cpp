@@ -257,7 +257,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(31));
 		customImport->meshes.at(31).textureBool = true;
 
-
 		// Results Menu
 		// Option 1 - Play Again
 		customImport->LoadCustomFormat("../BinaryDataResult1-PlayAgain.dat");
