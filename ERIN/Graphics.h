@@ -18,13 +18,6 @@ public:
 	void SetViewport();
 	void Render();
 
-	void TitleScreenRender();
-	void MainMenuRender();
-	void PauseRender();
-	void GameOverRender();
-	void HighScoreRender();
-	void HelpAndOptionsRender();
-
 	void CustomVertexBuffer(Mesh mesh);
 	void RenderCustom(Mesh mesh, Matrix transform, int cvb, int tv);
 	void CustomUpdateBuffer(Matrix transform);
@@ -100,8 +93,8 @@ public:
 	vector<DWORD> indices;
 
 private:
-	float WIDTH = 1280;
-	float HEIGHT = 720;
+	float WIDTH = 1920;
+	float HEIGHT = 810;
 
 	float camPosX;
 	float camPosY;

@@ -610,12 +610,12 @@ void Engine::processInput()
 				{
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
+					floorClear = false;
+					mainMenu = true;
 					player->PlayerReset();
 					gameObject->reset();
 					Objectpool->ResetBullet();
 					camera->ResetCamera();
-					floorClear = false;
-					mainMenu = true;
 
 					for (int i = 0; i < 5; i++)
 					{
@@ -1162,18 +1162,24 @@ void Engine::update(double deltaTimeMs)
 			cout << "Title Screen | Press Start to Continue" << endl;
 			printTitle = false;
 		}
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 		break;
 	case MainMenu:
 		camera->camPosition.x = 0;
 		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 		break;
 	case Pause:												
 		camera->camPosition.x = 0;
 		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 		break;
 	case GameOver:
 		camera->camPosition.x = 0;
 		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 		break;
 	}
 }
@@ -1382,12 +1388,12 @@ void Engine::render()
 		else if (resMenuOption == 3)
 		{
 			customImport->meshes.at(31).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 20);
+			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 23);
 		}
 		else if (resMenuOption == 4)
 		{
 			customImport->meshes.at(32).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-			graphics->RenderCustom(customImport->meshes.at(32), customImport->meshes.at(32).world, 32, 21);
+			graphics->RenderCustom(customImport->meshes.at(32), customImport->meshes.at(32).world, 32, 24);
 		}
 
 		camera->InitCamera();
@@ -1403,7 +1409,7 @@ void Engine::render()
 		graphics->Render();
 
 		customImport->meshes.at(33).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(33), customImport->meshes.at(33).world, 33, 22);
+		graphics->RenderCustom(customImport->meshes.at(33), customImport->meshes.at(33).world, 33, 25);
 
 		camera->InitCamera();
 		break;
@@ -1411,12 +1417,15 @@ void Engine::render()
 		graphics->Render();
 
 		customImport->meshes.at(34).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(34), customImport->meshes.at(34).world, 34, 23);
+		graphics->RenderCustom(customImport->meshes.at(34), customImport->meshes.at(34).world, 34, 26);
 
 		camera->InitCamera();
 		break;
 	case HowToPlay:
 		graphics->Render();
+
+		customImport->meshes.at(34).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(34), customImport->meshes.at(34).world, 35, 27);
 
 		camera->InitCamera();
 		break;
