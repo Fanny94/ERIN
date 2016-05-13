@@ -107,7 +107,6 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb, int tv)
 		CFPtr->specularColor[1] = mesh.material.at(j).specularColor[1];
 		CFPtr->specularColor[2] = mesh.material.at(j).specularColor[2];
 		CFPtr->shininess = mesh.material.at(j).shininess;
-		CFPtr->camPos = camera->camPosition;
 		CFPtr->textureBool = mesh.textureBool;
 	}
 

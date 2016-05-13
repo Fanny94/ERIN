@@ -73,7 +73,6 @@ public:
 		float paddingAC;
 		float specularColor[3];
 		float shininess;
-		XMFLOAT4 camPos;
 		int textureBool;
 		float padding[3];
 	};
