@@ -3,9 +3,10 @@
 #include "Linker.h"
 #include "Structs.h"
 #include "Camera.h"
-#include "Mesh.h"
-#include "FW1FontWrapper_1_1\FW1FontWrapper.h"
 
+#include "Mesh.h"
+
+using namespace std;
 class Camera;
 
 class Graphics
@@ -32,10 +33,9 @@ public:
 	void CreateDepthBuffer();
 
 	void CreateConstantBuffer();
+
 	void UpdateConstantBuffer();
 
-	void CreateFontWrapper();
-	void drawText();
 	void CreateTexture(Mesh mesh);
 
 	float get_gWidth() { return this->WIDTH; }
@@ -126,10 +126,7 @@ private:
 	vector<ID3D11ShaderResourceView*> textureView;
 	ID3D11ShaderResourceView* temptextureView = nullptr;
 	unsigned char* buffer;
-
-	IFW1Factory *pFW1Factory;
-	IFW1FontWrapper *pFontWrapper;
-	HRESULT fontResult;
+	
 };
 
 #endif // !GRAPHICS_H

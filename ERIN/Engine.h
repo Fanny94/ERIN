@@ -50,6 +50,7 @@ public:
 	bool bButtonActive = false;
 
 	bool mainMenu = true;
+	bool resMenu = false;
 	bool floorClear = false;
 
 	bool printTitle = true;
