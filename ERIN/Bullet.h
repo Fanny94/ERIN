@@ -24,7 +24,6 @@ public:
 	Matrix* bulletMatrix;
 	int timeLeft = 300; //How long a bullet will last
 	
-
 	union 
 	{
 		struct alive

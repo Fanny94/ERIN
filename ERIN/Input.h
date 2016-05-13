@@ -72,4 +72,3 @@ private:
 };
 
 #endif // !INPUT_H
-

@@ -41,6 +41,8 @@ public:
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
 
+	void swapChain();
+
 	ID3D11Device* get_gDevice() { return this->gDevice; }
 	ID3D11DeviceContext* get_gDeviceContext() { return this->gDeviceContext; }
 	IDXGISwapChain* get_gSwapChain() { return this->gSwapChain; }
@@ -98,7 +100,7 @@ public:
 	vector<DWORD> indices;
 
 private:
-	float WIDTH = 1080;
+	float WIDTH = 1280;
 	float HEIGHT = 720;
 
 	float camPosX;

@@ -181,6 +181,7 @@ void Player::computeTurn(double dt)
 		heading += turnRate * dt * dir;
 	}
 }
+
 void Player::turretComputeTurn(double dt)
 {
 	double dh = turret_plannedHeading - turrent_heading;
@@ -203,10 +204,12 @@ void Player::turnTo(double newHeading)
 {
 	plannedHeading = newHeading;
 }
+
 double Player::getVx()
 {
 	return r_speed * acos(heading * M_PI / 180);
 }
+
 double Player::getVy()
 {
 	return r_speed * asin(heading * M_PI / 180);

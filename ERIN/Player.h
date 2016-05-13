@@ -5,7 +5,6 @@
 #include "Structs.h"
 
 # define M_PI 3.14159265358979323846
-using namespace std;
 
 class Player
 {
@@ -81,7 +80,6 @@ private:
 	float thumbLeftX;
 	float thumbLeftY;
 	
-
 	float velocityX;
 	float velocityY;
 
@@ -91,7 +89,7 @@ private:
 	double r_speed = 10; // m/s;
 	double heading = 0;
 	double plannedHeading = 0;
-	double turnRate = 0.5; // deg /s
+	double turnRate = 0.1; // deg /s
 
 	// turrent rotation
 	double tr_x = 0;
@@ -99,12 +97,11 @@ private:
 	double tr_speed = 20; // m/s;
 	double turrent_heading = 0;
 	double turret_plannedHeading = 0;
-	double turret_turnRate = 1.0; // deg /s	
+	double turret_turnRate = 0.5; // deg /s	
 
 	//cooldown for damage
 	bool hpReady;
 	const float hpcooldown = 4.0f;
 	double hpcurrentTime;
-	//cooldown for damage
 };
 #endif // !PLAYER_H
