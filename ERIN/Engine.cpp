@@ -7,7 +7,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->running = true;
 	this->camera = new Camera();
 	this->graphics = new Graphics();
-	this->gameLogic = new GameLogic();
 
 	Esphere = new TSphere();
 
