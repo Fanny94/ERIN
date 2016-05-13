@@ -89,17 +89,23 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(4));
 		customImport->meshes.at(4).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataHUDHP1.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(5));
+		customImport->LoadCustomFormat("../BinaryDataHUDHP1.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(5));
+		graphics->CreateTexture(customImport->meshes.at(5));
+		customImport->meshes.at(5).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(6));
+		customImport->LoadCustomFormat("../BinaryDataHUDHP.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(6));
+		graphics->CreateTexture(customImport->meshes.at(6));
+		customImport->meshes.at(6).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataHUDHP5.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(7));
+		customImport->LoadCustomFormat("../BinaryDataHUDHP5.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(7));
+		graphics->CreateTexture(customImport->meshes.at(7));
+		customImport->meshes.at(7).textureBool = true;
 
 		//customImport->LoadCustomFormat("../BinaryDataHUDHP4.dat");
 		//customImport->NewMesh();
@@ -1079,10 +1085,10 @@ void Engine::render()
 			Elevatorfunc();
 		}
 
-	/*	if (player->HP > 0)
+		if (player->HP > 0)
 		{
 			RendHUD();
-		}*/
+		}
 
 		//Bullet rendering
 		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
@@ -1109,7 +1115,7 @@ void Engine::render()
 				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->Senemies[i].objectMatrix, 3, 3);
 			}
 		}
-
+	
 		if (this->ready)
 		{
 			for (int i = 0; i <Objectpool->e_poolSize; i++)
@@ -1273,28 +1279,30 @@ void Engine::RendHUD()
 
 	if (player->HP >= 1)
 	{
-		customImport->meshes.at(i).world = XMMatrixTranslation(0, 0, 0) + XMMatrixScaling(2.5, 2.5, 1);
-		graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i).world, i + 0, -2);
+		customImport->meshes.at(i).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(2.5, 2.5, 1);
+		customImport->meshes.at(i + 1).world = XMMatrixRotationZ(XMConvertToRadians(60)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(2.5, 2.5, 1);
+		customImport->meshes.at(i + 2).world = XMMatrixRotationZ(XMConvertToRadians(120)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(2.5, 2.5, 1);
+		graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i).world, i + 0, 5);
 
 		if (player->HP >= 2)
 		{
-			graphics->RenderCustom(customImport->meshes.at(i + 1), customImport->meshes.at(i).world, i + 1, -2);
+			graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i + 1).world, i + 0, 5);
 
 			if (player->HP >= 3)
 			{
-				graphics->RenderCustom(customImport->meshes.at(i + 2), customImport->meshes.at(i).world, i + 2, -2);
+				graphics->RenderCustom(customImport->meshes.at(i + 0), customImport->meshes.at(i + 2).world, i + 0, 5);
 
 				if (player->HP >= 4)
 				{
-					graphics->RenderCustom(customImport->meshes.at(i + 3), customImport->meshes.at(i).world, i + 3, -2);
+					/*graphics->RenderCustom(customImport->meshes.at(i + 3), customImport->meshes.at(i).world, i + 3, -2);*/
 
 					if (player->HP >= 5)
 					{
-						graphics->RenderCustom(customImport->meshes.at(i + 4), customImport->meshes.at(i).world, i + 4, -2);
+						/*graphics->RenderCustom(customImport->meshes.at(i + 4), customImport->meshes.at(i).world, i + 4, -2);*/
 
 						if (player->HP >= 6)
 						{
-							graphics->RenderCustom(customImport->meshes.at(i + 5), customImport->meshes.at(i).world, i + 5, -2);
+							/*graphics->RenderCustom(customImport->meshes.at(i + 5), customImport->meshes.at(i).world, i + 5, -2);*/
 						}
 					}
 				}
