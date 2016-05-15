@@ -14,20 +14,20 @@ void Sound::fmod()
 
 	result = system->init(32, FMOD_INIT_NORMAL, extradriverdata);
 
-	result = system->createSound("C:/Users/cyka/Documents/GitHub/ERIN/Sounds/In Game sounds/Expulsion-Sound-Game-Shoot.wav", FMOD_DEFAULT, 0, &sound1);
+	result = system->createSound("C:/Users/Brainiac/Documents/GitHub/ERIN/Sounds/In Game sounds/Expulsion-Sound-Game-Shoot.wav", FMOD_DEFAULT, 0, &sound1);
 
 	result = sound1->setMode(FMOD_LOOP_OFF);    /* drumloop.wav has embedded loop points which automatically makes looping turn on, */
 					                            /* so turn it off here.  We could have also just put FMOD_LOOP_OFF in the above CreateSound call. */
 
-	result = system->createSound("C:/Users/cyka/Documents/GitHub/ERIN/Sounds/In Game sounds/Expulsion-Sound-Game-Hit.wav", FMOD_DEFAULT, 0, &sound2);
+	result = system->createSound("C:/Users/Brainiac/Documents/GitHub/ERIN/Sounds/In Game sounds/Expulsion-Sound-Game-Hit.wav", FMOD_DEFAULT, 0, &sound2);
 
-	result = system->createSound("C:/Users/cyka/Documents/GitHub/ERIN/Sounds/In Game sounds/Expulsion-Sound-Game-Engine.wav", FMOD_DEFAULT, 0, &sound3);
+	result = system->createSound("C:/Users/Brainiac/Documents/GitHub/ERIN/Sounds/In Game sounds/Expulsion-Sound-Game-Engine.wav", FMOD_DEFAULT, 0, &sound3);
 
-	result = system->createSound("C:/Users/cyka/Desktop/196861__ionicsmusic__race-robot-severe-damage.wav", FMOD_DEFAULT, 0, &sound4);
+	result = system->createSound("C:/Users/Brainiac/Desktop/196861__ionicsmusic__race-robot-severe-damage.wav", FMOD_DEFAULT, 0, &sound4);
 
-	result = system->createStream("C:/Users/cyka/Documents/GitHub/ERIN/Sounds/Music for the Game/Expulsion-Music-Game.wav", FMOD_LOOP_NORMAL | FMOD_2D, 0, &Gsound);
+	result = system->createStream("C:/Users/Brainiac/Documents/GitHub/ERIN/Sounds/Music for the Game/Expulsion-Music-Game.wav", FMOD_LOOP_NORMAL | FMOD_2D, 0, &Gsound);
 
-	result = system->createStream("C:/Users/cyka/Documents/GitHub/ERIN/Sounds/Music for the Game/Expulsion-Music-Menu.wav", FMOD_LOOP_NORMAL | FMOD_2D, 0, &Msound);
+	result = system->createStream("C:/Users/Brainiac/Documents/GitHub/ERIN/Sounds/Music for the Game/Expulsion-Music-Menu.wav", FMOD_LOOP_NORMAL | FMOD_2D, 0, &Msound);
 	
 	result = system->update();
 		{
