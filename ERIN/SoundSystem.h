@@ -53,7 +53,7 @@ public:
 	void UseitFire();
 	void UseitHit();
 	void UseitEngineSound();
-	void UseitSevereDmg();
+	void UseitDmg();
 	void fmod();
 	void setPause(bool paused) { this->paused = paused; };
 	bool getPause() { return paused; };
