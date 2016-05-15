@@ -978,7 +978,6 @@ void Engine::update(double deltaTimeMs)
 				if (player->getHpCooldown())
 				{
 					player->HP--;
-					sound->UseitDmg();
 					enemyCount--;
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
