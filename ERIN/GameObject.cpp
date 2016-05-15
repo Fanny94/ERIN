@@ -11,7 +11,7 @@ GameObject::GameObject()
 
 	this->sphere = new TSphere();
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
-	this->sphere->m_fRadius = 1.0f;
+	this->sphere->m_fRadius = 0.5f;
 }
 
 GameObject::GameObject(int objectID, string name, float x, float y, float z, bool doHaveBehavior)
