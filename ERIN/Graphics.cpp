@@ -39,6 +39,12 @@ Graphics::~Graphics()
 
 	this->gConstantBuffer = nullptr;
 	this->camera = nullptr;
+
+	if (fontinit)
+	{
+		pFontWrapper->Release();
+		//pFW1Factory->Release();
+	}
 }
 
 void Graphics::SetViewport()
@@ -351,6 +357,46 @@ void Graphics::UpdateConstantBuffer()
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+}
+
+bool Graphics::IsFontInit()
+{
+	return fontinit;
+}
+
+bool Graphics::CreateFontWrapper()
+{
+	/*HRESULT hResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	hResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);*/
+
+	HRESULT hResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	if (FAILED(hResult)) {
+		return false;
+	}
+
+	hResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);
+	if (FAILED(hResult)) {
+		return false;
+	}
+
+	pFW1Factory->Release();
+	fontinit = true;
+	return fontinit;
+}
+
+void Graphics::drawText()
+{
+	if (!fontinit) return;
+
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		L"Text",// String
+		128.0f,// Font size
+		100.0f,// X position
+		50.0f,// Y position
+		0xff0099ff,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+		);
 }
 
 void Graphics::swapChain()

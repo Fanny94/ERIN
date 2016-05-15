@@ -85,11 +85,13 @@ public:
 	TSphere* Esphere;
 
 	//Enemy counters
-	int specialEnemyCount = 2;
-	int enemyCount = 5;
+	int specialEnemyCount = 5;
+	int enemyCount = 12;
 
 private:
 	bool running;
+
+	float childX, childY;
 
 	// test cooldown function
 	bool ready = true;
