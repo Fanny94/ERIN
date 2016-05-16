@@ -120,6 +120,7 @@ private:
 	float safeZoneX, safeZoneY;
 	void randomFloat();
 	float Rx, Ry;
+	float childX, childY;
 
 };
 

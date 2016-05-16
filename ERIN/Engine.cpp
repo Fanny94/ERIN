@@ -1032,7 +1032,9 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->Senemies[i].update(deltaTimeMs);
 				if (Objectpool->getSpawnCooldown())
 				{
-					Objectpool->createEnemy(Objectpool->Senemies[i].childX, Objectpool->Senemies[i].childY, 0);
+					childX = Objectpool->Senemies[i].getX();
+					childY = Objectpool->Senemies[i].getY();
+					Objectpool->createEnemy(childX, childY, 0);
 					Objectpool->setSpawnCooldown(false);
 				}
 			}
@@ -1045,19 +1047,19 @@ void Engine::update(double deltaTimeMs)
 			{
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, upper_wall->point, upper_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosY(upper_wall->point.y - 0.5f);
+					Objectpool->Senemies[i].setObjectPosY(upper_wall->point.y - 1.0f);
 				}
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, left_wall->point, left_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosX(left_wall->point.x + 0.5f);
+					Objectpool->Senemies[i].setObjectPosX(left_wall->point.x + 1.0f);
 				}
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, lower_wall->point, lower_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosY(lower_wall->point.y + 0.5f);
+					Objectpool->Senemies[i].setObjectPosY(lower_wall->point.y + 1.0f);
 				}
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, right_wall->point, right_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosX(right_wall->point.x - 0.5f);
+					Objectpool->Senemies[i].setObjectPosX(right_wall->point.x - 1.0f);
 				}
 			}
 		}

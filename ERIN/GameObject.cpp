@@ -41,7 +41,7 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 
 	this->sphere = new TSphere();
 	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
-	this->sphere->m_fRadius = 0.5f;
+	this->sphere->m_fRadius = 1.0f;
 
 	this->behavior->VelX = getVelocityX();
 	this->behavior->VelY = getVelocityY();
@@ -223,8 +223,6 @@ void GameObject::updateSpecialBehavior(Position player, GameObject* myself, Game
 	{
 		Position thisEnemy = { this->x, this->y, this->z };
 		this->behavior->updateSpecial(player, thisEnemy);
-		childX = thisEnemy.x;
-		childY = thisEnemy.y;
 
 		// static number of enemies
 		for (int i = 0; i < 2; i++)
