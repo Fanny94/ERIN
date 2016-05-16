@@ -96,8 +96,8 @@ void GameObject::update(double dt)
 	this->pos->y = this->y;
 	this->pos->z = this->z;
 
-	childX = pos->x;
-	childY = pos->y;
+	//childX = pos->x;
+	//childY = pos->y;
 
 	if (this->behavior->getBehavior() == Follow)
 	{
@@ -223,6 +223,8 @@ void GameObject::updateSpecialBehavior(Position player, GameObject* myself, Game
 	{
 		Position thisEnemy = { this->x, this->y, this->z };
 		this->behavior->updateSpecial(player, thisEnemy);
+		childX = thisEnemy.x;
+		childY = thisEnemy.y;
 
 		// static number of enemies
 		for (int i = 0; i < 2; i++)

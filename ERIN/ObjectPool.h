@@ -27,7 +27,7 @@ public:
 	// special Enemies
 	void createSpecialEnemy(float x, float y, float z);
 	int getSpecialEnemyPoolSize() { return this->Se_poolSize; };
-	static const int Se_poolSize = 2;
+	static const int Se_poolSize = 3;
 	GameObject Senemies[Se_poolSize];
 	bool getSpawnCooldown() { return this->swReady; };
 	void setSpawnCooldown(bool swReady) { this->swReady = swReady; };
@@ -36,7 +36,7 @@ public:
 	// Enemies
 	void createEnemy(float x, float y, float z);
 	int getEnemyPoolSize() { return this->e_poolSize; };
-	static const int e_poolSize = 5;
+	static const int e_poolSize = 7;
 	GameObject enemies[e_poolSize];
 	
 	// Waves
