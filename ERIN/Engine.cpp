@@ -394,8 +394,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		}
 	}
 
-	floorClear = false;
-	resetCooldown();
+	//floorClear = false;
+	//resetCooldown();
 }
 
 Engine::~Engine()
@@ -424,7 +424,7 @@ void Engine::processInput()
 		// Update player accelerating bool
 		if (this->ready)
 		{
-		player->playerInput();
+			player->playerInput();
 		}
 
 		switch (gameState)
@@ -631,7 +631,7 @@ void Engine::processInput()
 					for (int i = 0; i < Objectpool->e_poolSize; i++)
 					{
 						Objectpool->enemies[i].setInUse(false);
-						
+
 						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
 					}
 					for (int i = 0; i < Objectpool->Se_poolSize; i++)
@@ -969,9 +969,10 @@ void Engine::update(double deltaTimeMs)
 
 		/* *********** Player Update *********** */
 		player->hpCooldown(deltaTimeS);
+
 		if (this->ready)
 		{
-		player->update(deltaTimeMs);
+			player->update(deltaTimeMs);
 		}
 
 		camera->UpdateGameCamera(this->player->getX(), this->player->getY(), deltaTimeS);
@@ -1066,7 +1067,7 @@ void Engine::update(double deltaTimeMs)
 		{
 			Objectpool->bullets[i].update();
 		}
-	
+
 		// Collision Bullets
 		for (int t = 0; t < Objectpool->e_poolSize; t++)
 		{
@@ -1226,7 +1227,7 @@ void Engine::render()
 				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->Senemies[i].objectMatrix, 3, 3);
 			}
 		}
-	
+
 		customImport->meshes.at(35).world = XMMatrixRotationX(XMConvertToRadians(-90)) * XMMatrixTranslation(0, 0, -2);
 		graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
 
@@ -1531,7 +1532,7 @@ void Engine::Elevatorfunc()
 		{
 			randomFloat();
 			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-			
+
 			this->gameObject->setSpecialCooldown(false);
 			this->Objectpool->setSpawnCooldown(false);
 		}
@@ -1548,14 +1549,14 @@ void Engine::Elevatorfunc()
 		else if (floorState == Volcanic)
 			floorState = Jungle;
 
-		resetCooldown();
+		//resetCooldown();
 	}
-	}
+}
 
 void Engine::rendElevator()
-	{
-		customImport->meshes.at(6).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
-		graphics->RenderCustom(customImport->meshes.at(6), customImport->meshes.at(6).world, 6, 6);
+{
+	customImport->meshes.at(6).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
+	graphics->RenderCustom(customImport->meshes.at(6), customImport->meshes.at(6).world, 6, 6);
 }
 
 void Engine::updateCooldown(double dt)
@@ -1574,7 +1575,7 @@ void Engine::resetCooldown()
 {
 	this->ready = false;
 	this->currentTime = 0.0f;
-	}
+}
 
 
 void Engine::randomFloat()
