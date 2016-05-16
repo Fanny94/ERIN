@@ -524,6 +524,9 @@ void Engine::processInput()
 					mainMenu = false;
 					gameState = GameRunning;
 					floorState = Jungle;
+					enemyCount = ec;
+					specialEnemyCount = sc;
+					eCount = enemyCount + specialEnemyCount -1;
 				}
 				else if (mainMenuOption == 1)
 				{
@@ -619,6 +622,8 @@ void Engine::processInput()
 					gameObject->reset();
 					player->PlayerReset();
 					camera->ResetCamera();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
 
 					for (int i = 0; i < Objectpool->e_poolSize; i++)
 					{
@@ -633,6 +638,7 @@ void Engine::processInput()
 						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
 						this->gameObject->setSpecialCooldown(false);
 					}
+					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
 				else if (pMenuOption == 2)
@@ -835,6 +841,8 @@ void Engine::processInput()
 					gameObject->reset();
 					player->PlayerReset();
 					camera->ResetCamera();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
 
 					for (int i = 0; i < Objectpool->e_poolSize; i++)
 					{
@@ -849,7 +857,7 @@ void Engine::processInput()
 						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
 						this->gameObject->setSpecialCooldown(false);
 					}
-
+					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
 				else if (resMenuOption == 1)
@@ -1005,7 +1013,7 @@ void Engine::update(double deltaTimeMs)
 				if (player->getHpCooldown())
 				{
 					player->HP--;
-					enemyCount--;
+					eCount--;
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
 				}
@@ -1026,7 +1034,7 @@ void Engine::update(double deltaTimeMs)
 					childX = Objectpool->Senemies[i].getX();
 					childY = Objectpool->Senemies[i].getY();
 					Objectpool->createEnemy(childX, childY, 0);
-					//enemyCount++;
+					eCount++;
 					Objectpool->setSpawnCooldown(false);
 				}
 			}
@@ -1096,7 +1104,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
-						enemyCount--;
+						eCount--;
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -1114,7 +1122,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
-						specialEnemyCount--;
+						eCount--;
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -1250,15 +1258,13 @@ void Engine::render()
 			rendElevator();
 		}
 
-		eCount = enemyCount + specialEnemyCount;
-
 		if (eCount < 10)
 		{
 			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
 		}
 
-		if (eCount <= 0 || eCount == 10)
+		if (eCount <= 0 || eCount == 10 || eCount == 20)
 		{
 			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
@@ -1270,55 +1276,61 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
 		}
 
-		if (eCount == 1 || eCount == 11)
+		if (eCount == 1 || eCount == 11 || eCount == 21)
 		{
 			customImport->meshes.at(36).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
 		}
 
-		if (eCount == 2 || eCount == 12)
+		if (eCount >= 20 && eCount < 30)
+		{
+			customImport->meshes.at(37).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 37);
+		}
+
+		if (eCount == 2 || eCount == 12 || eCount == 22)
 		{
 			customImport->meshes.at(37).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 37);
 		}
 
-		if (eCount == 3 || eCount == 13)
+		if (eCount == 3 || eCount == 13 || eCount == 23)
 		{
 			customImport->meshes.at(38).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(38), customImport->meshes.at(38).world, 38, 38);
 		}
 
-		if (eCount == 4 || eCount == 14)
+		if (eCount == 4 || eCount == 14 || eCount == 24)
 		{
 			customImport->meshes.at(39).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(39), customImport->meshes.at(39).world, 39, 39);
 		}
 
-		if (eCount == 5 || eCount == 15)
+		if (eCount == 5 || eCount == 15 || eCount == 25)
 		{
 			customImport->meshes.at(40).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(40), customImport->meshes.at(40).world, 40, 40);
 		}
 
-		if (eCount == 6 || eCount == 16)
+		if (eCount == 6 || eCount == 16 || eCount == 26)
 		{
 			customImport->meshes.at(41).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(41), customImport->meshes.at(41).world, 41, 41);
 		}
 
-		if (eCount == 7 || eCount == 17)
+		if (eCount == 7 || eCount == 17 || eCount == 27)
 		{
 			customImport->meshes.at(42).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(42), customImport->meshes.at(42).world, 42, 42);
 		}
 
-		if (eCount == 8 || eCount == 18)
+		if (eCount == 8 || eCount == 18 || eCount == 28)
 		{
 			customImport->meshes.at(43).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(43), customImport->meshes.at(43).world, 43, 43);
 		}
 
-		if (eCount == 9 || eCount == 19)
+		if (eCount == 9 || eCount == 19 || eCount == 29)
 		{
 			customImport->meshes.at(44).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(44), customImport->meshes.at(44).world, 44, 44);
@@ -1611,6 +1623,7 @@ void Engine::Elevatorfunc()
 		player->NewFloorReset();
 		enemyCount = Objectpool->e_poolSize;
 		specialEnemyCount = Objectpool->Se_poolSize;
+		eCount = enemyCount + specialEnemyCount -1;
 
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
