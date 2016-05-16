@@ -96,6 +96,9 @@ void GameObject::update(double dt)
 	this->pos->y = this->y;
 	this->pos->z = this->z;
 
+	childX = pos->x;
+	childY = pos->y;
+
 	if (this->behavior->getBehavior() == Follow)
 	{
 		this->accelerating = true;
