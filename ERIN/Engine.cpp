@@ -389,6 +389,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 			this->gameObject->setSpecialCooldown(false);
 		}
 	}
+	enemyCount = Objectpool->e_poolSize;
+	specialEnemyCount = Objectpool->Se_poolSize;
 
 	//floorClear = false;
 	//resetCooldown();
@@ -1023,10 +1025,13 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->Senemies[i].update(deltaTimeMs);
 				if (Objectpool->getSpawnCooldown())
 				{
-					childX = Objectpool->Senemies[i].getX();
-					childY = Objectpool->Senemies[i].getY();
-					Objectpool->createEnemy(childX, childY, 0);
-					Objectpool->setSpawnCooldown(false);
+					for (int i = 0; this->Objectpool->Senemies[i].getInUse(); i++)
+					{
+						childX = Objectpool->Senemies[i].getX();
+						childY = Objectpool->Senemies[i].getY();
+						Objectpool->createEnemy(childX, childY, 0);
+						Objectpool->setSpawnCooldown(false);
+					}
 				}
 			}
 		}

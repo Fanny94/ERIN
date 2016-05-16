@@ -107,19 +107,6 @@ void Behavior::separation(Position myself, Position ally)
 		//Converts the values to degrees so that it can affect the heading of the enemy
 		this->heading = XMConvertToDegrees(atan2f(vec.x, vec.y));
 	}
-
-	/*float AvoidWeight = 0.1f;
-	float NewAcc[3];
-
-	for (int i = thisEnemy.x; i <= thisEnemy.z; i++)
-	{
-	NewAcc[i] = (AvoidWeight * )
-	}
-	/*if (DistanceX > 0 && DistanceX < SeperationDist)
-	{
-	vector<float> Diff(DistanceX, DistanceY);
-	Counter++;
-	}*/
 }
 
 void Behavior::CornerAvoidance(Position myself)
@@ -132,7 +119,7 @@ void Behavior::CornerAvoidance(Position myself)
 
 	if (myself.y < 20 && myself.y >= 0)
 	{
-		Vector2 vec((-myself.x), myself.y);
+		Vector2 vec((+myself.x), myself.y);
 		this->heading = XMConvertToDegrees(atan2f(vec.x, vec.y));
 	}
 
