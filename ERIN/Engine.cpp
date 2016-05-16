@@ -1031,7 +1031,7 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->Senemies[i].update(deltaTimeMs);
 				if (Objectpool->getSpawnCooldown())
 				{
-					Objectpool->createEnemy(savedRx, savedRy, 0);
+					Objectpool->createEnemy(Objectpool->Senemies[i].childX, Objectpool->Senemies[i].childY, 0);
 					Objectpool->setSpawnCooldown(false);
 				}
 			}

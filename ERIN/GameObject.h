@@ -22,6 +22,8 @@ public:
 	void SpecialupdateCooldown(double sdt);
 	bool getSpecialCooldown() { return this->sReady; };
 	void setSpecialCooldown(bool sReady) { this->sReady = sReady; };
+	float childX, childY;
+
 
 	void updateBehavior(Position player, GameObject* myself, GameObject* allEnemies);
 	void update(double deltaTimeMs);
