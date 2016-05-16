@@ -1026,6 +1026,7 @@ void Engine::update(double deltaTimeMs)
 					childX = Objectpool->Senemies[i].getX();
 					childY = Objectpool->Senemies[i].getY();
 					Objectpool->createEnemy(childX, childY, 0);
+					//enemyCount++;
 					Objectpool->setSpawnCooldown(false);
 				}
 			}
@@ -1122,7 +1123,7 @@ void Engine::update(double deltaTimeMs)
 		}
 
 		/* *********** HUD Logic *********** */
-		if (enemyCount <= 0 && specialEnemyCount <= 0)
+		if (eCount <= 0)
 		{
 			floorClear = true;
 		}
@@ -1140,6 +1141,7 @@ void Engine::update(double deltaTimeMs)
 			resMenu = true;
 			gameState = GameOver;
 		}
+
 		if (floorClear == true)
 		{
 			Elevatorfunc();
@@ -1243,12 +1245,83 @@ void Engine::render()
 			}
 		}
 
-		customImport->meshes.at(35).world = XMMatrixRotationX(XMConvertToRadians(-90)) * XMMatrixTranslation(0, 0, -2);
-		graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
-
-		if (floorClear)
+		if (floorClear == true)
 		{
 			rendElevator();
+		}
+
+		eCount = enemyCount + specialEnemyCount;
+
+		if (eCount < 10)
+		{
+			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
+		}
+
+		if (eCount <= 0 || eCount == 10)
+		{
+			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
+		}
+
+		if (eCount >= 10 && eCount < 20)
+		{
+			customImport->meshes.at(36).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
+		}
+
+		if (eCount == 1 || eCount == 11)
+		{
+			customImport->meshes.at(36).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
+		}
+
+		if (eCount == 2 || eCount == 12)
+		{
+			customImport->meshes.at(37).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 37);
+		}
+
+		if (eCount == 3 || eCount == 13)
+		{
+			customImport->meshes.at(38).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(38), customImport->meshes.at(38).world, 38, 38);
+		}
+
+		if (eCount == 4 || eCount == 14)
+		{
+			customImport->meshes.at(39).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(39), customImport->meshes.at(39).world, 39, 39);
+		}
+
+		if (eCount == 5 || eCount == 15)
+		{
+			customImport->meshes.at(40).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(40), customImport->meshes.at(40).world, 40, 40);
+		}
+
+		if (eCount == 6 || eCount == 16)
+		{
+			customImport->meshes.at(41).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(41), customImport->meshes.at(41).world, 41, 41);
+		}
+
+		if (eCount == 7 || eCount == 17)
+		{
+			customImport->meshes.at(42).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(42), customImport->meshes.at(42).world, 42, 42);
+		}
+
+		if (eCount == 8 || eCount == 18)
+		{
+			customImport->meshes.at(43).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(43), customImport->meshes.at(43).world, 43, 43);
+		}
+
+		if (eCount == 9 || eCount == 19)
+		{
+			customImport->meshes.at(44).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(44), customImport->meshes.at(44).world, 44, 44);
 		}
 
 		// Camera Update
@@ -1260,7 +1333,7 @@ void Engine::render()
 
 		customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 		graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 12);
-		graphics->drawText();
+		//graphics->drawText();
 		camera->InitCamera();
 		break;
 	case MainMenu:
@@ -1592,7 +1665,6 @@ void Engine::resetCooldown()
 	this->ready = false;
 	this->currentTime = 0.0f;
 }
-
 
 void Engine::randomFloat()
 {
