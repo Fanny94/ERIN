@@ -144,7 +144,7 @@ void Player::update(double dt)
 
 void Player::PlayerReset()
 {
-	this->SetX(3);
+	this->SetX(0);
 	this->SetY(0);
 	this->SetZ(0);
 
@@ -156,7 +156,7 @@ void Player::PlayerReset()
 
 void Player::NewFloorReset()
 {
-	this->SetX(3);
+	this->SetX(0);
 	this->SetY(0);
 	this->SetZ(0);
 

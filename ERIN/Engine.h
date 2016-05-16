@@ -67,11 +67,11 @@ public:
 	GameStateManager gameState;
 	FloorStateManager floorState;
 
-	float Rx = -20 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (20 - (-20)))),
-		  Ry = -10 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (10 - (-10))));
 	float savedRx, savedRy;
 	bool block = false;
 	void Elevatorfunc();
+
+	void rendElevator();
 
 	// Pause
 	int pMenuOption = 0;
@@ -93,10 +93,10 @@ private:
 
 	// test cooldown function
 	bool ready = true;
-	const float cooldown = 1.0f;
+	const float cooldown = 30.0f;
 	double currentTime;
 	void updateCooldown(double dt);
-	// test cooldown function #end
+	void resetCooldown();
 
 	Graphics* graphics;
 	Mesh* mesh;
@@ -115,6 +115,12 @@ private:
 	Wall* right_wall;
 
 	Player* player;
+
+	float upperWall, leftWall, lowerWall, rightWall;
+	float safeZoneX, safeZoneY;
+	void randomFloat();
+	float Rx, Ry;
+
 };
 
 #endif // !ENGINE_H

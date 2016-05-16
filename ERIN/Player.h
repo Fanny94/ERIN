@@ -91,7 +91,7 @@ private:
 	double r_speed = 10; // m/s;
 	double heading = 0;
 	double plannedHeading = 0;
-	double turnRate = 0.1; // deg /s
+	double turnRate = 0.3; // deg /s
 
 	// turrent rotation
 	double tr_x = 0;
