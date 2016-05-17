@@ -110,11 +110,15 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(7));
 		customImport->meshes.at(7).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataStageArctic.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(8));
-		//graphics->CreateTexture(customImport->meshes.at(8));
-		//customImport->meshes.at(8).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataStageArctic.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(8));
+		graphics->CreateTexture(customImport->meshes.at(8));
+		customImport->meshes.at(8).textureBool = true;
+
+		customImport->LoadCustomFormat("../BinaryDatafloorTest.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(9));
 
 		//customImport->LoadCustomFormat("../BinaryDataStageDesert.dat");
 		//customImport->NewMesh();
@@ -1147,19 +1151,19 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(7), customImport->meshes.at(7).world, 7, 7);
 			break;
 		case Arctic:
-			/*customImport->meshes.at(8).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(8), customImport->meshes.at(8).world, 8, 8);*/
+			customImport->meshes.at(8).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(8), customImport->meshes.at(8).world, 8, 8);
 			break;
 		case Desert:
 		/*	customImport->meshes.at(9).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
 			graphics->RenderCustom(customImport->meshes.at(9), customImport->meshes.at(9).world, 9, 9);*/
 			break;
 		case Tropical:
-			/*customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+		/*	customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
 			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10, 10);*/
 			break;
 		case Volcanic:
-			/*customImport->meshes.at(11).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+	/*		customImport->meshes.at(11).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
 			graphics->RenderCustom(customImport->meshes.at(11), customImport->meshes.at(11).world, 11, 11);*/
 			break;
 		}
@@ -1229,6 +1233,8 @@ void Engine::render()
 		//customImport->meshes.at(35).world = XMMatrixRotationX(XMConvertToRadians(-90)) * XMMatrixTranslation(0, 0, -2);
 		//graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
 
+		customImport->meshes.at(9).world = XMMatrixTranslation(0, 0, -1) + XMMatrixScaling(0, 0, 0);
+		graphics->RenderCustom(customImport->meshes.at(9), customImport->meshes.at(9).world, 9, -2);
 		// Camera Update
 		camera->InitCamera();
 
@@ -1533,12 +1539,12 @@ void Engine::Elevatorfunc()
 		if (floorState == Jungle)
 			floorState = Arctic;
 		else if (floorState == Arctic)
-			floorState = Desert;
-		else if (floorState == Desert)
-			floorState = Tropical;
-		else if (floorState == Tropical)
-			floorState = Volcanic;
-		else if (floorState == Volcanic)
+		//	floorState = Desert;
+		//else if (floorState == Desert)
+		//	floorState = Tropical;
+		//else if (floorState == Tropical)
+		//	floorState = Volcanic;
+		//else if (floorState == Volcanic)
 			floorState = Jungle;
 	}
 	else

@@ -40,6 +40,6 @@ float4 PS_main(VS_OUT input) : SV_Target
 
 	float4 color = float4((lightIntensity * diffuseLight), 1.0f);
 
-	//return -input.Nor;
-	return color;
+	return input.Nor;
+	//return color;
 };
