@@ -84,9 +84,9 @@ public:
 	TSphere* Esphere;
 
 	//Enemy counters
-	int specialEnemyCount = 0;
-	int enemyCount = 0;
-
+	int specialEnemyCount = 4;
+	int enemyCount = 8;
+	int floorCount = 0;
 private:
 	bool running;
 
@@ -94,7 +94,7 @@ private:
 
 	// test cooldown function
 	bool ready = true;
-	const float cooldown = 10.0f;
+	const float cooldown = 5.0f;
 	double currentTime;
 	void updateCooldown(double dt);
 	void resetCooldown();
@@ -119,6 +119,7 @@ private:
 	float upperWall, leftWall, lowerWall, rightWall;
 	float safeZoneX, safeZoneY;
 	void randomFloat();
+	void createAllEnemies();
 	float Rx, Ry;
 
 };
