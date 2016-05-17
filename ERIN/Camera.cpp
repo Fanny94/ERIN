@@ -76,6 +76,12 @@ void Camera::DetectInput(double time)
 		}
 	}
 
+	if (keyboardState[DIK_V] & 0x80)
+	{
+		camYaw = 0.0f;
+		camPitch = 0.0f;
+	}
+
 	UpdateCamera();
 }
 
