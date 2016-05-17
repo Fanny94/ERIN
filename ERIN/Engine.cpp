@@ -1046,14 +1046,11 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->Senemies[i].update(deltaTimeMs);
 				if (Objectpool->getSpawnCooldown())
 				{
-					for (int i = 0; this->Objectpool->Senemies[i].getInUse(); i++)
-					{
-						childX = Objectpool->Senemies[i].getX();
-						childY = Objectpool->Senemies[i].getY();
-						Objectpool->createEnemy(childX, childY, 0);
-						eCount++;
-						Objectpool->setSpawnCooldown(false);
-					}
+					childX = Objectpool->Senemies[i].getX();
+					childY = Objectpool->Senemies[i].getY();
+					Objectpool->createEnemy(childX, childY, 0);
+					eCount++;
+					Objectpool->setSpawnCooldown(false);
 				}
 			}
 		}
