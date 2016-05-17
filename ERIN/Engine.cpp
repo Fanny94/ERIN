@@ -116,10 +116,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(8));
 		customImport->meshes.at(8).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDatafloorTest.dat");
-		customImport->NewMesh();
-		graphics->CustomVertexBuffer(customImport->meshes.at(9));
-
 		//customImport->LoadCustomFormat("../BinaryDataStageDesert.dat");
 		//customImport->NewMesh();
 		//graphics->CustomVertexBuffer(customImport->meshes.at(9));
@@ -1151,8 +1147,8 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(7), customImport->meshes.at(7).world, 7, 7);
 			break;
 		case Arctic:
-			customImport->meshes.at(8).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(8), customImport->meshes.at(8).world, 8, 8);
+			//customImport->meshes.at(8).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			//graphics->RenderCustom(customImport->meshes.at(8), customImport->meshes.at(8).world, 8, 8);
 			break;
 		case Desert:
 		/*	customImport->meshes.at(9).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
@@ -1233,8 +1229,6 @@ void Engine::render()
 		//customImport->meshes.at(35).world = XMMatrixRotationX(XMConvertToRadians(-90)) * XMMatrixTranslation(0, 0, -2);
 		//graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
 
-		customImport->meshes.at(9).world = XMMatrixTranslation(0, 0, -1) + XMMatrixScaling(0, 0, 0);
-		graphics->RenderCustom(customImport->meshes.at(9), customImport->meshes.at(9).world, 9, -2);
 		// Camera Update
 		camera->InitCamera();
 
@@ -1536,9 +1530,10 @@ void Engine::Elevatorfunc()
 			this->Objectpool->setSpawnCooldown(false);
 		}
 		floorClear = false;
+		
 		if (floorState == Jungle)
-			floorState = Arctic;
-		else if (floorState == Arctic)
+	/*		floorState = Arctic;
+		else if (floorState == Arctic)*/
 		//	floorState = Desert;
 		//else if (floorState == Desert)
 		//	floorState = Tropical;
