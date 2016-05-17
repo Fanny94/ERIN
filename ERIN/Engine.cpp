@@ -524,9 +524,22 @@ void Engine::processInput()
 					mainMenu = false;
 					gameState = GameRunning;
 					floorState = Jungle;
-					enemyCount = ec;
-					specialEnemyCount = sc;
-					eCount = enemyCount + specialEnemyCount -1;
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
+					for (int i = 0; i < Objectpool->e_poolSize; i++)
+					{
+						Objectpool->enemies[i].setInUse(false);
+
+						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+					}
+					for (int i = 0; i < Objectpool->Se_poolSize; i++)
+					{
+						Objectpool->Senemies[i].setInUse(false);
+
+						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+						this->gameObject->setSpecialCooldown(false);
+					}
+					eCount = enemyCount + specialEnemyCount -2;
 				}
 				else if (mainMenuOption == 1)
 				{
@@ -1131,7 +1144,7 @@ void Engine::update(double deltaTimeMs)
 		}
 
 		/* *********** HUD Logic *********** */
-		if (eCount <= 0)
+		if (eCount < 1)
 		{
 			floorClear = true;
 		}

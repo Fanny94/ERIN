@@ -85,10 +85,8 @@ public:
 
 	//Enemy counters
 	int eCount = 0;
-	int ec = 12;
-	int sc = 5;
-	int specialEnemyCount = sc;
-	int enemyCount = ec;
+	int specialEnemyCount = 2;
+	int enemyCount = 8;
 
 private:
 	bool running;
