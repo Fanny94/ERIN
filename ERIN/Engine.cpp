@@ -524,8 +524,10 @@ void Engine::processInput()
 				if (mainMenuOption == 0)
 				{
 					mainMenu = false;
-					gameState = GameRunning;
 					floorState = Jungle;
+					gameObject->reset();
+					player->PlayerReset();
+					camera->ResetCamera();
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
 					for (int i = 0; i < Objectpool->e_poolSize; i++)
@@ -541,7 +543,8 @@ void Engine::processInput()
 						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
 						this->gameObject->setSpecialCooldown(false);
 					}
-					eCount = enemyCount + specialEnemyCount -2;
+					eCount = enemyCount + specialEnemyCount - 2;
+					gameState = GameRunning;
 				}
 				else if (mainMenuOption == 1)
 				{
@@ -634,6 +637,7 @@ void Engine::processInput()
 				{
 					pMenuOption = 0;
 					floorClear = false;
+					floorState = Jungle;
 					gameObject->reset();
 					player->PlayerReset();
 					camera->ResetCamera();
@@ -853,6 +857,7 @@ void Engine::processInput()
 					resMenuOption = 0;
 					floorClear = false;
 					resMenu = false;
+					floorState = Jungle;
 					gameObject->reset();
 					player->PlayerReset();
 					camera->ResetCamera();
@@ -1638,8 +1643,6 @@ void Engine::Elevatorfunc()
 		player->NewFloorReset();
 		enemyCount = Objectpool->e_poolSize;
 		specialEnemyCount = Objectpool->Se_poolSize;
-		eCount = enemyCount + specialEnemyCount -1;
-
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
 			randomFloat();
@@ -1653,7 +1656,7 @@ void Engine::Elevatorfunc()
 			this->gameObject->setSpecialCooldown(false);
 			this->Objectpool->setSpawnCooldown(false);
 		}
-
+		eCount = enemyCount + specialEnemyCount - 1;
 		floorClear = false;
 		if (floorState == Jungle)
 			floorState = Arctic;
