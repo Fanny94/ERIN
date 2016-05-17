@@ -68,6 +68,7 @@ public:
 
 	float savedRx, savedRy;
 	bool block = false;
+	void resetGame();
 	void Elevatorfunc();
 
 	void rendElevator();
@@ -120,6 +121,8 @@ private:
 	float safeZoneX, safeZoneY;
 	void randomFloat();
 	void createAllEnemies();
+	void setAllEnemiesFalse();
+	void resetAllEnemies();
 	float Rx, Ry;
 
 };
