@@ -866,9 +866,9 @@ void Engine::processInput()
 				bButtonActive = false;
 			break;
 		case ScoreScreen:
-			if (this->player->input->State._buttons[GamePad_Button_B] == true && aButtonActive == false)
+			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
 			{
-				bButtonActive = true;
+				aButtonActive = true;
 				gameState = GameOver;
 			}
 			break;
@@ -910,10 +910,10 @@ void Engine::processInput()
 		this->running = false;
 		}*/
 
-		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
+		/*if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
 			this->running = false;
-		}
+		}*/
 	}
 }
 
