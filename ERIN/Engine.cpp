@@ -515,8 +515,27 @@ void Engine::processInput()
 				if (mainMenuOption == 0)
 				{
 					mainMenu = false;
-					gameState = GameRunning;
 					floorState = Jungle;
+					gameObject->reset();
+					player->PlayerReset();
+					camera->ResetCamera();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
+					for (int i = 0; i < Objectpool->e_poolSize; i++)
+					{
+						Objectpool->enemies[i].setInUse(false);
+
+						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+					}
+					for (int i = 0; i < Objectpool->Se_poolSize; i++)
+					{
+						Objectpool->Senemies[i].setInUse(false);
+
+						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+						this->gameObject->setSpecialCooldown(false);
+					}
+					eCount = enemyCount + specialEnemyCount - 2;
+					gameState = GameRunning;
 				}
 				else if (mainMenuOption == 1)
 				{
@@ -606,7 +625,42 @@ void Engine::processInput()
 				else if (pMenuOption == 1)
 				{
 					pMenuOption = 0;
+					floorClear = false;
+					floorState = Jungle;
+					gameObject->reset();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
 					resetGame();
+					createAllEnemies();
+					eCount = enemyCount + specialEnemyCount - 2;
+					gameState = GameRunning;
+				}
+				else if (pMenuOption == 2)
+				{
+					aButtonActive = true;
+					gameState = HelpAndOptions;
+				}
+				else if (pMenuOption == 3)
+				{
+					aButtonActive = true;
+					pMenuOption = 4;
+				}
+				else if (pMenuOption == 4)
+				{
+					pMenuOption = 0;
+					gameObject->reset();
+					mainMenu = true;
+					resetGame();
+
+					for (int i = 0; i < 5; i++)
+					{
+						Objectpool->enemies[i].setInUse(false);
+					}
+					for (int i = 0; i < 2; i++)
+					{
+						Objectpool->Senemies[i].setInUse(false);
+					}
+
 					aButtonActive = true;
 					gameState = MainMenu;
 				}
@@ -774,9 +828,13 @@ void Engine::processInput()
 				{
 					resMenuOption = 0;
 					resMenu = false;
+					floorState = Jungle;
+					gameObject->reset();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
 					resetGame();
 					createAllEnemies();
-
+					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
 				else if (resMenuOption == 1)
@@ -849,10 +907,10 @@ void Engine::processInput()
 			break;
 		}
 
-		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
+		/*if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
 			this->running = false;
-		}
+		}*/
 
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
@@ -916,7 +974,7 @@ void Engine::update(double deltaTimeMs)
 				if (player->getHpCooldown())
 				{
 					player->HP--;
-					enemyCount--;
+					eCount--;
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
 				}
@@ -934,13 +992,11 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->Senemies[i].update(deltaTimeMs);
 				if (Objectpool->getSpawnCooldown())
 				{
-					for (int i = 0; this->Objectpool->Senemies[i].getInUse(); i++)
-					{
-						childX = Objectpool->Senemies[i].getX();
-						childY = Objectpool->Senemies[i].getY();
-						Objectpool->createEnemy(childX, childY, 0);
-						Objectpool->setSpawnCooldown(false);
-					}
+					childX = Objectpool->Senemies[i].getX();
+					childY = Objectpool->Senemies[i].getY();
+					Objectpool->createEnemy(childX, childY, 0);
+					eCount++;
+					Objectpool->setSpawnCooldown(false);
 				}
 			}
 		}
@@ -1009,7 +1065,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
-						enemyCount--;
+						eCount--;
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->enemies[t].reset();
 						Objectpool->bullets[i].setInUse(false);
@@ -1028,7 +1084,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
-						specialEnemyCount--;
+						eCount--;
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -1037,7 +1093,7 @@ void Engine::update(double deltaTimeMs)
 		}
 
 		/* *********** HUD Logic *********** */
-		if (enemyCount <= 0 && specialEnemyCount <= 0)
+		if (eCount < 1)
 		{
 			floorClear = true;
 		}
@@ -1050,7 +1106,7 @@ void Engine::update(double deltaTimeMs)
 			resMenu = true;
 			gameState = GameOver;
 		}
-		
+
 		if (floorClear == true)
 		{
 			Elevatorfunc();
@@ -1154,13 +1210,88 @@ void Engine::render()
 			}
 		}
 
-		customImport->meshes.at(35).world = XMMatrixRotationX(XMConvertToRadians(-90)) * XMMatrixTranslation(0, 0, -2);
-		graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
-
-		if (floorClear)
+		if (floorClear == true)
 		{
 			rendElevator();
 			graphics->drawProgressionText();
+		}
+
+		if (eCount < 10)
+		{
+			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
+		}
+
+		if (eCount <= 0 || eCount == 10 || eCount == 20)
+		{
+			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
+		}
+
+		if (eCount >= 10 && eCount < 20)
+		{
+			customImport->meshes.at(36).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
+		}
+
+		if (eCount == 1 || eCount == 11 || eCount == 21)
+		{
+			customImport->meshes.at(36).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
+		}
+
+		if (eCount >= 20 && eCount < 30)
+		{
+			customImport->meshes.at(37).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 37);
+		}
+
+		if (eCount == 2 || eCount == 12 || eCount == 22)
+		{
+			customImport->meshes.at(37).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 37);
+		}
+
+		if (eCount == 3 || eCount == 13 || eCount == 23)
+		{
+			customImport->meshes.at(38).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(38), customImport->meshes.at(38).world, 38, 38);
+		}
+
+		if (eCount == 4 || eCount == 14 || eCount == 24)
+		{
+			customImport->meshes.at(39).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(39), customImport->meshes.at(39).world, 39, 39);
+		}
+
+		if (eCount == 5 || eCount == 15 || eCount == 25)
+		{
+			customImport->meshes.at(40).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(40), customImport->meshes.at(40).world, 40, 40);
+		}
+
+		if (eCount == 6 || eCount == 16 || eCount == 26)
+		{
+			customImport->meshes.at(41).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(41), customImport->meshes.at(41).world, 41, 41);
+		}
+
+		if (eCount == 7 || eCount == 17 || eCount == 27)
+		{
+			customImport->meshes.at(42).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(42), customImport->meshes.at(42).world, 42, 42);
+		}
+
+		if (eCount == 8 || eCount == 18 || eCount == 28)
+		{
+			customImport->meshes.at(43).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(43), customImport->meshes.at(43).world, 43, 43);
+		}
+
+		if (eCount == 9 || eCount == 19 || eCount == 29)
+		{
+			customImport->meshes.at(44).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(44), customImport->meshes.at(44).world, 44, 44);
 		}
 
 		// Camera Update
@@ -1470,14 +1601,15 @@ void Engine::Elevatorfunc()
 		specialEnemyCount = Objectpool->Se_poolSize;
 		floorCount++;
 		createAllEnemies();
+		eCount = enemyCount + specialEnemyCount - 1;
 		resetCooldown();
 
 		floorClear = false;
 		if (floorState == Jungle)
-			floorState = Arctic;
-		else if (floorState == Arctic)
 			floorState = Desert;
 		else if (floorState == Desert)
+			floorState = Arctic;
+		else if (floorState == Arctic)
 			floorState = Tropical;
 		else if (floorState == Tropical)
 			floorState = Volcanic;
@@ -1511,7 +1643,6 @@ void Engine::resetCooldown()
 	this->ready = true;
 	this->currentTime = 0.0f;
 }
-
 
 void Engine::randomFloat()
 {
