@@ -516,24 +516,10 @@ void Engine::processInput()
 				{
 					mainMenu = false;
 					floorState = Jungle;
-					gameObject->reset();
-					player->PlayerReset();
-					camera->ResetCamera();
+					resetGame;
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
-					for (int i = 0; i < Objectpool->e_poolSize; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-
-						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-					}
-					for (int i = 0; i < Objectpool->Se_poolSize; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-
-						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-						this->gameObject->setSpecialCooldown(false);
-					}
+					createAllEnemies();
 					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
@@ -627,11 +613,10 @@ void Engine::processInput()
 					pMenuOption = 0;
 					floorClear = false;
 					floorState = Jungle;
-					gameObject->reset();
-					enemyCount = Objectpool->e_poolSize;
-					specialEnemyCount = Objectpool->Se_poolSize;
 					resetGame();
 					createAllEnemies();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
 					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
@@ -648,19 +633,8 @@ void Engine::processInput()
 				else if (pMenuOption == 4)
 				{
 					pMenuOption = 0;
-					gameObject->reset();
 					mainMenu = true;
 					resetGame();
-
-					for (int i = 0; i < 5; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-					}
-					for (int i = 0; i < 2; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-					}
-
 					aButtonActive = true;
 					gameState = MainMenu;
 				}
@@ -829,11 +803,10 @@ void Engine::processInput()
 					resMenuOption = 0;
 					resMenu = false;
 					floorState = Jungle;
-					gameObject->reset();
-					enemyCount = Objectpool->e_poolSize;
-					specialEnemyCount = Objectpool->Se_poolSize;
 					resetGame();
 					createAllEnemies();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
 					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
@@ -856,8 +829,6 @@ void Engine::processInput()
 					resetGame();
 					mainMenu = true;
 					resMenu = false;
-					setAllEnemiesFalse();
-
 					gameState = MainMenu;
 					aButtonActive = true;
 				}
@@ -1101,8 +1072,6 @@ void Engine::update(double deltaTimeMs)
 		if (player->HP <= 0)
 		{
 			resetGame();
-			setAllEnemiesFalse();
-
 			resMenu = true;
 			gameState = GameOver;
 		}
