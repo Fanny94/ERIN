@@ -915,9 +915,9 @@ void Engine::processInput()
 				bButtonActive = false;
 			break;
 		case ScoreScreen:
-			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && aButtonActive == false)
 			{
-				aButtonActive = true;
+				bButtonActive = true;
 				gameState = GameOver;
 			}
 			break;
@@ -1438,7 +1438,7 @@ void Engine::render()
 		graphics->Render();
 
 		customImport->meshes.at(36).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 28);
+		graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 24);
 
 		camera->InitCamera();
 	case HighScore:
