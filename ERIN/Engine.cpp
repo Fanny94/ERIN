@@ -904,16 +904,6 @@ void Engine::processInput()
 			}
 			break;
 		}
-
-		/*if (this->player->input->State._buttons[GamePad_Button_Y] == true)
-		{
-		this->running = false;
-		}*/
-
-		/*if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
-		{
-			this->running = false;
-		}*/
 	}
 }
 
