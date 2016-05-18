@@ -991,11 +991,14 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->Senemies[i].update(deltaTimeMs);
 				if (Objectpool->getSpawnCooldown())
 				{
-					childX = Objectpool->Senemies[i].getX();
-					childY = Objectpool->Senemies[i].getY();
-					Objectpool->createEnemy(childX, childY, 0);
-					eCount++;
-					Objectpool->setSpawnCooldown(false);
+					for (int i = 0; i < this->Objectpool->Senemies[i].getInUse(); i++)
+					{
+						childX = Objectpool->Senemies[i].getX();
+						childY = Objectpool->Senemies[i].getY();
+						Objectpool->createEnemy(childX, childY, 0);
+						eCount++;
+						Objectpool->setSpawnCooldown(false);
+					}
 				}
 			}
 		}
@@ -1316,7 +1319,7 @@ void Engine::render()
 			customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 13);
 			createAllEnemies();
-			floorCount = 0;
+			floorCount = 1;
 		}
 		else if (mainMenuOption == 1) // Highscore
 		{
