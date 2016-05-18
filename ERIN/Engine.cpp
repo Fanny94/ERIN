@@ -962,10 +962,10 @@ void Engine::processInput()
 			break;
 		}
 
-		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
+		/*if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
 			this->running = false;
-		}
+		}*/
 
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
 		{
@@ -1659,10 +1659,10 @@ void Engine::Elevatorfunc()
 		eCount = enemyCount + specialEnemyCount - 1;
 		floorClear = false;
 		if (floorState == Jungle)
-			floorState = Arctic;
-		else if (floorState == Arctic)
 			floorState = Desert;
 		else if (floorState == Desert)
+			floorState = Arctic;
+		else if (floorState == Arctic)
 			floorState = Tropical;
 		else if (floorState == Tropical)
 			floorState = Volcanic;
