@@ -1333,6 +1333,7 @@ void Engine::render()
 		{
 			customImport->meshes.at(19).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(19), customImport->meshes.at(19).world, 19, 19);
+			floorCount = 1;
 		}
 		else if (pMenuOption == 2) // Help & Options
 		{
@@ -1384,6 +1385,7 @@ void Engine::render()
 		{
 			customImport->meshes.at(27).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(27), customImport->meshes.at(27).world, 27, 27);
+			floorCount = 1;
 		}
 		else if (resMenuOption == 1)
 		{
