@@ -380,14 +380,11 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	}
 
 	// spawn special enemies
-	if (this->gameObject->getSpecialCooldown())
+	for (int i = 0; i < Objectpool->Se_poolSize; i++)
 	{
-		for (int i = 0; i < Objectpool->Se_poolSize; i++)
-		{
-			randomFloat();
-			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-			this->gameObject->setSpecialCooldown(false);
-		}
+		randomFloat();
+		this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+		this->gameObject->setSpecialCooldown(false);
 	}
 	enemyCount = Objectpool->e_poolSize;
 	specialEnemyCount = Objectpool->Se_poolSize;
@@ -418,18 +415,13 @@ void Engine::processInput()
 		// Update controller states
 		player->input->update();
 		// Update player accelerating bool
-		if (this->ready)
-		{
 			player->playerInput();
-		}
 
 		switch (gameState)
 		{
 		case GameRunning:
 
 			// Fire Bullets
-			if (this->ready)
-			{
 				if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
 				{
 					if (Objectpool->getCooldown())
@@ -438,7 +430,6 @@ void Engine::processInput()
 						Objectpool->setCooldown(false);
 					}
 				}
-			}
 
 			if (this->player->input->State._buttons[GamePad_Button_START] == true)
 			{
@@ -599,7 +590,6 @@ void Engine::processInput()
 				else if (pMenuOption == 2)
 				{
 					pMenuOption = 3;
-					gameObject->reset();
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
@@ -622,7 +612,6 @@ void Engine::processInput()
 				else if (pMenuOption == 1)
 				{
 					pMenuOption = 3;
-					gameObject->reset();
 				}
 			}
 
@@ -639,24 +628,10 @@ void Engine::processInput()
 					floorClear = false;
 					floorState = Jungle;
 					gameObject->reset();
-					player->PlayerReset();
-					camera->ResetCamera();
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
-
-					for (int i = 0; i < Objectpool->e_poolSize; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-
-						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-					}
-					for (int i = 0; i < Objectpool->Se_poolSize; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-
-						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-						this->gameObject->setSpecialCooldown(false);
-					}
+					resetGame();
+					createAllEnemies();
 					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
@@ -673,12 +648,9 @@ void Engine::processInput()
 				else if (pMenuOption == 4)
 				{
 					pMenuOption = 0;
-					player->PlayerReset();
 					gameObject->reset();
-					Objectpool->ResetBullet();
-					camera->ResetCamera();
-					floorClear = false;
 					mainMenu = true;
+					resetGame();
 
 					for (int i = 0; i < 5; i++)
 					{
@@ -855,28 +827,13 @@ void Engine::processInput()
 				if (resMenuOption == 0)
 				{
 					resMenuOption = 0;
-					floorClear = false;
 					resMenu = false;
 					floorState = Jungle;
 					gameObject->reset();
-					player->PlayerReset();
-					camera->ResetCamera();
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
-
-					for (int i = 0; i < Objectpool->e_poolSize; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-
-						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-					}
-					for (int i = 0; i < Objectpool->Se_poolSize; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-
-						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-						this->gameObject->setSpecialCooldown(false);
-					}
+					resetGame();
+					createAllEnemies();
 					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
@@ -896,22 +853,10 @@ void Engine::processInput()
 				else if (resMenuOption == 4)
 				{
 					resMenuOption = 0;
-					player->PlayerReset();
-					gameObject->reset();
-					Objectpool->ResetBullet();
-					camera->ResetCamera();
-					floorClear = false;
+					resetGame();
 					mainMenu = true;
 					resMenu = false;
-
-					for (int i = 0; i < 5; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-					}
-					for (int i = 0; i < 2; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-					}
+					setAllEnemiesFalse();
 
 					gameState = MainMenu;
 					aButtonActive = true;
@@ -989,11 +934,7 @@ void Engine::update(double deltaTimeMs)
 
 		/* *********** Player Update *********** */
 		player->hpCooldown(deltaTimeS);
-
-		if (this->ready)
-		{
-			player->update(deltaTimeMs);
-		}
+		player->update(deltaTimeMs);
 
 		camera->UpdateGameCamera(this->player->getX(), this->player->getY(), deltaTimeS);
 
@@ -1018,7 +959,7 @@ void Engine::update(double deltaTimeMs)
 		/* *********** Enemies Updates *********** */
 		for (int i = 0; i < this->Objectpool->e_poolSize; i++)
 		{
-			if (this->ready && Objectpool->enemies[i].getInUse())
+			if (Objectpool->enemies[i].getInUse())
 			{
 				Objectpool->enemies[i].updateBehavior(*player->shipPos, &Objectpool->enemies[i], Objectpool->enemies);
 				Objectpool->enemies[i].update(deltaTimeMs);
@@ -1045,7 +986,7 @@ void Engine::update(double deltaTimeMs)
 		// Special enemy update
 		for (int i = 0; i < this->Objectpool->Se_poolSize; i++)
 		{
-			if (this->ready && Objectpool->Senemies[i].getInUse())
+			if (Objectpool->Senemies[i].getInUse())
 			{
 				Objectpool->Senemies[i].updateSpecialBehavior(*player->shipPos, &Objectpool->Senemies[i], Objectpool->Senemies);
 				Objectpool->Senemies[i].update(deltaTimeMs);
@@ -1126,6 +1067,7 @@ void Engine::update(double deltaTimeMs)
 					{
 						eCount--;
 						Objectpool->enemies[t].setInUse(false);
+						Objectpool->enemies[t].reset();
 						Objectpool->bullets[i].setInUse(false);
 					}
 				}
@@ -1158,13 +1100,8 @@ void Engine::update(double deltaTimeMs)
 
 		if (player->HP <= 0)
 		{
-			player->PlayerReset();
-			gameObject->reset();
-
-			for (int i = 0; i < Objectpool->e_poolSize; i++)
-			{
-				Objectpool->enemies[i].setInUse(false);
-			}
+			resetGame();
+			setAllEnemiesFalse();
 
 			resMenu = true;
 			gameState = GameOver;
@@ -1276,6 +1213,7 @@ void Engine::render()
 		if (floorClear == true)
 		{
 			rendElevator();
+			graphics->drawProgressionText();
 		}
 
 		if (eCount < 10)
@@ -1358,14 +1296,17 @@ void Engine::render()
 
 		// Camera Update
 		camera->InitCamera();
-
+		
+		//Font draw
+		
+		if(!ready)
+		graphics->drawLevelText(floorCount);
 		break;
 	case TitleScreen:
 		graphics->Render();
 
 		customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 		graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 12);
-		//graphics->drawText();
 		camera->InitCamera();
 		break;
 	case MainMenu:
@@ -1374,6 +1315,8 @@ void Engine::render()
 		{
 			customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 13);
+			createAllEnemies();
+			floorCount = 0;
 		}
 		else if (mainMenuOption == 1) // Highscore
 		{
@@ -1482,7 +1425,9 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 31);
 		}
 		camera->InitCamera();
+		graphics->drawResultText(floorCount);
 		break;
+		floorClear = 0;
 	case Controls:
 		graphics->Render();
 
@@ -1634,29 +1579,31 @@ bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 	//If not, it will return false
 }
 
+void Engine::resetGame()
+{
+	camera->ResetCamera();
+	player->PlayerReset();
+	Objectpool->ResetBullet();
+	resetAllEnemies();
+	setAllEnemiesFalse();
+	floorClear = false;
+}
+
 void Engine::Elevatorfunc()
 {
 	if (sphereToSphere(*player->sphere, *Esphere))
 	{
-		Objectpool->ResetBullet();
-		gameObject->reset();
 		player->NewFloorReset();
+		Objectpool->ResetBullet();
+		resetAllEnemies();
+		setAllEnemiesFalse();
 		enemyCount = Objectpool->e_poolSize;
 		specialEnemyCount = Objectpool->Se_poolSize;
-		for (int i = 0; i < Objectpool->e_poolSize; i++)
-		{
-			randomFloat();
-			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-		}
-		for (int i = 0; i < Objectpool->Se_poolSize; i++)
-		{
-			randomFloat();
-			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-
-			this->gameObject->setSpecialCooldown(false);
-			this->Objectpool->setSpawnCooldown(false);
-		}
+		floorCount++;
+		createAllEnemies();
 		eCount = enemyCount + specialEnemyCount - 1;
+		resetCooldown();
+
 		floorClear = false;
 		if (floorState == Jungle)
 			floorState = Desert;
@@ -1666,9 +1613,8 @@ void Engine::Elevatorfunc()
 			floorState = Tropical;
 		else if (floorState == Tropical)
 			floorState = Volcanic;
-		else if (floorState == Volcanic)
+		else if (floorState == Volcanic) 
 			floorState = Jungle;
-
 		//resetCooldown();
 	}
 }
@@ -1684,6 +1630,7 @@ void Engine::updateCooldown(double dt)
 	if (this->cooldown >= this->currentTime)
 	{
 		this->currentTime += dt;
+		ready = false;
 	}
 	else
 	{
@@ -1693,7 +1640,7 @@ void Engine::updateCooldown(double dt)
 
 void Engine::resetCooldown()
 {
-	this->ready = false;
+	this->ready = true;
 	this->currentTime = 0.0f;
 }
 
@@ -1702,6 +1649,49 @@ void Engine::randomFloat()
 	//float r3 = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
 	Rx = leftWall + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (rightWall - (leftWall))));
 	Ry = lowerWall + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (upperWall - (lowerWall))));
+}
+
+void Engine::createAllEnemies()
+{
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
+	{
+		randomFloat();
+		this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+	}
+	for (int i = 0; i < Objectpool->Se_poolSize; i++)
+	{
+		randomFloat();
+		this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+		this->gameObject->setSpecialCooldown(false);
+		this->Objectpool->setSpawnCooldown(false);
+	}
+}
+
+void Engine::setAllEnemiesFalse()
+{
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
+	{
+		Objectpool->enemies[i].setInUse(false);
+	}
+
+	for (int i = 0; i < Objectpool->Se_poolSize; i++)
+	{
+		Objectpool->Senemies[i].setInUse(false);
+	}
+}
+
+void Engine::resetAllEnemies()
+{
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
+	{
+		Objectpool->enemies[i].reset();
+	}
+
+	for (int i = 0; i < Objectpool->Se_poolSize; i++)
+	{
+		Objectpool->Senemies[i].reset();
+	}
+	gameObject->setSpecialCooldown(false);
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)
