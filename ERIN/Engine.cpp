@@ -1218,79 +1218,79 @@ void Engine::render()
 
 		if (eCount < 10)
 		{
-			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
 		}
 
 		if (eCount <= 0 || eCount == 10 || eCount == 20)
 		{
-			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(35).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
 		}
 
 		if (eCount >= 10 && eCount < 20)
 		{
-			customImport->meshes.at(36).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(36).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
 		}
 
 		if (eCount == 1 || eCount == 11 || eCount == 21)
 		{
-			customImport->meshes.at(36).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(36).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
 		}
 
 		if (eCount >= 20 && eCount < 30)
 		{
-			customImport->meshes.at(37).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(37).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(-1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 37);
 		}
 
 		if (eCount == 2 || eCount == 12 || eCount == 22)
 		{
-			customImport->meshes.at(37).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(37).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 37);
 		}
 
 		if (eCount == 3 || eCount == 13 || eCount == 23)
 		{
-			customImport->meshes.at(38).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(38).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(38), customImport->meshes.at(38).world, 38, 38);
 		}
 
 		if (eCount == 4 || eCount == 14 || eCount == 24)
 		{
-			customImport->meshes.at(39).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(39).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(39), customImport->meshes.at(39).world, 39, 39);
 		}
 
 		if (eCount == 5 || eCount == 15 || eCount == 25)
 		{
-			customImport->meshes.at(40).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(40).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(40), customImport->meshes.at(40).world, 40, 40);
 		}
 
 		if (eCount == 6 || eCount == 16 || eCount == 26)
 		{
-			customImport->meshes.at(41).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(41).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(41), customImport->meshes.at(41).world, 41, 41);
 		}
 
 		if (eCount == 7 || eCount == 17 || eCount == 27)
 		{
-			customImport->meshes.at(42).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(42).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, -2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(42), customImport->meshes.at(42).world, 42, 42);
 		}
 
 		if (eCount == 8 || eCount == 18 || eCount == 28)
 		{
-			customImport->meshes.at(43).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(43).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(43), customImport->meshes.at(43).world, 43, 43);
 		}
 
 		if (eCount == 9 || eCount == 19 || eCount == 29)
 		{
-			customImport->meshes.at(44).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(0.85, 0.2, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			customImport->meshes.at(44).world = XMMatrixRotationZ(XMConvertToRadians(-90)) * XMMatrixTranslation(1.0, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
 			graphics->RenderCustom(customImport->meshes.at(44), customImport->meshes.at(44).world, 44, 44);
 		}
 
