@@ -18,6 +18,7 @@ enum GameStateManager
 	GameRunning,
 	Pause,
 	GameOver,
+	ScoreScreen,
 	HighScore,
 	HelpAndOptions,
 	HowToPlay,

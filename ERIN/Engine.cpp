@@ -317,6 +317,30 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(35));
 		customImport->meshes.at(35).textureBool = true;
 
+		// Score
+		customImport->LoadCustomFormat("../BinaryDataScore.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(36));
+
+		graphics->CreateTexture(customImport->meshes.at(36));
+		customImport->meshes.at(36).textureBool = true;
+
+		// Highscore
+		customImport->LoadCustomFormat("../BinaryDataHighscore.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(37));
+
+		graphics->CreateTexture(customImport->meshes.at(37));
+		customImport->meshes.at(37).textureBool = true;
+
+		// Settings
+		customImport->LoadCustomFormat("../BinaryDataSettings.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(38));
+
+		graphics->CreateTexture(customImport->meshes.at(38));
+		customImport->meshes.at(38).textureBool = true;
+
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
 	}
@@ -890,6 +914,13 @@ void Engine::processInput()
 			if (this->player->input->State._buttons[GamePad_Button_B] == false)
 				bButtonActive = false;
 			break;
+		case ScoreScreen:
+			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
+			{
+				aButtonActive = true;
+				gameState = GameOver;
+			}
+			break;
 		case Controls:
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
 			{
@@ -1152,7 +1183,7 @@ void Engine::update(double deltaTimeMs)
 			}
 
 			resMenu = true;
-			gameState = GameOver;
+			gameState = ScoreScreen;
 		}
 
 		break;
@@ -1181,6 +1212,10 @@ void Engine::update(double deltaTimeMs)
 		camera->camPosition.y = 0;
 		camera->camPosition.z = -15.8;
 		break;
+	case ScoreScreen:
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 	}
 }
 
@@ -1399,11 +1434,20 @@ void Engine::render()
 		camera->InitCamera();
 
 		break;
-	case HighScore:
-
+	case ScoreScreen:
 		graphics->Render();
-		camera->InitCamera();
 
+		customImport->meshes.at(36).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 28);
+
+		camera->InitCamera();
+	case HighScore:
+		graphics->Render();
+
+		customImport->meshes.at(37).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 29);
+
+		camera->InitCamera();
 		break;
 	case Controls:
 		graphics->Render();
@@ -1416,8 +1460,8 @@ void Engine::render()
 	case Credits:
 		graphics->Render();
 
-		customImport->meshes.at(34).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(34), customImport->meshes.at(34).world, 34, 26);
+		customImport->meshes.at(35).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 26);
 
 		camera->InitCamera();
 		break;
@@ -1431,6 +1475,9 @@ void Engine::render()
 		break;
 	case Settings:
 		graphics->Render();
+
+		customImport->meshes.at(38).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(38), customImport->meshes.at(38).world, 38, 30);
 
 		camera->InitCamera();
 		break;
