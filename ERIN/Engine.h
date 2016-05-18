@@ -86,9 +86,9 @@ public:
 
 	//Enemy counters
 	int eCount = 0;
-	int specialEnemyCount = 2;
+	int specialEnemyCount = 4;
 	int enemyCount = 8;
-	int floorCount = 0;
+	int floorCount = 1;
 
 private:
 	bool running;
