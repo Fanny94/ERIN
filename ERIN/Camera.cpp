@@ -66,12 +66,22 @@ void Camera::DetectInput(double time)
 	if (keyboardState[DIK_E] & 0x80)
 		moveUpDown -= speed;
 
-	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
+	if (keyboardState[DIK_C] & 0x80)
 	{
-		camYaw += mouseLastState.lX * 0.001f;
-		camPitch += mouseCurrState.lY * 0.001f;
-		mouseLastState = mouseCurrState;
+		if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
+		{
+			camYaw += mouseLastState.lX * 0.001f;
+			camPitch += mouseCurrState.lY * 0.001f;
+			mouseLastState = mouseCurrState;
+		}
 	}
+
+	if (keyboardState[DIK_V] & 0x80)
+	{
+		camYaw = 0;
+		camPitch = 0;
+	}
+	
 
 	UpdateCamera();
 }

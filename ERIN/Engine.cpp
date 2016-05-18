@@ -116,23 +116,23 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(8));
 		customImport->meshes.at(8).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataStageDesert.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(9));
-		//graphics->CreateTexture(customImport->meshes.at(9));
-		//customImport->meshes.at(9).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataStageDesert.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(9));
+		graphics->CreateTexture(customImport->meshes.at(9));
+		customImport->meshes.at(9).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataStageTropical.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(10));
-		//graphics->CreateTexture(customImport->meshes.at(10));
-		//customImport->meshes.at(10).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataStageTropical.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(10));
+		graphics->CreateTexture(customImport->meshes.at(10));
+		customImport->meshes.at(10).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataStageVolcanic.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(11));
-		//graphics->CreateTexture(customImport->meshes.at(11));
-		//customImport->meshes.at(11).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataStageVolcanic.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(11));
+		graphics->CreateTexture(customImport->meshes.at(11));
+		customImport->meshes.at(11).textureBool = true;
 
 		//// Title Screen
 		//customImport->LoadCustomFormat("../BinaryDataMenuQuad.dat");
@@ -299,18 +299,18 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		//graphics->CreateTexture(customImport->meshes.at(34));
 		//customImport->meshes.at(34).textureBool = true;
 
-		////Numbers
-		//customImport->LoadCustomFormat("../BinaryDataNumber0.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(35));
-		//graphics->CreateTexture(customImport->meshes.at(35));
-		//customImport->meshes.at(35).textureBool = true;
+		//Numbers
+		customImport->LoadCustomFormat("../BinaryDataNumber0.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(12));
+		graphics->CreateTexture(customImport->meshes.at(12));
+		customImport->meshes.at(12).textureBool = true;
 
-		//customImport->LoadCustomFormat("../BinaryDataNumber1.dat");
-		//customImport->NewMesh();
-		//graphics->CustomVertexBuffer(customImport->meshes.at(36));
-		//graphics->CreateTexture(customImport->meshes.at(36));
-		//customImport->meshes.at(36).textureBool = true;
+		customImport->LoadCustomFormat("../BinaryDataNumber1.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(13));
+		graphics->CreateTexture(customImport->meshes.at(13));
+		customImport->meshes.at(13).textureBool = true;
 
 		//customImport->LoadCustomFormat("../BinaryDataNumber2.dat");
 		//customImport->NewMesh();
@@ -1147,20 +1147,20 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(7), customImport->meshes.at(7).world, 7, 7);
 			break;
 		case Arctic:
-			//customImport->meshes.at(8).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			//graphics->RenderCustom(customImport->meshes.at(8), customImport->meshes.at(8).world, 8, 8);
+			customImport->meshes.at(8).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(8), customImport->meshes.at(8).world, 8, 8);
 			break;
 		case Desert:
-		/*	customImport->meshes.at(9).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(9), customImport->meshes.at(9).world, 9, 9);*/
+			customImport->meshes.at(9).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(9), customImport->meshes.at(9).world, 9, 9);
 			break;
 		case Tropical:
-		/*	customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10, 10);*/
+			customImport->meshes.at(10).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(10), customImport->meshes.at(10).world, 10, 10);
 			break;
 		case Volcanic:
-	/*		customImport->meshes.at(11).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
-			graphics->RenderCustom(customImport->meshes.at(11), customImport->meshes.at(11).world, 11, 11);*/
+			customImport->meshes.at(11).world = XMMatrixTranslation(0, 0, 1) + XMMatrixScaling(10, 10, 3);
+			graphics->RenderCustom(customImport->meshes.at(11), customImport->meshes.at(11).world, 11, 11);
 			break;
 		}
 
@@ -1226,20 +1226,24 @@ void Engine::render()
 			}
 		}
 
-		//customImport->meshes.at(35).world = XMMatrixRotationX(XMConvertToRadians(-90)) * XMMatrixTranslation(0, 0, -2);
-		//graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
+		customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, -2);
+		graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 12);
+
+		customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, -2);
+		graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 13);
+
 
 		// Camera Update
 		camera->InitCamera();
 
 		break;
 	case TitleScreen:
-		//graphics->Render();
+		/*graphics->Render();
 
-		//customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		//graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 12);
-		//graphics->drawText();
-		//camera->InitCamera();
+		customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 12);
+		graphics->drawText();
+		camera->InitCamera();*/
 		break;
 	case MainMenu:
 		//graphics->Render();
@@ -1327,34 +1331,34 @@ void Engine::render()
 		//camera->InitCamera();
 		break;
 	case GameOver:
-		//graphics->Render();
+		/*graphics->Render();
 
-		//if (resMenuOption == 0)
-		//{
-		//	customImport->meshes.at(27).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		//	graphics->RenderCustom(customImport->meshes.at(27), customImport->meshes.at(27).world, 27, 27);
-		//}
-		//else if (resMenuOption == 1)
-		//{
-		//	customImport->meshes.at(28).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		//	graphics->RenderCustom(customImport->meshes.at(28), customImport->meshes.at(28).world, 28, 28);
-		//}
-		//else if (resMenuOption == 2)
-		//{
-		//	customImport->meshes.at(29).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		//	graphics->RenderCustom(customImport->meshes.at(29), customImport->meshes.at(29).world, 29, 29);
-		//}
-		//else if (resMenuOption == 3)
-		//{
-		//	customImport->meshes.at(30).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		//	graphics->RenderCustom(customImport->meshes.at(30), customImport->meshes.at(30).world, 30, 30);
-		//}
-		//else if (resMenuOption == 4)
-		//{
-		//	customImport->meshes.at(31).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		//	graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 31);
-		//}
-		//camera->InitCamera();
+		if (resMenuOption == 0)
+		{
+			customImport->meshes.at(27).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(27), customImport->meshes.at(27).world, 27, 27);
+		}
+		else if (resMenuOption == 1)
+		{
+			customImport->meshes.at(28).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(28), customImport->meshes.at(28).world, 28, 28);
+		}
+		else if (resMenuOption == 2)
+		{
+			customImport->meshes.at(29).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(29), customImport->meshes.at(29).world, 29, 29);
+		}
+		else if (resMenuOption == 3)
+		{
+			customImport->meshes.at(30).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(30), customImport->meshes.at(30).world, 30, 30);
+		}
+		else if (resMenuOption == 4)
+		{
+			customImport->meshes.at(31).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 31);
+		}
+		camera->InitCamera();*/
 		break;
 	case Controls:
 	/*	graphics->Render();
@@ -1401,32 +1405,32 @@ void Engine::RendHUD()
 {
 	if (player->HP >= 1)
 	{
-		customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(60)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
+		customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(-120)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
 		graphics->RenderCustom(customImport->meshes.at(5), customImport->meshes.at(5).world, 5, 5);
 
 		if (player->HP >= 2)
 		{
-			customImport->meshes.at(5).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
+			customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(180)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
 			graphics->RenderCustom(customImport->meshes.at(5), customImport->meshes.at(5).world, 5, 5);
 
 			if (player->HP >= 3)
 			{
-				customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(-60)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
+				customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(120)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
 				graphics->RenderCustom(customImport->meshes.at(5), customImport->meshes.at(5).world, 5, 5);
 
 				if (player->HP >= 4)
 				{
-					customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(-120)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
+					customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(60)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
 					graphics->RenderCustom(customImport->meshes.at(5), customImport->meshes.at(5).world, 5, 5);
 
 					if (player->HP >= 5)
 					{
-						customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(180)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
+						customImport->meshes.at(5).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
 						graphics->RenderCustom(customImport->meshes.at(5), customImport->meshes.at(5).world, 5, 5);
 
 						if (player->HP >= 6)
 						{
-							customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(120)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
+							customImport->meshes.at(5).world = XMMatrixRotationZ(XMConvertToRadians(-60)) * XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
 							graphics->RenderCustom(customImport->meshes.at(5), customImport->meshes.at(5).world, 5, 5);
 						}
 					}
@@ -1532,14 +1536,14 @@ void Engine::Elevatorfunc()
 		floorClear = false;
 		
 		if (floorState == Jungle)
-	/*		floorState = Arctic;
-		else if (floorState == Arctic)*/
-		//	floorState = Desert;
-		//else if (floorState == Desert)
-		//	floorState = Tropical;
-		//else if (floorState == Tropical)
-		//	floorState = Volcanic;
-		//else if (floorState == Volcanic)
+			floorState = Arctic;
+		else if (floorState == Arctic)
+			floorState = Desert;
+		else if (floorState == Desert)
+			floorState = Tropical;
+		else if (floorState == Tropical)
+			floorState = Volcanic;
+		else if (floorState == Volcanic)
 			floorState = Jungle;
 	}
 	else
