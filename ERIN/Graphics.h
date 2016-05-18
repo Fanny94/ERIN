@@ -3,8 +3,8 @@
 #include "Linker.h"
 #include "Structs.h"
 #include "Camera.h"
-
 #include "Mesh.h"
+#include "FW1FontWrapper_1_1\FW1FontWrapper.h"
 
 using namespace std;
 class Camera;
@@ -26,13 +26,21 @@ public:
 	void CreateDepthBuffer();
 
 	void CreateConstantBuffer();
-
 	void UpdateConstantBuffer();
 
 	void CreateTexture(Mesh mesh);
 
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
+
+	bool IsFontInit();
+	bool CreateFontWrapper();
+
+	void drawResultText(int i);
+
+	void drawLevelText(int i);
+
+	void drawProgressionText();
 
 	void swapChain();
 
@@ -74,7 +82,6 @@ public:
 		float paddingAC;
 		float specularColor[3];
 		float shininess;
-		XMFLOAT4 camPos;
 		int textureBool;
 		float padding[3];
 	};
@@ -119,7 +126,10 @@ private:
 	vector<ID3D11ShaderResourceView*> textureView;
 	ID3D11ShaderResourceView* temptextureView = nullptr;
 	unsigned char* buffer;
-	
+
+	IFW1Factory *pFW1Factory;
+	IFW1FontWrapper *pFontWrapper;
+	bool fontinit = false;
 };
 
 #endif // !GRAPHICS_H

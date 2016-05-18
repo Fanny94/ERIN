@@ -36,7 +36,7 @@ public:
 	// Enemies
 	void createEnemy(float x, float y, float z);
 	int getEnemyPoolSize() { return this->e_poolSize; };
-	static const int e_poolSize = 5;
+	static const int e_poolSize = 8;
 	GameObject enemies[e_poolSize];
 	
 	// Waves

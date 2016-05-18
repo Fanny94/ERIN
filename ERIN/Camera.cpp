@@ -66,11 +66,20 @@ void Camera::DetectInput(double time)
 	if (keyboardState[DIK_E] & 0x80)
 		moveUpDown -= speed;
 
-	if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
+	if (keyboardState[DIK_C] & 0x80)
 	{
-		camYaw += mouseLastState.lX * 0.001f;
-		camPitch += mouseCurrState.lY * 0.001f;
-		mouseLastState = mouseCurrState;
+		if ((mouseCurrState.lX != mouseLastState.lX) || (mouseCurrState.lY != mouseLastState.lY))
+		{
+			camYaw += mouseLastState.lX * 0.001f;
+			camPitch += mouseCurrState.lY * 0.001f;
+			mouseLastState = mouseCurrState;
+		}
+	}
+
+	if (keyboardState[DIK_V] & 0x80)
+	{
+		camYaw = 0.0f;
+		camPitch = 0.0f;
 	}
 
 	UpdateCamera();
@@ -122,8 +131,8 @@ void Camera::UpdateGameCamera(float x, float y, double dt)
 {
 	// The Game camera that is going to follow the player and allways showing the elevator
 
-	camPosition.x += (x - camPosition.x) * lerp * dt;
-	camPosition.y += (y - camPosition.y) * lerp * dt;
+	camPosition.x += ((x / 2) - camPosition.x) * lerp * dt;
+	camPosition.y += ((y / 2) - camPosition.y) * lerp * dt;
 }
 
 void Camera::ResetCamera()

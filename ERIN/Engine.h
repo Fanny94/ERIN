@@ -3,7 +3,6 @@
 
 #include "Linker.h"
 #include "Graphics.h"
-#include "GameLogic.h"
 #include "Mesh.h"
 #include "Camera.h"
 #include "CustomImport.h"
@@ -25,6 +24,15 @@ enum GameStateManager
 	Controls,
 	Settings,
 	Credits
+};
+
+enum FloorStateManager
+{
+	Arctic,
+	Desert,
+	Jungle,
+	Tropical,
+	Volcanic
 };
 
 class Engine
@@ -57,12 +65,14 @@ public:
 	bool printTitle = true;
 
 	GameStateManager gameState;
+	FloorStateManager floorState;
 
-	float Rx = -20 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (20 - (-20)))),
-		  Ry = -10 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (10 - (-10))));
 	float savedRx, savedRy;
 	bool block = false;
+	void resetGame();
 	void Elevatorfunc();
+
+	void rendElevator();
 
 	// Pause
 	int pMenuOption = 0;
@@ -76,21 +86,24 @@ public:
 	TSphere* Esphere;
 
 	//Enemy counters
+	int eCount = 0;
 	int specialEnemyCount = 2;
-	int enemyCount = 5;
+	int enemyCount = 8;
+	int floorCount = 0;
 
 private:
 	bool running;
 
+	float childX, childY;
+
 	// test cooldown function
 	bool ready = true;
-	const float cooldown = 1.0f;
+	const float cooldown = 5.0f;
 	double currentTime;
 	void updateCooldown(double dt);
-	// test cooldown function #end
+	void resetCooldown();
 
 	Graphics* graphics;
-	GameLogic* gameLogic;
 	Mesh* mesh;
 	Camera* camera;
 	CustomImport* customImport;
@@ -106,6 +119,15 @@ private:
 	Wall* right_wall;
 
 	Player* player;
+
+	float upperWall, leftWall, lowerWall, rightWall;
+	float safeZoneX, safeZoneY;
+	void randomFloat();
+	void createAllEnemies();
+	void setAllEnemiesFalse();
+	void resetAllEnemies();
+	float Rx, Ry;
+
 };
 
 #endif // !ENGINE_H

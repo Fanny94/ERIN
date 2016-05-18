@@ -1438,7 +1438,7 @@ void Engine::render()
 		graphics->Render();
 
 		customImport->meshes.at(36).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
-		graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 24);
+		graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 28);
 
 		camera->InitCamera();
 	case HighScore:

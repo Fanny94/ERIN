@@ -40,8 +40,11 @@ Graphics::~Graphics()
 	this->gConstantBuffer = nullptr;
 	this->camera = nullptr;
 
-	/*pFontWrapper->Release();
-	pFW1Factory->Release();*/
+	if (fontinit)
+	{
+		pFontWrapper->Release();
+		//pFW1Factory->Release();
+	}
 }
 
 void Graphics::SetViewport()
@@ -59,7 +62,11 @@ void Graphics::SetViewport()
 
 void Graphics::Render()
 {
+<<<<<<< HEAD
 	float clearColor[] = {0, 0, 0, 1 };
+=======
+	float clearColor[] = { 0, 0, 0, 1 };
+>>>>>>> refs/remotes/origin/master
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -110,7 +117,6 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb, int tv)
 		CFPtr->specularColor[1] = mesh.material.at(j).specularColor[1];
 		CFPtr->specularColor[2] = mesh.material.at(j).specularColor[2];
 		CFPtr->shininess = mesh.material.at(j).shininess;
-		CFPtr->camPos = camera->camPosition;
 		CFPtr->textureBool = mesh.textureBool;
 	}
 
@@ -357,24 +363,91 @@ void Graphics::UpdateConstantBuffer()
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
 }
 
-//void Graphics::CreateFontWrapper()
-//{
-//	fontResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
-//	fontResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);
-//}
+bool Graphics::IsFontInit()
+{
+	return fontinit;
+}
 
-//void Graphics::drawText()
-//{
-//	pFontWrapper->DrawString(
-//		gDeviceContext,
-//		L"Stage 1",// String
-//		60.0f,// Font size
-//		0.0f,// X position
-//		0.0f,// Y position
-//		0xff0099ff,// Text color, 0xAaBbGgRr
-//		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
-//	);
-//}
+bool Graphics::CreateFontWrapper()
+{
+	/*HRESULT hResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	hResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);*/
+
+	HRESULT hResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	if (FAILED(hResult)) {
+		return false;
+	}
+
+	hResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);
+	if (FAILED(hResult)) {
+		return false;
+	}
+
+	pFW1Factory->Release();
+	fontinit = true;
+	return fontinit;
+}
+
+void Graphics::drawResultText(int i)
+{
+	if (!fontinit) return;
+
+	ostringstream oss;
+	oss << i;
+	string conver = oss.str();
+
+	std::wstring widestr = std::wstring(conver.begin(), conver.end());
+
+	const wchar_t* convertion = widestr.c_str();
+
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		convertion,// String
+		128.0f,// Font size
+		640.0f,// X position
+		360.0f,// Y position
+		0xff0099ff,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+	);
+}
+
+void Graphics::drawLevelText(int i)
+{
+	if (!fontinit) return;
+
+	ostringstream oss;
+	oss << "Floor  " << i;
+	string conver = oss.str();
+
+	std::wstring widestr = std::wstring(conver.begin(), conver.end());
+
+	const wchar_t* convertion = widestr.c_str();
+
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		convertion,// String
+		128.0f,// Font size
+		500.0f,// X position
+		220.0f,// Y position
+		0xff0099ff,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+	);
+}
+
+void Graphics::drawProgressionText()
+{
+	if (!fontinit) return;
+
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		L"Get to the Elevator",// String
+		128.0f,// Font size
+		100.0f,// X position
+		50.0f,// Y position
+		0xff0099ff,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+	);
+}
 
 void Graphics::swapChain()
 {
