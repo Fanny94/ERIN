@@ -62,11 +62,7 @@ void Graphics::SetViewport()
 
 void Graphics::Render()
 {
-<<<<<<< HEAD
 	float clearColor[] = {0, 0, 0, 1 };
-=======
-	float clearColor[] = { 0, 0, 0, 1 };
->>>>>>> refs/remotes/origin/master
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
