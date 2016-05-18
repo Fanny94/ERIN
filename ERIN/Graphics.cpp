@@ -399,9 +399,9 @@ void Graphics::drawResultText(int i)
 	pFontWrapper->DrawString(
 		gDeviceContext,
 		convertion,// String
-		128.0f,// Font size
-		640.0f,// X position
-		360.0f,// Y position
+		164.0f,// Font size
+		600.0f,// X position
+		340.0f,// Y position
 		0xff999999,// Text color, 0xAaBbGgRr
 		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
 	);

@@ -397,19 +397,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	}
 
 	// spawn enemies
-	for (int i = 0; i < Objectpool->e_poolSize; i++)
-	{
-		randomFloat();
-		this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-	}
-
-	// spawn special enemies
-	for (int i = 0; i < Objectpool->Se_poolSize; i++)
-	{
-		randomFloat();
-		this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-		this->gameObject->setSpecialCooldown(false);
-	}
+	createAllEnemies();
 	enemyCount = Objectpool->e_poolSize;
 	specialEnemyCount = Objectpool->Se_poolSize;
 }
@@ -537,9 +525,9 @@ void Engine::processInput()
 					mainMenu = false;
 					floorState = Jungle;
 					resetGame();
+					createAllEnemies();
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
-					createAllEnemies();
 					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
@@ -634,9 +622,9 @@ void Engine::processInput()
 					floorClear = false;
 					floorState = Jungle;
 					resetGame();
-					createAllEnemies();
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
+					createAllEnemies();
 					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
@@ -824,9 +812,9 @@ void Engine::processInput()
 					resMenu = false;
 					floorState = Jungle;
 					resetGame();
-					createAllEnemies();
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
+					createAllEnemies();
 					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
@@ -1418,7 +1406,6 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 31);
 		}
 		camera->InitCamera();
-		graphics->drawResultText(floorCount);
 		floorClear = 0;
 		break;
 
@@ -1462,6 +1449,7 @@ void Engine::render()
 		graphics->RenderCustom(customImport->meshes.at(45), customImport->meshes.at(45).world, 45, 45);
 
 		camera->InitCamera();
+		graphics->drawResultText(floorCount);
 		break;
 	case HighScore:
 		graphics->Render();
