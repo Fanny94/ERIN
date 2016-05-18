@@ -491,6 +491,13 @@ void Engine::processInput()
 					cout << "Game Running" << endl;
 					this->ready = true;
 					mainMenu = false;
+					floorState = Jungle;
+					resetGame;
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
+					createAllEnemies();
+					eCount = enemyCount + specialEnemyCount - 2;
+
 					gameState = GameRunning;
 				}
 				else if (mainMenuOption == 1)
@@ -598,25 +605,12 @@ void Engine::processInput()
 
 					pMenuOption = 0;
 					floorClear = false;
-					gameObject->reset();
-					player->PlayerReset();
-					camera->ResetCamera();
-
-					for (int i = 0; i < Objectpool->e_poolSize; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-						
-						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-						this->ready = false;
-					}
-					for (int i = 0; i < Objectpool->Se_poolSize; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-
-						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-						this->gameObject->setSpecialCooldown(false);
-					}
-
+					floorState = Jungle;
+					resetGame();
+					createAllEnemies();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
+					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
 				else if (pMenuOption == 2)
@@ -634,22 +628,8 @@ void Engine::processInput()
 				{
 					cout << "Main Menu " << endl << "Main Menu Option " << mainMenuOption << " (Start Game)" << endl;
 					pMenuOption = 0;
-					floorClear = false;
 					mainMenu = true;
-					player->PlayerReset();
-					gameObject->reset();
-					Objectpool->ResetBullet();
-					camera->ResetCamera();
-
-					for (int i = 0; i < 5; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-					}
-					for (int i = 0; i < 2; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-					}
-
+					resetGame();
 					aButtonActive = true;
 					gameState = MainMenu;
 				}
@@ -843,25 +823,12 @@ void Engine::processInput()
 					resMenuOption = 0;
 					floorClear = false;
 					resMenu = false;
-					gameObject->reset();
-					player->PlayerReset();
-					camera->ResetCamera();
-
-					for (int i = 0; i < Objectpool->e_poolSize; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-
-						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-						this->ready = false;
-					}
-					for (int i = 0; i < Objectpool->Se_poolSize; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-
-						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-						this->gameObject->setSpecialCooldown(false);
-					}
-
+					floorState = Jungle;
+					resetGame();
+					createAllEnemies();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
+					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
 				else if (resMenuOption == 1)
@@ -888,7 +855,6 @@ void Engine::processInput()
 					floorClear = false;
 					mainMenu = true;
 					resMenu = false;
-
 					for (int i = 0; i < 5; i++)
 					{
 						Objectpool->enemies[i].setInUse(false);
@@ -897,7 +863,6 @@ void Engine::processInput()
 					{
 						Objectpool->Senemies[i].setInUse(false);
 					}
-
 					gameState = MainMenu;
 					aButtonActive = true;
 				}
@@ -1172,10 +1137,10 @@ void Engine::update(double deltaTimeMs)
 
 		if (player->HP <= 0)
 		{
-			cout << "Game Over" << endl;
-
-			player->PlayerReset();
-			gameObject->reset();
+			resetGame();
+			resMenu = true;
+			gameState = GameOver;
+		}
 
 			for (int i = 0; i < Objectpool->e_poolSize; i++)
 			{
