@@ -27,7 +27,7 @@ public:
 	// special Enemies
 	void createSpecialEnemy(float x, float y, float z);
 	int getSpecialEnemyPoolSize() { return this->Se_poolSize; };
-	static const int Se_poolSize = 2;
+	static const int Se_poolSize = 4;
 	GameObject Senemies[Se_poolSize];
 	bool getSpawnCooldown() { return this->swReady; };
 	void setSpawnCooldown(bool swReady) { this->swReady = swReady; };

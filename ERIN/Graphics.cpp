@@ -62,7 +62,7 @@ void Graphics::SetViewport()
 
 void Graphics::Render()
 {
-	float clearColor[] = { 0, 0, 0, 1 };
+	float clearColor[] = {0, 0, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -402,7 +402,7 @@ void Graphics::drawResultText(int i)
 		128.0f,// Font size
 		640.0f,// X position
 		360.0f,// Y position
-		0xff0099ff,// Text color, 0xAaBbGgRr
+		0xff999999,// Text color, 0xAaBbGgRr
 		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
 	);
 }
@@ -425,7 +425,7 @@ void Graphics::drawLevelText(int i)
 		128.0f,// Font size
 		500.0f,// X position
 		220.0f,// Y position
-		0xff0099ff,// Text color, 0xAaBbGgRr
+		0xff999999,// Text color, 0xAaBbGgRr
 		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
 	);
 }
@@ -440,7 +440,7 @@ void Graphics::drawProgressionText()
 		128.0f,// Font size
 		100.0f,// X position
 		50.0f,// Y position
-		0xff0099ff,// Text color, 0xAaBbGgRr
+		0xff999999,// Text color, 0xAaBbGgRr
 		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
 	);
 }
