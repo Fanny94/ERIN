@@ -47,6 +47,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	if (!camera->InitDirectInput(hInstance))
 	{
 		MessageBox(0, "Direct Input Initialization - Failed", "Error", MB_OK);
+
 		return;
 	}
 
@@ -63,7 +64,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateShaders();
 
 		graphics->CreateFontWrapper();
-
 		//Ship
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
@@ -368,6 +368,30 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateTexture(customImport->meshes.at(44));
 		customImport->meshes.at(44).textureBool = true;
 
+		// Score
+		customImport->LoadCustomFormat("../BinaryDataScore.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(45));
+
+		graphics->CreateTexture(customImport->meshes.at(45));
+		customImport->meshes.at(45).textureBool = true;
+
+		// Highscore
+		customImport->LoadCustomFormat("../BinaryDataHighscore.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(46));
+
+		graphics->CreateTexture(customImport->meshes.at(46));
+		customImport->meshes.at(46).textureBool = true;
+
+		// Settings
+		customImport->LoadCustomFormat("../BinaryDataSettings.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(47));
+
+		graphics->CreateTexture(customImport->meshes.at(47));
+		customImport->meshes.at(47).textureBool = true;
+
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
 	}
@@ -388,9 +412,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	}
 	enemyCount = Objectpool->e_poolSize;
 	specialEnemyCount = Objectpool->Se_poolSize;
-
-	//floorClear = false;
-	//resetCooldown();
 }
 
 Engine::~Engine()
@@ -415,27 +436,26 @@ void Engine::processInput()
 		// Update controller states
 		player->input->update();
 		// Update player accelerating bool
-			player->playerInput();
+		player->playerInput();
 
 		switch (gameState)
 		{
 		case GameRunning:
 
 			// Fire Bullets
-				if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
+			if ((this->player->input->State._right_thumbstick.x || this->player->input->State._right_thumbstick.x) == 1)
+			{
+				if (Objectpool->getCooldown())
 				{
-					if (Objectpool->getCooldown())
-					{
-						this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
-						Objectpool->setCooldown(false);
-					}
+					this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+					Objectpool->setCooldown(false);
 				}
+			}
 
 			if (this->player->input->State._buttons[GamePad_Button_START] == true)
 			{
 				gameState = Pause;
 			}
-
 
 			// Dpad camera movement
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_LEFT] == true)
@@ -845,6 +865,13 @@ void Engine::processInput()
 			if (this->player->input->State._buttons[GamePad_Button_B] == false)
 				bButtonActive = false;
 			break;
+		case ScoreScreen:
+			if (this->player->input->State._buttons[GamePad_Button_B] == true && aButtonActive == false)
+			{
+				bButtonActive = true;
+				gameState = GameOver;
+			}
+			break;
 		case Controls:
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
 			{
@@ -880,7 +907,7 @@ void Engine::processInput()
 
 		/*if (this->player->input->State._buttons[GamePad_Button_Y] == true)
 		{
-			this->running = false;
+		this->running = false;
 		}*/
 
 		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
@@ -892,16 +919,17 @@ void Engine::processInput()
 
 void Engine::update(double deltaTimeMs)
 {
-	double deltaTimeS; // deltaTimeMs millisecond
+	double deltaTimeS; // millisecond
 	deltaTimeS = deltaTimeMs / 1000; // seconds
 
 	switch (gameState)
 	{
 	case GameRunning:
-		updateCooldown(deltaTimeS);
 		Objectpool->bulletupdateCooldown(deltaTimeS);
+		updateCooldown(deltaTimeS);
 		gameObject->SpecialupdateCooldown(deltaTimeS);
 		Objectpool->spawnTimer(deltaTimeS);
+		//Objectpool->updateWaveCooldown(deltaTimeS);
 
 		/* *********** Player Update *********** */
 		player->hpCooldown(deltaTimeS);
@@ -982,23 +1010,23 @@ void Engine::update(double deltaTimeMs)
 			{
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, upper_wall->point, upper_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosY(upper_wall->point.y - 1.0f);
+					Objectpool->Senemies[i].setObjectPosY(upper_wall->point.y - 0.5f);
 				}
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, left_wall->point, left_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosX(left_wall->point.x + 1.0f);
+					Objectpool->Senemies[i].setObjectPosX(left_wall->point.x + 0.5f);
 				}
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, lower_wall->point, lower_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosY(lower_wall->point.y + 1.0f);
+					Objectpool->Senemies[i].setObjectPosY(lower_wall->point.y + 0.5f);
 				}
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, right_wall->point, right_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosX(right_wall->point.x - 1.0f);
+					Objectpool->Senemies[i].setObjectPosX(right_wall->point.x - 0.5f);
 				}
 			}
 		}
-
+		
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
 			if (Objectpool->enemies[i].getInUse())
@@ -1027,7 +1055,7 @@ void Engine::update(double deltaTimeMs)
 		{
 			Objectpool->bullets[i].update();
 		}
-
+	
 		// Collision Bullets
 		for (int t = 0; t < Objectpool->e_poolSize; t++)
 		{
@@ -1039,9 +1067,8 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
-						eCount--;
+						eCount --;
 						Objectpool->enemies[t].setInUse(false);
-						Objectpool->enemies[t].reset();
 						Objectpool->bullets[i].setInUse(false);
 					}
 				}
@@ -1058,7 +1085,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
-						eCount--;
+						eCount --;
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -1076,7 +1103,7 @@ void Engine::update(double deltaTimeMs)
 		{
 			resetGame();
 			resMenu = true;
-			gameState = GameOver;
+			gameState = ScoreScreen;
 		}
 
 		if (floorClear == true)
@@ -1099,7 +1126,7 @@ void Engine::update(double deltaTimeMs)
 		camera->camPosition.y = 0;
 		camera->camPosition.z = -15.8;
 		break;
-	case Pause:
+	case Pause:												
 		camera->camPosition.x = 0;
 		camera->camPosition.y = 0;
 		camera->camPosition.z = -15.8;
@@ -1109,6 +1136,10 @@ void Engine::update(double deltaTimeMs)
 		camera->camPosition.y = 0;
 		camera->camPosition.z = -15.8;
 		break;
+	case ScoreScreen:
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 	}
 }
 
@@ -1268,11 +1299,11 @@ void Engine::render()
 
 		// Camera Update
 		camera->InitCamera();
-		
+
 		//Font draw
-		
-		if(!ready)
-		graphics->drawLevelText(floorCount);
+
+		if (!ready)
+			graphics->drawLevelText(floorCount);
 		break;
 	case TitleScreen:
 		graphics->Render();
@@ -1398,8 +1429,9 @@ void Engine::render()
 		}
 		camera->InitCamera();
 		graphics->drawResultText(floorCount);
-		break;
 		floorClear = 0;
+		break;
+
 	case Controls:
 		graphics->Render();
 
@@ -1428,10 +1460,24 @@ void Engine::render()
 	case Settings:
 		graphics->Render();
 
+		customImport->meshes.at(47).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(47), customImport->meshes.at(47).world, 47, 47);
+
+		camera->InitCamera();
+		break;
+	case ScoreScreen:
+		graphics->Render();
+
+		customImport->meshes.at(45).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(45), customImport->meshes.at(45).world, 45, 45);
+
 		camera->InitCamera();
 		break;
 	case HighScore:
 		graphics->Render();
+
+		customImport->meshes.at(46).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(46), customImport->meshes.at(46).world, 46, 46);
 
 		camera->InitCamera();
 		break;
@@ -1585,7 +1631,7 @@ void Engine::Elevatorfunc()
 			floorState = Tropical;
 		else if (floorState == Tropical)
 			floorState = Volcanic;
-		else if (floorState == Volcanic) 
+		else if (floorState == Volcanic)
 			floorState = Jungle;
 		//resetCooldown();
 	}
@@ -1599,14 +1645,14 @@ void Engine::rendElevator()
 
 void Engine::updateCooldown(double dt)
 {
-	if (this->cooldown >= this->currentTime)
+	if (this->cooldown <= this->currentTime)
 	{
-		this->currentTime += dt;
-		ready = false;
+		this->currentTime = 0.0f;
+		//this->ready = true;
 	}
 	else
 	{
-		this->ready = true;
+		this->currentTime += dt;
 	}
 }
 
