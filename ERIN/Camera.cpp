@@ -74,12 +74,14 @@ void Camera::DetectInput(double time)
 			camPitch += mouseCurrState.lY * 0.001f;
 			mouseLastState = mouseCurrState;
 		}
+
 	}
 
 	if (keyboardState[DIK_V] & 0x80)
 	{
 		camYaw = 0.0f;
 		camPitch = 0.0f;
+
 	}
 
 	UpdateCamera();
