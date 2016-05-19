@@ -44,6 +44,7 @@ public:
 	string getName() { return this->name; };
 
 	Matrix* objectMatrix;
+	Matrix* EnemyShadowMatrix;
 	Behavior* behavior;
 	Position* pos;
 

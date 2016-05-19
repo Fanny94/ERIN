@@ -24,6 +24,7 @@ Player::Player(string name, float x, float y, float z)
 	//this->objectMatrix = new Matrix();
 	this->shipMatrix = new Matrix();
 	this->turretMatrix = new Matrix();
+	this->shadowMatrix = new Matrix();
 
 	this->shipPos = new Position{ this->x, this->y, this->z };
 	this->turretPos = new Position{ this->x + 1.0f, this->y, this->z };
@@ -42,6 +43,7 @@ Player::~Player()
 	delete this->shipPos;
 	delete this->turretPos;
 	delete this->sphere;
+	delete this->shadowMatrix;
 }
 
 
@@ -140,6 +142,12 @@ void Player::update(double dt)
 	*this->shipMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f)
 		* XMMatrixRotationZ(XMConvertToRadians((float)-heading))
 		* XMMatrixTranslation(this->x, this->y, this->z);
+
+	//shadow matrix
+	*this->shadowMatrix = XMMatrixScaling(1.0f, 1.0f, 1.0f)
+		* XMMatrixRotationZ(XMConvertToRadians((float)-heading))
+			* XMMatrixTranslation(this->x * 1.03, this->y * 1.03, this->z + 0.45);
+
 }
 
 void Player::PlayerReset()
