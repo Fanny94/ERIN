@@ -288,7 +288,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(31).textureBool = true;
 
 		//Controls
-		customImport->LoadCustomFormat("../BinaryDataControlls.dat");
+		customImport->LoadCustomFormat("../BinaryDataControls.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(32));
 		graphics->CreateTexture(customImport->meshes.at(32));
