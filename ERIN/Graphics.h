@@ -35,7 +35,12 @@ public:
 
 	bool IsFontInit();
 	bool CreateFontWrapper();
-	void drawText();
+
+	void drawResultText(int i);
+
+	void drawLevelText(int i);
+
+	void drawProgressionText();
 
 	void swapChain();
 

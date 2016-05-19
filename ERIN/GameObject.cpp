@@ -193,27 +193,6 @@ double GameObject::getVy()
 	return r_speed * asin(heading * M_PI / 180);
 }
 
-void GameObject::SpecialReset()
-{
-	this->x = 0.0f;
-	this->y = 0.0f;
-	this->z = 0.0f;
-
-	this->heading = 0;
-	this->plannedHeading = 0;
-
-	this->speed = 0.0f;
-
-	delete this->objectMatrix;
-	this->objectMatrix = new Matrix();
-
-	this->pos->x = this->x;
-	this->pos->y = this->y;
-	this->pos->z = this->z;
-
-	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
-}
-
 void GameObject::updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies)
 {
 	if (this->behavior)

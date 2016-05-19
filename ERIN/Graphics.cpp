@@ -62,7 +62,7 @@ void Graphics::SetViewport()
 
 void Graphics::Render()
 {
-	float clearColor[] = { 0, 1, 0, 1 };
+	float clearColor[] = {0, 0, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -384,19 +384,65 @@ bool Graphics::CreateFontWrapper()
 	return fontinit;
 }
 
-void Graphics::drawText()
+void Graphics::drawResultText(int i)
+{
+	if (!fontinit) return;
+
+	ostringstream oss;
+	oss << i;
+	string conver = oss.str();
+
+	std::wstring widestr = std::wstring(conver.begin(), conver.end());
+
+	const wchar_t* convertion = widestr.c_str();
+
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		convertion,// String
+		164.0f,// Font size
+		600.0f,// X position
+		340.0f,// Y position
+		0xff999999,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+	);
+}
+
+void Graphics::drawLevelText(int i)
+{
+	if (!fontinit) return;
+
+	ostringstream oss;
+	oss << "Floor  " << i;
+	string conver = oss.str();
+
+	std::wstring widestr = std::wstring(conver.begin(), conver.end());
+
+	const wchar_t* convertion = widestr.c_str();
+
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		convertion,// String
+		128.0f,// Font size
+		500.0f,// X position
+		220.0f,// Y position
+		0xff999999,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+	);
+}
+
+void Graphics::drawProgressionText()
 {
 	if (!fontinit) return;
 
 	pFontWrapper->DrawString(
 		gDeviceContext,
-		L"Text",// String
+		L"Get to the Elevator",// String
 		128.0f,// Font size
 		100.0f,// X position
 		50.0f,// Y position
-		0xff0099ff,// Text color, 0xAaBbGgRr
+		0xff999999,// Text color, 0xAaBbGgRr
 		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
-		);
+	);
 }
 
 void Graphics::swapChain()

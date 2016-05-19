@@ -8,7 +8,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->camera = new Camera();
 	this->graphics = new Graphics();
 
+	// Elevator Sphere
 	Esphere = new TSphere();
+	Esphere->m_vecCenter = Vector3(0, 0, 0);
+	Esphere->m_fRadius = 0.5f;
 
 	this->Objectpool = new ObjectPool();
 	this->gameObject = new GameObject();
@@ -16,21 +19,26 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->customImport = new CustomImport();
 	this->player = new Player("player", 3.0f, 0.0f, 0.0f);
 
+	this->upperWall = 21.0f;
+	this->leftWall = -43.0f;
+	this->lowerWall = -21.0f;
+	this->rightWall = 43.0f;
+
 	// upper
 	this->upper_wall = new Wall();
-	this->upper_wall->point = Vector3(0, 21, 0);
+	this->upper_wall->point = Vector3(0, upperWall, 0);
 	this->upper_wall->normal = Vector3(0, -1, 0);
 	// left
 	this->left_wall = new Wall();
-	this->left_wall->point = Vector3(-43, 0, 0);
+	this->left_wall->point = Vector3(leftWall, 0, 0);
 	this->left_wall->normal = Vector3(1, 0, 0);
 	// lower
 	this->lower_wall = new Wall();
-	this->lower_wall->point = Vector3(0, -21, 0);
+	this->lower_wall->point = Vector3(0, lowerWall, 0);
 	this->lower_wall->normal = Vector3(0, 1, 0);
 	// right
 	this->right_wall = new Wall();
-	this->right_wall->point = Vector3(43, 0, 0);
+	this->right_wall->point = Vector3(rightWall, 0, 0);
 	this->right_wall->normal = Vector3(-1, 0, 0);
 
 	//create window
@@ -39,6 +47,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	if (!camera->InitDirectInput(hInstance))
 	{
 		MessageBox(0, "Direct Input Initialization - Failed", "Error", MB_OK);
+
 		return;
 	}
 
@@ -55,9 +64,8 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateShaders();
 
 		graphics->CreateFontWrapper();
-
 		//Ship
-		//new
+
 		customImport->LoadCustomFormat("../BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
@@ -65,7 +73,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(0).textureBool = true;
 
 		//Turret
-		//new
 		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(1));
@@ -73,14 +80,12 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(1).textureBool = true;
 
 		//Enemies
-		//new
 		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
 		graphics->CreateTexture(customImport->meshes.at(2));
 		customImport->meshes.at(2).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataEnemySpawner.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(3));
@@ -88,7 +93,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(3).textureBool = true;
 
 		//Bullets
-		//new
 		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(4));
@@ -96,14 +100,12 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(4).textureBool = true;
 
 		//HUD
-		//new
 		customImport->LoadCustomFormat("../BinaryDataHUDHP1.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(5));
 		graphics->CreateTexture(customImport->meshes.at(5));
 		customImport->meshes.at(5).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataHUDBase.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(6));
@@ -111,35 +113,30 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(6).textureBool = true;
 
 		//Stages
-		//new
 		customImport->LoadCustomFormat("../BinaryDataStageJungle.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(7));
 		graphics->CreateTexture(customImport->meshes.at(7));
 		customImport->meshes.at(7).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataStageArctic.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(8));
 		graphics->CreateTexture(customImport->meshes.at(8));
 		customImport->meshes.at(8).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataStageDesert.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(9));
 		graphics->CreateTexture(customImport->meshes.at(9));
 		customImport->meshes.at(9).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataStageTropical.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 		graphics->CreateTexture(customImport->meshes.at(10));
 		customImport->meshes.at(10).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataStageVolcanic.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(11));
@@ -147,7 +144,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(11).textureBool = true;
 
 		// Title Screen
-		//new
 		customImport->LoadCustomFormat("../BinaryDataMenuQuad.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(12));
@@ -156,7 +152,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		// Main Menu
 		// Option 1 - Play
-		//new
 		customImport->LoadCustomFormat("../BinaryDataMain1-Play.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(13));
@@ -164,7 +159,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(13).textureBool = true;
 
 		// Option 2 - Highscore
-		//new
 		customImport->LoadCustomFormat("../BinaryDataMain2-Highscore.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(14));
@@ -172,7 +166,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(14).textureBool = true;
 
 		//Option 3 - Help & Options
-		//new
 		customImport->LoadCustomFormat("../BinaryDataMain3-Help&Options.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(15));
@@ -180,7 +173,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(15).textureBool = true;
 
 		//Option 4 - Quit
-		//new
 		customImport->LoadCustomFormat("../BinaryDataMain4-Quit.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(16));
@@ -188,7 +180,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(16).textureBool = true;
 
 		//Option 5 - Are You Sure?
-		//new
 		customImport->LoadCustomFormat("../BinaryDataMain5-Quit-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(17));
@@ -197,7 +188,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		// Pause Menu
 		// Option 1 - Continue
-		//new
 		customImport->LoadCustomFormat("../BinaryDataPause1-Continue.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(18));
@@ -205,7 +195,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(18).textureBool = true;
 
 		// Option 2 - Restart
-		//new
 		customImport->LoadCustomFormat("../BinaryDataPause2-Restart.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(19));
@@ -213,7 +202,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(19).textureBool = true;
 
 		//Option 3 - Help & Options
-		//new
 		customImport->LoadCustomFormat("../BinaryDataPause3-Help&Options.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(20));
@@ -221,7 +209,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(20).textureBool = true;
 
 		//Option 4 - Main Menu
-		//new
 		customImport->LoadCustomFormat("../BinaryDataPause4-MainMenu.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(21));
@@ -229,7 +216,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(21).textureBool = true;
 
 		//Option 5 - Are You Sure?
-		//new
 		customImport->LoadCustomFormat("../BinaryDataPause5-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(22));
@@ -238,7 +224,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		// Options Menu
 		// Option 1 - How To Play
-		//new
 		customImport->LoadCustomFormat("../BinaryDataOptions1-HowToPlay.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(23));
@@ -246,7 +231,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(23).textureBool = true;
 
 		// Option 2 - Controls
-		//new
 		customImport->LoadCustomFormat("../BinaryDataOptions2-Controls.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(24));
@@ -254,7 +238,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(24).textureBool = true;
 
 		//Option 3 - Settings
-		//new
 		customImport->LoadCustomFormat("../BinaryDataOptions3-Settings.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(25));
@@ -262,7 +245,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(25).textureBool = true;
 
 		//Option 4 - Credits
-		//new
 		customImport->LoadCustomFormat("../BinaryDataOptions4-Credits.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(26));
@@ -271,7 +253,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		// Results Menu
 		// Option 1 - Play Again
-		//new
 		customImport->LoadCustomFormat("../BinaryDataResult1-PlayAgain.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(27));
@@ -279,7 +260,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(27).textureBool = true;
 
 		// Option 2 - Highscore
-		//new
 		customImport->LoadCustomFormat("../BinaryDataResult2-Highscore.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(28));
@@ -287,7 +267,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(28).textureBool = true;
 
 		//Option 3 - Credits
-		//new
 		customImport->LoadCustomFormat("../BinaryDataResult3-Credits.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(29));
@@ -295,7 +274,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(29).textureBool = true;
 
 		//Option 4 - Main Menu
-		//new
 		customImport->LoadCustomFormat("../BinaryDataResult4-MainMenu.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(30));
@@ -303,7 +281,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(30).textureBool = true;
 
 		//Option 5 - Are You Sure?
-		//new
 		customImport->LoadCustomFormat("../BinaryDataResult5-MainMenu-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(31));
@@ -311,7 +288,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(31).textureBool = true;
 
 		//Controls
-		//new
 		customImport->LoadCustomFormat("../BinaryDataControlls.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(32));
@@ -319,7 +295,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(32).textureBool = true;
 
 		//Credits
-		//new
 		customImport->LoadCustomFormat("../BinaryDataCredits.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(33));
@@ -327,7 +302,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(33).textureBool = true;
 
 		// How to Play
-		//new
 		customImport->LoadCustomFormat("../BinaryDataHowToPlay.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(34));
@@ -335,79 +309,98 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(34).textureBool = true;
 
 		//Numbers
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber0.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(35));
 		graphics->CreateTexture(customImport->meshes.at(35));
 		customImport->meshes.at(35).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber1.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(36));
 		graphics->CreateTexture(customImport->meshes.at(36));
 		customImport->meshes.at(36).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber2.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(37));
 		graphics->CreateTexture(customImport->meshes.at(37));
 		customImport->meshes.at(37).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber3.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(38));
 		graphics->CreateTexture(customImport->meshes.at(38));
 		customImport->meshes.at(38).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber4.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(39));
 		graphics->CreateTexture(customImport->meshes.at(39));
 		customImport->meshes.at(39).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber5.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(40));
 		graphics->CreateTexture(customImport->meshes.at(40));
 		customImport->meshes.at(40).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber6.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(41));
 		graphics->CreateTexture(customImport->meshes.at(41));
 		customImport->meshes.at(41).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber7.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(42));
 		graphics->CreateTexture(customImport->meshes.at(42));
 		customImport->meshes.at(42).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber8.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(43));
 		graphics->CreateTexture(customImport->meshes.at(43));
 		customImport->meshes.at(43).textureBool = true;
 
-		//new
 		customImport->LoadCustomFormat("../BinaryDataNumber9.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(44));
 		graphics->CreateTexture(customImport->meshes.at(44));
 		customImport->meshes.at(44).textureBool = true;
 
+		// Score
+		customImport->LoadCustomFormat("../BinaryDataScore.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(45));
+
+		graphics->CreateTexture(customImport->meshes.at(45));
+		customImport->meshes.at(45).textureBool = true;
+
+		// Highscore
+		customImport->LoadCustomFormat("../BinaryDataHighscore.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(46));
+
+		graphics->CreateTexture(customImport->meshes.at(46));
+		customImport->meshes.at(46).textureBool = true;
+
+		// Settings
+		customImport->LoadCustomFormat("../BinaryDataSettings.dat");
+		customImport->NewMesh();
+		graphics->CustomVertexBuffer(customImport->meshes.at(47));
+
+		graphics->CreateTexture(customImport->meshes.at(47));
+		customImport->meshes.at(47).textureBool = true;
+
 		graphics->CreateConstantBuffer();
 		ShowWindow(wndHandle, nCommandShow);
 	}
+
+	// spawn enemies
+	createAllEnemies();
+	enemyCount = Objectpool->e_poolSize;
+	specialEnemyCount = Objectpool->Se_poolSize;
 }
 
 Engine::~Engine()
@@ -530,10 +523,14 @@ void Engine::processInput()
 			{
 				if (mainMenuOption == 0)
 				{
-					this->ready = true;
 					mainMenu = false;
-					gameState = GameRunning;
 					floorState = Jungle;
+					resetGame();
+					createAllEnemies();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
+					eCount = enemyCount + specialEnemyCount - 2;
+					gameState = GameRunning;
 				}
 				else if (mainMenuOption == 1)
 				{
@@ -588,7 +585,6 @@ void Engine::processInput()
 				else if (pMenuOption == 2)
 				{
 					pMenuOption = 3;
-					gameObject->reset();
 				}
 			}
 			if (this->player->input->State._buttons[GamePad_Button_DPAD_UP] == true)
@@ -611,7 +607,6 @@ void Engine::processInput()
 				else if (pMenuOption == 1)
 				{
 					pMenuOption = 3;
-					gameObject->reset();
 				}
 			}
 
@@ -626,24 +621,12 @@ void Engine::processInput()
 				{
 					pMenuOption = 0;
 					floorClear = false;
-					gameObject->reset();
-					player->PlayerReset();
-					camera->ResetCamera();
-
-					for (int i = 0; i < Objectpool->e_poolSize; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-						
-						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-						this->ready = false;
-					}
-					for (int i = 0; i < Objectpool->Se_poolSize; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-
-						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-						this->gameObject->setSpecialCooldown(false);
-					}
+					floorState = Jungle;
+					resetGame();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
+					createAllEnemies();
+					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
 				else if (pMenuOption == 2)
@@ -659,22 +642,8 @@ void Engine::processInput()
 				else if (pMenuOption == 4)
 				{
 					pMenuOption = 0;
-					player->PlayerReset();
-					gameObject->reset();
-					Objectpool->ResetBullet();
-					camera->ResetCamera();
-					floorClear = false;
 					mainMenu = true;
-
-					for (int i = 0; i < 5; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-					}
-					for (int i = 0; i < 2; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-					}
-
+					resetGame();
 					aButtonActive = true;
 					gameState = MainMenu;
 				}
@@ -841,27 +810,13 @@ void Engine::processInput()
 				if (resMenuOption == 0)
 				{
 					resMenuOption = 0;
-					floorClear = false;
 					resMenu = false;
-					gameObject->reset();
-					player->PlayerReset();
-					camera->ResetCamera();
-
-					for (int i = 0; i < Objectpool->e_poolSize; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-
-						this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-						this->ready = false;
-					}
-					for (int i = 0; i < Objectpool->Se_poolSize; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-
-						this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-						this->gameObject->setSpecialCooldown(false);
-					}
-
+					floorState = Jungle;
+					resetGame();
+					enemyCount = Objectpool->e_poolSize;
+					specialEnemyCount = Objectpool->Se_poolSize;
+					createAllEnemies();
+					eCount = enemyCount + specialEnemyCount - 2;
 					gameState = GameRunning;
 				}
 				else if (resMenuOption == 1)
@@ -880,23 +835,9 @@ void Engine::processInput()
 				else if (resMenuOption == 4)
 				{
 					resMenuOption = 0;
-					player->PlayerReset();
-					gameObject->reset();
-					Objectpool->ResetBullet();
-					camera->ResetCamera();
-					floorClear = false;
+					resetGame();
 					mainMenu = true;
 					resMenu = false;
-
-					for (int i = 0; i < 5; i++)
-					{
-						Objectpool->enemies[i].setInUse(false);
-					}
-					for (int i = 0; i < 2; i++)
-					{
-						Objectpool->Senemies[i].setInUse(false);
-					}
-
 					gameState = MainMenu;
 					aButtonActive = true;
 				}
@@ -912,6 +853,13 @@ void Engine::processInput()
 				aButtonActive = false;
 			if (this->player->input->State._buttons[GamePad_Button_B] == false)
 				bButtonActive = false;
+			break;
+		case ScoreScreen:
+			if (this->player->input->State._buttons[GamePad_Button_A] == true && aButtonActive == false)
+			{
+				aButtonActive = true;
+				gameState = GameOver;
+			}
 			break;
 		case Controls:
 			if (this->player->input->State._buttons[GamePad_Button_B] == true && bButtonActive == false)
@@ -945,16 +893,6 @@ void Engine::processInput()
 			}
 			break;
 		}
-
-		if (this->player->input->State._buttons[GamePad_Button_Y] == true)
-		{
-			this->running = false;
-		}
-
-		if (this->player->input->State._buttons[GamePad_Button_BACK] == true)
-		{
-			this->running = false;
-		}
 	}
 }
 
@@ -970,6 +908,7 @@ void Engine::update(double deltaTimeMs)
 		updateCooldown(deltaTimeS);
 		gameObject->SpecialupdateCooldown(deltaTimeS);
 		Objectpool->spawnTimer(deltaTimeS);
+		//Objectpool->updateWaveCooldown(deltaTimeS);
 
 		/* *********** Player Update *********** */
 		player->hpCooldown(deltaTimeS);
@@ -1013,7 +952,7 @@ void Engine::update(double deltaTimeMs)
 				if (player->getHpCooldown())
 				{
 					player->HP--;
-					enemyCount--;
+					eCount--;
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
 				}
@@ -1031,10 +970,14 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->Senemies[i].update(deltaTimeMs);
 				if (Objectpool->getSpawnCooldown())
 				{
-					childX = Objectpool->Senemies[i].getX();
-					childY = Objectpool->Senemies[i].getY();
-					Objectpool->createEnemy(childX, childY, 0);
-					Objectpool->setSpawnCooldown(false);
+					for (int i = 0; i < this->Objectpool->Senemies[i].getInUse(); i++)
+					{
+						childX = Objectpool->Senemies[i].getX();
+						childY = Objectpool->Senemies[i].getY();
+						Objectpool->createEnemy(childX, childY, 0);
+						eCount++;
+						Objectpool->setSpawnCooldown(false);
+					}
 				}
 			}
 		}
@@ -1046,23 +989,23 @@ void Engine::update(double deltaTimeMs)
 			{
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, upper_wall->point, upper_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosY(upper_wall->point.y - 1.0f);
+					Objectpool->Senemies[i].setObjectPosY(upper_wall->point.y - 0.5f);
 				}
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, left_wall->point, left_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosX(left_wall->point.x + 1.0f);
+					Objectpool->Senemies[i].setObjectPosX(left_wall->point.x + 0.5f);
 				}
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, lower_wall->point, lower_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosY(lower_wall->point.y + 1.0f);
+					Objectpool->Senemies[i].setObjectPosY(lower_wall->point.y + 0.5f);
 				}
 				if (sphereToPlane(*Objectpool->Senemies[i].sphere, right_wall->point, right_wall->normal))
 				{
-					Objectpool->Senemies[i].setObjectPosX(right_wall->point.x - 1.0f);
+					Objectpool->Senemies[i].setObjectPosX(right_wall->point.x - 0.5f);
 				}
 			}
 		}
-
+		
 		for (int i = 0; i < Objectpool->e_poolSize; i++)
 		{
 			if (Objectpool->enemies[i].getInUse())
@@ -1103,7 +1046,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
-						enemyCount --;
+						eCount --;
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -1121,7 +1064,7 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
-						specialEnemyCount --;
+						eCount --;
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -1130,23 +1073,21 @@ void Engine::update(double deltaTimeMs)
 		}
 
 		/* *********** HUD Logic *********** */
-		if (enemyCount <= 0 && specialEnemyCount <= 0)
+		if (eCount < 1)
 		{
 			floorClear = true;
 		}
 
 		if (player->HP <= 0)
 		{
-			player->PlayerReset();
-			gameObject->reset();
-
-			for (int i = 0; i < Objectpool->e_poolSize; i++)
-			{
-				Objectpool->enemies[i].setInUse(false);
-			}
-
+			resetGame();
 			resMenu = true;
-			gameState = GameOver;
+			gameState = ScoreScreen;
+		}
+
+		if (floorClear == true)
+		{
+			Elevatorfunc();
 		}
 
 		break;
@@ -1164,7 +1105,7 @@ void Engine::update(double deltaTimeMs)
 		camera->camPosition.y = 0;
 		camera->camPosition.z = -15.8;
 		break;
-	case Pause:
+	case Pause:												
 		camera->camPosition.x = 0;
 		camera->camPosition.y = 0;
 		camera->camPosition.z = -15.8;
@@ -1174,6 +1115,10 @@ void Engine::update(double deltaTimeMs)
 		camera->camPosition.y = 0;
 		camera->camPosition.z = -15.8;
 		break;
+	case ScoreScreen:
+		camera->camPosition.x = 0;
+		camera->camPosition.y = 0;
+		camera->camPosition.z = -15.8;
 	}
 }
 
@@ -1215,17 +1160,12 @@ void Engine::render()
 		customImport->meshes.at(1).world = *player->turretMatrix;
 		graphics->RenderCustom(customImport->meshes.at(1), customImport->meshes.at(1).world, 1, 1);
 
-		if (floorClear == true)
-		{
-			Elevatorfunc();
-		}
-
 		if (player->HP > 0)
 		{
 			RendHUD();
 		}
 
-		//Bullet rendering
+		// Bullet rendering
 		for (int i = 0; i < Objectpool->getBulletPoolSize(); i++)
 		{
 			if (Objectpool->bullets[i].getInUse())
@@ -1242,7 +1182,8 @@ void Engine::render()
 				graphics->RenderCustom(customImport->meshes.at(2), *Objectpool->enemies[i].objectMatrix, 2, 2);
 			}
 		}
-		//special enemy rendering
+
+		// Special enemy rendering
 		for (int i = 0; i < Objectpool->Se_poolSize; i++)
 		{
 			if (Objectpool->Senemies[i].getInUse())
@@ -1250,37 +1191,104 @@ void Engine::render()
 				graphics->RenderCustom(customImport->meshes.at(3), *Objectpool->Senemies[i].objectMatrix, 3, 3);
 			}
 		}
-	
-		if (this->ready)
+
+		if (floorClear == true)
 		{
-			for (int i = 0; i <Objectpool->e_poolSize; i++)
-			{
-				this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-				this->ready = false;
-			}
+			rendElevator();
+			graphics->drawProgressionText();
 		}
-		//spawn special enemies
-		if (this->gameObject->getSpecialCooldown())
+
+		if (eCount < 10)
 		{
-			for (int i = 0; i < Objectpool->Se_poolSize; i++)
-			{
-				this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-				savedRx = Rx;
-				savedRy = Ry;
-				this->gameObject->setSpecialCooldown(false);
-			}
+			customImport->meshes.at(35).world = XMMatrixTranslation(-1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
+		}
+
+		if (eCount <= 0 || eCount == 10 || eCount == 20)
+		{
+			customImport->meshes.at(35).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(35), customImport->meshes.at(35).world, 35, 35);
+		}
+
+		if (eCount >= 10 && eCount < 20)
+		{
+			customImport->meshes.at(36).world = XMMatrixTranslation(-1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
+		}
+
+		if (eCount == 1 || eCount == 11 || eCount == 21)
+		{
+			customImport->meshes.at(36).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(36), customImport->meshes.at(36).world, 36, 36);
+		}
+
+		if (eCount >= 20 && eCount < 30)
+		{
+			customImport->meshes.at(37).world = XMMatrixTranslation(-1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 37);
+		}
+
+		if (eCount == 2 || eCount == 12 || eCount == 22)
+		{
+			customImport->meshes.at(37).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(37), customImport->meshes.at(37).world, 37, 37);
+		}
+
+		if (eCount == 3 || eCount == 13 || eCount == 23)
+		{
+			customImport->meshes.at(38).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(38), customImport->meshes.at(38).world, 38, 38);
+		}
+
+		if (eCount == 4 || eCount == 14 || eCount == 24)
+		{
+			customImport->meshes.at(39).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(39), customImport->meshes.at(39).world, 39, 39);
+		}
+
+		if (eCount == 5 || eCount == 15 || eCount == 25)
+		{
+			customImport->meshes.at(40).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(40), customImport->meshes.at(40).world, 40, 40);
+		}
+
+		if (eCount == 6 || eCount == 16 || eCount == 26)
+		{
+			customImport->meshes.at(41).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(41), customImport->meshes.at(41).world, 41, 41);
+		}
+
+		if (eCount == 7 || eCount == 17 || eCount == 27)
+		{
+			customImport->meshes.at(42).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(42), customImport->meshes.at(42).world, 42, 42);
+		}
+
+		if (eCount == 8 || eCount == 18 || eCount == 28)
+		{
+			customImport->meshes.at(43).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(43), customImport->meshes.at(43).world, 43, 43);
+		}
+
+		if (eCount == 9 || eCount == 19 || eCount == 29)
+		{
+			customImport->meshes.at(44).world = XMMatrixTranslation(1.1, 0.0, -0.75) * XMMatrixScaling(0.45, 0.45, 1);
+			graphics->RenderCustom(customImport->meshes.at(44), customImport->meshes.at(44).world, 44, 44);
 		}
 
 		// Camera Update
 		camera->InitCamera();
 
+		//Font draw
+
+		if (!ready)
+			graphics->drawLevelText(floorCount);
 		break;
 	case TitleScreen:
 		graphics->Render();
 
 		customImport->meshes.at(12).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 		graphics->RenderCustom(customImport->meshes.at(12), customImport->meshes.at(12).world, 12, 12);
-		graphics->drawText();
 		camera->InitCamera();
 		break;
 	case MainMenu:
@@ -1289,6 +1297,8 @@ void Engine::render()
 		{
 			customImport->meshes.at(13).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(13), customImport->meshes.at(13).world, 13, 13);
+			createAllEnemies();
+			floorCount = 1;
 		}
 		else if (mainMenuOption == 1) // Highscore
 		{
@@ -1324,6 +1334,7 @@ void Engine::render()
 		{
 			customImport->meshes.at(19).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(19), customImport->meshes.at(19).world, 19, 19);
+			floorCount = 1;
 		}
 		else if (pMenuOption == 2) // Help & Options
 		{
@@ -1375,6 +1386,7 @@ void Engine::render()
 		{
 			customImport->meshes.at(27).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
 			graphics->RenderCustom(customImport->meshes.at(27), customImport->meshes.at(27).world, 27, 27);
+			floorCount = 1;
 		}
 		else if (resMenuOption == 1)
 		{
@@ -1397,7 +1409,9 @@ void Engine::render()
 			graphics->RenderCustom(customImport->meshes.at(31), customImport->meshes.at(31).world, 31, 31);
 		}
 		camera->InitCamera();
+		floorClear = 0;
 		break;
+
 	case Controls:
 		graphics->Render();
 
@@ -1426,10 +1440,25 @@ void Engine::render()
 	case Settings:
 		graphics->Render();
 
+		customImport->meshes.at(47).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(47), customImport->meshes.at(47).world, 47, 47);
+
+		camera->InitCamera();
+		break;
+	case ScoreScreen:
+		graphics->Render();
+
+		customImport->meshes.at(45).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(45), customImport->meshes.at(45).world, 45, 45);
+
+		graphics->drawResultText(floorCount);
 		camera->InitCamera();
 		break;
 	case HighScore:
 		graphics->Render();
+
+		customImport->meshes.at(46).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(3, 3, 0);
+		graphics->RenderCustom(customImport->meshes.at(46), customImport->meshes.at(46).world, 46, 46);
 
 		camera->InitCamera();
 		break;
@@ -1549,48 +1578,51 @@ bool AABBtoAABB(const TAABB& tBox1, const TAABB& tBox2)
 	//If not, it will return false
 }
 
+void Engine::resetGame()
+{
+	camera->ResetCamera();
+	player->PlayerReset();
+	Objectpool->ResetBullet();
+	resetAllEnemies();
+	setAllEnemiesFalse();
+	floorClear = false;
+}
+
 void Engine::Elevatorfunc()
 {
 	if (sphereToSphere(*player->sphere, *Esphere))
 	{
-		Objectpool->ResetBullet();
-		gameObject->reset();
 		player->NewFloorReset();
+		Objectpool->ResetBullet();
+		resetAllEnemies();
+		setAllEnemiesFalse();
 		enemyCount = Objectpool->e_poolSize;
 		specialEnemyCount = Objectpool->Se_poolSize;
-		for (int i = 0; i < Objectpool->e_poolSize; i++)
-		{
-			this->Objectpool->createEnemy(Rx, Ry, 0.0f);
-			
-			this->ready = false;
-		}
-		for (int i = 0; i < Objectpool->Se_poolSize; i++)
-		{
-			this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
-			
-			this->gameObject->setSpecialCooldown(false);
-			this->Objectpool->setSpawnCooldown(false);
-		}
+		floorCount++;
+		createAllEnemies();
+		eCount = enemyCount + specialEnemyCount - 1;
+		resetCooldown();
+
 		floorClear = false;
 		
 		if (floorState == Jungle)
-			floorState = Arctic;
-		else if (floorState == Arctic)
 			floorState = Desert;
 		else if (floorState == Desert)
+			floorState = Arctic;
+		else if (floorState == Arctic)
 			floorState = Tropical;
 		else if (floorState == Tropical)
 			floorState = Volcanic;
 		else if (floorState == Volcanic)
 			floorState = Jungle;
+		//resetCooldown();
 	}
-	else
-	{
-		customImport->meshes.at(6).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
-		graphics->RenderCustom(customImport->meshes.at(6), customImport->meshes.at(6).world, 6, 6);
-		Esphere->m_vecCenter = Vector3(0, 0, 0);
-		Esphere->m_fRadius = 0.5f;
-	}
+}
+
+void Engine::rendElevator()
+{
+	customImport->meshes.at(6).world = XMMatrixTranslation(0, 0, 0) * XMMatrixScaling(1.5, 1.5, 1);
+	graphics->RenderCustom(customImport->meshes.at(6), customImport->meshes.at(6).world, 6, 6);
 }
 
 void Engine::updateCooldown(double dt)
@@ -1598,11 +1630,68 @@ void Engine::updateCooldown(double dt)
 	if (this->cooldown <= this->currentTime)
 	{
 		this->currentTime = 0.0f;
+		//this->ready = true;
 	}
 	else
 	{
 		this->currentTime += dt;
 	}
+}
+
+void Engine::resetCooldown()
+{
+	this->ready = true;
+	this->currentTime = 0.0f;
+}
+
+void Engine::randomFloat()
+{
+	//float r3 = LO + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (HI - LO)));
+	Rx = leftWall + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (rightWall - (leftWall))));
+	Ry = lowerWall + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (upperWall - (lowerWall))));
+}
+
+void Engine::createAllEnemies()
+{
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
+	{
+		randomFloat();
+		this->Objectpool->createEnemy(Rx, Ry, 0.0f);
+	}
+	for (int i = 0; i < Objectpool->Se_poolSize; i++)
+	{
+		randomFloat();
+		this->Objectpool->createSpecialEnemy(Rx, Ry, 0.0f);
+		this->gameObject->setSpecialCooldown(false);
+		this->Objectpool->setSpawnCooldown(false);
+	}
+}
+
+void Engine::setAllEnemiesFalse()
+{
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
+	{
+		Objectpool->enemies[i].setInUse(false);
+	}
+
+	for (int i = 0; i < Objectpool->Se_poolSize; i++)
+	{
+		Objectpool->Senemies[i].setInUse(false);
+	}
+}
+
+void Engine::resetAllEnemies()
+{
+	for (int i = 0; i < Objectpool->e_poolSize; i++)
+	{
+		Objectpool->enemies[i].reset();
+	}
+
+	for (int i = 0; i < Objectpool->Se_poolSize; i++)
+	{
+		Objectpool->Senemies[i].reset();
+	}
+	gameObject->setSpecialCooldown(false);
 }
 
 HWND Engine::InitWindow(HINSTANCE hInstance)
