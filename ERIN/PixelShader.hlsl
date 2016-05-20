@@ -24,7 +24,7 @@ struct VS_OUT
 float4 PS_main(VS_OUT input) : SV_Target
 {
 	float3 diffuseLight;
-	float4 lightPosition = float4(0.0, 0.0, -60.0, 0.0);
+	float4 lightPosition = float4(0.0, 0.0, -10.0, 0.0);
 	float3 lightIntensity = { 1.0, 1.0, 1.0 };
 
 	float4 lightDir = normalize(lightPosition - input.WPos);
