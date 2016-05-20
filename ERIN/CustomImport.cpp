@@ -312,6 +312,18 @@ void CustomImport::NewMesh()
 				}
 				break;
 			}
+			else if (temp[p] == '\\')
+			{
+				material.at(i).diffuseMap[0] = '.';
+				material.at(i).diffuseMap[1] = '.';
+				int size = 256 - p;
+				p = p - 2;
+				for (int q = 2; q < size; q++)
+				{
+					material.at(i).diffuseMap[q] = temp[p + q];
+				}
+				break;
+			}
 		}
 
 		for (int j = 0; j < 3; j++)

@@ -373,7 +373,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataScore.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(45));
-
 		graphics->CreateTexture(customImport->meshes.at(45));
 		customImport->meshes.at(45).textureBool = true;
 
@@ -381,7 +380,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataHighscore.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(46));
-
 		graphics->CreateTexture(customImport->meshes.at(46));
 		customImport->meshes.at(46).textureBool = true;
 
@@ -389,7 +387,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataSettings.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(47));
-
 		graphics->CreateTexture(customImport->meshes.at(47));
 		customImport->meshes.at(47).textureBool = true;
 
@@ -397,7 +394,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataShadow.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(48));
-
 		graphics->CreateTexture(customImport->meshes.at(48));
 		customImport->meshes.at(48).textureBool = true;
 
@@ -405,7 +401,6 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->LoadCustomFormat("../BinaryDataEnemyShadow.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(49));
-
 		graphics->CreateTexture(customImport->meshes.at(49));
 		customImport->meshes.at(49).textureBool = true;
 
