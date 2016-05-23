@@ -18,6 +18,7 @@ enum GameStateManager
 	GameRunning,
 	Pause,
 	GameOver,
+	ScoreScreen,
 	HighScore,
 	HelpAndOptions,
 	HowToPlay,
@@ -69,6 +70,7 @@ public:
 
 	float savedRx, savedRy;
 	bool block = false;
+	void resetGame();
 	void Elevatorfunc();
 
 	void rendElevator();
@@ -85,8 +87,10 @@ public:
 	TSphere* Esphere;
 
 	//Enemy counters
-	int specialEnemyCount = 2;
-	int enemyCount = 5;
+	int eCount = 0;
+	int specialEnemyCount = 4;
+	int enemyCount = 8;
+	int floorCount = 1;
 
 private:
 	bool running;
@@ -119,6 +123,9 @@ private:
 	float upperWall, leftWall, lowerWall, rightWall;
 	float safeZoneX, safeZoneY;
 	void randomFloat();
+	void createAllEnemies();
+	void setAllEnemiesFalse();
+	void resetAllEnemies();
 	float Rx, Ry;
 	float childX, childY;
 

@@ -22,6 +22,8 @@ public:
 	
 	Position* bulletPos;
 	Matrix* bulletMatrix;
+	Matrix* bulletShadowMatrix;
+
 	int timeLeft = 300; //How long a bullet will last
 	
 	union 

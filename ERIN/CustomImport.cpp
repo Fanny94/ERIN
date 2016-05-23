@@ -251,33 +251,28 @@ void CustomImport::NewMesh()
 
 		for (int l = 0; l < newMesh.meshTemp.VertexCount; l++)
 		{
+			int vertIndex = l;
+				if (l % 3 == 0)
+				{ 
+					vertIndex += 2;
+				}
+				else if (l % 3 == 2)
+				{
+					vertIndex -= 2;
+				}
+
 			for (int m = 0; m < 3; m++)
 			{
-				if (m == 0)
-				{
-					newMesh.meshTemp.vertexTemp.pos[2] = meshS.at(i).vertex.at(l).pos[m];
-					newMesh.meshTemp.vertexTemp.nor[2] = meshS.at(i).vertex.at(l).nor[m];
-				}
-				else if (m == 1)
-				{
-					newMesh.meshTemp.vertexTemp.pos[m] = meshS.at(i).vertex.at(l).pos[m];
-					newMesh.meshTemp.vertexTemp.nor[m] = meshS.at(i).vertex.at(l).nor[m];
-				}
-				else if (m == 2)
-				{
-					newMesh.meshTemp.vertexTemp.pos[0] = meshS.at(i).vertex.at(l).pos[m];
-					newMesh.meshTemp.vertexTemp.nor[0] = meshS.at(i).vertex.at(l).nor[m];
-				}
-				
-				newMesh.meshTemp.vertexTemp.tan[m] = meshS.at(i).vertex.at(l).tan[m];
-				newMesh.meshTemp.vertexTemp.bitan[m] = meshS.at(i).vertex.at(l).bitan[m];
+				newMesh.meshTemp.vertexTemp.pos[m] = meshS.at(i).vertex.at(vertIndex).pos[m];
+				newMesh.meshTemp.vertexTemp.nor[m] = meshS.at(i).vertex.at(vertIndex).nor[m];
+
+				newMesh.meshTemp.vertexTemp.tan[m] = meshS.at(i).vertex.at(vertIndex).tan[m];
+				newMesh.meshTemp.vertexTemp.bitan[m] = meshS.at(i).vertex.at(vertIndex).bitan[m];
 			}
 			for (int n = 0; n < 2; n++)
 			{
-				if (n == 0)
-					newMesh.meshTemp.vertexTemp.uv[1] = meshS.at(i).vertex.at(l).uv[n];
-				if (n == 1)
-					newMesh.meshTemp.vertexTemp.uv[0] = meshS.at(i).vertex.at(l).uv[n];
+				newMesh.meshTemp.vertexTemp.uv[n] = meshS.at(i).vertex.at(vertIndex).uv[n];
+	
 			}
 			newMesh.meshTemp.vertex.push_back(newMesh.meshTemp.vertexTemp);
 		}
@@ -306,6 +301,18 @@ void CustomImport::NewMesh()
 		for (int p = 256; p > 0; p--)
 		{
 			if (temp[p] == '/')
+			{
+				material.at(i).diffuseMap[0] = '.';
+				material.at(i).diffuseMap[1] = '.';
+				int size = 256 - p;
+				p = p - 2;
+				for (int q = 2; q < size; q++)
+				{
+					material.at(i).diffuseMap[q] = temp[p + q];
+				}
+				break;
+			}
+			else if (temp[p] == '\\')
 			{
 				material.at(i).diffuseMap[0] = '.';
 				material.at(i).diffuseMap[1] = '.';

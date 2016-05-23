@@ -31,6 +31,7 @@ GameObject::GameObject(int objectID, string name, float x, float y, float z, boo
 	this->acceleration = Ran;
 
 	this->objectMatrix = new Matrix();
+	this->EnemyShadowMatrix = new Matrix();
 
 	// behavoir
 	if (doHaveBehavior == true)
@@ -52,6 +53,7 @@ GameObject::~GameObject()
 	delete this->objectMatrix;
 	delete this->pos;
 	delete this->sphere;
+	delete this->EnemyShadowMatrix;
 
 	if (this->behavior)
 	{
@@ -140,6 +142,11 @@ void GameObject::update(double dt)
 		XMMatrixRotationZ(XMConvertToRadians((float)-heading))
 		* XMMatrixTranslation(x, y, z)
 		* XMMatrixScaling(1.0f, 1.0f, 1.0f);
+
+	*this->EnemyShadowMatrix =
+		XMMatrixRotationZ(XMConvertToRadians((float)-heading))
+		* XMMatrixTranslation(x * 1.03, y * 1.03, z + 0.45)
+		* XMMatrixScaling(1.0f, 1.0f, 1.0f);
 }
 
 void GameObject::reset()
@@ -155,6 +162,9 @@ void GameObject::reset()
 
 	delete this->objectMatrix;
 	this->objectMatrix = new Matrix();
+
+	delete this->EnemyShadowMatrix;
+	this->EnemyShadowMatrix = new Matrix();
 
 	this->pos->x = this->x;
 	this->pos->y = this->y;
@@ -194,27 +204,6 @@ double GameObject::getVx()
 double GameObject::getVy()
 {
 	return r_speed * asin(heading * M_PI / 180);
-}
-
-void GameObject::SpecialReset()
-{
-	this->x = 0.0f;
-	this->y = 0.0f;
-	this->z = 0.0f;
-
-	this->heading = 0;
-	this->plannedHeading = 0;
-
-	this->speed = 0.0f;
-
-	delete this->objectMatrix;
-	this->objectMatrix = new Matrix();
-
-	this->pos->x = this->x;
-	this->pos->y = this->y;
-	this->pos->z = this->z;
-
-	this->sphere->m_vecCenter = Vector3(this->x, this->y, this->z);
 }
 
 void GameObject::updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies)

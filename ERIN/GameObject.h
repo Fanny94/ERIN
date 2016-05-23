@@ -18,7 +18,6 @@ public:
 
 	//Special Enemy
 	void updateSpecialBehavior(Position player, GameObject* myself, GameObject* allEnemies);
-	void SpecialReset();
 	void SpecialupdateCooldown(double sdt);
 	bool getSpecialCooldown() { return this->sReady; };
 	void setSpecialCooldown(bool sReady) { this->sReady = sReady; };
@@ -45,6 +44,7 @@ public:
 	string getName() { return this->name; };
 
 	Matrix* objectMatrix;
+	Matrix* EnemyShadowMatrix;
 	Behavior* behavior;
 	Position* pos;
 

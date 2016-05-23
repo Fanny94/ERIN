@@ -21,6 +21,7 @@ Global
 		{3D593AF3-C77A-4DC0-8DD9-7CB503310788}.Release|x64.Build.0 = Release|x64
 		{3D593AF3-C77A-4DC0-8DD9-7CB503310788}.Release|x86.ActiveCfg = Release|Win32
 		{3D593AF3-C77A-4DC0-8DD9-7CB503310788}.Release|x86.Build.0 = Release|Win32
+		{3D593AF3-C77A-4DC0-8DD9-7CB503310788}.Release|x86.Deploy.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

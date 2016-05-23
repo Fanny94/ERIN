@@ -41,6 +41,7 @@ public:
 	Matrix* objectMatrix; // is replaced by shipMatrix
 	Matrix* shipMatrix;
 	Matrix* turretMatrix;
+	Matrix* shadowMatrix;
 
 	Position* shipPos;
 	Position* turretPos;

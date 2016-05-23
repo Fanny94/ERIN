@@ -33,6 +33,15 @@ public:
 	float get_gWidth() { return this->WIDTH; }
 	float get_gHeight() { return this->HEIGHT; }
 
+	bool IsFontInit();
+	bool CreateFontWrapper();
+
+	void drawResultText(int i);
+
+	void drawLevelText(int i);
+
+	void drawProgressionText();
+
 	void swapChain();
 
 	ID3D11Device* get_gDevice() { return this->gDevice; }

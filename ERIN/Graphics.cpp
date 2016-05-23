@@ -56,7 +56,7 @@ void Graphics::SetViewport()
 
 void Graphics::Render()
 {
-	float clearColor[] = { 0, 0, 0, 1 };
+	float clearColor[] = {0, 0, 0, 1 };
 	gDeviceContext->ClearRenderTargetView(gBackbufferRTV, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
@@ -131,8 +131,6 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb, int tv)
 void Graphics::CreateTexture(Mesh mesh)
 {
 	basic_ifstream<unsigned char> file(mesh.material.at(0).diffuseMap, ios::binary);
-	bool snafu = file.bad();
-	bool fubar = file.fail();
 	if (file.is_open())
 	{
 		file.seekg(0, ios::end);
@@ -351,6 +349,92 @@ void Graphics::UpdateConstantBuffer()
 	gDeviceContext->Unmap(gConstantBuffer, 0);
 
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gConstantBuffer);
+}
+
+bool Graphics::IsFontInit()
+{
+	return fontinit;
+}
+
+bool Graphics::CreateFontWrapper()
+{
+	/*HRESULT hResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	hResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);*/
+
+	HRESULT hResult = FW1CreateFactory(FW1_VERSION, &pFW1Factory);
+	if (FAILED(hResult)) {
+		return false;
+	}
+
+	hResult = pFW1Factory->CreateFontWrapper(gDevice, L"Arial", &pFontWrapper);
+	if (FAILED(hResult)) {
+		return false;
+	}
+
+	pFW1Factory->Release();
+	fontinit = true;
+	return fontinit;
+}
+
+void Graphics::drawResultText(int i)
+{
+	if (!fontinit) return;
+
+	ostringstream oss;
+	oss << i;
+	string conver = oss.str();
+
+	std::wstring widestr = std::wstring(conver.begin(), conver.end());
+
+	const wchar_t* convertion = widestr.c_str();
+
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		convertion,// String
+		164.0f,// Font size
+		600.0f,// X position
+		340.0f,// Y position
+		0xff999999,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+	);
+}
+
+void Graphics::drawLevelText(int i)
+{
+	if (!fontinit) return;
+
+	ostringstream oss;
+	oss << "Floor  " << i;
+	string conver = oss.str();
+
+	std::wstring widestr = std::wstring(conver.begin(), conver.end());
+
+	const wchar_t* convertion = widestr.c_str();
+
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		convertion,// String
+		128.0f,// Font size
+		500.0f,// X position
+		220.0f,// Y position
+		0xff999999,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+	);
+}
+
+void Graphics::drawProgressionText()
+{
+	if (!fontinit) return;
+
+	pFontWrapper->DrawString(
+		gDeviceContext,
+		L"Get to the Elevator",// String
+		128.0f,// Font size
+		100.0f,// X position
+		50.0f,// Y position
+		0xff999999,// Text color, 0xAaBbGgRr
+		FW1_RESTORESTATE// Flags (for example FW1_RESTORESTATE to keep context states unchanged)
+	);
 }
 
 void Graphics::swapChain()
