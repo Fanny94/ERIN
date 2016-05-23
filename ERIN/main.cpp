@@ -21,15 +21,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpComma
 
 	MSG msg = { 0 };
 
-	// create console window
-	AllocConsole();
 
 	CoInitializeEx(NULL, 0);
 	CoInitialize(NULL);
 
 	// if you get an error because of freopen
 	// Go to proporties and write _CRT_SECURE_NO_WARNINGS in preprocessor definitions 
-	freopen("CONOUT$", "w", stdout);
 
 	CoInitializeEx(NULL, 0);
 
