@@ -993,7 +993,6 @@ void Engine::update(double deltaTimeMs)
 				{
 					player->HP--;
 					sound->UseitSevereDmg();
-					enemyCount--;
 					eCount--;
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
@@ -1088,7 +1087,6 @@ void Engine::update(double deltaTimeMs)
 					float y = Objectpool->bullets[i].state.alive.y;
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
-						enemyCount --;
 						sound->UseitHit();
 						eCount --;
 						Objectpool->enemies[t].setInUse(false);
@@ -1109,7 +1107,6 @@ void Engine::update(double deltaTimeMs)
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
 						eCount --;
-						specialEnemyCount --;
 						sound->UseitHit();
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
