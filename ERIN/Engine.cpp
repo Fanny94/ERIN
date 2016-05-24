@@ -1228,9 +1228,10 @@ void Engine::render()
 			}
 		}
 
+		rendElevator();
+
 		if (floorClear == true)
 		{
-			rendElevator();
 			graphics->drawProgressionText();
 		}
 
