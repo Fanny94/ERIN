@@ -58,7 +58,7 @@ private:
 
 	//coldown for spawning
 	bool swReady = true;
-	const float swcooldown = 5.0f;
+	const float swcooldown = 10.0f;
 	double swcurrentTime;
 
 	// Bullets
