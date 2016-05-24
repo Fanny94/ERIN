@@ -35,6 +35,7 @@
     <ClInclude Include="PlatformHelpers.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SimpleMath.h" />
+    <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="WICTextureLoader.h" />
   </ItemGroup>
@@ -86,6 +87,7 @@
     </ClCompile>
     <ClCompile Include="ObjectPool.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -153,13 +155,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\ERIN\FW1FontWrapper_1_1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ERIN\FW1FontWrapper_1_1;C:\Users\Taccoa\Documents\GitHub\ERIN\Fmod\lowlevel\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <ControlFlowGuard>false</ControlFlowGuard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>FW1FontWrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\ERIN\FW1FontWrapper_1_1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FW1FontWrapper.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\ERIN\FW1FontWrapper_1_1;C:\Users\Taccoa\Documents\GitHub\ERIN\Fmod\lowlevel\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -178,7 +180,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\ERIN\FW1FontWrapper_1_1;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\ERIN\FW1FontWrapper_1_1;C:\Users\Taccoa\Documents\GitHub\ERIN\Fmod\lowlevel\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <MinimalRebuild>true</MinimalRebuild>
@@ -186,8 +188,8 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\ERIN\FW1FontWrapper_1_1;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FW1FontWrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\ERIN\FW1FontWrapper_1_1;C:\Users\Taccoa\Documents\GitHub\ERIN\Fmod\lowlevel\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FW1FontWrapper.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
