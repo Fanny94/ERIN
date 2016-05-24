@@ -9,6 +9,7 @@
 #include "ObjectPool.h"
 #include "Player.h"
 #include "GameObject.h"
+#include "SoundSystem.h"
 
 enum GameStateManager
 {
@@ -109,6 +110,9 @@ private:
 	CustomImport* customImport;
 	ObjectPool* Objectpool;
 	GameObject* gameObject;
+
+	//sound
+	Sound* sound;
 
 	Bullet* bulletptr;
 	Bullet** bullets;

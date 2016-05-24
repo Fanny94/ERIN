@@ -8,6 +8,10 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	this->camera = new Camera();
 	this->graphics = new Graphics();
 
+	//Soundsystem
+	this->sound = new Sound();
+	sound->fmod();
+
 	// Elevator Sphere
 	Esphere = new TSphere();
 	Esphere->m_vecCenter = Vector3(0, 0, 0);
@@ -428,6 +432,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 	createAllEnemies();
 	enemyCount = Objectpool->e_poolSize;
 	specialEnemyCount = Objectpool->Se_poolSize;
+	sound->UseitGameSound();
 }
 
 Engine::~Engine()
@@ -443,6 +448,9 @@ Engine::~Engine()
 	delete this->left_wall;
 	delete this->lower_wall;
 	delete this->right_wall;
+
+	//sound
+	delete this->sound;
 }
 
 void Engine::processInput()
@@ -464,6 +472,7 @@ void Engine::processInput()
 				if (Objectpool->getCooldown())
 				{
 					this->Objectpool->fire(player->getX(), player->getY(), player->getHeading());
+					sound->UseitFire();
 					Objectpool->setCooldown(false);
 				}
 			}
@@ -980,6 +989,7 @@ void Engine::update(double deltaTimeMs)
 				{
 					player->HP--;
 					eCount--;
+					sound->UseitSevereDmg();
 					Objectpool->enemies[i].setInUse(false);
 					player->setHpCooldown(false);
 				}
@@ -997,14 +1007,17 @@ void Engine::update(double deltaTimeMs)
 				Objectpool->Senemies[i].update(deltaTimeMs);
 				if (Objectpool->getSpawnCooldown())
 				{
-					for (int i = 0; i < this->Objectpool->Senemies[i].getInUse(); i++)
+					for (int t = 0; t < this->Objectpool->Se_poolSize; t++)
 					{
-						childX = Objectpool->Senemies[i].getX();
-						childY = Objectpool->Senemies[i].getY();
-						Objectpool->createEnemy(childX, childY, 0);
-						eCount++;
-						Objectpool->setSpawnCooldown(false);
+						if (Objectpool->Senemies[t].getInUse())
+						{
+							childX = Objectpool->Senemies[t].getX();
+							childY = Objectpool->Senemies[t].getY();
+							Objectpool->createEnemy(childX, childY, 0);
+							eCount++;
+						}
 					}
+					Objectpool->setSpawnCooldown(false);
 				}
 			}
 		}
@@ -1074,6 +1087,7 @@ void Engine::update(double deltaTimeMs)
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->enemies[t].sphere, Vector3(x, y, 0)))
 					{
 						eCount --;
+						sound->UseitHit();
 						Objectpool->enemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
@@ -1092,6 +1106,7 @@ void Engine::update(double deltaTimeMs)
 					if (Objectpool->bullets[i].getInUse() && pointInSphere(*Objectpool->Senemies[t].sphere, Vector3(x, y, 0)))
 					{
 						eCount --;
+						sound->UseitHit();
 						Objectpool->Senemies[t].setInUse(false);
 						Objectpool->bullets[i].setInUse(false);
 					}
