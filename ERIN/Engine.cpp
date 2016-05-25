@@ -499,6 +499,10 @@ void Engine::processInput()
 			{
 				this->camera->cameraMoveDown();
 			}
+			if (this->player->input->State._buttons[GamePad_Button_RIGHT_SHOULDER] == true)
+			{
+				eCount = 0;
+			}
 			break;
 
 		case TitleScreen:
@@ -565,7 +569,7 @@ void Engine::processInput()
 					createAllEnemies();
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
-					eCount = enemyCount + specialEnemyCount - 2;
+					eCount = enemyCount + specialEnemyCount /*- 2*/;
 					gameState = GameRunning;
 				}
 				else if (mainMenuOption == 1)
@@ -662,7 +666,7 @@ void Engine::processInput()
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
 					createAllEnemies();
-					eCount = enemyCount + specialEnemyCount - 2;
+					eCount = enemyCount + specialEnemyCount /*- 2*/;
 					gameState = GameRunning;
 				}
 				else if (pMenuOption == 2)
@@ -852,7 +856,7 @@ void Engine::processInput()
 					enemyCount = Objectpool->e_poolSize;
 					specialEnemyCount = Objectpool->Se_poolSize;
 					createAllEnemies();
-					eCount = enemyCount + specialEnemyCount - 2;
+					eCount = enemyCount + specialEnemyCount /*- 2*/;
 					gameState = GameRunning;
 				}
 				else if (resMenuOption == 1)
@@ -1652,7 +1656,7 @@ void Engine::Elevatorfunc()
 		specialEnemyCount = Objectpool->Se_poolSize;
 		floorCount++;
 		createAllEnemies();
-		eCount = enemyCount + specialEnemyCount - 1;
+		eCount = enemyCount + specialEnemyCount /*- 1*/;
 		resetCooldown();
 
 		floorClear = false;
