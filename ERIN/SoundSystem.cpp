@@ -14,15 +14,15 @@ void Sound::fmod()
 
 	result = system->init(32, FMOD_INIT_NORMAL, extradriverdata);
 
-	result = system->createSound("C:/Users/Taccoa/Documents/GitHub/ERIN/Sounds/Sound Effects/Game Sounds/Expulsion-Sound-Game-Shoot.wav", FMOD_DEFAULT, 0, &sound1);
+	result = system->createSound("../Sounds/Sound Effects/Game Sounds/Expulsion-Sound-Game-Shoot.wav", FMOD_DEFAULT, 0, &sound1);
 
 	result = sound1->setMode(FMOD_LOOP_OFF);
 
-	result = system->createSound("C:/Users/Taccoa/Documents/GitHub/ERIN/Sounds/Sound Effects/Game Sounds/Expulsion-Sound-Game-Hit.wav", FMOD_DEFAULT, 0, &sound2);
+	result = system->createSound("../Sounds/Sound Effects/Game Sounds/Expulsion-Sound-Game-Hit.wav", FMOD_DEFAULT, 0, &sound2);
 
-	result = system->createSound("C:/Users/Taccoa/Documents/GitHub/ERIN/Sounds/Sound Effects/Game Sounds/Expulsion-Sound-Game-Damage.wav", FMOD_DEFAULT, 0, &sound4);
+	result = system->createSound("../Sounds/Sound Effects/Game Sounds/Expulsion-Sound-Game-Damage.wav", FMOD_DEFAULT, 0, &sound4);
 
-	result = system->createStream("C:/Users/Taccoa/Documents/GitHub/ERIN/Sounds/Music/Expulsion-Music-Game.wav", FMOD_LOOP_NORMAL | FMOD_2D, 0, &Gsound);
+	result = system->createStream("../Sounds/Music/Expulsion-Music-Game.wav", FMOD_LOOP_NORMAL | FMOD_2D, 0, &Gsound);
 
 	result = system->update();
 	{
