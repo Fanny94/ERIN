@@ -35,12 +35,60 @@ struct Material
 	char diffuseMap[256];
 };
 
+struct Camera
+{
+	float CamPos[3];
+	float CamRotation[3];
+};
+
+struct PointLight
+{
+	float intensity;
+	float color[3];
+	float position[3];
+};
+
+struct SpotLight
+{
+	float intensity;
+	float color[3];
+	float position[3];
+	float rotation[3];
+};
+
+struct DirectionalLight
+{
+	float intensity;
+	float color[3];
+	float position[3];
+	float rotation[3];
+};
+
+struct Light
+{
+	unsigned int Point;
+	unsigned int Spot;
+	unsigned int Directional;
+};
+
 unsigned int MeshCount = 0;
 vector<MeshStruct> meshS;
 MeshStruct meshTemp;
 unsigned int MaterialCount = 0;
 vector<Material> material;
 Material materialTemp;
+unsigned int CameraCount = 0;
+vector<Camera> camera;
+Camera cameraTemp;
+unsigned int LightCount;
+Light light;
+vector<PointLight> pointL;
+PointLight pointLightTemp;
+vector<SpotLight> spotL;
+SpotLight spotLightTemp;
+vector<DirectionalLight> directionalL;
+DirectionalLight directionalLightTemp;
+
 
 CustomImport::CustomImport() {}
 
@@ -53,8 +101,8 @@ void CustomImport::LoadCustomFormat(string filePath)
 	fileIn.read((char*)&MeshCount, sizeof(unsigned int));
 	fileIn.read((char*)&MaterialCount, sizeof(unsigned int));
 	//fileIn.read((char*)&GroupCount, sizeof(unsigned int));
-	//fileIn.read((char*)&LightCount, sizeof(unsigned int));
-	//fileIn.read((char*)&CameraCount, sizeof(unsigned int));
+	fileIn.read((char*)&LightCount, sizeof(unsigned int));
+	fileIn.read((char*)&CameraCount, sizeof(unsigned int));
 	//fileIn.read((char*)&SkeletonAnimationCount, sizeof(unsigned int));
 	//fileIn.read((char*)&KeyFrameCount, sizeof(unsigned int));
 	//fileIn.read((char*)&MorphAnimationCount, sizeof(unsigned int));
@@ -107,61 +155,45 @@ void CustomImport::LoadCustomFormat(string filePath)
 	fileIn.read((char*)&GroupMeshID, sizeof(unsigned int));
 	}*/
 
-	/*for (int i = 0; i < LightCount; i++)
+	for (int i = 0; i < LightCount; i++)
 	{
-	fileIn.read((char*)&PointLightCount, sizeof(unsigned int));
-	fileIn.read((char*)&SpotLightCount, sizeof(unsigned int));
-	fileIn.read((char*)&DirectionalLightCount, sizeof(unsigned int));
-	fileIn.read((char*)&AreaLightCount, sizeof(unsigned int));
+		fileIn.read((char*)&light.Point, sizeof(unsigned int));
+		fileIn.read((char*)&light.Spot, sizeof(unsigned int));
+		fileIn.read((char*)&light.Directional, sizeof(unsigned int));
 
-	for (int j = 0; j < PointLightCount; j++)
-	{
-	fileIn.read((char*)&pointLightTemp.intensity, sizeof(float));
-	fileIn.read((char*)&pointLightTemp.color, sizeof(float) * 3);
-	fileIn.read((char*)&pointLightTemp.position, sizeof(float) * 3);
-	pointLight.push_back(pointLightTemp);
+		for (int j = 0; j < light.Point; j++)
+		{
+			fileIn.read((char*)&pointLightTemp.intensity, sizeof(float));
+			fileIn.read((char*)&pointLightTemp.color, sizeof(float) * 3);
+			fileIn.read((char*)&pointLightTemp.position, sizeof(float) * 3);
+			pointL.push_back(pointLightTemp);
+		}
+
+		for (int k = 0; k < light.Spot; k++)
+		{
+			fileIn.read((char*)&spotLightTemp.intensity, sizeof(float));
+			fileIn.read((char*)&spotLightTemp.color, sizeof(float) * 3);
+			fileIn.read((char*)&spotLightTemp.position, sizeof(float) * 3);
+			fileIn.read((char*)&spotLightTemp.rotation, sizeof(float) * 3);
+			spotL.push_back(spotLightTemp);
+		}
+
+		for (int l = 0; l < light.Directional; l++)
+		{
+			fileIn.read((char*)&directionalLightTemp.intensity, sizeof(float));
+			fileIn.read((char*)&directionalLightTemp.color, sizeof(float) * 3);
+			fileIn.read((char*)&directionalLightTemp.position, sizeof(float) * 3);
+			fileIn.read((char*)&directionalLightTemp.rotation, sizeof(float) * 3);
+			directionalL.push_back(directionalLightTemp);
+		}
 	}
 
-	for (int k = 0; k < SpotLightCount; k++)
+	for (int i = 0; i < CameraCount; i++)
 	{
-	fileIn.read((char*)&spotLightTemp.intensity, sizeof(float));
-	fileIn.read((char*)&spotLightTemp.color, sizeof(float) * 3);
-	fileIn.read((char*)&spotLightTemp.position, sizeof(float) * 3);
-	fileIn.read((char*)&spotLightTemp.rotation, sizeof(float) * 3);
-	fileIn.read((char*)&spotLightTemp.scale, sizeof(float) * 3);
-	spotLight.push_back(spotLightTemp);
+		fileIn.read((char*)&cameraTemp.CamPos, sizeof(float) * 3);
+		fileIn.read((char*)&cameraTemp.CamRotation, sizeof(float) * 3);
+		camera.push_back(cameraTemp);
 	}
-
-	for (int l = 0; l < DirectionalLightCount; l++)
-	{
-	fileIn.read((char*)&directionalLightTemp.intensity, sizeof(float));
-	fileIn.read((char*)&directionalLightTemp.color, sizeof(float) * 3);
-	fileIn.read((char*)&directionalLightTemp.rotation, sizeof(float) * 3);
-	directionalLight.push_back(directionalLightTemp);
-	}
-
-	for (int m = 0; m < AreaLightCount; m++)
-	{
-	fileIn.read((char*)&areaLightTemp.intensity, sizeof(float));
-	fileIn.read((char*)&areaLightTemp.color, sizeof(float) * 3);
-	fileIn.read((char*)&areaLightTemp.position, sizeof(float) * 3);
-	fileIn.read((char*)&areaLightTemp.rotation, sizeof(float) * 3);
-	fileIn.read((char*)&areaLightTemp.height, sizeof(float));
-	fileIn.read((char*)&areaLightTemp.width, sizeof(float));
-	areaLight.push_back(areaLightTemp);
-	}
-	}*/
-
-	/*for (int i = 0; i < CameraCount; i++)
-	{
-	fileIn.read((char*)&camPosition, sizeof(float) * 4);
-	fileIn.read((char*)&camTarget, sizeof(float) * 4);
-	fileIn.read((char*)&camUp, sizeof(float) * 4);
-	fileIn.read((char*)&camRight, sizeof(float) * 4);
-	fileIn.read((char*)&camForward, sizeof(float) * 4);
-	fileIn.read((char*)&camYaw, sizeof(float));
-	fileIn.read((char*)&camPitch, sizeof(float));
-	}*/
 
 	/*for (int i = 0; i < SkeletonAnimationCount; i++)
 	{

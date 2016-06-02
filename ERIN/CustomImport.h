@@ -10,39 +10,7 @@ class Graphics;
 class CustomImport
 {
 private:
-	/*struct PointLight
-	{
-	float intensity;
-	float color[3];
-	float position[3];
-	};
-
-	struct SpotLight
-	{
-	float intensity;
-	float color[3];
-	float position[3];
-	float rotation[3];
-	float scale[3];
-	};
-
-	struct DirectionalLight
-	{
-	float intensity;
-	float color[3];
-	float rotation[3];
-	};
-
-	struct AreaLight
-	{
-	float intensity;
-	float color[3];
-	float position[3];
-	float rotation[3];
-	float height;
-	float width;
-	};
-
+	/*
 	struct CustomVector
 	{
 	float cVector[3];
@@ -70,7 +38,6 @@ private:
 
 	/*unsigned int GroupCount;
 	unsigned int LightCount;
-	unsigned int CameraCount;
 	unsigned int SkeletonAnimationCount;
 	unsigned int KeyFrameCount;
 	unsigned int MorphAnimationCount;
@@ -97,14 +64,6 @@ private:
 	DirectionalLight directionalLightTemp;
 	vector<AreaLight> areaLight;
 	AreaLight areaLightTemp;
-
-	float camPosition[4];
-	float camTarget[4];
-	float camUp[4];
-	float camRight[4];
-	float camForward[4];
-	float camYaw;
-	float camPitch;
 
 	float KeyFrameID;
 	float KeyFrameTime;
