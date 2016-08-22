@@ -35,7 +35,7 @@ struct Material
 	char diffuseMap[256];
 };
 
-struct Camera
+struct CameraMesh
 {
 	float CamPos[3];
 	float CamRotation[3];
@@ -71,6 +71,16 @@ struct Light
 	unsigned int Directional;
 };
 
+struct MorphStruct
+{
+	float MorphShape[4];
+};
+
+struct MorphCountStruct
+{
+	unsigned int MorphShapeCount = 0;
+};
+
 unsigned int MeshCount = 0;
 vector<MeshStruct> meshS;
 MeshStruct meshTemp;
@@ -78,8 +88,8 @@ unsigned int MaterialCount = 0;
 vector<Material> material;
 Material materialTemp;
 unsigned int CameraCount = 0;
-vector<Camera> camera;
-Camera cameraTemp;
+vector<CameraMesh> camera;
+CameraMesh cameraTemp;
 unsigned int LightCount;
 Light light;
 vector<PointLight> pointL;
@@ -88,7 +98,10 @@ vector<SpotLight> spotL;
 SpotLight spotLightTemp;
 vector<DirectionalLight> directionalL;
 DirectionalLight directionalLightTemp;
-
+unsigned int MorphAnimationCount = 0;
+MorphCountStruct morphCount;
+vector<MorphStruct> morphVector;
+MorphStruct morphTemp;
 
 CustomImport::CustomImport() {}
 
@@ -105,7 +118,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 	fileIn.read((char*)&CameraCount, sizeof(unsigned int));
 	//fileIn.read((char*)&SkeletonAnimationCount, sizeof(unsigned int));
 	//fileIn.read((char*)&KeyFrameCount, sizeof(unsigned int));
-	//fileIn.read((char*)&MorphAnimationCount, sizeof(unsigned int));
+	fileIn.read((char*)&MorphAnimationCount, sizeof(unsigned int));
 	//fileIn.read((char*)&CustomAttributesCount, sizeof(unsigned int));
 
 	for (int i = 0; i < MeshCount; i++)
@@ -207,10 +220,15 @@ void CustomImport::LoadCustomFormat(string filePath)
 	fileIn.read((char*)&KeyFramePosition, sizeof(float) * 3);
 	}*/
 
-	/*for (int i = 0; i < MorphAnimationCount; i++)
+	for (int i = 0; i < MorphAnimationCount; i++)
 	{
-
-	}*/
+		fileIn.read((char*)&morphCount.MorphShapeCount, sizeof(unsigned int));
+		for (int j = 0; j < morphCount.MorphShapeCount; j++)
+		{
+			fileIn.read((char*)&morphTemp.MorphShape, sizeof(float) * 4);
+			morphVector.push_back(morphTemp);
+		}
+	}
 
 	/*for (int i = 0; i < CustomAttributesCount; i++)
 	{
