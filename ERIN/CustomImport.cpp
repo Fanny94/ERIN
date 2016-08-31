@@ -113,13 +113,11 @@ void CustomImport::LoadCustomFormat(string filePath)
 
 	fileIn.read((char*)&MeshCount, sizeof(unsigned int));
 	fileIn.read((char*)&MaterialCount, sizeof(unsigned int));
-	//fileIn.read((char*)&GroupCount, sizeof(unsigned int));
 	fileIn.read((char*)&LightCount, sizeof(unsigned int));
 	fileIn.read((char*)&CameraCount, sizeof(unsigned int));
 	//fileIn.read((char*)&SkeletonAnimationCount, sizeof(unsigned int));
 	//fileIn.read((char*)&KeyFrameCount, sizeof(unsigned int));
 	fileIn.read((char*)&MorphAnimationCount, sizeof(unsigned int));
-	//fileIn.read((char*)&CustomAttributesCount, sizeof(unsigned int));
 
 	for (int i = 0; i < MeshCount; i++)
 	{
@@ -159,14 +157,6 @@ void CustomImport::LoadCustomFormat(string filePath)
 		fileIn.read((char*)&SpecularMap, sizeof(char) * 256);*/
 		material.push_back(materialTemp);
 	}
-
-	/*for (int i = 0; i < GroupCount; i++)
-	{
-	fileIn.read((char*)&GroupID, sizeof(unsigned int));
-	fileIn.read((char*)&GGroupCount, sizeof(unsigned int));
-	fileIn.read((char*)&GroupParentID, sizeof(unsigned int));
-	fileIn.read((char*)&GroupMeshID, sizeof(unsigned int));
-	}*/
 
 	for (int i = 0; i < LightCount; i++)
 	{
@@ -230,44 +220,6 @@ void CustomImport::LoadCustomFormat(string filePath)
 		}
 	}
 
-	/*for (int i = 0; i < CustomAttributesCount; i++)
-	{
-	fileIn.read((char*)&CustomVectorCount, sizeof(unsigned int));
-	fileIn.read((char*)&CustomFloatCount, sizeof(unsigned int));
-	fileIn.read((char*)&CustomIntCount, sizeof(unsigned int));
-	fileIn.read((char*)&CustomBoolCount, sizeof(unsigned int));
-	fileIn.read((char*)&CustomStringCount, sizeof(unsigned int));
-
-	for (int j = 0; j < CustomVectorCount; j++)
-	{
-	fileIn.read((char*)&customVectorTemp.cVector, sizeof(float) * 3);
-	customVector.push_back(customVectorTemp);
-	}
-
-	for (int k = 0; k < CustomFloatCount; k++)
-	{
-	fileIn.read((char*)&customFloatTemp.cFloat, sizeof(float));
-	customFloat.push_back(customFloatTemp);
-	}
-
-	for (int l = 0; l < CustomIntCount; l++)
-	{
-	fileIn.read((char*)&customIntTemp.cInt, sizeof(int));
-	customInt.push_back(customIntTemp);
-	}
-
-	for (int m = 0; m < CustomBoolCount; m++)
-	{
-	fileIn.read((char*)&customBoolTemp.cBool, sizeof(bool));
-	customBool.push_back(customBoolTemp);
-	}
-
-	for (int n = 0; n < CustomStringCount; n++)
-	{
-	fileIn.read((char*)&customStringTemp.cString, sizeof(char) * 256);
-	customString.push_back(customStringTemp);
-	}
-	}*/
 	fileIn.close();
 }
 
