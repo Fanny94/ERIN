@@ -71,6 +71,36 @@ struct Light
 	unsigned int Directional;
 };
 
+struct Skinning
+{
+	float weights[4];
+	unsigned int boneIndices[4];
+};
+
+struct JointHeader //one joint
+{
+	char jointName[256];
+	int ParentID = 0;
+	unsigned int jointIndex = 0;
+	unsigned int nrOfKeyframes = 0;
+	float globalBindPoseInverse[16];
+};
+
+struct Keyframe
+{
+	float translation[4];
+	float rotation[4];
+	float scale[4];
+	float keyTime;
+};
+
+struct Skeleton
+{
+	unsigned int numberOfJoints = 0; //The number of Jointheaders
+	unsigned int numberOfSkinWeights = 0; /*as big as the number of control points,
+										  containing weightdata for each control point*/
+};
+
 struct MorphStruct
 {
 	float MorphShape[4];
@@ -98,6 +128,14 @@ vector<SpotLight> spotL;
 SpotLight spotLightTemp;
 vector<DirectionalLight> directionalL;
 DirectionalLight directionalLightTemp;
+unsigned int SkeletonAnimationCount;
+Skeleton skeleton;
+vector<JointHeader> jointHeader;
+JointHeader jointHeaderTemp;
+vector<Keyframe> keyframe;
+Keyframe keyframeTemp;
+vector<Skinning> skinning;
+Skinning skinningTemp;
 unsigned int MorphAnimationCount = 0;
 MorphCountStruct morphCount;
 vector<MorphStruct> morphVector;
@@ -115,8 +153,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 	fileIn.read((char*)&MaterialCount, sizeof(unsigned int));
 	fileIn.read((char*)&LightCount, sizeof(unsigned int));
 	fileIn.read((char*)&CameraCount, sizeof(unsigned int));
-	//fileIn.read((char*)&SkeletonAnimationCount, sizeof(unsigned int));
-	//fileIn.read((char*)&KeyFrameCount, sizeof(unsigned int));
+	fileIn.read((char*)&SkeletonAnimationCount, sizeof(unsigned int));
 	fileIn.read((char*)&MorphAnimationCount, sizeof(unsigned int));
 
 	for (int i = 0; i < MeshCount; i++)
@@ -198,17 +235,39 @@ void CustomImport::LoadCustomFormat(string filePath)
 		camera.push_back(cameraTemp);
 	}
 
-	/*for (int i = 0; i < SkeletonAnimationCount; i++)
+	for (int i = 0; i < SkeletonAnimationCount; i++)
 	{
+		fileIn.read((char*)&skeleton.numberOfJoints, sizeof(unsigned int));
+		fileIn.read((char*)&skeleton.numberOfSkinWeights, sizeof(unsigned int));
 
-	}*/
+		for (int j = 0; j < skeleton.numberOfJoints; j++)
+		{
 
-	/*for (int i = 0; i < KeyFrameCount; i++)
-	{
-	fileIn.read((char*)&KeyFrameID, sizeof(float));
-	fileIn.read((char*)&KeyFrameTime, sizeof(float));
-	fileIn.read((char*)&KeyFramePosition, sizeof(float) * 3);
-	}*/
+			fileIn.read((char*)&jointHeaderTemp.jointName, sizeof(char) * 256);
+			fileIn.read((char*)&jointHeaderTemp.ParentID, sizeof(unsigned int));
+			fileIn.read((char*)&jointHeaderTemp.jointIndex, sizeof(unsigned int));
+			fileIn.read((char*)&jointHeaderTemp.nrOfKeyframes, sizeof(unsigned int));
+			fileIn.read((char*)&jointHeaderTemp.globalBindPoseInverse, sizeof(float) * 16);
+			jointHeader.push_back(jointHeaderTemp);
+
+			for (int k = 0; k < jointHeader.at(j).nrOfKeyframes; k++)
+			{
+				fileIn.read((char*)&keyframeTemp.translation, sizeof(float) * 4);
+				fileIn.read((char*)&keyframeTemp.rotation, sizeof(float) * 4);
+				fileIn.read((char*)&keyframeTemp.scale, sizeof(float) * 4);
+				fileIn.read((char*)&keyframeTemp.keyTime, sizeof(float) * 4);
+				keyframe.push_back(keyframeTemp);
+			}
+			
+		}
+		for (int j = 0; j < skeleton.numberOfSkinWeights; j++)
+		{
+			fileIn.read((char*)&skinningTemp.boneIndices, sizeof(unsigned int) * 4);
+			fileIn.read((char*)&skinningTemp.weights, sizeof(float) * 4);
+			skinning.push_back(skinningTemp);
+		}
+
+	}
 
 	for (int i = 0; i < MorphAnimationCount; i++)
 	{
