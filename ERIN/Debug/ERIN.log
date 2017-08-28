@@ -1,0 +1,50 @@
+﻿  WICTextureLoader.cpp
+  SoundSystem.cpp
+c:\users\funne\onedrive\dokument\erin\erin\soundsystem.cpp(75): warning C4551: function call missing argument list
+  Player.cpp
+c:\users\funne\onedrive\dokument\erin\erin\player.cpp(149): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  ObjectPool.cpp
+  main.cpp
+  Input.cpp
+  Graphics.cpp
+c:\users\funne\onedrive\dokument\erin\erin\graphics.cpp(143): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+  GameObject.cpp
+c:\users\funne\onedrive\dokument\erin\erin\gameobject.cpp(145): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Engine.cpp
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1142): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1148): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1153): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1158): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1163): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1255): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1261): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1267): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1273): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1279): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1285): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1291): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1297): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1303): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1309): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1315): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1321): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\funne\onedrive\dokument\erin\erin\engine.cpp(1327): warning C4305: 'argument': truncation from 'double' to 'float'
+  CustomImport.cpp
+c:\users\funne\onedrive\dokument\erin\erin\customimport.cpp(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\funne\onedrive\dokument\erin\erin\customimport.cpp(75): warning C4018: '<': signed/unsigned mismatch
+c:\users\funne\onedrive\dokument\erin\erin\customimport.cpp(88): warning C4018: '<': signed/unsigned mismatch
+c:\users\funne\onedrive\dokument\erin\erin\customimport.cpp(232): warning C4018: '<': signed/unsigned mismatch
+c:\users\funne\onedrive\dokument\erin\erin\customimport.cpp(252): warning C4018: '<': signed/unsigned mismatch
+c:\users\funne\onedrive\dokument\erin\erin\customimport.cpp(283): warning C4018: '<': signed/unsigned mismatch
+  Camera.cpp
+c:\users\funne\onedrive\dokument\erin\erin\camera.cpp(136): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\funne\onedrive\dokument\erin\erin\camera.cpp(137): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  Bullet.cpp
+c:\users\funne\onedrive\dokument\erin\erin\bullet.cpp(46): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Behavior.cpp
+c:\users\funne\onedrive\dokument\erin\erin\behavior.cpp(72): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\funne\onedrive\dokument\erin\erin\behavior.cpp(73): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  Mesh.cpp
+  ERIN.vcxproj -> C:\Users\funne\OneDrive\Dokument\ERIN\ERIN\Debug\ERIN.exe
+  ERIN.vcxproj -> C:\Users\funne\OneDrive\Dokument\ERIN\ERIN\Debug\ERIN.pdb (Partial PDB)
