@@ -15,11 +15,12 @@ struct MeshStruct
 	unsigned int MaterialID;
 	unsigned int MeshID;
 	unsigned int ParentID;
+	char MeshName[256] = "";
 	unsigned int AttributeCount;
-	char MeshName[256];
-	float Translation[3];
-	float Rotation[3];
-	float Scale[3];
+	float Translation[3] = { 0.0, 0.0, 0.0 };
+	float Rotation[3] = { 0.0, 0.0, 0.0 };
+	float Scale[3] = { 1.0, 1.0, 1.0 };
+
 	vector<Vertex> vertex;
 	Vertex vertexTemp;
 };
@@ -27,13 +28,79 @@ struct MeshStruct
 struct Material
 {
 	float diffuseColor[3];
-	float ambientColor[3];
 	float specularColor[3];
+	float ambientColor[3];
 	float transparency;
 	float shininess;
 	float reflection;
 	char diffuseMap[256];
 };
+
+//struct CameraMesh
+//{
+//	float CamPos[3];
+//	float CamRotation[3];
+//};
+//struct PointLight
+//{
+//	float intensity;
+//	float color[3];
+//	float position[3];
+//};
+//struct SpotLight
+//{
+//	float intensity;
+//	float color[3];
+//	float position[3];
+//	float rotation[3];
+//};
+//struct DirectionalLight
+//{
+//	float intensity;
+//	float color[3];
+//	float position[3];
+//	float rotation[3];
+//};
+//struct Light
+//{
+//	unsigned int Point;
+//	unsigned int Spot;
+//	unsigned int Directional;
+//};
+//struct Skinning
+//{
+//	float weights[4];
+//	unsigned int boneIndices[4];
+//};
+//struct JointHeader //one joint
+//{
+//	char jointName[256];
+//	int ParentID = 0;
+//	unsigned int jointIndex = 0;
+//	unsigned int nrOfKeyframes = 0;
+//	float globalBindPoseInverse[16];
+//};
+//struct Keyframe
+//{
+//	float translation[4];
+//	float rotation[4];
+//	float scale[4];
+//	float keyTime;
+//};
+//struct Skeleton
+//{
+//	unsigned int numberOfJoints = 0; //The number of Jointheaders
+//	unsigned int numberOfSkinWeights = 0; /*as big as the number of control points,
+//										   +										  containing weightdata for each control point*/
+//};
+//struct MorphStruct
+//{
+//	float MorphShape[4];
+//};
+//struct MorphCountStruct
+//{
+//	unsigned int MorphShapeCount = 0;
+//};
 
 unsigned int MeshCount = 0;
 vector<MeshStruct> meshS;
@@ -41,6 +108,30 @@ MeshStruct meshTemp;
 unsigned int MaterialCount = 0;
 vector<Material> material;
 Material materialTemp;
+
+/*unsigned int CameraCount = 0;
+vector<CameraMesh> camera;
+CameraMesh cameraTemp;
+unsigned int LightCount;
+Light light;
+vector<PointLight> pointL;
+PointLight pointLightTemp;
+vector<SpotLight> spotL;
+SpotLight spotLightTemp;
+vector<DirectionalLight> directionalL;
+DirectionalLight directionalLightTemp;
+unsigned int SkeletonAnimationCount;
+Skeleton skeleton;
+vector<JointHeader> jointHeader;
+JointHeader jointHeaderTemp;
+vector<Keyframe> keyframe;
+Keyframe keyframeTemp;
+vector<Skinning> skinning;
+Skinning skinningTemp;
+unsigned int MorphAnimationCount = 0;
+MorphCountStruct morphCount;
+vector<MorphStruct> morphVector;
+MorphStruct morphTemp;*/
 
 CustomImport::CustomImport() {}
 
@@ -52,13 +143,10 @@ void CustomImport::LoadCustomFormat(string filePath)
 
 	fileIn.read((char*)&MeshCount, sizeof(unsigned int));
 	fileIn.read((char*)&MaterialCount, sizeof(unsigned int));
-	//fileIn.read((char*)&GroupCount, sizeof(unsigned int));
 	//fileIn.read((char*)&LightCount, sizeof(unsigned int));
 	//fileIn.read((char*)&CameraCount, sizeof(unsigned int));
 	//fileIn.read((char*)&SkeletonAnimationCount, sizeof(unsigned int));
-	//fileIn.read((char*)&KeyFrameCount, sizeof(unsigned int));
 	//fileIn.read((char*)&MorphAnimationCount, sizeof(unsigned int));
-	//fileIn.read((char*)&CustomAttributesCount, sizeof(unsigned int));
 
 	for (int i = 0; i < MeshCount; i++)
 	{
@@ -94,130 +182,85 @@ void CustomImport::LoadCustomFormat(string filePath)
 		fileIn.read((char*)&materialTemp.shininess, sizeof(float));
 		fileIn.read((char*)&materialTemp.reflection, sizeof(float));
 		fileIn.read((char*)&materialTemp.diffuseMap, sizeof(char) * 256);
-		/*fileIn.read((char*)&NormalMap, sizeof(char) * 256);
-		fileIn.read((char*)&SpecularMap, sizeof(char) * 256);*/
 		material.push_back(materialTemp);
 	}
 
-	/*for (int i = 0; i < GroupCount; i++)
-	{
-	fileIn.read((char*)&GroupID, sizeof(unsigned int));
-	fileIn.read((char*)&GGroupCount, sizeof(unsigned int));
-	fileIn.read((char*)&GroupParentID, sizeof(unsigned int));
-	fileIn.read((char*)&GroupMeshID, sizeof(unsigned int));
-	}*/
+	//for (int i = 0; i < LightCount; i++)
+	//{
+	//	fileIn.read((char*)&light.Point, sizeof(unsigned int));
+	//	fileIn.read((char*)&light.Spot, sizeof(unsigned int));
+	//	fileIn.read((char*)&light.Directional, sizeof(unsigned int));
+	//	for (int j = 0; j < light.Point; j++)
+	//	{
+	//		fileIn.read((char*)&pointLightTemp.intensity, sizeof(float));
+	//		fileIn.read((char*)&pointLightTemp.color, sizeof(float) * 3);
+	//		fileIn.read((char*)&pointLightTemp.position, sizeof(float) * 3);
+	//		pointL.push_back(pointLightTemp);
+	//	}
+	//	for (int k = 0; k < light.Spot; k++)
+	//	{
+	//		fileIn.read((char*)&spotLightTemp.intensity, sizeof(float));
+	//		fileIn.read((char*)&spotLightTemp.color, sizeof(float) * 3);
+	//		fileIn.read((char*)&spotLightTemp.position, sizeof(float) * 3);
+	//		fileIn.read((char*)&spotLightTemp.rotation, sizeof(float) * 3);
+	//		spotL.push_back(spotLightTemp);
+	//	}
+	//	for (int l = 0; l < light.Directional; l++)
+	//	{
+	//		fileIn.read((char*)&directionalLightTemp.intensity, sizeof(float));
+	//		fileIn.read((char*)&directionalLightTemp.color, sizeof(float) * 3);
+	//		fileIn.read((char*)&directionalLightTemp.position, sizeof(float) * 3);
+	//		fileIn.read((char*)&directionalLightTemp.rotation, sizeof(float) * 3);
+	//		directionalL.push_back(directionalLightTemp);
+	//	}
+	//}
+	//for (int i = 0; i < CameraCount; i++)
+	//{
+	//	fileIn.read((char*)&cameraTemp.CamPos, sizeof(float) * 3);
+	//	fileIn.read((char*)&cameraTemp.CamRotation, sizeof(float) * 3);
+	//	camera.push_back(cameraTemp);
+	//}
+	//for (int i = 0; i < SkeletonAnimationCount; i++)
+	//{
+	//	fileIn.read((char*)&skeleton.numberOfJoints, sizeof(unsigned int));
+	//	fileIn.read((char*)&skeleton.numberOfSkinWeights, sizeof(unsigned int));
+	//	
+	//	for (int j = 0; j < skeleton.numberOfJoints; j++)
+	//	{
+	//		fileIn.read((char*)&jointHeaderTemp.jointName, sizeof(char) * 256);
+	//		fileIn.read((char*)&jointHeaderTemp.ParentID, sizeof(unsigned int));
+	//		fileIn.read((char*)&jointHeaderTemp.jointIndex, sizeof(unsigned int));
+	//		fileIn.read((char*)&jointHeaderTemp.nrOfKeyframes, sizeof(unsigned int));
+	//		fileIn.read((char*)&jointHeaderTemp.globalBindPoseInverse, sizeof(float) * 16);
+	//		jointHeader.push_back(jointHeaderTemp);
+	//		
+	//		for (int k = 0; k < jointHeader.at(j).nrOfKeyframes; k++)
+	//		{
+	//			fileIn.read((char*)&keyframeTemp.translation, sizeof(float) * 4);
+	//			fileIn.read((char*)&keyframeTemp.rotation, sizeof(float) * 4);
+	//			fileIn.read((char*)&keyframeTemp.scale, sizeof(float) * 4);
+	//			fileIn.read((char*)&keyframeTemp.keyTime, sizeof(float) * 4);
+	//			keyframe.push_back(keyframeTemp);
+	//		}
+	//	}
+	//	for (int j = 0; j < skeleton.numberOfSkinWeights; j++)
+	//	{
+	//		fileIn.read((char*)&skinningTemp.boneIndices, sizeof(unsigned int) * 4);
+	//		fileIn.read((char*)&skinningTemp.weights, sizeof(float) * 4);
+	//		skinning.push_back(skinningTemp);
+	//	}
+	//
+	//}
+	//for (int i = 0; i < MorphAnimationCount; i++)
+	//{
+	//	fileIn.read((char*)&morphCount.MorphShapeCount, sizeof(unsigned int));
+	//	for (int j = 0; j < morphCount.MorphShapeCount; j++)
+	//	{
+	//		fileIn.read((char*)&morphTemp.MorphShape, sizeof(float) * 4);
+	//		morphVector.push_back(morphTemp);
+	//	}
+	//}
 
-	/*for (int i = 0; i < LightCount; i++)
-	{
-	fileIn.read((char*)&PointLightCount, sizeof(unsigned int));
-	fileIn.read((char*)&SpotLightCount, sizeof(unsigned int));
-	fileIn.read((char*)&DirectionalLightCount, sizeof(unsigned int));
-	fileIn.read((char*)&AreaLightCount, sizeof(unsigned int));
-
-	for (int j = 0; j < PointLightCount; j++)
-	{
-	fileIn.read((char*)&pointLightTemp.intensity, sizeof(float));
-	fileIn.read((char*)&pointLightTemp.color, sizeof(float) * 3);
-	fileIn.read((char*)&pointLightTemp.position, sizeof(float) * 3);
-	pointLight.push_back(pointLightTemp);
-	}
-
-	for (int k = 0; k < SpotLightCount; k++)
-	{
-	fileIn.read((char*)&spotLightTemp.intensity, sizeof(float));
-	fileIn.read((char*)&spotLightTemp.color, sizeof(float) * 3);
-	fileIn.read((char*)&spotLightTemp.position, sizeof(float) * 3);
-	fileIn.read((char*)&spotLightTemp.rotation, sizeof(float) * 3);
-	fileIn.read((char*)&spotLightTemp.scale, sizeof(float) * 3);
-	spotLight.push_back(spotLightTemp);
-	}
-
-	for (int l = 0; l < DirectionalLightCount; l++)
-	{
-	fileIn.read((char*)&directionalLightTemp.intensity, sizeof(float));
-	fileIn.read((char*)&directionalLightTemp.color, sizeof(float) * 3);
-	fileIn.read((char*)&directionalLightTemp.rotation, sizeof(float) * 3);
-	directionalLight.push_back(directionalLightTemp);
-	}
-
-	for (int m = 0; m < AreaLightCount; m++)
-	{
-	fileIn.read((char*)&areaLightTemp.intensity, sizeof(float));
-	fileIn.read((char*)&areaLightTemp.color, sizeof(float) * 3);
-	fileIn.read((char*)&areaLightTemp.position, sizeof(float) * 3);
-	fileIn.read((char*)&areaLightTemp.rotation, sizeof(float) * 3);
-	fileIn.read((char*)&areaLightTemp.height, sizeof(float));
-	fileIn.read((char*)&areaLightTemp.width, sizeof(float));
-	areaLight.push_back(areaLightTemp);
-	}
-	}*/
-
-	/*for (int i = 0; i < CameraCount; i++)
-	{
-	fileIn.read((char*)&camPosition, sizeof(float) * 4);
-	fileIn.read((char*)&camTarget, sizeof(float) * 4);
-	fileIn.read((char*)&camUp, sizeof(float) * 4);
-	fileIn.read((char*)&camRight, sizeof(float) * 4);
-	fileIn.read((char*)&camForward, sizeof(float) * 4);
-	fileIn.read((char*)&camYaw, sizeof(float));
-	fileIn.read((char*)&camPitch, sizeof(float));
-	}*/
-
-	/*for (int i = 0; i < SkeletonAnimationCount; i++)
-	{
-
-	}*/
-
-	/*for (int i = 0; i < KeyFrameCount; i++)
-	{
-	fileIn.read((char*)&KeyFrameID, sizeof(float));
-	fileIn.read((char*)&KeyFrameTime, sizeof(float));
-	fileIn.read((char*)&KeyFramePosition, sizeof(float) * 3);
-	}*/
-
-	/*for (int i = 0; i < MorphAnimationCount; i++)
-	{
-
-	}*/
-
-	/*for (int i = 0; i < CustomAttributesCount; i++)
-	{
-	fileIn.read((char*)&CustomVectorCount, sizeof(unsigned int));
-	fileIn.read((char*)&CustomFloatCount, sizeof(unsigned int));
-	fileIn.read((char*)&CustomIntCount, sizeof(unsigned int));
-	fileIn.read((char*)&CustomBoolCount, sizeof(unsigned int));
-	fileIn.read((char*)&CustomStringCount, sizeof(unsigned int));
-
-	for (int j = 0; j < CustomVectorCount; j++)
-	{
-	fileIn.read((char*)&customVectorTemp.cVector, sizeof(float) * 3);
-	customVector.push_back(customVectorTemp);
-	}
-
-	for (int k = 0; k < CustomFloatCount; k++)
-	{
-	fileIn.read((char*)&customFloatTemp.cFloat, sizeof(float));
-	customFloat.push_back(customFloatTemp);
-	}
-
-	for (int l = 0; l < CustomIntCount; l++)
-	{
-	fileIn.read((char*)&customIntTemp.cInt, sizeof(int));
-	customInt.push_back(customIntTemp);
-	}
-
-	for (int m = 0; m < CustomBoolCount; m++)
-	{
-	fileIn.read((char*)&customBoolTemp.cBool, sizeof(bool));
-	customBool.push_back(customBoolTemp);
-	}
-
-	for (int n = 0; n < CustomStringCount; n++)
-	{
-	fileIn.read((char*)&customStringTemp.cString, sizeof(char) * 256);
-	customString.push_back(customStringTemp);
-	}
-	}*/
 	fileIn.close();
 }
 
