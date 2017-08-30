@@ -137,6 +137,7 @@ void Graphics::RenderCustom(Mesh mesh, Matrix transform, int cvb, int tv)
 void Graphics::CreateTexture(Mesh mesh)
 {
 	basic_ifstream<unsigned char> file(mesh.material.at(0).diffuseMap, ios::binary);
+	
 	if (file.is_open())
 	{
 		file.seekg(0, ios::end);

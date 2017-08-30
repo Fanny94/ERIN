@@ -70,85 +70,85 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		graphics->CreateFontWrapper();
 
 		// Ship
-		customImport->LoadCustomFormat("../BinaryDataShip.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataShip.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(0));
 		graphics->CreateTexture(customImport->meshes.at(0));
 		customImport->meshes.at(0).textureBool = true;
 
 		// Turret
-		customImport->LoadCustomFormat("../BinaryDataTurret.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataTurret.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(1));
 		graphics->CreateTexture(customImport->meshes.at(1));
 		customImport->meshes.at(1).textureBool = true;
 
 		// Enemies
-		customImport->LoadCustomFormat("../BinaryDataEnemy.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataEnemy.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(2));
 		graphics->CreateTexture(customImport->meshes.at(2));
 		customImport->meshes.at(2).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataEnemySpawner.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataEnemySpawner.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(3));
 		graphics->CreateTexture(customImport->meshes.at(3));
 		customImport->meshes.at(3).textureBool = true;
 
 		// Bullets
-		customImport->LoadCustomFormat("../BinaryDataBullet.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataBullet.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(4));
 		graphics->CreateTexture(customImport->meshes.at(4));
 		customImport->meshes.at(4).textureBool = true;
 
 		// HUD
-		customImport->LoadCustomFormat("../BinaryDataHUDHP1.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataHUDHP1.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(5));
 		graphics->CreateTexture(customImport->meshes.at(5));
 		customImport->meshes.at(5).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataHUDBase.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataHUDBase.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(6));
 		graphics->CreateTexture(customImport->meshes.at(6));
 		customImport->meshes.at(6).textureBool = true;
 
 		// Stages
-		customImport->LoadCustomFormat("../BinaryDataStageJungle.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataStageJungle.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(7));
 		graphics->CreateTexture(customImport->meshes.at(7));
 		customImport->meshes.at(7).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataStageArctic.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataStageArctic.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(8));
 		graphics->CreateTexture(customImport->meshes.at(8));
 		customImport->meshes.at(8).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataStageDesert.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataStageDesert.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(9));
 		graphics->CreateTexture(customImport->meshes.at(9));
 		customImport->meshes.at(9).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataStageTropical.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataStageTropical.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(10));
 		graphics->CreateTexture(customImport->meshes.at(10));
 		customImport->meshes.at(10).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataStageVolcanic.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataStageVolcanic.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(11));
 		graphics->CreateTexture(customImport->meshes.at(11));
 		customImport->meshes.at(11).textureBool = true;
 
 		// Title Screen
-		customImport->LoadCustomFormat("../BinaryDataMenuQuad.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataMenuQuad.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(12));
 		graphics->CreateTexture(customImport->meshes.at(12));
@@ -156,35 +156,35 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		// Main Menu
 		// Option 1 - Play
-		customImport->LoadCustomFormat("../BinaryDataMain1-Play.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataMain1-Play.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(13));
 		graphics->CreateTexture(customImport->meshes.at(13));
 		customImport->meshes.at(13).textureBool = true;
 
 		// Option 2 - Highscore
-		customImport->LoadCustomFormat("../BinaryDataMain2-Highscore.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataMain2-Highscore.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(14));
 		graphics->CreateTexture(customImport->meshes.at(14));
 		customImport->meshes.at(14).textureBool = true;
 
 		// Option 3 - Help & Options
-		customImport->LoadCustomFormat("../BinaryDataMain3-Help&Options.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataMain3-Help&Options.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(15));
 		graphics->CreateTexture(customImport->meshes.at(15));
 		customImport->meshes.at(15).textureBool = true;
 
 		// Option 4 - Quit
-		customImport->LoadCustomFormat("../BinaryDataMain4-Quit.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataMain4-Quit.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(16));
 		graphics->CreateTexture(customImport->meshes.at(16));
 		customImport->meshes.at(16).textureBool = true;
 
 		// Option 5 - Are You Sure?
-		customImport->LoadCustomFormat("../BinaryDataMain5-Quit-AreYouSure.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataMain5-Quit-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(17));
 		graphics->CreateTexture(customImport->meshes.at(17));
@@ -192,35 +192,35 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		// Pause Menu
 		// Option 1 - Continue
-		customImport->LoadCustomFormat("../BinaryDataPause1-Continue.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataPause1-Continue.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(18));
 		graphics->CreateTexture(customImport->meshes.at(18));
 		customImport->meshes.at(18).textureBool = true;
 
 		// Option 2 - Restart
-		customImport->LoadCustomFormat("../BinaryDataPause2-Restart.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataPause2-Restart.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(19));
 		graphics->CreateTexture(customImport->meshes.at(19));
 		customImport->meshes.at(19).textureBool = true;
 
 		// Option 3 - Help & Options
-		customImport->LoadCustomFormat("../BinaryDataPause3-Help&Options.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataPause3-Help&Options.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(20));
 		graphics->CreateTexture(customImport->meshes.at(20));
 		customImport->meshes.at(20).textureBool = true;
 
 		// Option 4 - Main Menu
-		customImport->LoadCustomFormat("../BinaryDataPause4-MainMenu.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataPause4-MainMenu.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(21));
 		graphics->CreateTexture(customImport->meshes.at(21));
 		customImport->meshes.at(21).textureBool = true;
 
 		// Option 5 - Are You Sure?
-		customImport->LoadCustomFormat("../BinaryDataPause5-AreYouSure.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataPause5-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(22));
 		graphics->CreateTexture(customImport->meshes.at(22));
@@ -228,28 +228,28 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		// Options Menu
 		// Option 1 - How To Play
-		customImport->LoadCustomFormat("../BinaryDataOptions1-HowToPlay.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataOptions1-HowToPlay.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(23));
 		graphics->CreateTexture(customImport->meshes.at(23));
 		customImport->meshes.at(23).textureBool = true;
 
 		// Option 2 - Controls
-		customImport->LoadCustomFormat("../BinaryDataOptions2-Controls.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataOptions2-Controls.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(24));
 		graphics->CreateTexture(customImport->meshes.at(24));
 		customImport->meshes.at(24).textureBool = true;
 
 		// Option 3 - Settings
-		customImport->LoadCustomFormat("../BinaryDataOptions3-Settings.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataOptions3-Settings.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(25));
 		graphics->CreateTexture(customImport->meshes.at(25));
 		customImport->meshes.at(25).textureBool = true;
 
 		// Option 4 - Credits
-		customImport->LoadCustomFormat("../BinaryDataOptions4-Credits.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataOptions4-Credits.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(26));
 		graphics->CreateTexture(customImport->meshes.at(26));
@@ -257,159 +257,159 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 
 		// Results Menu
 		// Option 1 - Play Again
-		customImport->LoadCustomFormat("../BinaryDataResult1-PlayAgain.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataResult1-PlayAgain.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(27));
 		graphics->CreateTexture(customImport->meshes.at(27));
 		customImport->meshes.at(27).textureBool = true;
 
 		// Option 2 - Highscore
-		customImport->LoadCustomFormat("../BinaryDataResult2-Highscore.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataResult2-Highscore.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(28));
 		graphics->CreateTexture(customImport->meshes.at(28));
 		customImport->meshes.at(28).textureBool = true;
 
 		// Option 3 - Credits
-		customImport->LoadCustomFormat("../BinaryDataResult3-Credits.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataResult3-Credits.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(29));
 		graphics->CreateTexture(customImport->meshes.at(29));
 		customImport->meshes.at(29).textureBool = true;
 
 		// Option 4 - Main Menu
-		customImport->LoadCustomFormat("../BinaryDataResult4-MainMenu.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataResult4-MainMenu.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(30));
 		graphics->CreateTexture(customImport->meshes.at(30));
 		customImport->meshes.at(30).textureBool = true;
 
 		// Option 5 - Are You Sure?
-		customImport->LoadCustomFormat("../BinaryDataResult5-MainMenu-AreYouSure.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataResult5-MainMenu-AreYouSure.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(31));
 		graphics->CreateTexture(customImport->meshes.at(31));
 		customImport->meshes.at(31).textureBool = true;
 
 		// Controls
-		customImport->LoadCustomFormat("../BinaryDataControls.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataControls.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(32));
 		graphics->CreateTexture(customImport->meshes.at(32));
 		customImport->meshes.at(32).textureBool = true;
 
 		// Credits
-		customImport->LoadCustomFormat("../BinaryDataCredits.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataCredits.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(33));
 		graphics->CreateTexture(customImport->meshes.at(33));
 		customImport->meshes.at(33).textureBool = true;
 
 		// How to Play
-		customImport->LoadCustomFormat("../BinaryDataHowToPlay.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataHowToPlay.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(34));
 		graphics->CreateTexture(customImport->meshes.at(34));
 		customImport->meshes.at(34).textureBool = true;
 
 		// Numbers
-		customImport->LoadCustomFormat("../BinaryDataNumber0.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber0.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(35));
 		graphics->CreateTexture(customImport->meshes.at(35));
 		customImport->meshes.at(35).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataNumber1.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber1.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(36));
 		graphics->CreateTexture(customImport->meshes.at(36));
 		customImport->meshes.at(36).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataNumber2.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber2.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(37));
 		graphics->CreateTexture(customImport->meshes.at(37));
 		customImport->meshes.at(37).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataNumber3.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber3.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(38));
 		graphics->CreateTexture(customImport->meshes.at(38));
 		customImport->meshes.at(38).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataNumber4.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber4.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(39));
 		graphics->CreateTexture(customImport->meshes.at(39));
 		customImport->meshes.at(39).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataNumber5.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber5.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(40));
 		graphics->CreateTexture(customImport->meshes.at(40));
 		customImport->meshes.at(40).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataNumber6.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber6.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(41));
 		graphics->CreateTexture(customImport->meshes.at(41));
 		customImport->meshes.at(41).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataNumber7.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber7.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(42));
 		graphics->CreateTexture(customImport->meshes.at(42));
 		customImport->meshes.at(42).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataNumber8.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber8.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(43));
 		graphics->CreateTexture(customImport->meshes.at(43));
 		customImport->meshes.at(43).textureBool = true;
 
-		customImport->LoadCustomFormat("../BinaryDataNumber9.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataNumber9.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(44));
 		graphics->CreateTexture(customImport->meshes.at(44));
 		customImport->meshes.at(44).textureBool = true;
 
 		// Score
-		customImport->LoadCustomFormat("../BinaryDataScore.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataScore.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(45));
 		graphics->CreateTexture(customImport->meshes.at(45));
 		customImport->meshes.at(45).textureBool = true;
 
 		// Highscore
-		customImport->LoadCustomFormat("../BinaryDataHighscore.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataHighscore.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(46));
 		graphics->CreateTexture(customImport->meshes.at(46));
 		customImport->meshes.at(46).textureBool = true;
 
 		// Settings
-		customImport->LoadCustomFormat("../BinaryDataSettings.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataSettings.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(47));
 		graphics->CreateTexture(customImport->meshes.at(47));
 		customImport->meshes.at(47).textureBool = true;
 
 		// Ship Shadow
-		customImport->LoadCustomFormat("../BinaryDataShadow.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataShadow.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(48));
 		graphics->CreateTexture(customImport->meshes.at(48));
 		customImport->meshes.at(48).textureBool = true;
 
 		// Enemy Shadow
-		customImport->LoadCustomFormat("../BinaryDataEnemyShadow.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataEnemyShadow.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(49));
 		graphics->CreateTexture(customImport->meshes.at(49));
 		customImport->meshes.at(49).textureBool = true;
 
 		// Senimies Shadow
-		customImport->LoadCustomFormat("../BinaryDataSpawnerShadow.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataSpawnerShadow.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(50));
 
@@ -417,7 +417,7 @@ Engine::Engine(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCommandLin
 		customImport->meshes.at(50).textureBool = true;
 
 		// Bullet Shadow
-		customImport->LoadCustomFormat("../BinaryDataBulletShadow.dat");
+		customImport->LoadCustomFormat("../custom_files/BinaryDataBulletShadow.dat");
 		customImport->NewMesh();
 		graphics->CustomVertexBuffer(customImport->meshes.at(51));
 

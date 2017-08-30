@@ -385,5 +385,6 @@ void CustomImport::NewMesh()
 		newMesh.material.push_back(newMesh.materialTemp);
 	}
 	newMesh.textureBool = false;
+
 	meshes.push_back(newMesh);
 }
