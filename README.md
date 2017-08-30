@@ -7,5 +7,5 @@ Desc: The game, named Expulsion, is a Twin stick shooter where the player is con
 
 Every asset/model and its texture in the game is imported from a customized format created by some of the developers of the game. Here is a link to the custom exporter used to write the data into a file the game imports: https://github.com/Fanny94/Custom-exporter.
 
-Limitations: The game must be played on windows PC and Requires a wired Xbox Controller.
+Limitations: The game must be played on windows PC and Requires a wired Xbox 360 Controller.
              The code can be executed in visual studio but only in Release x86.
