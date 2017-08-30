@@ -105,7 +105,6 @@ private:
 	void resetCooldown();
 
 	Graphics* graphics;
-	Mesh* mesh;
 	Camera* camera;
 	CustomImport* customImport;
 	ObjectPool* Objectpool;

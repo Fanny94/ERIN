@@ -103,10 +103,10 @@ struct Material
 //};
 
 unsigned int MeshCount = 0;
-vector<MeshStruct> meshS;
+vector<MeshStruct> meshList;
 MeshStruct meshTemp;
 unsigned int MaterialCount = 0;
-vector<Material> material;
+vector<Material> materials;
 Material materialTemp;
 
 /*unsigned int CameraCount = 0;
@@ -169,7 +169,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 			fileIn.read((char*)&meshTemp.vertexTemp.bitan, sizeof(float) * 3);
 			meshTemp.vertex.push_back(meshTemp.vertexTemp);
 		}
-		meshS.push_back(meshTemp);
+		meshList.push_back(meshTemp);
 		meshTemp.vertex.clear();
 	}
 
@@ -182,7 +182,7 @@ void CustomImport::LoadCustomFormat(string filePath)
 		fileIn.read((char*)&materialTemp.shininess, sizeof(float));
 		fileIn.read((char*)&materialTemp.reflection, sizeof(float));
 		fileIn.read((char*)&materialTemp.diffuseMap, sizeof(char) * 256);
-		material.push_back(materialTemp);
+		materials.push_back(materialTemp);
 	}
 
 	//for (int i = 0; i < LightCount; i++)
@@ -270,24 +270,24 @@ void CustomImport::NewMesh()
 	newMesh.MeshCount = MeshCount;
 	newMesh.MaterialCount = MaterialCount;
 
-	int count = meshS.size() - newMesh.MeshCount;
+	int count = meshList.size() - newMesh.MeshCount;
 
-	for (int i = count; i < meshS.size(); i++)
+	for (int i = count; i < meshList.size(); i++)
 	{
-		newMesh.meshTemp.VertexCount = meshS.at(i).VertexCount;
-		newMesh.meshTemp.MaterialID = meshS.at(i).MaterialID;
-		newMesh.meshTemp.MeshID = meshS.at(i).MeshID;
-		newMesh.meshTemp.ParentID = meshS.at(i).ParentID;
+		newMesh.meshTemp.VertexCount = meshList.at(i).VertexCount;
+		newMesh.meshTemp.MaterialID = meshList.at(i).MaterialID;
+		newMesh.meshTemp.MeshID = meshList.at(i).MeshID;
+		newMesh.meshTemp.ParentID = meshList.at(i).ParentID;
 		for (int j = 0; j < 256; j++)
 		{
-			newMesh.meshTemp.MeshName[j] = meshS.at(i).MeshName[j];
+			newMesh.meshTemp.MeshName[j] = meshList.at(i).MeshName[j];
 		}
-		newMesh.meshTemp.AttributeCount = meshS.at(i).AttributeCount;
+		newMesh.meshTemp.AttributeCount = meshList.at(i).AttributeCount;
 		for (int k = 0; k < 3; k++)
 		{
-			newMesh.meshTemp.Translation[k] = meshS.at(i).Translation[k];
-			newMesh.meshTemp.Rotation[k] = meshS.at(i).Rotation[k];
-			newMesh.meshTemp.Scale[k] = meshS.at(i).Scale[k];
+			newMesh.meshTemp.Translation[k] = meshList.at(i).Translation[k];
+			newMesh.meshTemp.Rotation[k] = meshList.at(i).Rotation[k];
+			newMesh.meshTemp.Scale[k] = meshList.at(i).Scale[k];
 		}
 
 		newMesh.world = XMMatrixTranslation(newMesh.meshTemp.Translation[0], newMesh.meshTemp.Translation[1], newMesh.meshTemp.Translation[2]);
@@ -306,29 +306,29 @@ void CustomImport::NewMesh()
 
 			for (int m = 0; m < 3; m++)
 			{
-				newMesh.meshTemp.vertexTemp.pos[m] = meshS.at(i).vertex.at(vertIndex).pos[m];
-				newMesh.meshTemp.vertexTemp.nor[m] = meshS.at(i).vertex.at(vertIndex).nor[m];
+				newMesh.meshTemp.vertexTemp.pos[m] = meshList.at(i).vertex.at(vertIndex).pos[m];
+				newMesh.meshTemp.vertexTemp.nor[m] = meshList.at(i).vertex.at(vertIndex).nor[m];
 
-				newMesh.meshTemp.vertexTemp.tan[m] = meshS.at(i).vertex.at(vertIndex).tan[m];
-				newMesh.meshTemp.vertexTemp.bitan[m] = meshS.at(i).vertex.at(vertIndex).bitan[m];
+				newMesh.meshTemp.vertexTemp.tan[m] = meshList.at(i).vertex.at(vertIndex).tan[m];
+				newMesh.meshTemp.vertexTemp.bitan[m] = meshList.at(i).vertex.at(vertIndex).bitan[m];
 			}
 			for (int n = 0; n < 2; n++)
 			{
-				newMesh.meshTemp.vertexTemp.uv[n] = meshS.at(i).vertex.at(vertIndex).uv[n];
+				newMesh.meshTemp.vertexTemp.uv[n] = meshList.at(i).vertex.at(vertIndex).uv[n];
 	
 			}
 			newMesh.meshTemp.vertex.push_back(newMesh.meshTemp.vertexTemp);
 		}
 		newMesh.mesh.push_back(newMesh.meshTemp);
 	}
-	int mcount = material.size() - newMesh.MaterialCount;
+	int mcount = materials.size() - newMesh.MaterialCount;
 
-	for (int i = mcount; i < material.size(); i++)
+	for (int i = mcount; i < materials.size(); i++)
 	{
 		char temp[256];
 		for (int e = 0; e < 256; e++)
 		{
-			if (material.at(i).diffuseMap[e] == '\0')
+			if (materials.at(i).diffuseMap[e] == '\0')
 			{
 				temp[e] = '\0';
 				int snafu = 256 - e;
@@ -338,32 +338,32 @@ void CustomImport::NewMesh()
 				}
 				break;
 			}
-			temp[e] = material.at(i).diffuseMap[e];
+			temp[e] = materials.at(i).diffuseMap[e];
 		}
 
 		for (int p = 256; p > 0; p--)
 		{
 			if (temp[p] == '/')
 			{
-				material.at(i).diffuseMap[0] = '.';
-				material.at(i).diffuseMap[1] = '.';
+				materials.at(i).diffuseMap[0] = '.';
+				materials.at(i).diffuseMap[1] = '.';
 				int size = 256 - p;
 				p = p - 2;
 				for (int q = 2; q < size; q++)
 				{
-					material.at(i).diffuseMap[q] = temp[p + q];
+					materials.at(i).diffuseMap[q] = temp[p + q];
 				}
 				break;
 			}
 			else if (temp[p] == '\\')
 			{
-				material.at(i).diffuseMap[0] = '.';
-				material.at(i).diffuseMap[1] = '.';
+				materials.at(i).diffuseMap[0] = '.';
+				materials.at(i).diffuseMap[1] = '.';
 				int size = 256 - p;
 				p = p - 2;
 				for (int q = 2; q < size; q++)
 				{
-					material.at(i).diffuseMap[q] = temp[p + q];
+					materials.at(i).diffuseMap[q] = temp[p + q];
 				}
 				break;
 			}
@@ -371,16 +371,16 @@ void CustomImport::NewMesh()
 
 		for (int j = 0; j < 3; j++)
 		{
-			newMesh.materialTemp.diffuseColor[j] = material.at(i).diffuseColor[j];
-			newMesh.materialTemp.specularColor[j] = material.at(i).specularColor[j];
-			newMesh.materialTemp.ambientColor[j] = material.at(i).ambientColor[j];
+			newMesh.materialTemp.diffuseColor[j] = materials.at(i).diffuseColor[j];
+			newMesh.materialTemp.specularColor[j] = materials.at(i).specularColor[j];
+			newMesh.materialTemp.ambientColor[j] = materials.at(i).ambientColor[j];
 		}
-		newMesh.materialTemp.transparency = material.at(i).transparency;
-		newMesh.materialTemp.shininess = material.at(i).shininess;
-		newMesh.materialTemp.reflection = material.at(i).reflection;
+		newMesh.materialTemp.transparency = materials.at(i).transparency;
+		newMesh.materialTemp.shininess = materials.at(i).shininess;
+		newMesh.materialTemp.reflection = materials.at(i).reflection;
 		for (int k = 0; k < 256; k++)
 		{
-			newMesh.materialTemp.diffuseMap[k] = material.at(i).diffuseMap[k];
+			newMesh.materialTemp.diffuseMap[k] = materials.at(i).diffuseMap[k];
 		}
 		newMesh.material.push_back(newMesh.materialTemp);
 	}
