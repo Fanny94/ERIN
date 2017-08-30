@@ -347,9 +347,13 @@ void CustomImport::NewMesh()
 			{
 				materials.at(i).diffuseMap[0] = '.';
 				materials.at(i).diffuseMap[1] = '.';
+				materials.at(i).diffuseMap[2] = '/';
+				materials.at(i).diffuseMap[3] = 't';
+				materials.at(i).diffuseMap[4] = 'x';
+
 				int size = 256 - p;
-				p = p - 2;
-				for (int q = 2; q < size; q++)
+				p = p - 5;
+				for (int q = 5; q < size; q++)
 				{
 					materials.at(i).diffuseMap[q] = temp[p + q];
 				}
@@ -359,9 +363,13 @@ void CustomImport::NewMesh()
 			{
 				materials.at(i).diffuseMap[0] = '.';
 				materials.at(i).diffuseMap[1] = '.';
+				materials.at(i).diffuseMap[2] = '\\';
+				materials.at(i).diffuseMap[3] = 't';
+				materials.at(i).diffuseMap[4] = 'x';
+
 				int size = 256 - p;
-				p = p - 2;
-				for (int q = 2; q < size; q++)
+				p = p - 5;
+				for (int q = 5; q < size; q++)
 				{
 					materials.at(i).diffuseMap[q] = temp[p + q];
 				}
@@ -378,6 +386,7 @@ void CustomImport::NewMesh()
 		newMesh.materialTemp.transparency = materials.at(i).transparency;
 		newMesh.materialTemp.shininess = materials.at(i).shininess;
 		newMesh.materialTemp.reflection = materials.at(i).reflection;
+
 		for (int k = 0; k < 256; k++)
 		{
 			newMesh.materialTemp.diffuseMap[k] = materials.at(i).diffuseMap[k];

@@ -1,1 +1,14 @@
-﻿
+﻿  CustomImport.cpp
+CustomImport.cpp(151): warning C4018: '<': signed/unsigned mismatch
+CustomImport.cpp(163): warning C4018: '<': signed/unsigned mismatch
+CustomImport.cpp(176): warning C4018: '<': signed/unsigned mismatch
+CustomImport.cpp(275): warning C4018: '<': signed/unsigned mismatch
+CustomImport.cpp(295): warning C4018: '<': signed/unsigned mismatch
+CustomImport.cpp(326): warning C4018: '<': signed/unsigned mismatch
+  Generating code
+  2 of 1715 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  ERIN.vcxproj -> C:\Users\funne\OneDrive\Dokument\ERIN\Release\Release\ERIN.exe
+  ERIN.vcxproj -> C:\Users\funne\OneDrive\Dokument\ERIN\Release\Release\ERIN.pdb (Full PDB)
